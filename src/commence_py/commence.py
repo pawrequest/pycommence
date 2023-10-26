@@ -5,7 +5,6 @@ from .cmc_funcs import clean_dict, clean_hire_dict, connected_records_to_qs, get
 from .auto_cmc import ICommenceDB, ICommenceEditRowSet
 from .cmc_entities import CONNECTION, CmcError
 
-
 ### functions to call
 
 

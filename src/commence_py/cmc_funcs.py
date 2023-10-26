@@ -4,8 +4,7 @@ from typing import List
 from win32com.client import Dispatch
 
 from . import auto_cmc
-from .cmc_entities import CONNECTION
-from .exceptions import CommenceNotInstalled
+from .cmc_entities import CONNECTION, CommenceNotInstalled
 
 
 def get_cmc() -> auto_cmc.ICommenceDB:
@@ -14,15 +13,14 @@ def get_cmc() -> auto_cmc.ICommenceDB:
     except Exception as e:
         if 'Invalid class string' in e.args:
             raise CommenceNotInstalled()
-
         raise e
 
 
-def get_csr(cmc, tablename) -> auto_cmc.ICommenceCursor:
+def get_csr(cmc:auto_cmc.ICommenceDB, tablename) -> auto_cmc.ICommenceCursor:
     return cmc.GetCursor(0, tablename, 0)
 
 
-def qs_from_name(cmc, table, record, edit=False) -> auto_cmc.ICommenceQueryRowSet | auto_cmc.ICommenceEditRowSet:
+def qs_from_name(cmc:auto_cmc.ICommenceDB, table, record, edit=False) -> auto_cmc.ICommenceQueryRowSet | auto_cmc.ICommenceEditRowSet:
     csr = get_csr(cmc, table)
     # filter_by_field(csr, 'Name', 'Equals', value=record)
     filter_by_field_old(csr, 'Name', record)
@@ -38,7 +36,7 @@ def qs_from_name(cmc, table, record, edit=False) -> auto_cmc.ICommenceQueryRowSe
     return results
 
 
-def connected_records_to_qs(cmc, connect: CONNECTION, item_name: str, max_res=50) -> auto_cmc.ICommenceQueryRowSet | None:
+def connected_records_to_qs(cmc:auto_cmc.ICommenceDB, connect: CONNECTION, item_name: str, max_res=50) -> auto_cmc.ICommenceQueryRowSet | None:
     cursor = get_csr(cmc, connect.value.key_table)
     filter_by_connection(cursor, item_name, connect)
     qs = cursor.GetQueryRowSet(max_res, 0)
