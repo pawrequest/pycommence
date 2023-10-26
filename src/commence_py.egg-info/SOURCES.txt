@@ -1,10 +1,10 @@
 pyproject.toml
-src/cmc/__init__.py
-src/cmc/auto_cmc.py
-src/cmc/cmc_dde.py
-src/cmc/cmc_entities.py
-src/cmc/cmc_funcs.py
-src/cmc/commence.py
+src/commence_py/__init__.py
+src/commence_py/auto_cmc.py
+src/commence_py/cmc_dde.py
+src/commence_py/cmc_entities.py
+src/commence_py/cmc_funcs.py
+src/commence_py/commence.py
 src/commence_py.egg-info/PKG-INFO
 src/commence_py.egg-info/SOURCES.txt
 src/commence_py.egg-info/dependency_links.txt

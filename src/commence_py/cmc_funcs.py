@@ -1,17 +1,20 @@
 import datetime
-from _decimal import Decimal
+from decimal import Decimal
 from typing import List
-
 from win32com.client import Dispatch
 
 from . import auto_cmc
 from .cmc_entities import CONNECTION
+from .exceptions import CommenceNotInstalled
 
 
 def get_cmc() -> auto_cmc.ICommenceDB:
     try:
         return Dispatch(f"Commence.DB")
     except Exception as e:
+        if 'Invalid class string' in e.args:
+            raise CommenceNotInstalled()
+
         raise e
 
 
