@@ -34,7 +34,7 @@ class CommenceCursor:
         bool: True on success, False on error.
 
         Comments:
-        The filter_text string defines which filter clause is to be replaced. If the clause is already defined, it will be overwritten.
+        https://peps.python.org/pep-0563/be overwritten.
 
         If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter. That is, when building the rowset, the view's filter is first evaluated. Items that match are then passed through the cursor's secondary filter. The rowset only contains items that satisfy both filters.
         """
@@ -205,7 +205,9 @@ class CommenceCursor:
         """
         return self._csr.SetActiveDateRange(start, end, flags)
 
-    def set_related_column(self, col: int, con_name: str, connnected_cat: str, col_name: str, flags: int):
+    def set_related_column(
+        self, col: int, con_name: str, connnected_cat: str, col_name: str, flags: int
+    ):
         """
         Adds a related (indirect/connected field) column to the cursor.
 
@@ -223,4 +225,6 @@ class CommenceCursor:
         set_related_column(0, "Relates To", "History", "Date", 0)
         This call will add the Date field to the cursor via the 'Relates to History' connection.
         """
-        return self._csr.SetRelatedColumn(col, con_name, connnected_cat, col_name, flags)
+        return self._csr.SetRelatedColumn(
+            col, con_name, connnected_cat, col_name, flags
+        )

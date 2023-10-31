@@ -199,7 +199,9 @@ class RowSetQuery(BaseRowSet):
         BaseRowSet: Base class for Commence Row Set objects.
     """
 
-    def get_field_to_file(self, row_index: int, column_index: int, file_path: str) -> bool:
+    def get_field_to_file(
+        self, row_index: int, column_index: int, file_path: str
+    ) -> bool:
         """
         Saves the field value at the given (row, column) to a file.
 

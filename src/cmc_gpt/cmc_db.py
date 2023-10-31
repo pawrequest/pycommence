@@ -6,7 +6,7 @@ from cmc_gpt.cmc_conversation import CommenceConversation
 
 class CmcDB:
     def __init__(self):
-        self.cmc_db = Dispatch("Commence.DB")
+        self.cmc_db = Dispatch('Commence.DB')
 
     @property
     def name(self) -> str:
@@ -38,7 +38,9 @@ class CmcDB:
         """(read-only) Version number in x.y.z.w format."""
         return self.cmc_db.VersionExt
 
-    def get_conversation(self, topic: str, application_name: str = "Commence") -> CommenceConversation:
+    def get_conversation(
+        self, topic: str, application_name: str = 'Commence'
+    ) -> CommenceConversation:
         """
         Create a conversation object, except probably just don't and go get a cursor instead.
 
@@ -52,7 +54,9 @@ class CmcDB:
         """
         conversation_obj = self.cmc_db.GetConversation(application_name, topic)
         if conversation_obj is None:
-            raise ValueError(f"Could not create conversation object for {application_name}!{topic}")
+            raise ValueError(
+                f'Could not create conversation object for {application_name}!{topic}'
+            )
         return CommenceConversation(conversation_obj)
 
     def get_cursor(self) -> CommenceCursor:
