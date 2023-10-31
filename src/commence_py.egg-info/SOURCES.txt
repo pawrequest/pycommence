@@ -1,4 +1,5 @@
 pyproject.toml
+src/__init__.py
 src/commence_py/__init__.py
 src/commence_py/auto_cmc.py
 src/commence_py/cmc_dde.py
