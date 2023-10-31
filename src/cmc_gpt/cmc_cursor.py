@@ -36,7 +36,10 @@ class CommenceCursor:
         Comments:
         https://peps.python.org/pep-0563/be overwritten.
 
-        If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter. That is, when building the rowset, the view's filter is first evaluated. Items that match are then passed through the cursor's secondary filter. The rowset only contains items that satisfy both filters.
+        If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter.
+        That is, when building the rowset, the view's filter is first evaluated.
+        Items that match are then passed through the cursor's secondary filter.
+        The rowset only contains items that satisfy both filters.
         """
         return self._csr.SetFilter(filter_text, flags)
 
@@ -45,7 +48,8 @@ class CommenceCursor:
         Defines the filter logic for the cursor.
 
         Parameters:
-        logic_text (str): Text defining the new filter logic. Syntax is identical to the one used by the DDE ViewConjunction request.
+        logic_text (str): Text defining the new filter logic.
+        Syntax is identical to the one used by the DDE ViewConjunction request.
         flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
@@ -61,14 +65,16 @@ class CommenceCursor:
         Defines the sort criteria for the cursor.
 
         Parameters:
-        sort_text (str): Text defining the new sort criteria. Syntax is identical to the one used by the DDE ViewSort request.
+        sort_text (str): Text defining the new sort criteria.
+        Syntax is identical to the one used by the DDE ViewSort request.
         flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
         bool: True on success, False on error.
 
         Comments:
-        If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view's sort. All other cursor modes default to ascending sort by the Name field.
+        If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view's sort.
+        All other cursor modes default to ascending sort by the Name field.
         """
         return self._csr.SetSort(sort_text, flags)
 
@@ -85,9 +91,12 @@ class CommenceCursor:
         bool: True on success, False on error.
 
         Comments:
-        When defining a column set, the columns must be defined in sequential order (0, 1, 2, etc.). This is to prevent problems with undefined columns (e.g. 0, 1, 3, ...).
+        When defining a column set, the columns must be defined in sequential order (0, 1, 2, etc.).
+        This is to prevent problems with undefined columns (e.g. 0, 1, 3, ...).
         Duplicate columns are not supported. Each column must map to a different field.
-        Not all Commence field types can be included in the cursor definition. The set of supported field types exactly matches those fields that can be displayed in a Commence report (minus combined fields and indirect fields).
+        Not all Commence field types can be included in the cursor definition.
+        The set of supported field types exactly matches those fields that can be displayed in a Commence report
+        (minus combined fields and indirect fields).
         """
         return self._csr.SetColumn(column_index, field_name, flags)
 
@@ -149,19 +158,87 @@ class CommenceCursor:
     def get_query_row_set_by_id(self, row_id: str, flags: int = 0):
         return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, flags))
 
-    def get_add_row_set(self, count: int, flags: int = 0):
+    def get_add_row_set(self, count: int, flags: int = 0) -> RowSetAdd:
+        """
+        Creates a rowset of new items to add to the database.
+
+        Parameters:
+        count (int): The number of rows to create.
+        flags (int, optional): Option flags. Use CMC_FLAG_SHARED to default all rows to shared. Defaults to 0.
+
+        Returns:
+        RowSetAdd: A rowset object for adding new items, or None on error.
+
+        Comments:
+        The rowset inherits the column set from the cursor.
+        When first created, each row is initialized to field default values.
+        """
         return RowSetAdd(self._csr.GetAddRowSet(count, flags))
 
-    def get_edit_row_set(self, count: int, flags: int = 0):
+    def get_edit_row_set(self, count: int, flags: int = 0) -> RowSetEdit:
+        """
+        Creates a rowset of existing items for editing.
+
+        Parameters:
+        count (int): The number of rows to retrieve.
+        flags (int, optional): Unused at present, must be 0. Defaults to 0.
+
+        Returns:
+        RowSetEdit: A rowset object for editing existing items, or None on error.
+
+        Comments:
+        The rowset inherits the column set from the cursor.
+        """
         return RowSetEdit(self._csr.GetEditRowSet(count, flags))
 
-    def get_edit_row_set_by_id(self, row_id: str, flags: int = 0):
+    def get_edit_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetEdit:
+        """
+        Creates a rowset for editing a particular row.
+
+        Parameters:
+        row_id (str): Unique ID string obtained from GetRowID().
+        flags (int, optional): Unused at present, must be 0. Defaults to 0.
+
+        Returns:
+        RowSetEdit: A rowset object for editing a particular row, or None on error.
+
+        Comments:
+        The rowset inherits the column set from the cursor.
+        The cursor's 'current row pointer' is not advanced.
+        """
         return RowSetEdit(self._csr.GetEditRowSetByID(row_id, flags))
 
-    def get_delete_row_set(self, count: int, flags: int = 0):
+    def get_delete_row_set(self, count: int, flags: int = 0) -> RowSetDelete:
+        """
+        Creates a rowset of existing items for deletion.
+
+        Parameters:
+        count (int): The number of rows to retrieve.
+        flags (int, optional): Unused at present, must be 0. Defaults to 0.
+
+        Returns:
+        RowSetDelete: A rowset object for deleting existing items, or None on error.
+
+        Comments:
+        The rowset inherits the column set from the cursor.
+        """
         return RowSetDelete(self._csr.GetDeleteRowSet(count, flags))
 
-    def get_delete_row_set_by_id(self, row_id: str, flags: int = 0):
+    def get_delete_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetDelete:
+        """
+        Creates a rowset for deleting a particular row.
+
+        Parameters:
+        row_id (str): Unique ID string obtained from GetRowID().
+        flags (int, optional): Unused at present, must be 0. Defaults to 0.
+
+        Returns:
+        RowSetDelete: A rowset object for deleting a particular row, or None on error.
+
+        Comments:
+        The rowset inherits the column set from the cursor.
+        The cursor's 'current row pointer' is not advanced.
+        """
         return RowSetDelete(self._csr.GetDeleteRowSetByID(row_id, flags))
 
     def set_active_item(self, category: str, row_id: str, flags: int = 0):
@@ -170,7 +247,8 @@ class CommenceCursor:
 
         Parameters:
         category (str): Category name of the active item used with view linking filter_str.
-        row_id (str): Unique ID string obtained from GetRowID() indicating the active item used with view linking filter_str.
+        row_id (str): Unique ID string obtained from GetRowID()
+        indicating the active item used with view linking filter_str.
         flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
@@ -196,8 +274,10 @@ class CommenceCursor:
         Set active active_date range used for view cursors using a view linking filter_str.
 
         Parameters:
-        start (str): Date value of start active_date used with view linking filter_str; supports AI active_date values such as 'today'.
-        end (str): Date value of end active_date used with view linking filter_str; supports AI active_date values such as 'next monday'.
+        start (str): Date value of start active_date used with view linking filter_str;
+        supports AI active_date values such as 'today'.
+        end (str): Date value of end active_date used with view linking filter_str;
+        supports AI active_date values such as 'next monday'.
         flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
@@ -206,7 +286,7 @@ class CommenceCursor:
         return self._csr.SetActiveDateRange(start, end, flags)
 
     def set_related_column(
-        self, col: int, con_name: str, connnected_cat: str, col_name: str, flags: int
+        self, col: int, con_name: str, connected_cat: str, col_name: str, flags: int
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.
@@ -214,7 +294,7 @@ class CommenceCursor:
         Parameters:
         col (int): The (0-based) index of the column to set.
         con_name (str): Name of the connection to use in this column.
-        connnected_cat (str): Name of the connected Category to use in this column.
+        connected_cat (str): Name of the connected Category to use in this column.
         name (str): Name of the field in the connected category to use in this column.
         flags (int): Option flags (Logical OR of option flags like CMC_FLAG_ALL to create column set of all fields).
 
@@ -225,6 +305,4 @@ class CommenceCursor:
         set_related_column(0, "Relates To", "History", "Date", 0)
         This call will add the Date field to the cursor via the 'Relates to History' connection.
         """
-        return self._csr.SetRelatedColumn(
-            col, con_name, connnected_cat, col_name, flags
-        )
+        return self._csr.SetRelatedColumn(col, con_name, connected_cat, col_name, flags)
