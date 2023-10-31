@@ -1,155 +1,214 @@
 from cmc_gpt.cmc_cursor import CommenceCursor
 
 
-class CommenceAddRowSet:
-    def __init__(self, commence_add_row_set):
-        self.commence_add_row_set = commence_add_row_set
+class BaseRowSet:
+    """
+    Base class representing a Commence Row Set.
+
+    Attributes:
+        _rs: Internal representation of a Commence Row Set object.
+    """
+
+    def __init__(self, cmc_rs) -> None:
+        """
+        Initializes a BaseRowSet instance.
+
+        Args:
+            cmc_rs: A Commence Row Set object.
+        """
+        self._rs = cmc_rs
 
     @property
-    def column_count(self):
-        return self.commence_add_row_set.ColumnCount
+    def column_count(self) -> int:
+        """Returns the number of columns in the row set."""
+        return self._rs.ColumnCount
 
     @property
-    def row_count(self):
-        return self.commence_add_row_set.RowCount
+    def row_count(self) -> int:
+        """Returns the number of rows in the row set."""
+        return self._rs.RowCount
 
-    def commit(self):
-        return self.commence_add_row_set.Commit()
+    def get_row_value(self, row_index: int, column_index: int) -> str:
+        """
+        Retrieves the value at the specified row and column.
 
-    def commit_get_cursor(self):
-        return CommenceCursor(self.commence_add_row_set.CommitGetCursor())
+        Args:
+            row_index: Index of the row.
+            column_index: Index of the column.
 
-    def get_column_index(self, label):
-        return self.commence_add_row_set.GetColumnIndex(label)
+        Returns:
+            Value at the specified row and column.
+        """
+        return self._rs.GetRowValue(row_index, column_index)
 
-    def get_column_label(self, index):
-        return self.commence_add_row_set.GetColumnLabel(index)
+    def get_column_label(self, index: int) -> str:
+        """
+        Retrieves the label of the specified column.
 
-    def get_row(self, row_index):
-        return self.commence_add_row_set.GetRow(row_index)
+        Args:
+            index: Index of the column.
 
-    def get_row_value(self, row_index, column_index):
-        return self.commence_add_row_set.GetRowValue(row_index, column_index)
+        Returns:
+            Label of the specified column.
+        """
+        return self._rs.GetColumnLabel(index)
 
-    def modify_row(self, row_index, column_index, value):
-        return self.commence_add_row_set.ModifyRow(row_index, column_index, value)
+    def get_column_index(self, label: str) -> int:
+        """
+        Searches and retrieves the index of the specified column label.
 
-    def set_shared(self, row_index, shared):
-        return self.commence_add_row_set.SetShared(row_index, shared)
+        Args:
+            label: Label of the column.
 
-    def get_shared(self, row_index):
-        return self.commence_add_row_set.GetShared(row_index)
+        Returns:
+            Index of the specified column label.
+        """
+        return self._rs.GetColumnIndex(label)
 
+    def get_row(self, row_index: int) -> str:
+        """
+        Retrieves the values of the specified row.
 
-class CommenceDeleteRowSet:
-    def __init__(self, commence_delete_row_set):
-        self.commence_delete_row_set = commence_delete_row_set
+        Args:
+            row_index: Index of the row.
 
-    @property
-    def column_count(self):
-        return self.commence_delete_row_set.ColumnCount
+        Returns:
+            Values of the specified row.
+        """
+        return self._rs.GetRow(row_index)
 
-    @property
-    def row_count(self):
-        return self.commence_delete_row_set.RowCount
+    def get_shared(self, row_index: int) -> bool:
+        """
+        Determines whether the row at the specified index is shared.
 
-    def get_row_value(self, row_index, column_index):
-        return self.commence_delete_row_set.GetRowValue(row_index, column_index)
+        Args:
+            row_index: Index of the row.
 
-    def get_column_label(self, index):
-        return self.commence_delete_row_set.GetColumnLabel(index)
-
-    def get_column_index(self, label):
-        return self.commence_delete_row_set.GetColumnIndex(label)
-
-    def delete_row(self, row_index):
-        return self.commence_delete_row_set.DeleteRow(row_index)
-
-    def commit(self):
-        return self.commence_delete_row_set.Commit()
-
-    def get_row(self, row_index):
-        return self.commence_delete_row_set.GetRow(row_index)
-
-    def get_row_id(self, row_index):
-        return self.commence_delete_row_set.GetRowID(row_index)
-
-    def get_shared(self, row_index):
-        return self.commence_delete_row_set.GetShared(row_index)
+        Returns:
+            True if the row is shared, False otherwise.
+        """
+        return self._rs.GetShared(row_index)
 
 
-class CommenceEditRowSet:
-    def __init__(self, commence_edit_row_set):
-        self.commence_edit_row_set = commence_edit_row_set
+class RowSetAdd(BaseRowSet):
+    """
+    Represents a set of new items to add to the database.
 
-    @property
-    def column_count(self):
-        return self.commence_edit_row_set.ColumnCount
+    Inherits from:
+        BaseRowSet: Base class for Commence Row Set objects.
+    """
 
-    @property
-    def row_count(self):
-        return self.commence_edit_row_set.RowCount
+    def commit(self, flags: int = 0) -> bool:
+        """
+        Makes row modifications permanent (commit to disk).
 
-    def get_row_value(self, row_index, column_index):
-        return self.commence_edit_row_set.GetRowValue(row_index, column_index)
+        Args:
+            flags (int, optional): Flags for the commit operation. Defaults to 0.
 
-    def get_column_label(self, index):
-        return self.commence_edit_row_set.GetColumnLabel(index)
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return self._rs.Commit(flags)
 
-    def get_column_index(self, label):
-        return self.commence_edit_row_set.GetColumnIndex(label)
+    def commit_get_cursor(self) -> CommenceCursor:
+        """
+        Makes row modifications permanent (commit to disk) and returns a cursor.
 
-    def modify_row(self, row_index, column_index, value):
-        return self.commence_edit_row_set.ModifyRow(row_index, column_index, value)
-
-    def commit(self):
-        return self.commence_edit_row_set.Commit()
-
-    def commit_get_cursor(self):
-        return CommenceCursor(self.commence_edit_row_set.CommitGetCursor())
-
-    def get_row(self, row_index):
-        return self.commence_edit_row_set.GetRow(row_index)
-
-    def get_shared(self, row_index):
-        return self.commence_edit_row_set.GetShared(row_index)
-
-    def set_shared(self, row_index, shared):
-        return self.commence_edit_row_set.SetShared(row_index, shared)
-
-    def get_row_id(self, row_index):
-        return self.commence_edit_row_set.GetRowID(row_index)
+        Returns:
+            CommenceCursor: Cursor object with the committed data.
+        """
+        return CommenceCursor(self._rs.CommitGetCursor())
 
 
-class CommenceQueryRowSet:
-    def __init__(self, commence_query_row_set):
-        self.commence_query_row_set = commence_query_row_set
+class RowSetDelete(BaseRowSet):
+    """
+    Represents a set of items to delete from the database.
 
-    @property
-    def column_count(self):
-        return self.commence_query_row_set.ColumnCount
+    Inherits from:
+        BaseRowSet: Base class for Commence Row Set objects.
+    """
 
-    @property
-    def row_count(self):
-        return self.commence_query_row_set.RowCount
+    def delete_row(self, row_index: int) -> bool:
+        """
+        Marks a row for deletion.
 
-    def get_row_value(self, row_index, column_index):
-        return self.commence_query_row_set.GetRowValue(row_index, column_index)
+        Args:
+            row_index (int): The index of the row to mark for deletion.
 
-    def get_column_label(self, index):
-        return self.commence_query_row_set.GetColumnLabel(index)
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return self._rs.DeleteRow(row_index)
 
-    def get_column_index(self, label):
-        return self.commence_query_row_set.GetColumnIndex(label)
+    def commit(self) -> bool:
+        """
+        Makes row deletions permanent (commit to disk).
 
-    def get_row(self, row_index):
-        return self.commence_query_row_set.GetRow(row_index)
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return self._rs.Commit()
 
-    def get_row_id(self, row_index):
-        return self.commence_query_row_set.GetRowID(row_index)
 
-    def get_shared(self, row_index):
-        return self.commence_query_row_set.GetShared(row_index)
+class RowSetEdit(BaseRowSet):
+    """
+    Represents a set of items to edit in the database.
 
-    def get_field_to_file(self, row_index, column_index, file_path):
-        return self.commence_query_row_set.GetFieldToFile(row_index, column_index, file_path)
+    Inherits from:
+        BaseRowSet: Base class for Commence Row Set objects.
+    """
+
+    def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
+        """
+        Modifies a field value in the rowset.
+
+        Args:
+            row_index (int): The index of the row to modify.
+            column_index (int): The index of the column in the row to modify.
+            value (str): The new value for the field.
+
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return self._rs.ModifyRow(row_index, column_index, value)
+
+    def commit(self) -> bool:
+        """
+        Makes row modifications permanent (commit to disk).
+
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return self._rs.Commit()
+
+    def commit_get_cursor(self) -> 'CommenceCursor':
+        """
+        Makes row modifications permanent (commit to disk) and returns a cursor.
+
+        Returns:
+            CommenceCursor: Cursor object with the committed data.
+        """
+        return CommenceCursor(self._rs.CommitGetCursor())
+
+
+class RowSetQuery(BaseRowSet):
+    """
+    Represents a result set from a query.
+
+    Inherits from:
+        BaseRowSet: Base class for Commence Row Set objects.
+    """
+
+    def get_field_to_file(self, row_index: int, column_index: int, file_path: str) -> bool:
+        """
+        Saves the field value at the given (row, column) to a file.
+
+        Args:
+            row_index (int): The index of the row.
+            column_index (int): The index of the column.
+            file_path (str): The path where the field value will be saved to.
+
+        Returns:
+            bool: True on success, False on failure.
+        """
+        return self._rs.GetFieldToFile(row_index, column_index, file_path)

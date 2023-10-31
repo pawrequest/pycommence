@@ -1514,7 +1514,7 @@ IApp_vtables_ = [
             'GetCursor',
             'nMode',
             'nFlag',
-            'pName',
+            'name',
         ),
         2,
         (
