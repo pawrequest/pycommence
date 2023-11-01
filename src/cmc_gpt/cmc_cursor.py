@@ -1,9 +1,10 @@
 from cmc_gpt.cmc_rowset import RowSetQuery, RowSetAdd, RowSetEdit, RowSetDelete
+from commence_py.auto_cmc import ICommenceCursor
 
 
 class CommenceCursor:
-    def __init__(self, commence_cursor):
-        self._csr = commence_cursor
+    def __init__(self, cmc_cursor: ICommenceCursor):
+        self._csr = cmc_cursor
 
     @property
     def category(self):
@@ -286,7 +287,7 @@ class CommenceCursor:
         return self._csr.SetActiveDateRange(start, end, flags)
 
     def set_related_column(
-        self, col: int, con_name: str, connected_cat: str, col_name: str, flags: int
+            self, col: int, con_name: str, connected_cat: str, col_name: str, flags: int
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.

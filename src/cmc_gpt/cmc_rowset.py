@@ -1,7 +1,6 @@
-from cmc_gpt.cmc_cursor import CommenceCursor
 
 
-class BaseRowSet:
+class RowSetBase:
     """
     Base class representing a Commence Row Set.
 
@@ -11,7 +10,7 @@ class BaseRowSet:
 
     def __init__(self, cmc_rs) -> None:
         """
-        Initializes a BaseRowSet instance.
+        Initializes a RowSetBase instance.
 
         Args:
             cmc_rs: A Commence Row Set object.
@@ -90,12 +89,12 @@ class BaseRowSet:
         return self._rs.GetShared(row_index)
 
 
-class RowSetAdd(BaseRowSet):
+class RowSetAdd(RowSetBase):
     """
     Represents a set of new items to add to the database.
 
     Inherits from:
-        BaseRowSet: Base class for Commence Row Set objects.
+        RowSetBase: Base class for Commence Row Set objects.
     """
 
     def commit(self, flags: int = 0) -> bool:
@@ -110,7 +109,7 @@ class RowSetAdd(BaseRowSet):
         """
         return self._rs.Commit(flags)
 
-    def commit_get_cursor(self) -> CommenceCursor:
+    def commit_get_cursor(self) -> 'CommenceCursor':
         """
         Makes row modifications permanent (commit to disk) and returns a cursor.
 
@@ -120,12 +119,12 @@ class RowSetAdd(BaseRowSet):
         return CommenceCursor(self._rs.CommitGetCursor())
 
 
-class RowSetDelete(BaseRowSet):
+class RowSetDelete(RowSetBase):
     """
     Represents a set of items to delete from the database.
 
     Inherits from:
-        BaseRowSet: Base class for Commence Row Set objects.
+        RowSetBase: Base class for Commence Row Set objects.
     """
 
     def delete_row(self, row_index: int) -> bool:
@@ -150,12 +149,12 @@ class RowSetDelete(BaseRowSet):
         return self._rs.Commit()
 
 
-class RowSetEdit(BaseRowSet):
+class RowSetEdit(RowSetBase):
     """
     Represents a set of items to edit in the database.
 
     Inherits from:
-        BaseRowSet: Base class for Commence Row Set objects.
+        RowSetBase: Base class for Commence Row Set objects.
     """
 
     def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
@@ -188,15 +187,15 @@ class RowSetEdit(BaseRowSet):
         Returns:
             CommenceCursor: Cursor object with the committed data.
         """
-        return CommenceCursor(self._rs.CommitGetCursor())
+        return 'CommenceCursor'(self._rs.CommitGetCursor())
 
 
-class RowSetQuery(BaseRowSet):
+class RowSetQuery(RowSetBase):
     """
     Represents a result set from a query.
 
     Inherits from:
-        BaseRowSet: Base class for Commence Row Set objects.
+        RowSetBase: Base class for Commence Row Set objects.
     """
 
     def get_field_to_file(
