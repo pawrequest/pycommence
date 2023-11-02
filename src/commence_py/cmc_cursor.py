@@ -1,4 +1,5 @@
 from .auto_cmc import ICommenceCursor
+from .cmc_entities import Connector
 from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 
 
@@ -135,7 +136,7 @@ class CmcCursor:
         """
         return self._csr.SeekRowApprox(numerator, denominator)
 
-    def get_query_row_set(self, count: int) -> 'RowSetQuery':
+    def get_query_row_set(self, count: int) -> RowSetQuery:
         """
         Create a rowset object with the results of a query.
 
@@ -316,3 +317,31 @@ class CmcCursor:
         This call will add the Date field to the cursor via the 'Relates to History' connection.
         """
         return self._csr.SetRelatedColumn(col, con_name, connected_cat, col_name, flags)
+
+    # def filter_by_date(
+    #         cursor: ICommenceCursor,
+    #         field_name: str,
+    #         date: datetime.date,
+    #         condition='After',
+    # ):
+    #     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}, {date})]'  # noqa E231
+    #     res = cursor.SetFilter(filter_str, 0)
+    #     return res
+
+    def filter_by_field(self, field_name: str, condition, value=None):
+        # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
+        val_cond = f', "{value}"' if value else ''
+        filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
+        res = self.set_filter(filter_str)
+        if not res:
+            raise ValueError(f'Could not set filter for {field_name} {condition} {value}')
+
+    def filter_by_connection(self, item_name: str, connection: Connector):
+        filter_str = (f'[ViewFilter(1, CTI,, {connection.desc}, '  # noqa: E231
+                      f'{connection.to_table}, {item_name})]')
+        res = self.set_filter(filter_str)
+        if not res:
+            raise ValueError(f'Could not set filter for ' f'{connection.desc} = {item_name}')
+
+    def filter_by_name(self, name: str):
+        return self.filter_by_field('Name', 'Equal To', name)

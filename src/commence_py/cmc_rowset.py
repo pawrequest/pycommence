@@ -1,6 +1,7 @@
 from abc import ABC
 
-from .auto_cmc import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, ICommenceQueryRowSet
+from .auto_cmc import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
+    ICommenceQueryRowSet
 
 
 class RowSetBase(ABC):

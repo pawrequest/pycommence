@@ -18,7 +18,7 @@ strict = true
 mypy_path = "stubs"
 
 [tool.ruff]
-line-length = 88
+line-length = 100
 fix = true
 show-fixes = true
 show-source = true
