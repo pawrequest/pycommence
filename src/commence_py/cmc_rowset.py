@@ -1,3 +1,6 @@
+from .auto_cmc import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, ICommenceQueryRowSet
+
+
 class RowSetBase:
     """
     Base class representing a Commence Row Set.
@@ -113,6 +116,14 @@ class RowSetAdd(RowSetBase):
         RowSetBase: Base class for Commence Row Set objects.
     """
 
+    def __init__(self, cmc_rs: ICommenceAddRowSet) -> None:
+        """
+        Initializes a RowSetAdd instance.
+        Args:
+            cmc_rs: A Commence Row Set object.
+        """
+        super().__init__(cmc_rs)
+
     def commit(self) -> bool:
         """
         Makes row modifications permanent (commit to disk).
@@ -142,6 +153,14 @@ class RowSetDelete(RowSetBase):
     Inherits from:
         RowSetBase: Base class for Commence Row Set objects.
     """
+
+    def __init__(self, cmc_rs: ICommenceDeleteRowSet) -> None:
+        """
+        Initializes a RowSetDelete instance.
+        Args:
+            cmc_rs: A Commence Row Set object.
+        """
+        super().__init__(cmc_rs)
 
     def delete_row(self, row_index: int) -> bool:
         """
@@ -174,6 +193,14 @@ class RowSetEdit(RowSetBase):
     Inherits from:
         RowSetBase: Base class for Commence Row Set objects.
     """
+
+    def __init__(self, cmc_rs: ICommenceEditRowSet) -> None:
+        """
+        Initializes a RowSetEdit instance.
+        Args:
+            cmc_rs: A Commence Row Set object.
+        """
+        super().__init__(cmc_rs)
 
     def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
         """
@@ -209,12 +236,8 @@ class RowSetEdit(RowSetBase):
 
 
 class RowSetQuery(RowSetBase):
-    """
-    Represents a result set from a query.
-
-    Inherits from:
-        RowSetBase: Base class for Commence Row Set objects.
-    """
+    def __init__(self, cmc_rs: ICommenceQueryRowSet) -> None:
+        super().__init__(cmc_rs)
 
     def get_field_to_file(
             self, row_index: int, column_index: int, file_path: str, flags: int = 0

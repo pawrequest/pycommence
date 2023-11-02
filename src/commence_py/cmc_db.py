@@ -1,7 +1,7 @@
 from win32com.client import Dispatch
 
-from cmc_gpt.cmc_conversation import CommenceConversation
-from cmc_gpt.cmc_cursor import CommenceCursor
+from .cmc_conversation import CommenceConversation
+from .cmc_cursor import CmcCursor
 
 
 class CmcDB:
@@ -59,7 +59,7 @@ class CmcDB:
             )
         return CommenceConversation(conversation_obj)
 
-    def get_cursor(self, name: str, mode: int = 0, flags: int = 0) -> CommenceCursor:
+    def get_cursor(self, name: str, mode: int = 0, flags: int = 0) -> CmcCursor:
         """
         Create a cursor object for accessing Commence data.
 
@@ -93,4 +93,4 @@ class CmcDB:
         For CMC_CURSOR_PILOT*, the column set for the resulting cursor will only include fields defined by the Commence preferences (in no particular order). It is not possible to change the filter, sort, or column set.
         See the Developer Notes for more information about the CMC_FLAG_PILOT and CMC_FLAG_INTERNET flags.
         """
-        return CommenceCursor(self.cmc_db.GetCursor(mode, name, flags))
+        return CmcCursor(self.cmc_db.GetCursor(mode, name, flags))

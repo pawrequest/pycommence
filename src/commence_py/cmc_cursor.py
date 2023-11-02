@@ -1,8 +1,8 @@
-from cmc_gpt.cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
-from commence_py.auto_cmc import ICommenceCursor
+from .auto_cmc import ICommenceCursor
+from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 
 
-class CommenceCursor:
+class CmcCursor:
     def __init__(self, cmc_cursor: ICommenceCursor):
         self._csr = cmc_cursor
 
