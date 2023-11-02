@@ -1,5 +1,5 @@
 from .auto_cmc import ICommenceCursor
-from .cmc_entities import Connection
+from .cmc_entities import CmcError, Connection
 from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 
 
@@ -136,7 +136,7 @@ class CmcCursor:
         """
         return self._csr.SeekRowApprox(numerator, denominator)
 
-    def get_query_row_set(self, count: int) -> RowSetQuery:
+    def get_query_row_set(self, count: int or None = None) -> RowSetQuery:
         """
         Create a rowset object with the results of a query.
 
@@ -154,8 +154,10 @@ class CmcCursor:
         Use CommenceXRowSet.row_count to determine the actual row count.
         GetQueryRowSet will advance the 'current row pointer' by the number of rows in the rowset.
         """
+        if count is None:
+            count = self.row_count
         result = self._csr.GetQueryRowSet(count, 0)
-        return None if result is None else RowSetQuery(result)
+        return RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
         """
@@ -169,7 +171,7 @@ class CmcCursor:
         """
         return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, 0))
 
-    def get_add_row_set(self, count: int, flags: int = 0) -> RowSetAdd:
+    def get_add_row_set(self, count: int or None = None, flags: int = 0) -> RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
@@ -184,9 +186,11 @@ class CmcCursor:
         The rowset inherits the column set from the cursor.
         When first created, each row is initialized to field default values.
         """
+        if count is None:
+            count = self.row_count
         return RowSetAdd(self._csr.GetAddRowSet(count, flags))
 
-    def get_edit_row_set(self, count: int) -> RowSetEdit:
+    def get_edit_row_set(self, count: int or None = None) -> RowSetEdit:
         """
         Creates a rowset of existing items for editing.
 
@@ -200,6 +204,8 @@ class CmcCursor:
         Comments:
         The rowset inherits the column set from the cursor.
         """
+        if count is None:
+            count = self.row_count
         return RowSetEdit(self._csr.GetEditRowSet(count, 0))
 
     def get_edit_row_set_by_id(self, row_id: str) -> RowSetEdit:
@@ -219,7 +225,7 @@ class CmcCursor:
         """
         return RowSetEdit(self._csr.GetEditRowSetByID(row_id, 0))
 
-    def get_delete_row_set(self, count: int, flags: int = 0) -> RowSetDelete:
+    def get_delete_row_set(self, count: int or None = None) -> RowSetDelete:
         """
         Creates a rowset of existing items for deletion.
 
@@ -233,7 +239,13 @@ class CmcCursor:
         Comments:
         The rowset inherits the column set from the cursor.
         """
-        return RowSetDelete(self._csr.GetDeleteRowSet(count, flags))
+        if count is None:
+            if self.row_count > 1:
+                check = input(f'Are you sure you want to delete {self.row_count} rows? (y/n)')
+                if check.lower() != 'y':
+                    raise ValueError('Aborted deletion.')
+            count = self.row_count
+        return RowSetDelete(self._csr.GetDeleteRowSet(count, 0))
 
     def get_delete_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetDelete:
         """
@@ -345,3 +357,31 @@ class CmcCursor:
 
     def filter_by_name(self, name: str):
         return self.filter_by_field('Name', 'Equal To', name)
+
+    def edit_record(self, record, package: dict):
+        self.filter_by_name(record)
+        row_set = self.get_edit_row_set()
+        for key, value in package.items():
+            try:
+                col_idx = row_set.get_column_index(key)
+                row_set.modify_row(0, col_idx, str(value))
+            except Exception:
+                raise CmcError(f'Could not modify {key} to {value}')
+        row_set.commit()
+        ...
+
+    def get_record(self, record_name):
+        self.filter_by_name(record_name)
+        row_set = self.get_query_row_set()
+        record = row_set.get_rows_dict()
+        return record
+
+    def delete_record(self, record_name):
+        self.filter_by_name(record_name)
+        row_set = self.get_delete_row_set()
+        row_set.commit()
+
+    def add_record(self, record_name, package: dict):
+        row_set = self.get_add_row_set(1)
+        row_set.modify_row_dict(0, package)
+        row_set.commit()
