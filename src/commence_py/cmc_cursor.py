@@ -22,7 +22,7 @@ class CmcCursor:
     def shared(self):
         return self._csr.Shared
 
-    def set_filter(self, filter_text: str, flags: int = 0) -> bool:
+    def set_filter(self, filter_text: str) -> bool:
         """
         Defines a filter clause for the cursor.
 
@@ -42,7 +42,7 @@ class CmcCursor:
         Items that match are then passed through the cursor's secondary filter.
         The rowset only contains items that satisfy both filters.
         """
-        return self._csr.SetFilter(filter_text, flags)
+        return self._csr.SetFilter(filter_text, 0)
 
     def set_logic(self, logic_text: str, flags: int = 0) -> bool:
         """
@@ -61,7 +61,7 @@ class CmcCursor:
         """
         return self._csr.SetLogic(logic_text, flags)
 
-    def set_sort(self, sort_text: str, flags: int = 0) -> bool:
+    def set_sort(self, sort_text: str) -> bool:
         """
         Defines the sort criteria for the cursor.
 
@@ -77,9 +77,9 @@ class CmcCursor:
         If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view's sort.
         All other cursor modes default to ascending sort by the Name field.
         """
-        return self._csr.SetSort(sort_text, flags)
+        return self._csr.SetSort(sort_text, 0)
 
-    def set_column(self, column_index: int, field_name: str, flags: int) -> bool:
+    def set_column(self, column_index: int, field_name: str, flags: int = 0) -> bool:
         """
         Defines the column set for the cursor.
 
@@ -156,8 +156,17 @@ class CmcCursor:
         result = self._csr.GetQueryRowSet(count, 0)
         return None if result is None else RowSetQuery(result)
 
-    def get_query_row_set_by_id(self, row_id: str, flags: int = 0):
-        return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, flags))
+    def get_query_row_set_by_id(self, row_id: str):
+        """
+        Returns: Pointer to rowset object on success, NULL on error.
+        Parameters:
+            row_id:str Unique ID string obtained from GetRowID().
+            flags: unused, must be 0.
+        The rowset inherits to column set from the cursor.
+        The cursor's 'current row pointer' is not advanced.
+
+        """
+        return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, 0))
 
     def get_add_row_set(self, count: int, flags: int = 0) -> RowSetAdd:
         """
@@ -192,7 +201,7 @@ class CmcCursor:
         """
         return RowSetEdit(self._csr.GetEditRowSet(count, 0))
 
-    def get_edit_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetEdit:
+    def get_edit_row_set_by_id(self, row_id: str) -> RowSetEdit:
         """
         Creates a rowset for editing a particular row.
 
@@ -207,7 +216,7 @@ class CmcCursor:
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
         """
-        return RowSetEdit(self._csr.GetEditRowSetByID(row_id, flags))
+        return RowSetEdit(self._csr.GetEditRowSetByID(row_id, 0))
 
     def get_delete_row_set(self, count: int, flags: int = 0) -> RowSetDelete:
         """
@@ -242,7 +251,7 @@ class CmcCursor:
         """
         return RowSetDelete(self._csr.GetDeleteRowSetByID(row_id, flags))
 
-    def set_active_item(self, category: str, row_id: str, flags: int = 0):
+    def set_active_item(self, category: str, row_id: str):
         """
         Set active item used for view cursors using a view linking filter_str.
 
@@ -255,9 +264,9 @@ class CmcCursor:
         Returns:
         bool: True on success, else False on error.
         """
-        return self._csr.SetActiveItem(category, row_id, flags)
+        return self._csr.SetActiveItem(category, row_id, 0)
 
-    def set_active_date(self, active_date: str, flags=0):
+    def set_active_date(self, active_date: str):
         """
         Set active active_date used for view cursors using a view linking filter_str.
 
@@ -268,9 +277,9 @@ class CmcCursor:
         Returns:
         bool: True on success, else False on error.
         """
-        return self._csr.SetActiveDate(active_date, flags)
+        return self._csr.SetActiveDate(active_date, 0)
 
-    def set_active_date_range(self, start: str, end: str, flags=0):
+    def set_active_date_range(self, start: str, end: str):
         """
         Set active active_date range used for view cursors using a view linking filter_str.
 
@@ -284,7 +293,7 @@ class CmcCursor:
         Returns:
         bool: True on success, else False on error.
         """
-        return self._csr.SetActiveDateRange(start, end, flags)
+        return self._csr.SetActiveDateRange(start, end, 0)
 
     def set_related_column(
             self, col: int, con_name: str, connected_cat: str, col_name: str, flags: int
