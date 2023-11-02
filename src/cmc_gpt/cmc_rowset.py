@@ -41,6 +41,7 @@ class RowSetBase:
                     CMC_FLAG_CANONICAL - return field value in canonical form
         Returns:
             Value at the specified row and column.
+
         """
         return self._rs.GetRowValue(row_index, column_index, flags)
 
