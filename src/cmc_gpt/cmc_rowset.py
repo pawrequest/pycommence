@@ -16,6 +16,11 @@ class RowSetBase:
         self._rs = cmc_rs
 
     @property
+    def all_column_labels(self) -> list:
+        """Returns a list of all column labels."""
+        return [self.get_column_label(i) for i in range(self.column_count)]
+
+    @property
     def column_count(self) -> int:
         """Returns the number of columns in the row set."""
         return self._rs.ColumnCount
@@ -81,6 +86,13 @@ class RowSetBase:
             Values of the specified row.
         """
         return self._rs.GetRow(row_index, delim, flags)
+
+    def get_rows_dict(self, num):
+        """Returns a dictionary of the first num rows."""
+        labels = self.all_column_labels
+        delim = '%^&*'
+        rows = [self.get_row(i, delim=delim) for i in range(num)]
+        return [dict(zip(labels, row.split(delim))) for row in rows]
 
     def get_shared(self, row_index: int) -> bool:
         """

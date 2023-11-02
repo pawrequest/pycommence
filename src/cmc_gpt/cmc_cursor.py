@@ -1,4 +1,4 @@
-from cmc_gpt.cmc_rowset import RowSetQuery, RowSetAdd, RowSetEdit, RowSetDelete
+from cmc_gpt.cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 from commence_py.auto_cmc import ICommenceCursor
 
 
@@ -135,7 +135,7 @@ class CommenceCursor:
         """
         return self._csr.SeekRowApprox(numerator, denominator)
 
-    def get_query_row_set(self, count: int, flags: int = 0) -> 'RowSetQuery':
+    def get_query_row_set(self, count: int) -> 'RowSetQuery':
         """
         Create a rowset object with the results of a query.
 
@@ -153,7 +153,7 @@ class CommenceCursor:
         Use CommenceXRowSet.row_count to determine the actual row count.
         GetQueryRowSet will advance the 'current row pointer' by the number of rows in the rowset.
         """
-        result = self._csr.GetQueryRowSet(count, flags)
+        result = self._csr.GetQueryRowSet(count, 0)
         return None if result is None else RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str, flags: int = 0):
@@ -165,7 +165,7 @@ class CommenceCursor:
 
         Parameters:
         count (int): The number of rows to create.
-        flags (int, optional): Option flags. Use CMC_FLAG_SHARED to default all rows to shared. Defaults to 0.
+        flags (int): Option flags. Use CMC_FLAG_SHARED to default all rows to shared. Defaults to 0.
 
         Returns:
         RowSetAdd: A rowset object for adding new items, or None on error.
@@ -176,7 +176,7 @@ class CommenceCursor:
         """
         return RowSetAdd(self._csr.GetAddRowSet(count, flags))
 
-    def get_edit_row_set(self, count: int, flags: int = 0) -> RowSetEdit:
+    def get_edit_row_set(self, count: int) -> RowSetEdit:
         """
         Creates a rowset of existing items for editing.
 
@@ -190,7 +190,7 @@ class CommenceCursor:
         Comments:
         The rowset inherits the column set from the cursor.
         """
-        return RowSetEdit(self._csr.GetEditRowSet(count, flags))
+        return RowSetEdit(self._csr.GetEditRowSet(count, 0))
 
     def get_edit_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetEdit:
         """
