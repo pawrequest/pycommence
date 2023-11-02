@@ -1,5 +1,5 @@
 from .auto_cmc import ICommenceCursor
-from .cmc_entities import Connector
+from .cmc_entities import Connection
 from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 
 
@@ -336,7 +336,7 @@ class CmcCursor:
         if not res:
             raise ValueError(f'Could not set filter for {field_name} {condition} {value}')
 
-    def filter_by_connection(self, item_name: str, connection: Connector):
+    def filter_by_connection(self, item_name: str, connection: Connection):
         filter_str = (f'[ViewFilter(1, CTI,, {connection.desc}, '  # noqa: E231
                       f'{connection.to_table}, {item_name})]')
         res = self.set_filter(filter_str)
