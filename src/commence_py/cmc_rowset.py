@@ -11,7 +11,7 @@ class RowSetBase(ABC):
         _rs: Internal representation of a Commence Row Set object.
     """
 
-    def __init__(self, cmc_rs) -> None:
+    def __init__(self, cmc_rs):
         """
         Initializes a RowSetBase instance.
 
@@ -114,7 +114,7 @@ class RowSetBase(ABC):
 
 
 class RowSetQuery(RowSetBase):
-    def __init__(self, cmc_rs: ICommenceQueryRowSet) -> None:
+    def __init__(self, cmc_rs: ICommenceQueryRowSet):
         super().__init__(cmc_rs)
 
     def get_field_to_file(
@@ -139,6 +139,8 @@ class RowSetQuery(RowSetBase):
 
 
 class RowSetModifies(RowSetBase):
+    """ adds functionality to modify rows """""
+
     def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
         """
         Modifies a field value in the rowset.
