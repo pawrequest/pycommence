@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "commence_py"
+name = "commence-py"
 version = "0.1.0"
 description = "warapper for Commence Rm"
 dependencies = [
