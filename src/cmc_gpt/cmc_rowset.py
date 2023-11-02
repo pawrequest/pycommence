@@ -16,7 +16,7 @@ class RowSetBase:
         self._rs = cmc_rs
 
     @property
-    def all_column_labels(self) -> list:
+    def headers(self) -> list:
         """Returns a list of all column labels."""
         return [self.get_column_label(i) for i in range(self.column_count)]
 
@@ -30,7 +30,7 @@ class RowSetBase:
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_row_value(self, row_index: int, column_index: int, flags: int = 0) -> str:
+    def get_value(self, row_index: int, column_index: int, flags: int = 0) -> str:
         """
         Retrieves the value at the specified row and column.
 
@@ -67,8 +67,6 @@ class RowSetBase:
             label: Label of the column.
             flags: Logical OR of following option flags:
                     CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
-
-
         Returns:
             Index of the specified column label.
         """
@@ -82,7 +80,6 @@ class RowSetBase:
             row_index: Index of the row.
             flags: Logical OR of following option flags:
                     CMC_FLAG_CANONICAL - return field value in canonical form
-
         Returns:
             Values of the specified row.
         """
@@ -90,7 +87,7 @@ class RowSetBase:
 
     def get_rows_dict(self, num):
         """Returns a dictionary of the first num rows."""
-        labels = self.all_column_labels
+        labels = self.headers
         delim = '%^&*'
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(labels, row.split(delim))) for row in rows]
