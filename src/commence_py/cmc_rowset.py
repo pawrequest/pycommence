@@ -153,6 +153,22 @@ class RowSetModifies(RowSetBase):
         """
         return self._rs.ModifyRow(row_index, column_index, value, 0)
 
+    def modify_row_dict(self, row_index: int, row_dict: dict) -> bool:
+        """
+        Modifies a row in the rowset.
+
+        Args:
+            row_index (int): The index of the row to modify.
+            row_dict (dict): A dictionary of column names and values to modify.
+
+        Returns:
+            bool: True on success, False on failure.
+        """
+        for key, value in row_dict.items():
+            col_idx = self.get_column_index(key)
+            self.modify_row(row_index, col_idx, value)
+        return True
+
     def commit(self) -> bool:
         """
         Makes row modifications permanent (commit to disk).

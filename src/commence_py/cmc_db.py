@@ -6,37 +6,37 @@ from .cmc_cursor import CmcCursor
 
 class CmcDB:
     def __init__(self):
-        self.cmc_db = Dispatch('Commence.DB')
+        self._cmc = Dispatch('Commence.DB')
 
     @property
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
-        return self.cmc_db.Name
+        return self._cmc.Name
 
     @property
     def path(self) -> str:
         """(read-only) Full path of the Commence database."""
-        return self.cmc_db.Path
+        return self._cmc.Path
 
     @property
     def registered_user(self) -> str:
         """(read-only) CR/LF delimited string with username, company name, and serial number."""
-        return self.cmc_db.RegisteredUser
+        return self._cmc.RegisteredUser
 
     @property
     def shared(self) -> bool:
         """(read-only) TRUE if the database is enrolled in a workgroup."""
-        return self.cmc_db.Shared
+        return self._cmc.Shared
 
     @property
     def version(self) -> str:
         """(read-only) Version number in x.y format."""
-        return self.cmc_db.Version
+        return self._cmc.Version
 
     @property
     def version_ext(self) -> str:
         """(read-only) Version number in x.y.z.w format."""
-        return self.cmc_db.VersionExt
+        return self._cmc.VersionExt
 
     def get_conversation(
             self, topic: str, application_name: str = 'Commence'
@@ -52,7 +52,7 @@ class CmcDB:
         Returns:
             CommenceConversation: A CommenceConversation object on success, None on failure.
         """
-        conversation_obj = self.cmc_db.GetConversation(application_name, topic)
+        conversation_obj = self._cmc.GetConversation(application_name, topic)
         if conversation_obj is None:
             raise ValueError(
                 f'Could not create conversation object for {application_name}!{topic}'
@@ -93,4 +93,4 @@ class CmcDB:
         For CMC_CURSOR_PILOT*, the column set for the resulting cursor will only include fields defined by the Commence preferences (in no particular order). It is not possible to change the filter, sort, or column set.
         See the Developer Notes for more information about the CMC_FLAG_PILOT and CMC_FLAG_INTERNET flags.
         """
-        return CmcCursor(self.cmc_db.GetCursor(mode, name, flags))
+        return CmcCursor(self._cmc.GetCursor(mode, name, flags))
