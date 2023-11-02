@@ -240,11 +240,11 @@ class CmcCursor:
         The rowset inherits the column set from the cursor.
         """
         if count is None:
-            if self.row_count > 1:
-                check = input(f'Are you sure you want to delete {self.row_count} rows? (y/n)')
-                if check.lower() != 'y':
-                    raise ValueError('Aborted deletion.')
             count = self.row_count
+        if count > 1:
+            check = input(f'Are you sure you want to delete {self.row_count} rows? (y/n)')
+            if check.lower() != 'y':
+                raise ValueError('Aborted deletion.')
         return RowSetDelete(self._csr.GetDeleteRowSet(count, 0))
 
     def get_delete_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetDelete:
@@ -383,5 +383,6 @@ class CmcCursor:
 
     def add_record(self, record_name, package: dict):
         row_set = self.get_add_row_set(1)
+        row_set.modify_row(0, 0, record_name)
         row_set.modify_row_dict(0, package)
         row_set.commit()
