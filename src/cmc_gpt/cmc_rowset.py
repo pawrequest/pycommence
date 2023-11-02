@@ -1,5 +1,3 @@
-
-
 class RowSetBase:
     """
     Base class representing a Commence Row Set.
@@ -27,54 +25,62 @@ class RowSetBase:
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_row_value(self, row_index: int, column_index: int) -> str:
+    def get_row_value(self, row_index: int, column_index: int, flags: int = 0) -> str:
         """
         Retrieves the value at the specified row and column.
 
         Args:
             row_index: Index of the row.
             column_index: Index of the column.
-
+            flags: Logical OR of following option flags:
+                    CMC_FLAG_CANONICAL - return field value in canonical form
         Returns:
             Value at the specified row and column.
         """
-        return self._rs.GetRowValue(row_index, column_index)
+        return self._rs.GetRowValue(row_index, column_index, flags)
 
-    def get_column_label(self, index: int) -> str:
+    def get_column_label(self, index: int, flags=0) -> str:
         """
         Retrieves the label of the specified column.
 
         Args:
             index: Index of the column.
+            flags: Logical OR of following option flags:
+                CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
 
         Returns:
             Label of the specified column.
         """
-        return self._rs.GetColumnLabel(index)
+        return self._rs.GetColumnLabel(index, flags)
 
-    def get_column_index(self, label: str) -> int:
+    def get_column_index(self, label: str, flags: int = 0) -> int:
         """
         Searches and retrieves the index of the specified column label.
 
         Args:
             label: Label of the column.
+            flags: Logical OR of following option flags:
+                    CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
+
 
         Returns:
             Index of the specified column label.
         """
-        return self._rs.GetColumnIndex(label)
+        return self._rs.GetColumnIndex(label, flags)
 
-    def get_row(self, row_index: int) -> str:
+    def get_row(self, row_index: int, delim: str = ';', flags: int = 0) -> str:
         """
         Retrieves the values of the specified row.
 
         Args:
             row_index: Index of the row.
+            flags: Logical OR of following option flags:
+                    CMC_FLAG_CANONICAL - return field value in canonical form
 
         Returns:
             Values of the specified row.
         """
-        return self._rs.GetRow(row_index)
+        return self._rs.GetRow(row_index, delim, flags)
 
     def get_shared(self, row_index: int) -> bool:
         """
@@ -97,17 +103,17 @@ class RowSetAdd(RowSetBase):
         RowSetBase: Base class for Commence Row Set objects.
     """
 
-    def commit(self, flags: int = 0) -> bool:
+    def commit(self) -> bool:
         """
         Makes row modifications permanent (commit to disk).
 
         Args:
-            flags (int, optional): Flags for the commit operation. Defaults to 0.
-
+            flags: Unused at present, must be 0.
         Returns:
             bool: True on success, False on failure.
+        After Commit(), the ICommenceAddRowSet is no Longer valid and should be discarded.
         """
-        return self._rs.Commit(flags)
+        return self._rs.Commit(0)
 
     def commit_get_cursor(self) -> 'CommenceCursor':
         """
@@ -116,7 +122,7 @@ class RowSetAdd(RowSetBase):
         Returns:
             CommenceCursor: Cursor object with the committed data.
         """
-        return CommenceCursor(self._rs.CommitGetCursor())
+        return self._rs.CommitGetCursor(0)
 
 
 class RowSetDelete(RowSetBase):
@@ -133,11 +139,13 @@ class RowSetDelete(RowSetBase):
 
         Args:
             row_index (int): The index of the row to mark for deletion.
+            flags: Unused at present, must be 0.
 
         Returns:
             bool: True on success, False on failure.
+        Deletion is not permanent until Commit() is called.
         """
-        return self._rs.DeleteRow(row_index)
+        return self._rs.DeleteRow(row_index, 0)
 
     def commit(self) -> bool:
         """
@@ -146,7 +154,7 @@ class RowSetDelete(RowSetBase):
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.Commit()
+        return self._rs.Commit(0)
 
 
 class RowSetEdit(RowSetBase):
@@ -169,7 +177,7 @@ class RowSetEdit(RowSetBase):
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.ModifyRow(row_index, column_index, value)
+        return self._rs.ModifyRow(row_index, column_index, value, 0)
 
     def commit(self) -> bool:
         """
@@ -178,7 +186,7 @@ class RowSetEdit(RowSetBase):
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.Commit()
+        return self._rs.Commit(0)
 
     def commit_get_cursor(self) -> 'CommenceCursor':
         """
@@ -187,7 +195,7 @@ class RowSetEdit(RowSetBase):
         Returns:
             CommenceCursor: Cursor object with the committed data.
         """
-        return 'CommenceCursor'(self._rs.CommitGetCursor())
+        return self._rs.CommitGetCursor(0)
 
 
 class RowSetQuery(RowSetBase):
@@ -199,7 +207,7 @@ class RowSetQuery(RowSetBase):
     """
 
     def get_field_to_file(
-        self, row_index: int, column_index: int, file_path: str
+            self, row_index: int, column_index: int, file_path: str, flags: int = 0
     ) -> bool:
         """
         Saves the field value at the given (row, column) to a file.
@@ -208,8 +216,12 @@ class RowSetQuery(RowSetBase):
             row_index (int): The index of the row.
             column_index (int): The index of the column.
             file_path (str): The path where the field value will be saved to.
+            flags: Logical OR of following option flags:
+                    CMC_FLAG_CANONICAL - return field value in canonical form
+
+
 
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.GetFieldToFile(row_index, column_index, file_path)
+        return self._rs.GetFieldToFile(row_index, column_index, file_path, flags)
