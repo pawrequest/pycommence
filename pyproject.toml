@@ -21,7 +21,6 @@ mypy_path = "stubs"
 line-length = 100
 fix = true
 show-fixes = true
-show-source = true
 src = ["src", "test"]
 exclude = ["src/commence_py/cmc_dde.py"]
 
