@@ -3,9 +3,9 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "commence-py"
+name = "pycommence"
 version = "0.1.0"
-description = "warapper for Commence Rm"
+description = "wrapper for Commence Rm via pywin32"
 dependencies = [
     "pywin32",
 ]
@@ -18,7 +18,7 @@ strict = true
 mypy_path = "stubs"
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 fix = true
 show-fixes = true
 src = ["src", "test"]
