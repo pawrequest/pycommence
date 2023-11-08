@@ -116,4 +116,6 @@ class CmcDB:
                 raise ValueError(f'Mode {mode} ("{CursorModes(mode).name}") requires name param to be set')
         return CmcCursor(self._cmc.GetCursor(mode, name, flags))
 
+        # todo fix errors on non-standard modes
+
         # return CmcCursor(self._cmc.GetCursor(mode, flags))
