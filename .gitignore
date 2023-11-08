@@ -2,3 +2,4 @@
 /build/
 /src/commence_py.egg-info/
 /.idea/
+*__pycache__*

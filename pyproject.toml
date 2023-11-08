@@ -1,0 +1,50 @@
+[project]
+name = "pycommence"
+version = "0.1.0"
+description = "wrapper for Commence Rm via pywin32"
+authors = [
+    { name = "PawRequest", email = "pycommence+pawrequest@users.noreply.github.com" }
+]
+dependencies = [
+    "pywin32",
+]
+readme = "README.md"
+requires-python = ">= 3.8"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pytest",
+    "mypy"
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+
+[tool.mypy]
+files = "src/**/*.py"
+ignore_missing_imports = true
+strict = true
+#mypy_path = "stubs" # no stubs yet
+
+[tool.ruff]
+line-length = 120
+fix = true
+show-fixes = true
+src = ["src", "test"]
+exclude = ["src/commence_py/cmc_dde.py"] # legacy code needs refactor
+
+[tool.ruff.lint]
+extend-select = [
+    "UP", # pyupgrade
+    "E", # pycodestyle
+    "W", # pycodestyle warnings
+]
+
+[tool.ruff.format]
+quote-style = "single"
