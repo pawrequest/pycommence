@@ -15,7 +15,6 @@ class CursorModes(Enum):
     PILOTAPPT = 6
 
 
-
 class CmcDB:
     def __init__(self, db_name='Commence.DB'):
         self._cmc = Dispatch(db_name)
@@ -111,7 +110,7 @@ class CmcDB:
         For CMC_CURSOR_PILOT*, the column set for the resulting cursor will only include fields defined by the Commence preferences (in no particular order). It is not possible to change the filter, sort, or column set.
         See the Developer Notes for more information about the CMC_FLAG_PILOT and CMC_FLAG_INTERNET flags.
         """
-        if mode in [0,1]:
+        if mode in [0, 1]:
             if name is None:
                 raise ValueError(f'Mode {mode} ("{CursorModes(mode).name}") requires name param to be set')
         return CmcCursor(self._cmc.GetCursor(mode, name, flags))
