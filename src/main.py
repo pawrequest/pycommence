@@ -1,4 +1,5 @@
-from commence_py import CmcDB
+from pprint import pprint
+from pycommence import CmcDB
 
 
 def main():
@@ -19,6 +20,7 @@ def this_year():
     qs = cursor.get_query_row_set(count)
     dicts = qs.get_rows_dict(count)
     sorted_by_send_date = sorted(dicts, key=lambda x: x['Send Out Date'])
+    pprint(sorted_by_send_date)
     ...
 
 
