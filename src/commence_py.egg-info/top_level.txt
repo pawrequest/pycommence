@@ -1,3 +1,0 @@
-__init__
-cmc_gpt
-commence_py

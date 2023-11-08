@@ -1,7 +1,5 @@
 import pytest
 
-from src.cmc_gpt.cmc_cursor import CmcCsr
-from src.cmc_gpt.cmc_db import CmcDB
 
 
 @pytest.fixture

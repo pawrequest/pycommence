@@ -1,12 +1,24 @@
+from enum import Enum
+
 from win32com.client import Dispatch
 
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
 
 
+class CursorModes(Enum):
+    CATEGORY = 0
+    VIEW = 1
+    PILOTAB = 2
+    PILOTMEMO = 3
+    PILOTTODO = 5
+    PILOTAPPT = 6
+
+
+
 class CmcDB:
-    def __init__(self):
-        self._cmc = Dispatch('Commence.DB')
+    def __init__(self, db_name='Commence.DB'):
+        self._cmc = Dispatch(db_name)
 
     @property
     def name(self) -> str:
@@ -50,7 +62,9 @@ class CmcDB:
                          Examples include "GetData", "ViewData", etc.
 
         Returns:
-            CommenceConversation: A CommenceConversation object on success, None on failure.
+            CommenceConversation: A CommenceConversation object on success.
+
+        Raises: ValueError if failure
         """
         conversation_obj = self._cmc.GetConversation(application_name, topic)
         if conversation_obj is None:
@@ -59,7 +73,7 @@ class CmcDB:
             )
         return CommenceConversation(conversation_obj)
 
-    def get_cursor(self, name: str, mode: int = 0, flags: int = 0) -> CmcCursor:
+    def get_cursor(self, name: str or None = None, mode: int = 0, flags: int = 0) -> CmcCursor:
         """
         Create a cursor object for accessing Commence data.
 
@@ -75,17 +89,21 @@ class CmcDB:
                  Preferences - Other Apps - 3Com Pilot To Do List.
             6 - CMC_CURSOR_PILOTAPPT: Use the Commence category and fields defined from
                  Preferences - Other Apps - 3Com Pilot Date Book.
-        name (str, optional): Name of an object in the database. Usage determined by mode.
+
+        name (str): Name of an object in the database. Usage determined by mode.
             For CMC_CURSOR_CATEGORY, name is the category name.
             For CMC_CURSOR_VIEW, name is the view name.
             For CMC_CURSOR_PILOT*, name is unused. Defaults to ''.
+
         flags (int, optional): Additional option flags. Logical OR of the following option flags:
             CMC_FLAG_PILOT - Save Item agents defined for the Pilot subsystem will fire.
             CMC_FLAG_INTERNET - Save Item agents defined for the Internet/intranet will fire.
             Defaults to 0.
 
         Returns:
-        CommenceCursor: A CommenceCursor object on success, None on failure.
+        CommenceCursor: A CommenceCursor object on success.
+
+        Raises: ValueError if no name given for name based searches
 
         Comments:
         For CMC_CURSOR_CATEGORY, the resulting cursor will have a column set composed of all supported fields in the category (in no particular order).
@@ -93,4 +111,9 @@ class CmcDB:
         For CMC_CURSOR_PILOT*, the column set for the resulting cursor will only include fields defined by the Commence preferences (in no particular order). It is not possible to change the filter, sort, or column set.
         See the Developer Notes for more information about the CMC_FLAG_PILOT and CMC_FLAG_INTERNET flags.
         """
+        if mode in [0,1]:
+            if name is None:
+                raise ValueError(f'Mode {mode} ("{CursorModes(mode).name}") requires name param to be set')
         return CmcCursor(self._cmc.GetCursor(mode, name, flags))
+
+        # return CmcCursor(self._cmc.GetCursor(mode, flags))
