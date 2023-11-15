@@ -30,13 +30,11 @@ class CmcCursor:
         Parameters:
         filter_text (str): Text defining the new filter clause.
         Syntax is identical to the one used by the DDE ViewFilter request.
-        flags (int, optional): Unused at present, must be 0. Defaults to 0.
+        flags (int): Unused at present, must be 0.
 
         Returns:
         bool: True on success, False on error.
 
-        Comments:
-        https://peps.python.org/pep-0563/be overwritten.
 
         If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter.
         That is, when building the rowset, the view's filter is first evaluated.
