@@ -1,3 +1,5 @@
+from typing import Iterable, List
+
 from win32com.client import Dispatch
 
 from .cmc_conversation import CommenceConversation
@@ -15,10 +17,12 @@ from .cmc_entities import CursorType, OptionFlag
 #     PILOTAPPT = 6
 
 
+
 class CmcDB:
     def __init__(self, db_name='Commence.DB'):
         self.db_name = db_name
         self._cmc = Dispatch(db_name)
+        self._csrs = {}
 
     @property
     def name(self) -> str:
@@ -80,9 +84,9 @@ class CmcDB:
         return CommenceConversation(conversation_obj)
 
     def get_cursor(self,
-                   mode: CursorType,
                    name: str or None = None,
-                   flags: OptionFlag or None = None) -> CmcCursor:
+                   mode: CursorType=CursorType.CATEGORY,
+                   flags: List[OptionFlag] or OptionFlag or None = None) -> CmcCursor:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -102,10 +106,15 @@ class CmcDB:
 
         """
         if flags:
+            if isinstance(flags, OptionFlag):
+                flags = [flags]
             for flag in flags:
                 if flag not in [OptionFlag.PILOT, OptionFlag.INTERNET]:
                     raise ValueError(f'Invalid flag: {flag}')
-            flags = flags.value
+            flags = ', '.join(str(f.value) for f in flags)
+
+        else:
+            flags = 0
 
         mode = mode.value
         if mode in [0, 1]:
@@ -116,3 +125,12 @@ class CmcDB:
 
         # todo fix errors on non-standard modes
 
+class CommenceByCategory:
+    def __init__(self, tables: str or Iterable[str], db_name='Commence.DB'):
+        self.DB = CmcDB(db_name)
+        self._csrs = {}
+        if isinstance(tables, str):
+            tables = [tables]
+        for table in tables:
+            self._csrs[table] = self.DB.get_cursor(CursorType.CATEGORY, table)
+        ...

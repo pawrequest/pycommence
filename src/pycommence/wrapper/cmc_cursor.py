@@ -1,9 +1,11 @@
-from .auto_cmc import ICommenceCursor
-from .cmc_entities import CmcError, Connection
+from pycommence.wrapper.icommence import ICommenceCursor
 from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 
 
 class CmcCursor:
+    """ Python wrapper for Cursor Com-object.
+     Created by CmcDb.GetCursor().
+    """
     def __init__(self, cmc_cursor: ICommenceCursor):
         self._csr = cmc_cursor
 
@@ -30,7 +32,6 @@ class CmcCursor:
         Parameters:
         filter_text (str): Text defining the new filter clause.
         Syntax is identical to the one used by the DDE ViewFilter request.
-        flags (int): Unused at present, must be 0.
 
         Returns:
         bool: True on success, False on error.
@@ -41,9 +42,15 @@ class CmcCursor:
         Items that match are then passed through the cursor's secondary filter.
         The rowset only contains items that satisfy both filters.
         """
-        return self._csr.SetFilter(filter_text, 0)
+        res = self._csr.SetFilter(filter_text, 0)
+        if not res:
+            raise ValueError(f'Could not set filter {filter_text}')
+        if self.row_count == 0:
+            print(f'Warning: filter {filter_text} returned no rows.')
+            res = False
+        return res
 
-    def set_logic(self, logic_text: str, flags: int = 0) -> bool:
+    def set_filter_logic(self, logic_text: str, flags: int = 0) -> bool:
         """
         Defines the filter logic for the cursor.
 
@@ -243,7 +250,8 @@ class CmcCursor:
             check = input(f'Are you sure you want to delete {self.row_count} rows? (y/n)')
             if check.lower() != 'y':
                 raise ValueError('Aborted deletion.')
-        return RowSetDelete(self._csr.GetDeleteRowSet(count, 0))
+        rs = self._csr.GetDeleteRowSet(count, 0)
+        return RowSetDelete(rs)
 
     def get_delete_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetDelete:
         """
@@ -337,50 +345,55 @@ class CmcCursor:
     #     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}, {date})]'  # noqa E231
     #     res = cursor.SetFilter(filter_str, 0)
     #     return res
-
-    def filter_by_field(self, field_name: str, condition, value=None):
-        # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
-        val_cond = f', "{value}"' if value else ''
-        filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
-        res = self.set_filter(filter_str)
-        if not res:
-            raise ValueError(f'Could not set filter for {field_name} {condition} {value}')
-
-    def filter_by_connection(self, item_name: str, connection: Connection):
-        filter_str = (f'[ViewFilter(1, CTI,, {connection.desc}, '  # noqa: E231
-                      f'{connection.to_table}, {item_name})]')
-        res = self.set_filter(filter_str)
-        if not res:
-            raise ValueError(f'Could not set filter for ' f'{connection.desc} = {item_name}')
-
-    def filter_by_name(self, name: str):
-        return self.filter_by_field('Name', 'Equal To', name)
-
-    def edit_record(self, record, package: dict):
-        self.filter_by_name(record)
-        row_set = self.get_edit_row_set()
-        for key, value in package.items():
-            try:
-                col_idx = row_set.get_column_index(key)
-                row_set.modify_row(0, col_idx, str(value))
-            except Exception:
-                raise CmcError(f'Could not modify {key} to {value}')
-        row_set.commit()
-        ...
-
-    def get_record(self, record_name):
-        self.filter_by_name(record_name)
-        row_set = self.get_query_row_set()
-        record = row_set.get_rows_dict()
-        return record
-
-    def delete_record(self, record_name):
-        self.filter_by_name(record_name)
-        row_set = self.get_delete_row_set()
-        row_set.commit()
-
-    def add_record(self, record_name, package: dict):
-        row_set = self.get_add_row_set(1)
-        row_set.modify_row(0, 0, record_name)
-        row_set.modify_row_dict(0, package)
-        row_set.commit()
+    #
+    # def filter_by_field(self, field_name: str, condition, value=None):
+    #     # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
+    #     val_cond = f', "{value}"' if value else ''
+    #     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
+    #     res = self.set_filter(filter_str)
+    #     return res
+    #
+    # def filter_by_connection(self, item_name: str, connection: Connection):
+    #     filter_str = (f'[ViewFilter(1, CTI,, {connection.desc}, '  # noqa: E231
+    #                   f'{connection.to_table}, {item_name})]')
+    #     res = self.set_filter(filter_str)
+    #     if not res:
+    #         raise ValueError(f'Could not set filter for ' f'{connection.desc} = {item_name}')
+    #
+    # def filter_by_name(self, name: str):
+    #     res = self.filter_by_field('Name', 'Equal To', name)
+    #     return res
+    #
+    # def edit_record(self, record, package: dict):
+    #     self.filter_by_name(record)
+    #     row_set = self.get_edit_row_set()
+    #     for key, value in package.items():
+    #         try:
+    #             col_idx = row_set.get_column_index(key)
+    #             row_set.modify_row(0, col_idx, str(value))
+    #         except Exception:
+    #             raise CmcError(f'Could not modify {key} to {value}')
+    #     row_set.commit()
+    #     ...
+    #
+    # def get_record(self, record_name):
+    #     res = self.filter_by_name(record_name)
+    #     if not res:
+    #         raise CmcError(f'Could not find {record_name}')
+    #     row_set = self.get_query_row_set()
+    #     record = row_set.get_rows_dict()
+    #     return record
+    #
+    # def delete_record(self, record_name):
+    #     res = self.filter_by_name(record_name)
+    #     row_set = self.get_delete_row_set()
+    #     row_set.delete_row(0)
+    #     res = row_set.commit()
+    #     return res
+    #
+    # def add_record(self, record_name, package: dict):
+    #     row_set = self.get_add_row_set(1)
+    #     row_set.modify_row(0, 0, record_name)
+    #     row_set.modify_row_dict(0, package)
+    #     res = row_set.commit()
+    #     return res

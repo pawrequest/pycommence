@@ -1,7 +1,13 @@
-from abc import ABC
+from __future__ import annotations
 
-from .auto_cmc import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
+from abc import ABC
+from typing import TypeAlias
+
+from pycommence.wrapper.icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
     ICommenceQueryRowSet
+
+
+RowSetType: TypeAlias = ICommenceEditRowSet or ICommenceQueryRowSet or ICommenceAddRowSet or ICommenceDeleteRowSet
 
 
 class RowSetBase(ABC):
@@ -12,7 +18,7 @@ class RowSetBase(ABC):
         _rs: Internal representation of a Commence Row Set object.
     """
 
-    def __init__(self, cmc_rs):
+    def __init__(self, cmc_rs:RowSetType):
         """
         Initializes a RowSetBase instance.
 
@@ -169,18 +175,23 @@ class RowSetModifies(RowSetBase):
         """
         for key, value in row_dict.items():
             col_idx = self.get_column_index(key)
+            if col_idx == -1:
+                raise ValueError(f'Invalid column name: {key}')
             self.modify_row(row_index, col_idx, value)
         return True
 
     def commit(self) -> bool:
         """
-        Makes row modifications permanent (commit to disk).
+        Commit to disk.
         Returns:
             bool: True on success, False on failure.
         flags: Unused at present, must be 0.
-        After Commit(), the ICommenceAddRowSet is no Longer valid and should be discarded.
+        After Commit(), the RowSet is no Longer valid and should be discarded.
         """
-        return self._rs.Commit(0)
+        res = self._rs.Commit(0)
+        if res != 0:
+            raise ValueError(f'Commit failed')
+        return True
 
     def commit_get_cursor(self) -> 'CommenceCursor':
         """
