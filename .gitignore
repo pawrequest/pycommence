@@ -4,3 +4,4 @@
 /src/commence_py.egg-info/
 /.idea/
 *__pycache__*
+/.venv/
