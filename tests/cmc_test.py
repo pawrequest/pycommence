@@ -1,10 +1,9 @@
-from pycommence import CmcDB
 from pycommence import api
 
 rec_name = '_xcga fake hire'
 package = {'To Customer': 'Test', 'Delivery Contact': 'a contact', }
 
-db = CmcDB()
+db = api.CmcDB()
 curs = db.get_cursor(name='Hire')
 if api.filter_by_name(curs, rec_name):
     delet = api.delete_record(curs, rec_name)

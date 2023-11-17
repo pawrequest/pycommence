@@ -1,5 +1,3 @@
-from pycommence.wrapper.cmc_db import CmcDB as CmcDB
-from pycommence import api as api
 
 """
 todo:

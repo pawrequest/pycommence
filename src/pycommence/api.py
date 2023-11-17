@@ -1,6 +1,6 @@
 from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.wrapper.cmc_entities import CmcError, Connection
-
+from pycommence.wrapper.cmc_db import CmcDB
 
 # def filter_by_date(
 #         cursor: ICommenceCursor,
