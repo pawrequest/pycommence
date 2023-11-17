@@ -37,7 +37,7 @@ line-length = 120
 fix = true
 show-fixes = true
 src = ["src", "test"]
-exclude = ["src/commence_py/cmc_dde.py"] # legacy code needs refactor
+#exclude = ["src/commence_py/cmc_dde.py"] # legacy code needs refactor
 
 [tool.ruff.lint]
 extend-select = [

@@ -1,5 +1,5 @@
 from win32com.client import Dispatch
-
+""" maybe cache cursors or smth?"""
 
 class CmcHandler:
     _db = None

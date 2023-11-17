@@ -4,7 +4,7 @@ from win32com.client import Dispatch
 
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
-from .cmc_entities import CursorType, OptionFlag
+from .cmc_enums import CursorType, OptionFlag
 
 
 # class CursorModes(Enum):
@@ -22,7 +22,6 @@ class CmcDB:
     def __init__(self, db_name='Commence.DB'):
         self.db_name = db_name
         self._cmc = Dispatch(db_name)
-        self._csrs = {}
 
     @property
     def name(self) -> str:
@@ -105,6 +104,7 @@ class CmcDB:
         Raises: ValueError if no name given for name based searches
 
         """
+        #todo can ther be multiple flags?
         if flags:
             if isinstance(flags, OptionFlag):
                 flags = [flags]

@@ -1,21 +1,68 @@
 from pprint import pprint
-from pycommence import CmcDB
+
+import pythoncom
+from win32com.universal import com_error
+
+from pycommence.api import CmcDB, add_record, delete_record, filter_by_field, filter_by_name
+from pycommence.entities import CmcError
+
+TEST_RECORD_NAME = " _TestRecord"
+TEST_PACKAGE_ADD = {'Delivery Contact': 'Fake Deliv contact', 'To Customer': 'Test'}
+TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'Edited Test'}
 
 
-def main():
-    cmc_db = CmcDB()
-    cursor = cmc_db.get_cursor('Hire')
-    cursor.filter_by_name('Test - 10/11/2023 ref 42744')
-    qs = cursor.get_query_row_set(1)
-    dicty = qs.get_rows_dict(1)
-    assert dicty[0]['Name'] == 'Test - 10/11/2023 ref 42744'
+# def main():
+#     cmc_db = CmcDB()
+#     cursor = cmc_db.get_cursor(name='Hire')
+#     filter_by_name(cursor, 'Test - 10/11/2023 ref 42744')
+#     qs = cursor.get_query_row_set(1)
+#     dicty = qs.get_rows_dict(1)
+#     assert dicty[0]['Name'] == 'Test - 10/11/2023 ref 42744'
+#     ...
+
+
+def addy_record():
+    try:
+        db = CmcDB()
+        cursor = db.get_cursor(name='Hire')
+
+        add_result = add_record(cursor, record_name=TEST_RECORD_NAME, package=TEST_PACKAGE_ADD)
+        assert add_result, "Record addition failed"
+    except com_error as e:
+        # todo this is horrible. the error is due to threading but we are not using threading?
+        if e.hresult == -2147483617:
+            raise CmcError('Record already exists')
+    except Exception as e:
+        ...
+
+
+def old():
+    db = CmcDB()
+    curs = db.get_cursor(name='Hire')
+
+    if filter_by_name(curs, TEST_RECORD_NAME):
+        delet = delete_record(curs, TEST_RECORD_NAME)
+        curs = db.get_cursor(name='Hire')
+    add = add_record(curs, record_name=TEST_RECORD_NAME, package=TEST_PACKAGE_ADD)
     ...
+    curs = db.get_cursor(name='Hire')
+    del_row = delete_record(curs, record_name=TEST_RECORD_NAME)
+    ...
+
+
+if __name__ == '__main__':
+    # main()
+    # adding()
+    # this_year()
+    addy_record()
+    # old()
+
 
 
 def this_year():
     cmc_db = CmcDB()
     cursor = cmc_db.get_cursor('Hire')
-    cursor.filter_by_field('Send Out Date', 'After', 'Last year')
+    filter_by_field(cursor, 'Send Out Date', 'After', 'Last year')
     count = cursor.row_count
     qs = cursor.get_query_row_set(count)
     dicts = qs.get_rows_dict(count)
@@ -23,18 +70,3 @@ def this_year():
     pprint(sorted_by_send_date[:5])
     ...
 
-
-def adding():
-    cmc_db = CmcDB()
-    cursor = cmc_db.get_cursor('Address')
-    qs = cursor.get_add_row_set(1)
-    qs.modify_row(0, 0, "An address2")
-    qs.modify_row(0, 1, "HERES A STRING OF TEXT")
-    qs.commit()
-    ...
-
-
-if __name__ == '__main__':
-    # main()
-    # adding()
-    this_year()

@@ -1,4 +1,0 @@
-mypy
-pre-commit>=3.5.0
-ruff
-pytest

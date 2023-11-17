@@ -1,22 +1,4 @@
-from dataclasses import dataclass
 from enum import Enum
-
-
-@dataclass
-class Connection:
-    desc: str
-    from_table: str
-    to_table: str
-
-
-class CmcError(Exception):
-    ...
-
-
-class CommenceNotInstalled(Exception):
-    def __init__(self, msg='Commence is not installed'):
-        self.msg = msg
-        super().__init__(self.msg)
 
 
 class CursorType(Enum):
@@ -60,7 +42,6 @@ class CursorType(Enum):
 
     # open based on the view data used with the Send Letter command
     LETTER_MERGE = 11
-
 
 
 class Bookmark(Enum):

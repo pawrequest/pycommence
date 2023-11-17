@@ -1,16 +1,6 @@
 from pycommence.wrapper.cmc_cursor import CmcCursor
-from pycommence.wrapper.cmc_entities import CmcError, Connection
+from pycommence.entities import CmcError, Connection
 from pycommence.wrapper.cmc_db import CmcDB
-
-# def filter_by_date(
-#         cursor: ICommenceCursor,
-#         field_name: str,
-#         date: datetime.date,
-#         condition='After',
-# ):
-#     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}, {date})]'  # noqa E231
-#     res = cursor.SetFilter(filter_str, 0)
-#     return res
 
 def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, fslot=1):
     # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
@@ -21,11 +11,11 @@ def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, f
 
 
 def filter_by_connection(cursor: CmcCursor, item_name: str, connection: Connection, fslot=1):
-    filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.desc}, '  # noqa: E231
+    filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
                   f'{connection.to_table}, {item_name})]')
     res = cursor.set_filter(filter_str)
     if not res:
-        raise ValueError(f'Could not set filter for ' f'{connection.desc} = {item_name}')
+        raise ValueError(f'Could not set filter for ' f'{connection.name} = {item_name}')
     #todo return
 
 
@@ -71,3 +61,15 @@ def add_record(cursor: CmcCursor, record_name, package: dict):
     res = row_set.commit()
     return res
 
+
+
+
+# def filter_by_date(
+#         cursor: ICommenceCursor,
+#         field_name: str,
+#         date: datetime.date,
+#         condition='After',
+# ):
+#     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}, {date})]'  # noqa E231
+#     res = cursor.SetFilter(filter_str, 0)
+#     return res
