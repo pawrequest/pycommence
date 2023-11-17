@@ -124,13 +124,3 @@ class CmcDB:
         return CmcCursor(self._cmc.GetCursor(mode, name, flags))
 
         # todo fix errors on non-standard modes
-
-class CommenceByCategory:
-    def __init__(self, tables: str or Iterable[str], db_name='Commence.DB'):
-        self.DB = CmcDB(db_name)
-        self._csrs = {}
-        if isinstance(tables, str):
-            tables = [tables]
-        for table in tables:
-            self._csrs[table] = self.DB.get_cursor(CursorType.CATEGORY, table)
-        ...
