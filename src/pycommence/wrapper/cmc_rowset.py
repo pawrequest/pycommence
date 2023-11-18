@@ -6,6 +6,7 @@ from typing import TypeAlias
 
 from pycommence.entities import FLAGS_UNUSED
 
+# todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
     from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.wrapper.icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
