@@ -1,10 +1,10 @@
+'Commence RM Type Library - WIP'
 # ruff: noqa
 # -*- coding: mbcs -*-
 # Created by makepy.py version 0.5.01
 # By python version 3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]
 # From type library 'US_FORM.TLB'
 # On Wed Oct 11 22:12:08 2023
-'Commence RM Type Library'
 makepy_version = '0.5.01'
 python_version = 0x30C00F0
 
@@ -142,10 +142,10 @@ class ICommenceAddRowSet(DispatchBaseClass):
         )
 
     def GetRow(
-        self,
-        nRow=defaultNamedNotOptArg,
-        pDelim=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            pDelim=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -153,10 +153,10 @@ class ICommenceAddRowSet(DispatchBaseClass):
         )
 
     def GetRowValue(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -167,11 +167,11 @@ class ICommenceAddRowSet(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(28, LCID, 1, (11, 0), ((3, 1),), nRow)
 
     def ModifyRow(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        pBuf=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            pBuf=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             23,
@@ -235,7 +235,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceAddRowSet
     def GetAddRowSet(
-        self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceAddRowSet':
         ret = self._oleobj_.InvokeTypes(
             28, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
@@ -248,7 +248,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceDeleteRowSet
     def GetDeleteRowSet(
-        self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceDeleteRowSet':
         ret = self._oleobj_.InvokeTypes(
             31, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
@@ -261,7 +261,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceDeleteRowSet
     def GetDeleteRowSetByID(
-        self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceDeleteRowSet':
         ret = self._oleobj_.InvokeTypes(
             32, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
@@ -274,7 +274,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceEditRowSet
     def GetEditRowSet(
-        self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceEditRowSet':
         ret = self._oleobj_.InvokeTypes(
             29, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
@@ -287,7 +287,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceEditRowSet
     def GetEditRowSetByID(
-        self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceEditRowSet':
         ret = self._oleobj_.InvokeTypes(
             30, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
@@ -300,7 +300,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceQueryRowSet
     def GetQueryRowSet(
-        self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceQueryRowSet':
         ret = self._oleobj_.InvokeTypes(
             26, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
@@ -313,7 +313,7 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceQueryRowSet
     def GetQueryRowSetByID(
-        self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceQueryRowSet':
         ret = self._oleobj_.InvokeTypes(
             27, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
@@ -330,7 +330,7 @@ class ICommenceCursor(DispatchBaseClass):
         )
 
     def SeekRowApprox(
-        self, nNumerator=defaultNamedNotOptArg, nDenom=defaultNamedNotOptArg
+            self, nNumerator=defaultNamedNotOptArg, nDenom=defaultNamedNotOptArg
     ):
         return self._oleobj_.InvokeTypes(
             25, LCID, 1, (3, 0), ((3, 1), (3, 1)), nNumerator, nDenom
@@ -342,30 +342,30 @@ class ICommenceCursor(DispatchBaseClass):
         )
 
     def SetActiveDateRange(
-        self,
-        startDate=defaultNamedNotOptArg,
-        endDate=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            startDate=defaultNamedNotOptArg,
+            endDate=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             35, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags
         )
 
     def SetActiveItem(
-        self,
-        pCategoryName=defaultNamedNotOptArg,
-        pRowID=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            pCategoryName=defaultNamedNotOptArg,
+            pRowID=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             33, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), pCategoryName, pRowID, flags
         )
 
     def SetColumn(
-        self,
-        nColumn=defaultNamedNotOptArg,
-        pName=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nColumn=defaultNamedNotOptArg,
+            pName=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             23, LCID, 1, (11, 0), ((3, 1), (8, 1), (3, 1)), nColumn, pName, flags
@@ -382,12 +382,12 @@ class ICommenceCursor(DispatchBaseClass):
         )
 
     def SetRelatedColumn(
-        self,
-        nColumn=defaultNamedNotOptArg,
-        pConnName=defaultNamedNotOptArg,
-        pCatName=defaultNamedNotOptArg,
-        pName=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nColumn=defaultNamedNotOptArg,
+            pConnName=defaultNamedNotOptArg,
+            pCatName=defaultNamedNotOptArg,
+            pName=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             36,
@@ -439,7 +439,7 @@ class ICommenceDB(DispatchBaseClass):
 
     # Result is of type ICommenceConversation
     def GetConversation(
-        self, pszApplicationName=defaultNamedNotOptArg, pszTopic=defaultNamedNotOptArg
+            self, pszApplicationName=defaultNamedNotOptArg, pszTopic=defaultNamedNotOptArg
     ) -> ICommenceConversation:
         ret = self._oleobj_.InvokeTypes(
             40, LCID, 1, (9, 0), ((8, 1), (8, 1)), pszApplicationName, pszTopic
@@ -452,10 +452,10 @@ class ICommenceDB(DispatchBaseClass):
 
     # Result is of type ICommenceCursor
     def GetCursor(
-        self,
-        nMode=defaultNamedNotOptArg,
-        pName=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nMode=defaultNamedNotOptArg,
+            pName=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ) -> 'ICommenceCursor':
         ret = self._oleobj_.InvokeTypes(
             20, LCID, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, flags
@@ -519,10 +519,10 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
         )
 
     def GetRow(
-        self,
-        nRow=defaultNamedNotOptArg,
-        pDelim=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            pDelim=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -542,10 +542,10 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
         )
 
     def GetRowValue(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -601,10 +601,10 @@ class ICommenceEditRowSet(DispatchBaseClass):
         )
 
     def GetRow(
-        self,
-        nRow=defaultNamedNotOptArg,
-        pDelim=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            pDelim=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -624,10 +624,10 @@ class ICommenceEditRowSet(DispatchBaseClass):
         )
 
     def GetRowValue(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -638,11 +638,11 @@ class ICommenceEditRowSet(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(28, LCID, 1, (11, 0), ((3, 1),), nRow)
 
     def ModifyRow(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        pBuf=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            pBuf=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             23,
@@ -693,11 +693,11 @@ class ICommenceQueryRowSet(DispatchBaseClass):
         )
 
     def GetFieldToFile(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        filename=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            filename=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             26,
@@ -712,10 +712,10 @@ class ICommenceQueryRowSet(DispatchBaseClass):
         )
 
     def GetRow(
-        self,
-        nRow=defaultNamedNotOptArg,
-        pDelim=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            pDelim=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -735,10 +735,10 @@ class ICommenceQueryRowSet(DispatchBaseClass):
         )
 
     def GetRowValue(
-        self,
-        nRow=defaultNamedNotOptArg,
-        nCol=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            nRow=defaultNamedNotOptArg,
+            nCol=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
@@ -789,7 +789,7 @@ class IConnOA(DispatchBaseClass):
         )
 
     def ClearConnection(
-        self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg
+            self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg
     ):
         return self._oleobj_.InvokeTypes(
             12, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify
@@ -814,21 +814,21 @@ class IConnOA(DispatchBaseClass):
         )
 
     def SetActiveDateRange(
-        self,
-        startDate=defaultNamedNotOptArg,
-        endDate=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            startDate=defaultNamedNotOptArg,
+            endDate=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             17, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags
         )
 
     def SetActiveItem(
-        self,
-        pCategoryName=defaultNamedNotOptArg,
-        ItemName=defaultNamedNotOptArg,
-        Clarify=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            pCategoryName=defaultNamedNotOptArg,
+            ItemName=defaultNamedNotOptArg,
+            Clarify=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             15,
@@ -843,17 +843,17 @@ class IConnOA(DispatchBaseClass):
         )
 
     def SetConnection(
-        self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg
+            self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg
     ):
         return self._oleobj_.InvokeTypes(
             13, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify
         )
 
     def SetFilterKeyword(
-        self,
-        sKeyword=defaultNamedNotOptArg,
-        sValue=defaultNamedNotOptArg,
-        flags=defaultNamedNotOptArg,
+            self,
+            sKeyword=defaultNamedNotOptArg,
+            sValue=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             19, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), sKeyword, sValue, flags
@@ -892,7 +892,7 @@ class IControlOA(DispatchBaseClass):
     coclass_clsid = None
 
     def ActiveXGetProperty(
-        self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg
+            self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg
     ):
         return self._ApplyTypes_(
             2,
@@ -906,7 +906,7 @@ class IControlOA(DispatchBaseClass):
         )
 
     def ActiveXMethod(
-        self, MethodName=defaultNamedNotOptArg, ParameterArr=defaultNamedNotOptArg
+            self, MethodName=defaultNamedNotOptArg, ParameterArr=defaultNamedNotOptArg
     ):
         return self._ApplyTypes_(
             4,
@@ -920,7 +920,7 @@ class IControlOA(DispatchBaseClass):
         )
 
     def ActiveXSetProperty(
-        self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg
+            self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg
     ):
         return self._oleobj_.InvokeTypes(
             3, LCID, 1, (11, 0), ((8, 1), (16396, 1)), PropertyName, Parameter1
@@ -1024,7 +1024,7 @@ class IFormOA(DispatchBaseClass):
 
     # Result is of type IConnOA
     def Connection(
-        self, ConnectionName=defaultNamedNotOptArg, CategoryName=defaultNamedNotOptArg
+            self, ConnectionName=defaultNamedNotOptArg, CategoryName=defaultNamedNotOptArg
     ):
         ret = self._oleobj_.InvokeTypes(
             30, LCID, 1, (9, 0), ((8, 1), (8, 1)), ConnectionName, CategoryName
@@ -1143,7 +1143,7 @@ class ISimple(DispatchBaseClass):
     coclass_clsid = IID('{DADC9CCF-FA28-4738-B142-B4CBD17267A6}')
 
     def MyEventCallback(
-        self, id=defaultNamedNotOptArg, pVarResult=defaultNamedNotOptArg
+            self, id=defaultNamedNotOptArg, pVarResult=defaultNamedNotOptArg
     ):
         'method MyEventCallback'
         return self._oleobj_.InvokeTypes(
