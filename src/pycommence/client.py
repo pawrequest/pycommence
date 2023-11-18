@@ -1,26 +1,26 @@
 from win32com.client import Dispatch
 """ maybe cache cursors or smth?"""
 
-class CmcHandler:
-    _db = None
-    _csrs = {}
-    _db_name = "Commence.DB"
-
-    def __new__(cls, table_name):
-        # retrieve or get db connection
-        cls._db = cls._db or Dispatch(cls._db_name)
-
-
-        # retrieve or get cursor
-        csr1 = cls._csrs.get(table_name, cls._db.GetCursor(table_name))
-        if (csr := cls._csrs.get(table_name)) is not None:
-            print(f'returning existing cursor {table_name} from cache')
-            return csr
-        csr = super().__new__(cls)
-        cls._csrs[table_name] = csr
-        csr._connect(cls)
-        return csr
-
+# class CmcHandler:
+#     _db = None
+#     _csrs = {}
+#     _db_name = "Commence.DB"
+#
+#     def __new__(cls, table_name):
+#         # retrieve or get db connection
+#         cls._db = cls._db or Dispatch(cls._db_name)
+#
+#
+#         # retrieve or get cursor
+#         csr1 = cls._csrs.get(table_name, cls._db.GetCursor(table_name))
+#         if (csr := cls._csrs.get(table_name)) is not None:
+#             print(f'returning existing cursor {table_name} from cache')
+#             return csr
+#         csr = super().__new__(cls)
+#         cls._csrs[table_name] = csr
+#         csr._connect(cls)
+#         return csr
+#
 
 
 class Client:

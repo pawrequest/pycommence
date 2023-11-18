@@ -2,6 +2,7 @@ from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.entities import CmcError, Connection
 from pycommence.wrapper.cmc_db import CmcDB
 
+
 def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, fslot=1):
     # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
     val_cond = f', "{value}"' if value else ''

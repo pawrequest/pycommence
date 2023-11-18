@@ -1,31 +1,48 @@
-from typing import Iterable, List
+from typing import List
 
 from win32com.client import Dispatch
+from win32com.universal import com_error
 
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
-
-
-# class CursorModes(Enum):
-#     """ note missing 4 as per original cmc spec"""
-#     CATEGORY = 0
-#     VIEW = 1
-#     PILOTAB = 2
-#     PILOTMEMO = 3
-#     PILOTTODO = 5
-#     PILOTAPPT = 6
-
+from ..entities import CmcError
 
 
 class CmcDB:
+    """ handler for caching connections to multiple Commence instances"""
+    connections = {}
+
+    # def __init__(self, db_name='Commence.DB'):
+    #     self.db_name = db_name
+
+    def __new__(cls, db_name='Commence.DB'):
+        if (conn := cls.connections.get(db_name)) is not None:
+            print(f'returning existing connection {db_name} from cache')
+            return conn
+
+        conn = CmcConnection(db_name)
+        cls.connections[db_name] = conn
+        print(f'Returning new connection {db_name}')
+        return conn
+
+
+class CmcConnection:
+    """ Connection to a single Commence database"""
     def __init__(self, db_name='Commence.DB'):
         self.db_name = db_name
-        self._cmc = Dispatch(db_name)
+        try:
+            self._cmc = Dispatch(db_name)
+        except com_error as e:
+            if e.hresult == -2147221005:
+                raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
+
 
     @property
+    #todo make readonly mean readonly. are properties readonly?
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
+
         return self._cmc.Name
 
     @property
@@ -84,7 +101,7 @@ class CmcDB:
 
     def get_cursor(self,
                    name: str or None = None,
-                   mode: CursorType=CursorType.CATEGORY,
+                   mode: CursorType = CursorType.CATEGORY,
                    flags: List[OptionFlag] or OptionFlag or None = None) -> CmcCursor:
         """
         Create a cursor object for accessing Commence data.
@@ -104,7 +121,7 @@ class CmcDB:
         Raises: ValueError if no name given for name based searches
 
         """
-        #todo can ther be multiple flags?
+        # todo can ther be multiple flags?
         if flags:
             if isinstance(flags, OptionFlag):
                 flags = [flags]

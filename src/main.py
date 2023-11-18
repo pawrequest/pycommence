@@ -1,9 +1,8 @@
 from pprint import pprint
 
-import pythoncom
 from win32com.universal import com_error
 
-from pycommence.api import CmcDB, add_record, delete_record, filter_by_field, filter_by_name
+from pycommence.api import add_record, delete_record, filter_by_field, filter_by_name, CmcDB
 from pycommence.entities import CmcError
 
 TEST_RECORD_NAME = " _TestRecord"
@@ -21,9 +20,14 @@ TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'E
 #     ...
 
 
+def handled():
+    db = CmcDB()
+    curs = db.get_cursor('Hire')
+    db = CmcDB('nono')
+
 def addy_record():
     try:
-        db = CmcDB()
+        db = CmcConnection()
         cursor = db.get_cursor(name='Hire')
 
         add_result = add_record(cursor, record_name=TEST_RECORD_NAME, package=TEST_PACKAGE_ADD)
@@ -37,7 +41,7 @@ def addy_record():
 
 
 def old():
-    db = CmcDB()
+    db = CmcConnection()
     curs = db.get_cursor(name='Hire')
 
     if filter_by_name(curs, TEST_RECORD_NAME):
@@ -54,13 +58,14 @@ if __name__ == '__main__':
     # main()
     # adding()
     # this_year()
-    addy_record()
+    # addy_record()
     # old()
+    handled()
 
 
 
 def this_year():
-    cmc_db = CmcDB()
+    cmc_db = CmcConnection()
     cursor = cmc_db.get_cursor('Hire')
     filter_by_field(cursor, 'Send Out Date', 'After', 'Last year')
     count = cursor.row_count
