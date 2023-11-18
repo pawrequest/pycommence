@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import typing
 from abc import ABC
 from typing import TypeAlias
 
+from pycommence.entities import FLAGS_UNUSED
+
+if typing.TYPE_CHECKING:
+    from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.wrapper.icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
     ICommenceQueryRowSet
-
 
 RowSetType: TypeAlias = ICommenceEditRowSet or ICommenceQueryRowSet or ICommenceAddRowSet or ICommenceDeleteRowSet
 
@@ -18,7 +22,7 @@ class RowSetBase(ABC):
         _rs: Internal representation of a Commence Row Set object.
     """
 
-    def __init__(self, cmc_rs:RowSetType):
+    def __init__(self, cmc_rs: RowSetType):
         """
         Initializes a RowSetBase instance.
 
@@ -160,7 +164,7 @@ class RowSetModifies(RowSetBase):
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.ModifyRow(row_index, column_index, value, 0)
+        return self._rs.ModifyRow(row_index, column_index, value, FLAGS_UNUSED)
 
     def modify_row_dict(self, row_index: int, row_dict: dict) -> bool:
         """
@@ -185,22 +189,21 @@ class RowSetModifies(RowSetBase):
         Commit to disk.
         Returns:
             bool: True on success, False on failure.
-        flags: Unused at present, must be 0.
         After Commit(), the RowSet is no Longer valid and should be discarded.
         """
-        res = self._rs.Commit(0)
+        res = self._rs.Commit(FLAGS_UNUSED)
         if res != 0:
             raise ValueError(f'Commit failed')
         return True
 
-    def commit_get_cursor(self) -> 'CommenceCursor':
+    def commit_get_cursor(self) -> CmcCursor:
         """
         Makes row modifications permanent (commit to disk) and returns a cursor.
 
         Returns:
             CommenceCursor: Cursor object with the committed data.
         """
-        return self._rs.CommitGetCursor(0)
+        return self._rs.CommitGetCursor(FLAGS_UNUSED)
 
 
 class RowSetAdd(RowSetModifies):
@@ -243,10 +246,9 @@ class RowSetDelete(RowSetModifies):
             row_index (int): The index of the row to mark for deletion.
         Returns:
             bool: True on success, False on failure.
-        flags: Unused at present, must be 0.
         Deletion is not permanent until Commit() is called.
         """
-        return self._rs.DeleteRow(row_index, 0)
+        return self._rs.DeleteRow(row_index, FLAGS_UNUSED)
 
     def commit_get_cursor(self):
         raise NotImplementedError("Can not get a cursor for deleted rows.")
@@ -256,17 +258,8 @@ class RowSetDelete(RowSetModifies):
 
 
 class RowSetEdit(RowSetModifies):
-    """
-    Represents a set of items to edit in the database.
-
-    Inherits from:
-        RowSetBase: Base class for Commence Row Set objects.
-    """
-
-    def __init__(self, cmc_rs: ICommenceEditRowSet) -> None:
+    def __init__(self, edit_rowset: ICommenceEditRowSet) -> None:
         """
-        Initializes a RowSetEdit instance.
-        Args:
-            cmc_rs: A Commence Row Set object.
+            cmc_rs: A Commence EditRowSet COM object.
         """
-        super().__init__(cmc_rs)
+        super().__init__(edit_rowset)

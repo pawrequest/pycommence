@@ -1,11 +1,10 @@
 from typing import Optional
 
+from pycommence.entities import CmcError, FLAGS_UNUSED, NotFoundError
+from pycommence.wrapper.cmc_enums import OptionFlag
+from pycommence.wrapper.cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 from pycommence.wrapper.icommence import ICommenceCursor
-from .cmc_enums import OptionFlag
-from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
-from ..entities import CmcError, FLAGS_UNUSED, NotFoundError
 
-# todo pick an import style
 
 class CmcCursor:
     """ Python wrapper for Cursor Com-object.
@@ -31,7 +30,7 @@ class CmcCursor:
     def shared(self):
         return self._csr.Shared
 
-    def set_filter(self, filter_text: str) -> bool:
+    def set_filter(self, filter_text: str):
         """
         Defines a filter clause for the cursor.
 
@@ -42,9 +41,6 @@ class CmcCursor:
         Raises:
             CmcError on fail
             NotFoundError if filter returns no rows
-
-        Returns:
-            bool: True on success, False on error.
 
 
         If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter.
@@ -57,9 +53,8 @@ class CmcCursor:
             raise CmcError(f'Could not set filter {filter_text}')
         if self.row_count == 0:
             raise NotFoundError()
-        return res
 
-    def set_filter_logic(self, logic_text: str) -> bool:
+    def set_filter_logic(self, logic_text: str):
         """
         Defines the filter logic for the cursor.
 
@@ -68,15 +63,16 @@ class CmcCursor:
         # todo filter logic builder
         Syntax is identical to the one used by the DDE ViewConjunction request.
 
-        Returns:
-        bool: True on success, False on error.
 
         Comments:
         Unless otherwise specified, the default logic is AND, AND, AND.
         """
-        return self._csr.SetLogic(logic_text, FLAGS_UNUSED)
 
-    def set_sort(self, sort_text: str) -> bool:
+        res = self._csr.SetLogic(logic_text, FLAGS_UNUSED)
+        if not res:
+            raise CmcError('Unable to set filter logic')
+
+    def set_sort(self, sort_text: str):
         """
         Defines the sort criteria for the cursor.
 
@@ -84,17 +80,17 @@ class CmcCursor:
         sort_text (str): Text defining the new sort criteria.
         Syntax is identical to the one used by the DDE ViewSort request.
 
-        Returns:
-        bool: True on success, False on error.
 
         Comments:
         If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view's sort.
         All other cursor modes default to ascending sort by the Name field.
         """
 
-        return self._csr.SetSort(sort_text, FLAGS_UNUSED)
+        res = self._csr.SetSort(sort_text, FLAGS_UNUSED)
+        if not res:
+            raise CmcError("Unable to sort")
 
-    def set_column(self, column_index: int, field_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE) -> bool:
+    def set_column(self, column_index: int, field_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE):
         """
         Defines the column set for the cursor.
 
@@ -114,7 +110,9 @@ class CmcCursor:
         The set of supported field types exactly matches those fields that can be displayed in a Commence report
         (minus combined fields and indirect fields).
         """
-        return self._csr.SetColumn(column_index, field_name, flags.value)
+        res = self._csr.SetColumn(column_index, field_name, flags.value)
+        if not res:
+            raise CmcError("Unable to set column")
 
     def seek_row(self, start: int, rows: int) -> int:
         """
@@ -128,16 +126,22 @@ class CmcCursor:
         rows (int): Number of rows to move the current row pointer.
 
         Returns:
-        int: Actual number of rows moved, -1 on error.
+        int: Number of rows moved.
+
+        Raises:
+            CmcError on fail
 
         Comments:
         For any cursor, there is a 'current row pointer'. When the cursor is created, this defaults to the first row.
         SeekRow will reposition the current row pointer.
         GetQueryRowSet, GetEditRowSet, and GetDeleteRowSet will also advance the current row pointer.
         """
-        return self._csr.SeekRow(start, rows)
+        res = self._csr.SeekRow(start, rows)
+        if res == -1:
+            raise CmcError(f"Unable to seek {rows} rows")
+        return res
 
-    def seek_row_approx(self, numerator: int, denominator: int) -> int:
+    def seek_row_fractional(self, numerator: int, denominator: int) -> int:
         """
         Seek to a fractional position in the cursor.
 
@@ -148,7 +152,10 @@ class CmcCursor:
         Returns:
         int: Actual number of rows moved, -1 on error.
         """
-        return self._csr.SeekRowApprox(numerator, denominator)
+        res = self._csr.SeekRowApprox(numerator, denominator)
+        if res == -1:
+            raise CmcError(f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows")
+        return res
 
     def get_query_row_set(self, count: int or None = None) -> RowSetQuery:
         """
@@ -170,6 +177,8 @@ class CmcCursor:
         if count is None:
             count = self.row_count
         result = self._csr.GetQueryRowSet(count, FLAGS_UNUSED)
+        if result.rowcount == 0:
+            raise NotFoundError()
         return RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -182,7 +191,9 @@ class CmcCursor:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
+        res = RowSetQuery(self._csr.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
+        if res.row_count == 0:
+            raise NotFoundError()
 
     def get_add_row_set(self, count: int or None = None, flags: Optional[OptionFlag] = OptionFlag.NONE) -> RowSetAdd:
         """
@@ -193,7 +204,7 @@ class CmcCursor:
         flags (int): Option flags. Use CMC_FLAG_SHARED to default all rows to shared. Defaults to 0.
 
         Returns:
-        RowSetAdd: A rowset object for adding new items, or None on error.
+        RowSetAdd: A rowset object for adding new items.
 
         Comments:
         The rowset inherits the column set from the cursor.
@@ -201,7 +212,9 @@ class CmcCursor:
         """
         if count is None:
             count = self.row_count
-        return RowSetAdd(self._csr.GetAddRowSet(count, flags.value))
+        res = RowSetAdd(self._csr.GetAddRowSet(count, flags.value))
+        if res.row_count == 0:
+            raise NotFoundError()
 
     def get_edit_row_set(self, count: int or None = None) -> RowSetEdit:
         """
@@ -236,7 +249,9 @@ class CmcCursor:
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
         """
-        return RowSetEdit(self._csr.GetEditRowSetByID(row_id, FLAGS_UNUSED))
+        res = RowSetEdit(self._csr.GetEditRowSetByID(row_id, FLAGS_UNUSED))
+        if res.row_count == 0:
+            raise NotFoundError()
 
     def get_delete_row_set(self, count: int or None = None) -> RowSetDelete:
         """
@@ -321,7 +336,8 @@ class CmcCursor:
         return self._csr.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
-            self, col: int, con_name: str, connected_cat: str, col_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE
+            self, col: int, con_name: str, connected_cat: str, col_name: str,
+            flags: Optional[OptionFlag] = OptionFlag.NONE
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.
