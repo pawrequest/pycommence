@@ -1,6 +1,6 @@
 import pytest
 
-from pycommence.api import CmcConnection, add_record, delete_record, edit_record, get_record
+from pycommence.api import CmcDB, add_record, delete_record, edit_record, get_record
 
 # Constants
 TEST_RECORD_NAME = "_TestRecord"
@@ -22,7 +22,7 @@ TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'E
 
 
 def test_add_record():
-    db = CmcConnection()
+    db = CmcDB()
     cursor = db.get_cursor('Hire')
     # Add a new record
     add_result = add_record(cursor, TEST_RECORD_NAME, TEST_PACKAGE_ADD)

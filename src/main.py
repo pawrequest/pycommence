@@ -27,7 +27,7 @@ def handled():
 
 def addy_record():
     try:
-        db = CmcConnection()
+        db = CmcDB()
         cursor = db.get_cursor(name='Hire')
 
         add_result = add_record(cursor, record_name=TEST_RECORD_NAME, package=TEST_PACKAGE_ADD)
@@ -41,7 +41,7 @@ def addy_record():
 
 
 def old():
-    db = CmcConnection()
+    db = CmcDB()
     curs = db.get_cursor(name='Hire')
 
     if filter_by_name(curs, TEST_RECORD_NAME):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
 
 def this_year():
-    cmc_db = CmcConnection()
+    cmc_db = CmcDB()
     cursor = cmc_db.get_cursor('Hire')
     filter_by_field(cursor, 'Send Out Date', 'After', 'Last year')
     count = cursor.row_count

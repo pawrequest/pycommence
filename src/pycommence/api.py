@@ -1,3 +1,5 @@
+from win32com.universal import com_error
+
 from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.entities import CmcError, Connection
 from pycommence.wrapper.cmc_db import CmcDB
@@ -56,11 +58,22 @@ def delete_record(cursor: CmcCursor, record_name):
 
 
 def add_record(cursor: CmcCursor, record_name, package: dict):
-    row_set = cursor.get_add_row_set(1)
-    row_set.modify_row(0, 0, record_name)
-    row_set.modify_row_dict(0, package)
-    res = row_set.commit()
-    return res
+    try:
+        row_set = cursor.get_add_row_set(1)
+        row_set.modify_row(0, 0, record_name)
+        row_set.modify_row_dict(0, package)
+        res = row_set.commit()
+        return res
+
+    except com_error as e:
+        # todo this is horrible. the error is due to threading but we are not using threading?
+        # maybe pywin32 uses threading when handling the underlying db error?
+        if e.hresult == -2147483617:
+            raise CmcError('Record already exists')
+
+
+
+
 
 
 
