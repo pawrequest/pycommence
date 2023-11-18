@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+FLAGS_UNUSED = 0
 
 @dataclass
 class Connection:
@@ -12,6 +13,11 @@ class CmcError(Exception):
     def __init__(self, msg='Commence is not installed'):
         self.msg = msg
         super().__init__(self.msg)
+
+class NotFoundError(Exception):
+    def __init__(self, msg='No records found'):
+            self.msg = msg
+            super().__init__(self.msg)
 
 
 

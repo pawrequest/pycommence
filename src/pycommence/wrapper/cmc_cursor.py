@@ -1,11 +1,17 @@
-from pycommence.wrapper.icommence import ICommenceCursor
-from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
+from typing import Optional
 
+from pycommence.wrapper.icommence import ICommenceCursor
+from .cmc_enums import OptionFlag
+from .cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
+from ..entities import CmcError, FLAGS_UNUSED, NotFoundError
+
+# todo pick an import style
 
 class CmcCursor:
     """ Python wrapper for Cursor Com-object.
      Created by CmcDb.GetCursor().
     """
+
     def __init__(self, cmc_cursor: ICommenceCursor):
         self._csr = cmc_cursor
 
@@ -30,11 +36,15 @@ class CmcCursor:
         Defines a filter clause for the cursor.
 
         Parameters:
-        filter_text (str): Text defining the new filter clause.
-        Syntax is identical to the one used by the DDE ViewFilter request.
+            filter_text (str): Text defining the new filter clause.
+            Syntax is identical to the one used by the DDE ViewFilter request.
+
+        Raises:
+            CmcError on fail
+            NotFoundError if filter returns no rows
 
         Returns:
-        bool: True on success, False on error.
+            bool: True on success, False on error.
 
 
         If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter.
@@ -42,22 +52,21 @@ class CmcCursor:
         Items that match are then passed through the cursor's secondary filter.
         The rowset only contains items that satisfy both filters.
         """
-        res = self._csr.SetFilter(filter_text, 0)
+        res = self._csr.SetFilter(filter_text, FLAGS_UNUSED)
         if not res:
-            raise ValueError(f'Could not set filter {filter_text}')
+            raise CmcError(f'Could not set filter {filter_text}')
         if self.row_count == 0:
-            print(f'Warning: filter {filter_text} returned no rows.')
-            res = False
+            raise NotFoundError()
         return res
 
-    def set_filter_logic(self, logic_text: str, flags: int = 0) -> bool:
+    def set_filter_logic(self, logic_text: str) -> bool:
         """
         Defines the filter logic for the cursor.
 
         Parameters:
         logic_text (str): Text defining the new filter logic.
+        # todo filter logic builder
         Syntax is identical to the one used by the DDE ViewConjunction request.
-        flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
         bool: True on success, False on error.
@@ -65,7 +74,7 @@ class CmcCursor:
         Comments:
         Unless otherwise specified, the default logic is AND, AND, AND.
         """
-        return self._csr.SetLogic(logic_text, flags)
+        return self._csr.SetLogic(logic_text, FLAGS_UNUSED)
 
     def set_sort(self, sort_text: str) -> bool:
         """
@@ -74,7 +83,6 @@ class CmcCursor:
         Parameters:
         sort_text (str): Text defining the new sort criteria.
         Syntax is identical to the one used by the DDE ViewSort request.
-        flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
         bool: True on success, False on error.
@@ -83,9 +91,10 @@ class CmcCursor:
         If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view's sort.
         All other cursor modes default to ascending sort by the Name field.
         """
-        return self._csr.SetSort(sort_text, 0)
 
-    def set_column(self, column_index: int, field_name: str, flags: int = 0) -> bool:
+        return self._csr.SetSort(sort_text, FLAGS_UNUSED)
+
+    def set_column(self, column_index: int, field_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE) -> bool:
         """
         Defines the column set for the cursor.
 
@@ -105,7 +114,7 @@ class CmcCursor:
         The set of supported field types exactly matches those fields that can be displayed in a Commence report
         (minus combined fields and indirect fields).
         """
-        return self._csr.SetColumn(column_index, field_name, flags)
+        return self._csr.SetColumn(column_index, field_name, flags.value)
 
     def seek_row(self, start: int, rows: int) -> int:
         """
@@ -147,7 +156,6 @@ class CmcCursor:
 
         Parameters:
         count (int): Maximum number of rows to retrieve.
-        flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
         RowSetQuery: Pointer to rowset object on success, None on error.
@@ -161,7 +169,7 @@ class CmcCursor:
         """
         if count is None:
             count = self.row_count
-        result = self._csr.GetQueryRowSet(count, 0)
+        result = self._csr.GetQueryRowSet(count, FLAGS_UNUSED)
         return RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -174,9 +182,9 @@ class CmcCursor:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, 0))
+        return RowSetQuery(self._csr.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
 
-    def get_add_row_set(self, count: int or None = None, flags: int = 0) -> RowSetAdd:
+    def get_add_row_set(self, count: int or None = None, flags: Optional[OptionFlag] = OptionFlag.NONE) -> RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
@@ -193,7 +201,7 @@ class CmcCursor:
         """
         if count is None:
             count = self.row_count
-        return RowSetAdd(self._csr.GetAddRowSet(count, flags))
+        return RowSetAdd(self._csr.GetAddRowSet(count, flags.value))
 
     def get_edit_row_set(self, count: int or None = None) -> RowSetEdit:
         """
@@ -211,7 +219,7 @@ class CmcCursor:
         """
         if count is None:
             count = self.row_count
-        return RowSetEdit(self._csr.GetEditRowSet(count, 0))
+        return RowSetEdit(self._csr.GetEditRowSet(count, FLAGS_UNUSED))
 
     def get_edit_row_set_by_id(self, row_id: str) -> RowSetEdit:
         """
@@ -228,7 +236,7 @@ class CmcCursor:
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
         """
-        return RowSetEdit(self._csr.GetEditRowSetByID(row_id, 0))
+        return RowSetEdit(self._csr.GetEditRowSetByID(row_id, FLAGS_UNUSED))
 
     def get_delete_row_set(self, count: int or None = None) -> RowSetDelete:
         """
@@ -253,7 +261,7 @@ class CmcCursor:
         rs = self._csr.GetDeleteRowSet(count, 0)
         return RowSetDelete(rs)
 
-    def get_delete_row_set_by_id(self, row_id: str, flags: int = 0) -> RowSetDelete:
+    def get_delete_row_set_by_id(self, row_id: str, flags: OptionFlag = OptionFlag.NONE) -> RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
 
@@ -268,7 +276,7 @@ class CmcCursor:
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
         """
-        return RowSetDelete(self._csr.GetDeleteRowSetByID(row_id, flags))
+        return RowSetDelete(self._csr.GetDeleteRowSetByID(row_id, flags.value))
 
     def set_active_item(self, category: str, row_id: str):
         """
@@ -278,12 +286,11 @@ class CmcCursor:
         category (str): Category name of the active item used with view linking filter_str.
         row_id (str): Unique ID string obtained from GetRowID()
         indicating the active item used with view linking filter_str.
-        flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
         bool: True on success, else False on error.
         """
-        return self._csr.SetActiveItem(category, row_id, 0)
+        return self._csr.SetActiveItem(category, row_id, FLAGS_UNUSED)
 
     def set_active_date(self, active_date: str):
         """
@@ -291,12 +298,11 @@ class CmcCursor:
 
         Parameters:
         active_date (str): Date value used with view linking filter_str; supports AI active_date values such as 'today'.
-        flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
         bool: True on success, else False on error.
         """
-        return self._csr.SetActiveDate(active_date, 0)
+        return self._csr.SetActiveDate(active_date, FLAGS_UNUSED)
 
     def set_active_date_range(self, start: str, end: str):
         """
@@ -312,10 +318,10 @@ class CmcCursor:
         Returns:
         bool: True on success, else False on error.
         """
-        return self._csr.SetActiveDateRange(start, end, 0)
+        return self._csr.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
-            self, col: int, con_name: str, connected_cat: str, col_name: str, flags: int
+            self, col: int, con_name: str, connected_cat: str, col_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.
@@ -334,5 +340,4 @@ class CmcCursor:
         set_related_column(0, "Relates To", "History", "Date", 0)
         This call will add the Date field to the cursor via the 'Relates to History' connection.
         """
-        return self._csr.SetRelatedColumn(col, con_name, connected_cat, col_name, flags)
-
+        return self._csr.SetRelatedColumn(col, con_name, connected_cat, col_name, flags.value)

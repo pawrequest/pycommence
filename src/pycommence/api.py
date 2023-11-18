@@ -10,6 +10,7 @@ def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, f
     val_cond = f', "{value}"' if value else ''
     filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
     res = cursor.set_filter(filter_str)
+
     return res
 
 
@@ -50,11 +51,14 @@ def get_record(cursor: CmcCursor, record_name):
 
 
 def delete_record(cursor: CmcCursor, record_name):
-    res = filter_by_name(cursor, record_name)
-    row_set = cursor.get_delete_row_set()
-    row_set.delete_row(0)
-    res = row_set.commit()
-    return res
+    try:
+        res = filter_by_name(cursor, record_name)
+        row_set = cursor.get_delete_row_set()
+        row_set.delete_row(0)
+        res = row_set.commit()
+        return res
+    except Exception as e:
+        ...
 
 
 def add_record(cursor: CmcCursor, record_name, package: dict):

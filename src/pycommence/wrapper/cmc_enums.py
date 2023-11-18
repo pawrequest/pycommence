@@ -51,6 +51,7 @@ class Bookmark(Enum):
 
 
 class OptionFlag(Enum):
+    NONE = 0
     FIELD_NAME = 0x0001
     ALL = 0x0002
     SHARED = 0x0004
