@@ -3,12 +3,12 @@ from pprint import pprint
 from win32com.universal import com_error
 
 from pycommence.api import add_record, delete_record, filter_by_field, filter_by_name, CmcDB
-from pycommence.entities import CmcError
+from pycommence.entities import CmcError, configure_logging
 
 TEST_RECORD_NAME = " _TestRecord"
 TEST_PACKAGE_ADD = {'Delivery Contact': 'Fake Deliv contact', 'To Customer': 'Test'}
 TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'Edited Test'}
-
+LOG_FILE = 'pycommence.log'
 
 # def main():
 #     cmc_db = CmcDB()
@@ -23,7 +23,7 @@ TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'E
 def handled():
     db = CmcDB()
     curs = db.get_cursor('Hire')
-    db = CmcDB('nono')
+    # db = CmcDB('nono')
 
 def addy_record():
     try:
@@ -55,6 +55,7 @@ def old():
 
 
 if __name__ == '__main__':
+    configure_logging(LOG_FILE)
     # main()
     # adding()
     # this_year()

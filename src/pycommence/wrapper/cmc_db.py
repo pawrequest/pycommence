@@ -1,3 +1,4 @@
+import logging
 from typing import List
 
 from win32com.client import Dispatch
@@ -8,6 +9,8 @@ from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
 from ..entities import CmcError
 
+logger = logging.getLogger(__name__)
+
 
 class CmcDB:
     """ handler for caching connections to multiple Commence instances"""
@@ -16,19 +19,21 @@ class CmcDB:
     # def __init__(self, db_name='Commence.DB'):
     #     self.db_name = db_name
 
-    def __new__(cls, db_name='Commence.DB'):
-        if (conn := cls.connections.get(db_name)) is not None:
-            print(f'returning existing connection {db_name} from cache')
+    def __new__(cls, commence_instance='Commence.DB'):
+        if (conn := cls.connections.get(commence_instance)) is not None:
+            print(f'returning existing connection {commence_instance} from cache')
             return conn
 
-        conn = CmcConnection(db_name)
-        cls.connections[db_name] = conn
-        print(f'Returning new connection {db_name}')
+        conn = CmcConnection(commence_instance)
+        cls.connections[commence_instance] = conn
+        print(f'Returning new connection {commence_instance}')
+        logger.info(f'Returning new connection {commence_instance}')
         return conn
 
 
 class CmcConnection:
     """ Connection to a single Commence database"""
+
     def __init__(self, db_name='Commence.DB'):
         self.db_name = db_name
         try:
@@ -37,9 +42,8 @@ class CmcConnection:
             if e.hresult == -2147221005:
                 raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
 
-
     @property
-    #todo make readonly mean readonly. are properties readonly?
+    # todo make readonly mean readonly. are properties readonly?
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
 
