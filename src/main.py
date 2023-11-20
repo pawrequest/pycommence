@@ -20,11 +20,6 @@ LOG_FILE = 'pycommence.log'
 #     ...
 
 
-def handled():
-    db = CmcDB()
-    curs = db.get_cursor('Hire')
-    # db = CmcDB('nono')
-
 def addy_record():
     try:
         db = CmcDB()
@@ -53,15 +48,22 @@ def old():
     del_row = delete_record(curs, record_name=TEST_RECORD_NAME)
     ...
 
+def decod():
+    db = CmcDB()
+    curs = db.get_cursor(name='Hire')
+    dd = CmcDB()
 
 if __name__ == '__main__':
     configure_logging(LOG_FILE)
+    decod()
+
+
+
     # main()
     # adding()
     # this_year()
     # addy_record()
     # old()
-    handled()
 
 
 

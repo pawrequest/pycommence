@@ -7,4 +7,5 @@
 #   all-features: false
 
 -e file:.
+loggingdecorators @ file:///C:/psdev/pycommence/../loggingdecorators
 pywin32==306

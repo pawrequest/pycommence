@@ -1,3 +1,4 @@
+from __future__ import annotations
 'Commence RM Type Library - WIP'
 # ruff: noqa
 # -*- coding: mbcs -*-
@@ -7,7 +8,6 @@
 # On Wed Oct 11 22:12:08 2023
 makepy_version = '0.5.01'
 python_version = 0x30C00F0
-
 import pythoncom
 import win32com.client.CLSIDToClass
 import win32com.client.util

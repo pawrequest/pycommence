@@ -1,11 +1,16 @@
+import logging
 from typing import Optional
+
+from loggingdecorators import on_init
 
 from pycommence.entities import CmcError, FLAGS_UNUSED, NotFoundError
 from pycommence.wrapper.cmc_enums import OptionFlag
 from pycommence.wrapper.cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
 from pycommence.wrapper.icommence import ICommenceCursor
 
+logger = logging.getLogger(__name__)
 
+@on_init(logger=logger, logargs=True, logdefaults=True, level=logging.INFO)
 class CmcCursor:
     """ Python wrapper for Cursor Com-object.
      Created by CmcDb.GetCursor().
@@ -67,9 +72,10 @@ class CmcCursor:
         Comments:
         Unless otherwise specified, the default logic is AND, AND, AND.
         """
-
+        logger.info(f'Setting filter logic to {logic_text}')
         res = self._csr.SetLogic(logic_text, FLAGS_UNUSED)
         if not res:
+            logger.error(f'Unable to set filter logic to {logic_text}')
             raise CmcError('Unable to set filter logic')
 
     def set_sort(self, sort_text: str):
@@ -85,9 +91,10 @@ class CmcCursor:
         If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view's sort.
         All other cursor modes default to ascending sort by the Name field.
         """
-
+        logger.info(f'Setting sort to {sort_text}')
         res = self._csr.SetSort(sort_text, FLAGS_UNUSED)
         if not res:
+            logger.error(f'Unable to set sort to {sort_text}')
             raise CmcError("Unable to sort")
 
     def set_column(self, column_index: int, field_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE):
@@ -110,6 +117,7 @@ class CmcCursor:
         The set of supported field types exactly matches those fields that can be displayed in a Commence report
         (minus combined fields and indirect fields).
         """
+        logger.info(f'Setting column {column_index} to {field_name}')
         res = self._csr.SetColumn(column_index, field_name, flags.value)
         if not res:
             raise CmcError("Unable to set column")

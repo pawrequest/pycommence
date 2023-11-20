@@ -9,6 +9,7 @@
 -e file:.
 colorama==0.4.6
 iniconfig==2.0.0
+loggingdecorators @ file:///C:/psdev/pycommence/../loggingdecorators
 mypy==1.7.0
 mypy-extensions==1.0.0
 packaging==23.2
