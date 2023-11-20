@@ -1,6 +1,7 @@
 import logging
 from typing import List
 
+from loggingdecorators import on_init, on_new
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
@@ -21,16 +22,15 @@ class CmcDB:
 
     def __new__(cls, commence_instance='Commence.DB'):
         if (conn := cls.connections.get(commence_instance)) is not None:
-            print(f'returning existing connection {commence_instance} from cache')
+            logger.info(f'Using cached connection to {commence_instance}')
             return conn
 
         conn = CmcConnection(commence_instance)
         cls.connections[commence_instance] = conn
-        print(f'Returning new connection {commence_instance}')
-        logger.info(f'Returning new connection {commence_instance}')
         return conn
 
 
+@on_init(logger=logger, logargs=True, logdefaults=True, level=logging.INFO)
 class CmcConnection:
     """ Connection to a single Commence database"""
 
@@ -38,6 +38,7 @@ class CmcConnection:
         self.db_name = db_name
         try:
             self._cmc = Dispatch(db_name)
+            ...
         except com_error as e:
             if e.hresult == -2147221005:
                 raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
