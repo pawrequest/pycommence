@@ -1,8 +1,6 @@
 import logging
 from typing import Optional
 
-from loggingdecorators import on_init
-
 from pycommence.entities import CmcError, FLAGS_UNUSED, NotFoundError
 from pycommence.wrapper.cmc_enums import OptionFlag
 from pycommence.wrapper.cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
@@ -10,7 +8,7 @@ from pycommence.wrapper.icommence import ICommenceCursor
 
 logger = logging.getLogger(__name__)
 
-@on_init(logger=logger, logargs=True, logdefaults=True, level=logging.INFO)
+
 class CmcCursor:
     """ Python wrapper for Cursor Com-object.
      Created by CmcDb.GetCursor().
@@ -18,6 +16,9 @@ class CmcCursor:
 
     def __init__(self, cmc_cursor: ICommenceCursor):
         self._csr = cmc_cursor
+
+    def __repr__(self):
+        return f'<CmcCursor: "{self.category}">'
 
     @property
     def category(self):
@@ -97,7 +98,8 @@ class CmcCursor:
             logger.error(f'Unable to set sort to {sort_text}')
             raise CmcError("Unable to sort")
 
-    def set_column(self, column_index: int, field_name: str, flags: Optional[OptionFlag] = OptionFlag.NONE):
+    def set_column(self, column_index: int, field_name: str,
+                   flags: Optional[OptionFlag] = OptionFlag.NONE):
         """
         Defines the column set for the cursor.
 
@@ -162,7 +164,8 @@ class CmcCursor:
         """
         res = self._csr.SeekRowApprox(numerator, denominator)
         if res == -1:
-            raise CmcError(f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows")
+            raise CmcError(
+                f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows")
         return res
 
     def get_query_row_set(self, count: int or None = None) -> RowSetQuery:
@@ -203,7 +206,8 @@ class CmcCursor:
         if res.row_count == 0:
             raise NotFoundError()
 
-    def get_add_row_set(self, count: int or None = None, flags: Optional[OptionFlag] = OptionFlag.NONE) -> RowSetAdd:
+    def get_add_row_set(self, count: int or None = None,
+                        flags: Optional[OptionFlag] = OptionFlag.NONE) -> RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
@@ -284,7 +288,8 @@ class CmcCursor:
         rs = self._csr.GetDeleteRowSet(count, 0)
         return RowSetDelete(rs)
 
-    def get_delete_row_set_by_id(self, row_id: str, flags: OptionFlag = OptionFlag.NONE) -> RowSetDelete:
+    def get_delete_row_set_by_id(self, row_id: str,
+                                 flags: OptionFlag = OptionFlag.NONE) -> RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
 

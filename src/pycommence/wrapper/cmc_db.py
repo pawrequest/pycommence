@@ -1,7 +1,6 @@
 import logging
 from typing import List
 
-from loggingdecorators import on_init, on_new
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
@@ -17,9 +16,6 @@ class CmcDB:
     """ handler for caching connections to multiple Commence instances"""
     connections = {}
 
-    # def __init__(self, db_name='Commence.DB'):
-    #     self.db_name = db_name
-
     def __new__(cls, commence_instance='Commence.DB'):
         if (conn := cls.connections.get(commence_instance)) is not None:
             logger.info(f'Using cached connection to {commence_instance}')
@@ -30,7 +26,6 @@ class CmcDB:
         return conn
 
 
-@on_init(logger=logger, logargs=True, logdefaults=True, level=logging.INFO)
 class CmcConnection:
     """ Connection to a single Commence database"""
 
@@ -38,16 +33,18 @@ class CmcConnection:
         self.db_name = db_name
         try:
             self._cmc = Dispatch(db_name)
-            ...
         except com_error as e:
             if e.hresult == -2147221005:
-                raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
+                ans = input(f'Db Name "{db_name}" does not exist, y to try another name: ')
+                if ans.lower() == 'y':
+                    db_name = input('Enter new db name: ')
+                    self.__init__(db_name)
+                else:
+                    raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
 
     @property
-    # todo make readonly mean readonly. are properties readonly?
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
-
         return self._cmc.Name
 
     @property
@@ -56,7 +53,7 @@ class CmcConnection:
         return self._cmc.Path
 
     def __str__(self) -> str:
-        return f'<CmcDB: "{self.name}" stored at "{self.path}">'
+        return f'<CmcDB: "{self.name}">'
 
     def __repr__(self):
         return f"<CmcDB: {self.db_name}>"
@@ -141,7 +138,8 @@ class CmcConnection:
         mode = mode.value
         if mode in [0, 1]:
             if name is None:
-                raise ValueError(f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set')
+                raise ValueError(
+                    f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set')
 
         return CmcCursor(self._cmc.GetCursor(mode, name, flags))
 
