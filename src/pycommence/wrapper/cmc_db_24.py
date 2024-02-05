@@ -1,4 +1,3 @@
-import logging
 from typing import List
 
 from win32com.client import Dispatch
@@ -9,8 +8,6 @@ from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
 from ..entities import CmcError
 
-logger = logging.getLogger(__name__)
-
 
 class CachedMixin:
     """Mixin for caching CmcConnection objects"""
@@ -19,7 +16,6 @@ class CachedMixin:
 
     def __new__(cls, commence_instance='Commence.DB'):
         if (conn := cls.connections.get(commence_instance)) is not None:
-            logger.info(f'Using cached connection to {commence_instance}')
             return conn
 
         conn = super().__new__(cls)

@@ -1,4 +1,7 @@
 from __future__ import annotations
+"""
+MakePy generated api for Commence Rm COM object
+"""
 'Commence RM Type Library - WIP'
 # ruff: noqa
 # -*- coding: mbcs -*-

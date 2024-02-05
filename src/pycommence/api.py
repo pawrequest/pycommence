@@ -2,15 +2,12 @@ from win32com.universal import com_error
 
 from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.entities import CmcError, Connection
-from pycommence.wrapper.cmc_db import CmcConnectionCached
 
 
 def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, fslot=1):
-    # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
     val_cond = f', "{value}"' if value else ''
     filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
     res = cursor.set_filter(filter_str)
-
     return res
 
 
@@ -77,17 +74,3 @@ def add_record(cursor: CmcCursor, record_name, package: dict):
 
 
 
-
-
-
-
-
-# def filter_by_date(
-#         cursor: ICommenceCursor,
-#         field_name: str,
-#         date: datetime.date,
-#         condition='After',
-# ):
-#     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}, {date})]'  # noqa E231
-#     res = cursor.SetFilter(filter_str, 0)
-#     return res

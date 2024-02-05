@@ -59,6 +59,7 @@ class CmcCursor:
             raise CmcError(f'Could not set filter {filter_text}')
         if self.row_count == 0:
             raise NotFoundError()
+        return res
 
     def set_filter_logic(self, logic_text: str):
         """

@@ -103,7 +103,7 @@ class RowSetBase(ABC):
         """
         return self._rs.GetRow(row_index, delim, flags)
 
-    def get_rows_dict(self, num: int or None = None):
+    def get_rows_dict(self, num: int or None = None) -> list[dict[str, str]]:
         """Returns a dictionary of the first num rows."""
         if num is None:
             num = self.row_count
