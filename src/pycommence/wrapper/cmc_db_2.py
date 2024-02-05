@@ -27,30 +27,11 @@ class CachedMixin:
         return conn
 
 
-class CmcConnectionCached:
-    """Commence Database connection object.
-
+class CmcConnection(CachedMixin):
+    """ Commence Database connection object.
     args:
-        commence_instance (str): Name of the Commence database to connect to.
-
-    Returns:
-        CmcConnection: A CmcConnection object on success.
-
+        db_name (str): Name of the Commence database to connect to.
     """
-    connections = {}
-
-    def __new__(cls, commence_instance='Commence.DB'):
-        if (conn := cls.connections.get(commence_instance)) is not None:
-            logger.info(f'Using cached connection to {commence_instance}')
-            return conn
-
-        conn = CmcConnection(commence_instance)
-        cls.connections[commence_instance] = conn
-        return conn
-
-
-class CmcConnection:
-    """ Connection to a single Commence database"""
 
     def __init__(self, db_name='Commence.DB'):
         self.db_name = db_name

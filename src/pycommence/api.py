@@ -2,7 +2,7 @@ from win32com.universal import com_error
 
 from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.entities import CmcError, Connection
-from pycommence.wrapper.cmc_db import CmcDB
+from pycommence.wrapper.cmc_db import CmcConnectionCached
 
 
 def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, fslot=1):

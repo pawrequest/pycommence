@@ -1,33 +1,19 @@
-import logging
 from pprint import pprint
 
-from loggingdecorators import on_class, on_new
 from win32com.universal import com_error
 
-from pycommence.api import add_record, delete_record, filter_by_field, filter_by_name, CmcDB
+from pycommence.api import CmcConnectionCached, add_record, delete_record, filter_by_field, filter_by_name
 from pycommence.entities import CmcError
-from pycommence.logger_config import configure_logging
 
 TEST_RECORD_NAME = " _TestRecord"
 TEST_PACKAGE_ADD = {'Delivery Contact': 'Fake Deliv contact', 'To Customer': 'Test'}
 TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'Edited Test'}
 LOG_FILE = 'pycommence.log'
 
-logger = logging.getLogger(__name__)
-logger = configure_logging(logger, LOG_FILE)
-logger.info('infor message')
-
-def decod():
-    decorated = on_class(logger=logger, level=logging.INFO, logdefaults=True)(CmcDB)
-    db = decorated('Commence.DB')
-
-if __name__ == '__main__':
-    decod()
-
 
 def addy_record():
     try:
-        db = CmcDB()
+        db = CmcConnectionCached()
         cursor = db.get_cursor(name='Hire')
 
         add_result = add_record(cursor, record_name=TEST_RECORD_NAME, package=TEST_PACKAGE_ADD)
@@ -36,12 +22,12 @@ def addy_record():
         # todo this is horrible. the error is due to threading but we are not using threading?
         if e.hresult == -2147483617:
             raise CmcError('Record already exists')
-    except Exception as e:
+    except Exception:
         ...
 
 
 def old():
-    db = CmcDB()
+    db = CmcConnectionCached()
     curs = db.get_cursor(name='Hire')
 
     if filter_by_name(curs, TEST_RECORD_NAME):
@@ -53,8 +39,6 @@ def old():
     del_row = delete_record(curs, record_name=TEST_RECORD_NAME)
     ...
 
-
-
     # main()
     # adding()
     # this_year()
@@ -62,9 +46,8 @@ def old():
     # old()
 
 
-
 def this_year():
-    cmc_db = CmcDB()
+    cmc_db = CmcConnectionCached()
     cursor = cmc_db.get_cursor('Hire')
     filter_by_field(cursor, 'Send Out Date', 'After', 'Last year')
     count = cursor.row_count
@@ -73,4 +56,3 @@ def this_year():
     sorted_by_send_date = sorted(dicts, key=lambda x: x['Send Out Date'])
     pprint(sorted_by_send_date[:5])
     ...
-
