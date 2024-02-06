@@ -4,7 +4,7 @@ from typing import Optional
 from pycommence.entities import CmcError, FLAGS_UNUSED, NotFoundError
 from pycommence.wrapper.cmc_enums import OptionFlag
 from pycommence.wrapper.cmc_rowset import RowSetAdd, RowSetDelete, RowSetEdit, RowSetQuery
-from pycommence.wrapper.icommence import ICommenceCursor
+from pycommence.wrapper._icommence import ICommenceCursor
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ class CmcCursor:
             raise CmcError("Unable to sort")
 
     def set_column(self, column_index: int, field_name: str,
-                   flags: Optional[OptionFlag] = OptionFlag.NONE):
+                   flags: Optional[OptionFlag] = OptionFlag.NONE) -> bool:
         """
         Defines the column set for the cursor.
 
@@ -124,6 +124,7 @@ class CmcCursor:
         res = self._csr.SetColumn(column_index, field_name, flags.value)
         if not res:
             raise CmcError("Unable to set column")
+        return res
 
     def seek_row(self, start: int, rows: int) -> int:
         """
@@ -206,6 +207,7 @@ class CmcCursor:
         res = RowSetQuery(self._csr.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
         if res.row_count == 0:
             raise NotFoundError()
+        return res
 
     def get_add_row_set(self, count: int or None = None,
                         flags: Optional[OptionFlag] = OptionFlag.NONE) -> RowSetAdd:
@@ -228,6 +230,7 @@ class CmcCursor:
         res = RowSetAdd(self._csr.GetAddRowSet(count, flags.value))
         if res.row_count == 0:
             raise NotFoundError()
+        return res
 
     def get_edit_row_set(self, count: int or None = None) -> RowSetEdit:
         """
@@ -265,6 +268,7 @@ class CmcCursor:
         res = RowSetEdit(self._csr.GetEditRowSetByID(row_id, FLAGS_UNUSED))
         if res.row_count == 0:
             raise NotFoundError()
+        return res
 
     def get_delete_row_set(self, count: int or None = None) -> RowSetDelete:
         """
