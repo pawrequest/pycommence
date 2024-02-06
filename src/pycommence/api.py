@@ -43,7 +43,7 @@ def get_record(cursor: CmcCursor, record_name):
     if not res:
         raise CmcError(f'Could not find {record_name}')
     row_set = cursor.get_query_row_set()
-    record = row_set.get_rows_dict()
+    record = row_set.get_rows_dict()[0]
     return record
 
 
