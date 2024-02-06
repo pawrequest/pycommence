@@ -2,26 +2,15 @@ from typing import List
 
 from win32com.client import Dispatch
 from win32com.universal import com_error
+from loguru import logger
 
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
 from ..entities import CmcError
-from loguru import logger
-
-class CachedMixin:
-    connections = {}
-
-    def __new__(cls, commence_instance='Commence.DB'):
-        if (conn := cls.connections.get(commence_instance)) is not None:
-            return conn
-
-        conn = super().__new__(cls)
-        cls.connections[commence_instance] = conn
-        return conn
 
 
-class CmcConnection(CachedMixin):
+class CmcConnection:
     """Commence Database connection object.
 
     args:
