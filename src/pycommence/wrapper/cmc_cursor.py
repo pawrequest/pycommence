@@ -170,6 +170,7 @@ class CmcCursor:
                 f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows")
         return res
 
+
     def get_query_row_set(self, count: int or None = None) -> RowSetQuery:
         """
         Create a rowset object with the results of a query.
