@@ -7,6 +7,7 @@ from win32com.universal import com_error
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
+from .csr_api import CsrApi
 from ..entities import CmcError
 
 logger = logging.getLogger(__name__)
@@ -104,7 +105,7 @@ class CmcConnection:
     def get_cursor(self,
                    name: str or None = None,
                    mode: CursorType = CursorType.CATEGORY,
-                   flags: List[OptionFlag] or OptionFlag or None = None) -> CmcCursor:
+                   flags: List[OptionFlag] or OptionFlag or None = None) -> CsrApi:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -141,6 +142,8 @@ class CmcConnection:
                 raise ValueError(
                     f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set')
 
-        return CmcCursor(self._cmc.GetCursor(mode, name, flags))
+        csr = CmcCursor(self._cmc.GetCursor(mode, name, flags))
+        csr_api = CsrApi(csr)
+        return csr_api
 
         # todo fix errors on non-standard modes
