@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from win32com.universal import com_error
 
-from pycommence.entities import Connection, CmcError
+from win32com.universal import com_error
+from pycommence.entities import CmcError, Connection
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cmc_cursor import CmcCursor
@@ -13,7 +13,7 @@ class CsrApi:
     def __init__(self, cursor: CmcCursor):
         self.cursor = cursor
 
-    def filter_by_field(self, field_name: str, condition, value=None, fslot=1):
+    def filter_by_field(self, field_name: str, condition: str, value: str = '', *, fslot: int = 1):
         val_cond = f', "{value}"' if value else ''
         filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
         res = self.cursor.set_filter(filter_str)
@@ -28,7 +28,7 @@ class CsrApi:
         # todo return
 
     def filter_by_name(self, name: str, fslot=1):
-        res = self.filter_by_field('Name', 'Equal To', name, fslot=fslot)
+        res = self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
         return res
 
     def edit_record(self, name, package: dict):
@@ -43,7 +43,7 @@ class CsrApi:
         row_set.commit()
         ...
 
-    def get_record(self, record_name):
+    def get_record_one(self, record_name):
         res = self.filter_by_name(record_name)
         if not res:
             raise CmcError(f'Could not find {record_name}')
@@ -52,6 +52,11 @@ class CsrApi:
             raise CmcError(f'Expected 1 record, got {row_set.row_count}')
         record = row_set.get_rows_dict()[0]
         return record
+
+    def get_records(self):
+        row_set = self.cursor.get_query_row_set()
+        records = row_set.get_rows_dict()
+        return records
 
     def delete_record(self, record_name):
         try:
@@ -63,7 +68,17 @@ class CsrApi:
         except Exception:
             ...
 
-    def add_record(self, record_name, package: dict):
+    def add_record(self, record_name: str, package: dict) -> bool:
+        """
+        Adds a record to the cursor.
+
+        Args:
+            record_name (str): Name of the record to add at column0.
+            package (dict): A dictionary of field names and values to add to the record.
+
+        Returns:
+            bool: True on success, False on failure.
+            """
         try:
             row_set = self.cursor.get_add_row_set(1)
             row_set.modify_row(0, 0, record_name)
