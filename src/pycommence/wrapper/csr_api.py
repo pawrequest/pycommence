@@ -31,7 +31,7 @@ class CsrApi:
         res = self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
         return res
 
-    def edit_record(self, name, package: dict):
+    def edit_record(self, name: str, package: dict):
         self.filter_by_name(name)
         row_set = self.cursor.get_edit_row_set()
         for key, value in package.items():
@@ -43,7 +43,7 @@ class CsrApi:
         row_set.commit()
         ...
 
-    def get_record_one(self, record_name):
+    def get_record_one(self, record_name: str):
         res = self.filter_by_name(record_name)
         if not res:
             raise CmcError(f'Could not find {record_name}')
@@ -70,7 +70,7 @@ class CsrApi:
 
     def add_record(self, record_name: str, package: dict) -> bool:
         """
-        Adds a record to the cursor.
+        Add and commit a record to the cursor.
 
         Args:
             record_name (str): Name of the record to add at column0.
