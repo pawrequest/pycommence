@@ -21,26 +21,3 @@ class NotFoundError(Exception):
         self.msg = msg
         super().__init__(self.msg)
 
-#
-# def configure_logging(logger, log_file) -> logging.getLoggerClass():
-#     # todo rotating file handler
-#     # todo json output
-#
-#     logger.setLevel(logging.DEBUG)
-#
-#     file_handler = logging.FileHandler(log_file)
-#     file_formatter = logging.Formatter('{levelname} {asctime} | {module}:{lineno} | {message}',
-#                                        style='{')
-#
-#     file_handler.setFormatter(file_formatter)
-#     logger.addHandler(file_handler)
-#
-#     console_handler = logging.StreamHandler(sys.stdout)
-#     console_formatter = logging.Formatter('{levelname} {message}', style='{')
-#     console_handler.setFormatter(console_formatter)
-#     console_handler.setLevel(logging.INFO)
-#     logger.addHandler(console_handler)
-#
-#     return logger
-
-

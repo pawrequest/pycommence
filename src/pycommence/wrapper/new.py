@@ -1,53 +1,46 @@
-from typing import List
+from __future__ import annotations
 
 from win32com.client import Dispatch
 from win32com.universal import com_error
-from loguru import logger
 
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
-from .csr_api import CsrApi
 from ..entities import CmcError
 
 
-class CmcConnection:
-    """Commence Database connection object.
-
-    args:
-        commence_instance (str): Name of the Commence database to connect to.
-
-    Returns:
-        CmcConnection: A CmcConnection object on success.
-
-    """
+class CmcAPI:
     connections = {}
 
-    def __new__(cls, commence_instance='Commence.DB'):
-        if (conn := cls.connections.get(commence_instance)) is not None:
-            logger.info(f'Using cached connection to {commence_instance}')
+    def __new__(cls, cmc_name: str = 'Commence.DB',
+                cursor_names: list[str] | None = None):
+        """
+        Cache Commence db connection and cursor objects.
+        """
+        cursor_names = cursor_names or []
+        if conn := cls.connections.get(cmc_name):
             return conn
-
-        conn = CmcConnection(commence_instance)
-        cls.connections[commence_instance] = conn
+        conn = CmcConnection(cmc_name, cursor_names)
+        cls.connections[cmc_name] = conn
         return conn
 
 
 class CmcConnection:
-    """ Connection to a single Commence database"""
-
-    def __init__(self, db_name='Commence.DB'):
+    def __init__(self, db_name='Commence.DB', cursor_names: list[str] | None = None):
+        """Connect to a Commence Database."""
+        cursor_names = cursor_names or []
         self.db_name = db_name
+        self.cursors = {
+            name: self.get_cursor(name)
+            for name in cursor_names
+        }
+
         try:
             self._cmc = Dispatch(db_name)
         except com_error as e:
             if e.hresult == -2147221005:
-                ans = input(f'Db Name "{db_name}" does not exist, y to try another name: ')
-                if ans.lower() == 'y':
-                    db_name = input('Enter new db name: ')
-                    self.__init__(db_name)
-                else:
-                    raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
+                raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
+            raise e
 
     @property
     def name(self) -> str:
@@ -111,7 +104,7 @@ class CmcConnection:
     def get_cursor(self,
                    name: str or None = None,
                    mode: CursorType = CursorType.CATEGORY,
-                   flags: List[OptionFlag] or OptionFlag or None = None) -> CsrApi:
+                   flags: list[OptionFlag] or OptionFlag or None = None) -> CmcCursor:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -131,6 +124,8 @@ class CmcConnection:
 
         """
         # todo can ther be multiple flags?
+        if csr := self.cursors.get(name):
+            return csr
         if flags:
             if isinstance(flags, OptionFlag):
                 flags = [flags]
@@ -149,7 +144,7 @@ class CmcConnection:
                     f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set')
 
         csr = CmcCursor(self._cmc.GetCursor(mode, name, flags))
-        csr_api = CsrApi(csr)
-        return csr_api
+        self.cursors[name] = csr
+        return csr
 
         # todo fix errors on non-standard modes

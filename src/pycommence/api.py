@@ -2,15 +2,12 @@ from win32com.universal import com_error
 
 from pycommence.wrapper.cmc_cursor import CmcCursor
 from pycommence.entities import CmcError, Connection
-from pycommence.wrapper.cmc_db import CmcDB
 
 
 def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, fslot=1):
-    # filter_str = f'[ViewFilter(1, F,, "{field_name}", "{condition}", "{value})]'
     val_cond = f', "{value}"' if value else ''
     filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
     res = cursor.set_filter(filter_str)
-
     return res
 
 
@@ -20,7 +17,7 @@ def filter_by_connection(cursor: CmcCursor, item_name: str, connection: Connecti
     res = cursor.set_filter(filter_str)
     if not res:
         raise ValueError(f'Could not set filter for ' f'{connection.name} = {item_name}')
-    #todo return
+    # todo return
 
 
 def filter_by_name(cursor: CmcCursor, name: str, fslot=1):
@@ -41,12 +38,17 @@ def edit_record(cursor: CmcCursor, record, package: dict):
     ...
 
 
+def get_all_records(cursor: CmcCursor) -> list[dict[str, str]]:
+    qs = cursor.get_query_row_set()
+    return qs.get_rows_dict()
+
+
 def get_record(cursor: CmcCursor, record_name):
     res = filter_by_name(cursor, record_name)
     if not res:
         raise CmcError(f'Could not find {record_name}')
     row_set = cursor.get_query_row_set()
-    record = row_set.get_rows_dict()
+    record = row_set.get_rows_dict()[0]
     return record
 
 
@@ -57,7 +59,7 @@ def delete_record(cursor: CmcCursor, record_name):
         row_set.delete_row(0)
         res = row_set.commit()
         return res
-    except Exception as e:
+    except Exception:
         ...
 
 
@@ -74,20 +76,3 @@ def add_record(cursor: CmcCursor, record_name, package: dict):
         # maybe pywin32 uses threading when handling the underlying db error?
         if e.hresult == -2147483617:
             raise CmcError('Record already exists')
-
-
-
-
-
-
-
-
-# def filter_by_date(
-#         cursor: ICommenceCursor,
-#         field_name: str,
-#         date: datetime.date,
-#         condition='After',
-# ):
-#     filter_str = f'[ViewFilter(1, F,, {field_name}, {condition}, {date})]'  # noqa E231
-#     res = cursor.SetFilter(filter_str, 0)
-#     return res

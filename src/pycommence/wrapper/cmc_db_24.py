@@ -2,39 +2,32 @@ from typing import List
 
 from win32com.client import Dispatch
 from win32com.universal import com_error
-from loguru import logger
 
 from .cmc_conversation import CommenceConversation
 from .cmc_cursor import CmcCursor
 from .cmc_enums import CursorType, OptionFlag
-from .csr_api import CsrApi
 from ..entities import CmcError
 
 
-class CmcConnection:
-    """Commence Database connection object.
+class CachedMixin:
+    """Mixin for caching CmcConnection objects"""
 
-    args:
-        commence_instance (str): Name of the Commence database to connect to.
-
-    Returns:
-        CmcConnection: A CmcConnection object on success.
-
-    """
     connections = {}
 
     def __new__(cls, commence_instance='Commence.DB'):
         if (conn := cls.connections.get(commence_instance)) is not None:
-            logger.info(f'Using cached connection to {commence_instance}')
             return conn
 
-        conn = CmcConnection(commence_instance)
+        conn = super().__new__(cls)
         cls.connections[commence_instance] = conn
         return conn
 
 
-class CmcConnection:
-    """ Connection to a single Commence database"""
+class CmcConnection(CachedMixin):
+    """ Commence Database connection object.
+    args:
+        db_name (str): Name of the Commence database to connect to.
+    """
 
     def __init__(self, db_name='Commence.DB'):
         self.db_name = db_name
@@ -111,7 +104,7 @@ class CmcConnection:
     def get_cursor(self,
                    name: str or None = None,
                    mode: CursorType = CursorType.CATEGORY,
-                   flags: List[OptionFlag] or OptionFlag or None = None) -> CsrApi:
+                   flags: List[OptionFlag] or OptionFlag or None = None) -> CmcCursor:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -148,8 +141,6 @@ class CmcConnection:
                 raise ValueError(
                     f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set')
 
-        csr = CmcCursor(self._cmc.GetCursor(mode, name, flags))
-        csr_api = CsrApi(csr)
-        return csr_api
+        return CmcCursor(self._cmc.GetCursor(mode, name, flags))
 
         # todo fix errors on non-standard modes

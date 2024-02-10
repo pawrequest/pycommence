@@ -7,4 +7,7 @@
 #   all-features: false
 
 -e file:.
+colorama==0.4.6
+loguru==0.7.2
 pywin32==306
+win32-setctime==1.1.0

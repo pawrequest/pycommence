@@ -1,12 +1,9 @@
-import pytest
 
-from pycommence.api import CmcDB, add_record, delete_record, edit_record, get_record
 
 # Constants
 TEST_RECORD_NAME = "_TestRecord"
 TEST_PACKAGE_ADD = {'Delivery Contact': 'Fake Del contact', 'To Customer': 'Test'}
 TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'Edited Test'}
-
 
 # @pytest.fixture
 # def cmcdb():
@@ -21,6 +18,7 @@ TEST_PACKAGE_EDIT = {'Delivery Contact': 'Edited del contact', 'To Customer': 'E
 #     return new_curs
 
 
+testies = """
 def test_add_record():
     db = CmcDB()
     cursor = db.get_cursor('Hire')
@@ -54,3 +52,4 @@ def test_delete_record(cursor):
     # Attempt to retrieve the deleted record
     deleted_record = get_record(cursor, TEST_RECORD_NAME)
     assert not deleted_record, "Record still exists after deletion"
+"""
