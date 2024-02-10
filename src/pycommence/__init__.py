@@ -1,3 +1,5 @@
+from .wrapper.cmc_db import CmcDB as CmcDB
+from .wrapper.cmc_cursor import CmcCursor as CmcCursor
 
 """
 todo:

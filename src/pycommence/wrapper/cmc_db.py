@@ -11,16 +11,9 @@ from .csr_api import CsrApi
 from ..entities import CmcError
 
 
-class CmcConnection:
-    """Commence Database connection object.
 
-    args:
-        commence_instance (str): Name of the Commence database to connect to.
-
-    Returns:
-        CmcConnection: A CmcConnection object on success.
-
-    """
+class CmcDB:
+    """ handler for caching connections to multiple Commence instances"""
     connections = {}
 
     def __new__(cls, commence_instance='Commence.DB'):
@@ -31,6 +24,7 @@ class CmcConnection:
         conn = CmcConnection(commence_instance)
         cls.connections[commence_instance] = conn
         return conn
+
 
 
 class CmcConnection:

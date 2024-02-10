@@ -48,7 +48,9 @@ class CsrApi:
         if not res:
             raise CmcError(f'Could not find {record_name}')
         row_set = self.cursor.get_query_row_set()
-        record = row_set.get_rows_dict()
+        if row_set.row_count != 1:
+            raise CmcError(f'Expected 1 record, got {row_set.row_count}')
+        record = row_set.get_rows_dict()[0]
         return record
 
     def delete_record(self, record_name):
