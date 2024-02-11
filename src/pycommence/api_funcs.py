@@ -1,17 +1,17 @@
 from win32com.universal import com_error
 
-from pycommence.wrapper.cmc_cursor import CmcCursor
+from pycommence.wrapper.cmc_cursor import CsrCmc
 from pycommence.entities import CmcError, Connection
 
 
-def filter_by_field(cursor: CmcCursor, field_name: str, condition, value=None, fslot=1):
+def filter_by_field(cursor: CsrCmc, field_name: str, condition, value=None, fslot=1):
     val_cond = f', "{value}"' if value else ''
     filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
     res = cursor.set_filter(filter_str)
     return res
 
 
-def filter_by_connection(cursor: CmcCursor, item_name: str, connection: Connection, fslot=1):
+def filter_by_connection(cursor: CsrCmc, item_name: str, connection: Connection, fslot=1):
     filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
                   f'{connection.to_table}, {item_name})]')
     res = cursor.set_filter(filter_str)
@@ -20,12 +20,12 @@ def filter_by_connection(cursor: CmcCursor, item_name: str, connection: Connecti
     # todo return
 
 
-def filter_by_name(cursor: CmcCursor, name: str, fslot=1):
+def filter_by_name(cursor: CsrCmc, name: str, fslot=1):
     res = filter_by_field(cursor, 'Name', 'Equal To', name, fslot=fslot)
     return res
 
 
-def edit_record(cursor: CmcCursor, record, package: dict):
+def edit_record(cursor: CsrCmc, record, package: dict):
     filter_by_name(cursor, record)
     row_set = cursor.get_edit_row_set()
     for key, value in package.items():
@@ -38,12 +38,12 @@ def edit_record(cursor: CmcCursor, record, package: dict):
     ...
 
 
-def get_all_records(cursor: CmcCursor) -> list[dict[str, str]]:
+def get_all_records(cursor: CsrCmc) -> list[dict[str, str]]:
     qs = cursor.get_query_row_set()
     return qs.get_rows_dict()
 
 
-def get_record(cursor: CmcCursor, record_name):
+def get_record(cursor: CsrCmc, record_name):
     res = filter_by_name(cursor, record_name)
     if not res:
         raise CmcError(f'Could not find {record_name}')
@@ -52,7 +52,7 @@ def get_record(cursor: CmcCursor, record_name):
     return record
 
 
-def delete_record(cursor: CmcCursor, record_name):
+def delete_record(cursor: CsrCmc, record_name):
     try:
         res = filter_by_name(cursor, record_name)
         row_set = cursor.get_delete_row_set()
@@ -63,7 +63,7 @@ def delete_record(cursor: CmcCursor, record_name):
         ...
 
 
-def add_record(cursor: CmcCursor, record_name, package: dict):
+def add_record(cursor: CsrCmc, record_name, package: dict):
     try:
         row_set = cursor.get_add_row_set(1)
         row_set.modify_row(0, 0, record_name)

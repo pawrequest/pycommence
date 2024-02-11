@@ -8,7 +8,7 @@ from pycommence.entities import FLAGS_UNUSED
 
 # todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
-    from pycommence.wrapper.cmc_cursor import CmcCursor
+    from pycommence.wrapper.cmc_cursor import CsrCmc
 from pycommence.wrapper._icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
     ICommenceQueryRowSet
 
@@ -197,7 +197,7 @@ class RowSetModifies(RowSetBase):
             raise ValueError(f'Commit failed')
         return True
 
-    def commit_get_cursor(self) -> CmcCursor:
+    def commit_get_cursor(self) -> CsrCmc:
         """
         Makes row modifications permanent (commit to disk) and returns a cursor.
 

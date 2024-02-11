@@ -1,48 +1,48 @@
-from typing import List
+from __future__ import annotations
 
+from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
-from loguru import logger
 
 from .cmc_conversation import CommenceConversation
-from .cmc_cursor import CmcCursor
+from .cmc_cursor import CsrCmc
 from .cmc_enums import CursorType, OptionFlag
-from .csr_api import CsrApi
+from ..csr_api import Csr
 from ..entities import CmcError
 
 
-
-class CmcDB:
-    """ handler for caching connections to multiple Commence instances"""
-    connections = {}
-
-    def __new__(cls, commence_instance='Commence.DB'):
-        if (conn := cls.connections.get(commence_instance)) is not None:
-            logger.info(f'Using cached connection to {commence_instance}')
-            return conn
-
-        conn = CmcConnection(commence_instance)
-        cls.connections[commence_instance] = conn
-        return conn
-
+def get_csr(table_name, cmc_name: str = 'Commence.DB') -> Csr:
+    """ Easiest entry - Get a cursor for a table in a Commence database."""
+    return Cmc(cmc_name).get_cursor(table_name)
 
 
 class CmcConnection:
-    """ Connection to a single Commence database"""
+    """
+    Handler for caching connections to multiple Commence instances"""
+    connections = {}
 
-    def __init__(self, db_name='Commence.DB'):
-        self.db_name = db_name
-        try:
-            self._cmc = Dispatch(db_name)
-        except com_error as e:
-            if e.hresult == -2147221005:
-                ans = input(f'Db Name "{db_name}" does not exist, y to try another name: ')
-                if ans.lower() == 'y':
-                    db_name = input('Enter new db name: ')
-                    self.__init__(db_name)
-                else:
-                    raise CmcError(f'Db Name "{db_name}" does not exist - connection failed')
+    def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
+        if commence_instance in cls.connections:
+            logger.info(f'Using cached connection to {commence_instance}')
+        else:
+            cls.connections[commence_instance] = super().__new__(cls)
 
+        return cls.connections[commence_instance]
+
+    def __init__(self, commence_instance='Commence.DB'):
+        if not hasattr(self, '_initialized'):
+            self._initialized = True
+            self.db_name = commence_instance
+            try:
+                self._cmc = Dispatch(commence_instance)
+            except com_error as e:
+                if e.hresult == -2147221005:
+                    raise CmcError(
+                        f'Db Name "{commence_instance}" does not exist - connection failed'
+                    )
+
+
+class Cmc(CmcConnection):
     @property
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
@@ -102,10 +102,12 @@ class CmcConnection:
             )
         return CommenceConversation(conversation_obj)
 
-    def get_cursor(self,
-                   name: str or None = None,
-                   mode: CursorType = CursorType.CATEGORY,
-                   flags: List[OptionFlag] or OptionFlag or None = None) -> CsrApi:
+    def get_cursor(
+            self,
+            name: str or None = None,
+            mode: CursorType = CursorType.CATEGORY,
+            flags: list[OptionFlag] or OptionFlag or None = None
+    ) -> Csr:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -119,7 +121,7 @@ class CmcConnection:
             INTERNET - Save Item agents defined for the Internet/intranet will fire.
 
         Returns:
-        CommenceCursor: A CommenceCursor object on success.
+        CsrApi: A CsrApi object on success.
 
         Raises: ValueError if no name given for name based searches
 
@@ -140,10 +142,44 @@ class CmcConnection:
         if mode in [0, 1]:
             if name is None:
                 raise ValueError(
-                    f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set')
+                    f'Mode {mode} ("{CursorType(mode).name}") requires name param to be set'
+                )
 
-        csr = CmcCursor(self._cmc.GetCursor(mode, name, flags))
-        csr_api = CsrApi(csr)
+        csr = CsrCmc(self._cmc.GetCursor(mode, name, flags))
+        csr_api = Csr(csr)
         return csr_api
 
         # todo fix errors on non-standard modes
+
+
+# class CmcDB(CmcConnection):
+#     """ handler for caching connections to multiple Commence instances"""
+#     connections = {}
+#
+#     def __new__(cls, commence_instance='Commence.DB') -> 'CmcConnection':
+#         if (conn := cls.connections.get(commence_instance)) is not None:
+#             logger.info(f'Using cached connection to {commence_instance}')
+#             return conn
+#
+#         conn = CmcConnection(commence_instance)
+#         cls.connections[commence_instance] = conn
+#         return conn
+
+
+class CmcCache:
+    connections = {}
+
+    def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
+        if commence_instance in cls.connections:
+            logger.info(f'Using cached connection to {commence_instance}')
+            return cls.connections[commence_instance]
+
+        cls.connections[commence_instance] = super().__new__(cls)
+
+        # cls.connections[commence_instance] = Cmc(commence_instance)
+        return cls.connections[commence_instance]
+
+    def __init__(self, commence_instance='Commence.DB'):
+        if not hasattr(self, 'initialized'):  # Prevents reinitialization
+            self.connection = CmcConnection(commence_instance)
+            self.initialized = True
