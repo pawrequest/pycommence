@@ -123,9 +123,8 @@ class Csr:
 
     @property
     def get_schema(self):
-        # NOPE this gets incimplete schema if row does not have all ttrs
+        # NOPE this gets incimplete schema (missing types) if row does not have all ttrs
         rs = self._cursor.get_query_row_set(1)
-        # headers = rs.headers
         row = rs.get_rows_dict()[0]
         scm = {
             k: type(infer_and_parse(v))
@@ -146,9 +145,11 @@ def infer_and_parse(value: str) -> date | time | Decimal | bool | str | None:
         return value.lower() == 'true'
 
     if value.isnumeric():
-        try:
-            value = Decimal(value)
-        except Exception:
-            value = int(value)
+        if '.' in value:
+            try:
+                value = Decimal(value)
+            except Exception:
+                ...
+        value = int(value)
 
     return value or None
