@@ -1,7 +1,12 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from enum import StrEnum
+from typing import TYPE_CHECKING
+
+from pydantic import BaseModel, model_validator
+
+if TYPE_CHECKING:
+    from pycommence.csr_api import Csr
 
 
 class FilterCondition(StrEnum):
@@ -10,7 +15,7 @@ class FilterCondition(StrEnum):
     AFTER = "After"
 
 
-class FilterType(StrEnum):
+class FilterTypeEnum(StrEnum):
     FIELD = 'F'
     CONNECTION = 'CTI'
     CATEGORY = 'CTCF'
@@ -22,7 +27,25 @@ class NotFlag(StrEnum):
     BLANK = ''
 
 
-@dataclass
+class FilterArray:
+    def __init__(self, *filters):
+        self.filters = {i + 1: filters[i] for i in range(len(filters))}
+
+    # def filter(self, csr: Csr, get_all=False) -> None | list[dict[str, str]]:
+    #     for i, fil in self.filters.items():
+    #         filstr = self.filter_str(i)
+    #         csr.filter_by_filter_str(filstr)
+    #     if get_all:
+    #         return csr.get_all_records()
+    #
+    # def filter_str(self, slot: int) -> str:
+    #     fil = self.filters[slot]
+    #     filter_str = (f'[ViewFilter('
+    #                   f'{slot}, {fil.f_type}, {fil.not_flag}, "{fil.field_name}", "{fil.condition}{fil.value}"'
+    #                   f')]')
+    #     return filter_str
+
+
 class CmcFilter:
     """
     ViewFilter
@@ -35,20 +58,51 @@ class CmcFilter:
     The FilterTypeParameters specified with this REQUEST and the ViewConjunction REQUEST are similar to those available from the Commence main menu.
     """
 
-    field_name: str
-    condition: FilterCondition = FilterCondition.EQUAL_TO
-    value: str = ''
-    f_type: FilterType = FilterType.FIELD
-    not_flag: NotFlag = NotFlag.BLANK
-    slot: int = 1
+    def __init__(
+            self,
+            *,
+            field_name,
+            condition: FilterCondition = FilterCondition.EQUAL_TO,
+            value: str = '',
+            f_type: FilterTypeEnum = FilterTypeEnum.FIELD,
+            not_flag: NotFlag = NotFlag.BLANK
+    ):
+        self.field_name = field_name
+        self.condition = condition
+        self.f_type = f_type
+        self.not_flag = not_flag
+        self.value = value
 
-    def __post_init__(self):
         if self.condition == FilterCondition.CONTAINS or self.condition == FilterCondition.EQUAL_TO:
             if not self.value:
                 raise ValueError('Value must be set when condition is "Contains"')
         self.value = f', "{self.value}"' if self.value else ''
 
-    @property
-    def filter_str(self) -> str:
-        filter_str = f'[ViewFilter({self.slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]'
+    def filter_str(self, slot) -> str:
+        filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]'
         return filter_str
+
+    def filter_csr(self, csr: Csr, slot: int = 1):
+        csr.filter(self, slot)
+
+
+class CmcFilterPy(BaseModel):
+    field_name: str
+    condition: FilterCondition = FilterCondition.EQUAL_TO
+    value: str = ''
+    f_type: FilterTypeEnum = FilterTypeEnum.FIELD
+    not_flag: NotFlag = NotFlag.BLANK
+
+    @model_validator(mode='after')
+    def condition(self):
+        if self.condition == FilterCondition.CONTAINS or self.condition == FilterCondition.EQUAL_TO:
+            if not self.value:
+                raise ValueError('Value must be set when condition is "Contains"')
+        self.value = f', "{self.value}"' if self.value else ''
+
+    def filter_str(self, slot) -> str:
+        filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]'
+        return filter_str
+
+    def filter_csr(self, csr: Csr, slot: int = 1):
+        csr.filter_py(self, slot)

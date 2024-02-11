@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from win32com.universal import com_error
 
 from pycommence.entities import CmcError, Connection
-from pycommence.filters import CmcFilter
+from pycommence.filters import CmcFilter, FilterArray, CmcFilterPy
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cmc_cursor import CsrCmc
@@ -118,8 +118,26 @@ class Csr:
     def filter_by_name(self, name: str, *, fslot=1):
         self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
 
-    def filter(self, cmc_filter: CmcFilter):
-        self._cursor.set_filter(cmc_filter.filter_str)
+    def filter(self, cmc_filter: CmcFilter, slot=1):
+        self.filter_by_str(cmc_filter.filter_str(slot))
+
+    def filter_py(self, cmc_filter: CmcFilterPy, slot=1):
+        self.filter_by_str(cmc_filter.filter_str(slot))
+
+    def filter_by_str(self, filter_str: str):
+        self._cursor.set_filter(filter_str)
+
+    def set_filters(self, filters: list[CmcFilter], get_all=False):
+        for i, fil in enumerate(filters, start=1):
+            self.filter(fil, i)
+        if get_all:
+            return self.get_all_records()
+
+    def filter_by_array(self, fil_array: FilterArray, get_all=False) -> None | list[dict[str, str]]:
+        for slot, fil in fil_array.filters.items():
+            self.filter(fil, slot)
+        if get_all:
+            return self.get_all_records()
 
     @property
     def get_schema(self):
