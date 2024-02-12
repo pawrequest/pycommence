@@ -7,6 +7,7 @@ from pydantic import BaseModel, ValidationError
 from sqlmodel import SQLModel
 
 from pycommence import get_csr
+from pycommence.filters import CmcFilterPy
 
 
 def sub_model_from_cmc[T](
@@ -31,6 +32,8 @@ class CmcTableRaw(BaseModel, ABC):
 class CmcModel(BaseModel, ABC):
     # initial_filter_array: ClassVar[None | list[CmcFilterPy]] = None
     cmc_class: ClassVar[type[CmcTableRaw]]
+    initial_filter_array: ClassVar[list[CmcFilterPy]]
+
 
     @classmethod
     @abstractmethod
