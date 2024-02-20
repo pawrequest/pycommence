@@ -153,21 +153,26 @@ class Csr:
 
 def infer_and_parse(value: str) -> date | time | Decimal | bool | str | None:
     value = value.strip()
+
+    # date
     if re.match(r'\d{1,2}/\d{1,2}/\d{4}', value):
         return datetime.strptime(value, '%d/%m/%Y').date()
 
+    # time
     if re.match(r'^\d{2}:\d{2}', value):
         return datetime.strptime(value, "%I:%M %p").time()
 
+    # bool
     if value.lower() in ['true', 'false']:
         return value.lower() == 'true'
 
+    # num
     if value.isnumeric():
         if '.' in value:
             try:
                 value = Decimal(value)
             except Exception:
-                ...
+                value = float(value)
         value = int(value)
 
     return value or None
