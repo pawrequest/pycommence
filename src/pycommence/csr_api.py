@@ -119,7 +119,6 @@ class Csr:
         self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
 
     def filter(self, cmc_filter: CmcFilter, slot=1):
-        print('filter method is deprecated, use filter_by_array')
         self.filter_by_str(cmc_filter.filter_str(slot))
 
     def filter_py(self, cmc_filter: CmcFilter, slot=1):
