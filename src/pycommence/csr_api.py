@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from win32com.universal import com_error
 
 from pycommence.entities import CmcError, Connection
-from pycommence.filters import CmcFilter, FilterArray, CmcFilterPy
+from pycommence.filters import CmcFilter, FilterArray, CmcFilter
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cmc_cursor import CsrCmc
@@ -119,9 +119,10 @@ class Csr:
         self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
 
     def filter(self, cmc_filter: CmcFilter, slot=1):
+        print('filter method is deprecated, use filter_by_array')
         self.filter_by_str(cmc_filter.filter_str(slot))
 
-    def filter_py(self, cmc_filter: CmcFilterPy, slot=1):
+    def filter_py(self, cmc_filter: CmcFilter, slot=1):
         self.filter_by_str(cmc_filter.filter_str(slot))
 
     def filter_by_str(self, filter_str: str):

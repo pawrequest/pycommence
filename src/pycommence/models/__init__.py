@@ -1,3 +1,3 @@
-from .cmc_models import CmcModel, CmcTableRaw, CmcFilterPy
+from .cmc_models import CmcModel, CmcTableRaw, CmcFilter
 
-__all__ = ['CmcModel', 'CmcTableRaw', 'CmcFilterPy']
+__all__ = ['CmcModel', 'CmcTableRaw', 'CmcFilter']

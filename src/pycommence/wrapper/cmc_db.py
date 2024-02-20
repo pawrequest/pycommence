@@ -165,21 +165,21 @@ class Cmc(CmcConnection):
 #         cls.connections[commence_instance] = conn
 #         return conn
 
-
-class CmcCache:
-    connections = {}
-
-    def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
-        if commence_instance in cls.connections:
-            logger.info(f'Using cached connection to {commence_instance}')
-            return cls.connections[commence_instance]
-
-        cls.connections[commence_instance] = super().__new__(cls)
-
-        # cls.connections[commence_instance] = Cmc(commence_instance)
-        return cls.connections[commence_instance]
-
-    def __init__(self, commence_instance='Commence.DB'):
-        if not hasattr(self, 'initialized'):  # Prevents reinitialization
-            self.connection = CmcConnection(commence_instance)
-            self.initialized = True
+#
+# class CmcCache:
+#     connections = {}
+#
+#     def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
+#         if commence_instance in cls.connections:
+#             logger.info(f'Using cached connection to {commence_instance}')
+#             return cls.connections[commence_instance]
+#
+#         cls.connections[commence_instance] = super().__new__(cls)
+#
+#         # cls.connections[commence_instance] = Cmc(commence_instance)
+#         return cls.connections[commence_instance]
+#
+#     def __init__(self, commence_instance='Commence.DB'):
+#         if not hasattr(self, 'initialized'):  # Prevents reinitialization
+#             self.connection = CmcConnection(commence_instance)
+#             self.initialized = True
