@@ -29,10 +29,8 @@ class CmcTableRaw(BaseModel, ABC):
 
 
 class CmcModel(BaseModel, ABC):
-    # initial_filter_array: ClassVar[None | list[CmcFilterPy]] = None
     cmc_class: ClassVar[type[CmcTableRaw]]
-    initial_filter_array: ClassVar[list[CmcFilterPy]]
-
+    initial_filter_array: ClassVar[list[CmcFilterPy] | None] = None
 
     @classmethod
     @abstractmethod
@@ -53,5 +51,3 @@ class CmcModel(BaseModel, ABC):
             return cls.from_cmc(cmc)
         except ValidationError as e:
             raise ValueError(f'Failed to convert record to {cls.__name__}') from e
-
-
