@@ -139,16 +139,16 @@ class Csr:
         if get_all:
             return self.get_all_records()
 
-    @property
-    def get_schema(self):
-        # NOPE this gets incimplete schema (missing types) if row does not have all ttrs
-        rs = self._cursor.get_query_row_set(1)
-        row = rs.get_rows_dict()[0]
-        scm = {
-            k: type(infer_and_parse(v))
-            for k, v in row.items()
-        }
-        return scm
+    # @property
+    # def get_schema(self):
+    #     # NOPE this gets incimplete schema (missing types) if row does not have all ttrs
+    #     rs = self._cursor.get_query_row_set(1)
+    #     row = rs.get_rows_dict()[0]
+    #     scm = {
+    #         k: type(infer_and_parse(v))
+    #         for k, v in row.items()
+    #     }
+    #     return scm
 
 
 def infer_and_parse(value: str) -> date | time | Decimal | bool | str | None:
