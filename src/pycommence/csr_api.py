@@ -134,10 +134,10 @@ class Csr:
         if get_all:
             return self.get_all_records()
 
-    def filter_by_array(self, fil_array: FilterArray, get_all=False) -> None | list[dict[str, str]]:
+    def filter_by_array(self, fil_array: FilterArray, get=False) -> None | list[dict[str, str]]:
         for slot, fil in fil_array.filters.items():
             self.filter(fil, slot)
-        if get_all:
+        if get:
             return self.get_all_records()
 
     # @property
