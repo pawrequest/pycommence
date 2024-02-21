@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from typing import ClassVar
 
 from pydantic import BaseModel, ValidationError
+from sqlmodel import SQLModel
 
 from pycommence import get_csr
 from pycommence.filters import CmcFilter
@@ -21,14 +22,14 @@ def sub_model_from_cmc[T](
     return cls.model_validate(ob_dict)
 
 
-class CmcTableRaw(BaseModel, ABC):
+class CmcTableRaw(SQLModel, ABC):
     table_name: ClassVar[str]
 
     class Config:
         extra = 'ignore'
 
 
-class CmcModel(BaseModel, ABC):
+class CmcModel(SQLModel, ABC):
     cmc_class: ClassVar[type[CmcTableRaw]]
     initial_filter_array: ClassVar[list[CmcFilter] | None] = None
 
