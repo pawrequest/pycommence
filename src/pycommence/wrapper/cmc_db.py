@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import contextlib
+
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
@@ -11,9 +13,20 @@ from ..csr_api import Csr
 from ..entities import CmcError
 
 
+@contextlib.contextmanager
+def csr_cm(table_name, cmc_name: str = 'Commence.DB') -> Csr:
+    """Context manager for a cursor object."""
+    cmc = Cmc(cmc_name)
+    csr = cmc.get_cursor(table_name)
+    try:
+        yield csr
+    finally:
+        ...
+
 def get_csr(table_name, cmc_name: str = 'Commence.DB') -> Csr:
     """ Easiest entry - Get a cursor for a table in a Commence database."""
-    return Cmc(cmc_name).get_cursor(table_name)
+    cmc = Cmc(cmc_name)
+    return cmc.get_cursor(table_name)
 
 
 class CmcConnection:
@@ -40,6 +53,7 @@ class CmcConnection:
                     raise CmcError(
                         f'Db Name "{commence_instance}" does not exist - connection failed'
                     )
+                raise CmcError(f'Error connecting to {commence_instance}. Is Commence Running?\n{e}')
 
 
 class Cmc(CmcConnection):
