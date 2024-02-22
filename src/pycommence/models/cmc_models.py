@@ -42,7 +42,7 @@ class CmcModel(SQLModel, ABC):
     def from_name(cls, name: str) -> CmcModel:
         csr = get_csr(cls.cmc_class.table_name)
         record = csr.get_record(name)
-        cmc = cls.cmc_class(**record)
+        cmc = cls.cmc_class.model_validate(record)
         return cls.from_cmc(cmc)
 
     @classmethod
