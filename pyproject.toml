@@ -20,32 +20,7 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "pytest",
-    "mypy"
 ]
 
 [tool.hatch.metadata]
 allow-direct-references = true
-
-
-[tool.mypy]
-files = "src/**/*.py"
-ignore_missing_imports = true
-strict = true
-#mypy_path = "stubs" # no stubs yet
-
-[tool.ruff]
-line-length = 120
-fix = true
-show-fixes = true
-src = ["src", "test"]
-#exclude = ["src/commence_py/cmc_dde.py"] # legacy code needs refactor
-
-[tool.ruff.lint]
-extend-select = [
-    "UP", # pyupgrade
-    "E", # pycodestyle
-    "W", # pycodestyle warnings
-]
-
-[tool.ruff.format]
-quote-style = "single"

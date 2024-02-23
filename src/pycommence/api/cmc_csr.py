@@ -7,8 +7,8 @@ from typing import TYPE_CHECKING
 
 from win32com.universal import com_error
 
-from pycommence.entities import CmcError, Connection
-from pycommence.filters import CmcFilter, FilterArray, CmcFilter
+from .entities import CmcError, Connection
+from .filters import CmcFilter, FilterArray
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cmc_cursor import CsrCmc

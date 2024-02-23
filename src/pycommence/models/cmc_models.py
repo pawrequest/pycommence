@@ -7,7 +7,7 @@ from pydantic import BaseModel, ValidationError
 from sqlmodel import SQLModel
 
 from pycommence import get_csr
-from pycommence.filters import CmcFilter
+from pycommence.api.filters import CmcFilter
 
 
 def sub_model_from_cmc[T](

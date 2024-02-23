@@ -58,3 +58,6 @@ class OptionFlag(Enum):
     PILOT = 0x0008
     CANONICAL = 0x0010
     INTERNET = 0x0020
+
+
+FLAGS_UNUSED = 0

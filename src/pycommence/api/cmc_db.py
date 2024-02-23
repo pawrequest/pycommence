@@ -1,32 +1,14 @@
 from __future__ import annotations
 
-import contextlib
-
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from .cmc_conversation import CommenceConversation
-from .cmc_cursor import CsrCmc
-from .cmc_enums import CursorType, OptionFlag
-from ..csr_api import Csr
-from ..entities import CmcError
-
-
-@contextlib.contextmanager
-def csr_cm(table_name, cmc_name: str = 'Commence.DB') -> Csr:
-    """Context manager for a cursor object."""
-    cmc = Cmc(cmc_name)
-    csr = cmc.get_cursor(table_name)
-    try:
-        yield csr
-    finally:
-        ...
-
-def get_csr(table_name, cmc_name: str = 'Commence.DB') -> Csr:
-    """ Easiest entry - Get a cursor for a table in a Commence database."""
-    cmc = Cmc(cmc_name)
-    return cmc.get_cursor(table_name)
+from .cmc_csr import Csr
+from .entities import CmcError
+from ..wrapper import CommenceConversation
+from ..wrapper import CsrCmc
+from ..wrapper import OptionFlag, CursorType
 
 
 class CmcConnection:

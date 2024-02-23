@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-FLAGS_UNUSED = 0
-
 
 @dataclass
 class Connection:
