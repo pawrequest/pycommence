@@ -24,6 +24,9 @@ from pycommence.api.filters import CmcFilter
 #         ob_dict[attr] = res
 #     return cls(**ob_dict)
 
+class CmcBase(SQLModel, ABC):
+    pass
+
 
 #
 def sub_model_from_cmc[T](
@@ -51,7 +54,7 @@ def sub_model_from_cmc[T](
     # }
 
 
-class CmcModelRaw(SQLModel, ABC):
+class CmcModelRaw(CmcBase, ABC):
     table_name: ClassVar[str]
     record: dict[str, str]
 
@@ -59,7 +62,7 @@ class CmcModelRaw(SQLModel, ABC):
         extra = 'ignore'
 
 
-class CmcModelIn(SQLModel, ABC):
+class CmcModelIn(CmcBase, ABC):
     raw_table_class: ClassVar[type[CmcModelRaw]]
     initial_filter_array: ClassVar[list[CmcFilter] | None] = None
 
