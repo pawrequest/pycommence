@@ -1,42 +1,34 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import ClassVar
+from pydantic.alias_generators import to_snake
+from sqlmodel import Session
 
-from pydantic import BaseModel, ValidationError
-
-from pycommence import get_csr
-from pycommence.models import CmcModel
-from pycommence.models.cmc_models import CmcTableRaw
+from pycommence.models import CmcModelIn
+from pycommence.models.cmc_models import CmcModelRaw
 
 
-class CmcTableRawSql(SQLModel, ABC):
-    table_name: ClassVar[str]
-
-    class Config:
-        extra = 'ignore'
-
-
-class CmcModelSql(SQLModel, ABC):
-    # initial_filter_array: ClassVar[None | list[CmcFilterPy]] = None
-    cmc_class: ClassVar[type[CmcTableRaw]]
-
-    @classmethod
-    @abstractmethod
-    def from_cmc(cls, cmc_obj: BaseModel) -> CmcModel:
-        raise NotImplementedError
-
-    @classmethod
-    def from_name(cls, name: str) -> CmcModel:
-        csr = get_csr(cls.cmc_class.table_name)
-        record = csr.get_record(name)
-        cmc = cls.cmc_class(**record)
-        return cls.from_cmc(cmc)
-
-    @classmethod
-    def from_record(cls, record: dict[str, str]) -> CmcModel:
-        try:
-            cmc = cls.cmc_class(**record)
-            return cls.from_cmc(cmc)
-        except ValidationError as e:
-            raise ValueError(f'Failed to convert record to {cls.__name__}') from e
+def sub_model_from_cmc_db[T](
+        cls: type[T],
+        cmc_obj: CmcModelRaw | CmcModelIn,
+        session: Session,
+        # parent_id: int,
+        *,
+        prepend: str = ''
+) -> T:
+    # ob_dict = {
+    #     attr: getattr(cmc_obj, f'{cls}.{prepend}{attr}', None) for attr in cls.__fields__
+    # }
+    ob_dict = {}
+    for attr in cls.__fields__:
+        valstr = to_snake(f'{cls.__name__}.{prepend}{attr}')
+        val = getattr(cmc_obj, valstr, None)
+        if val is not None:
+            ob_dict[attr] = val
+    db_model_instance = cls(
+        **ob_dict,
+        # hire_id=parent_id
+    )
+    session.add(db_model_instance)
+    session.commit()
+    session.refresh(db_model_instance)
+    return db_model_instance

@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from pycommence.models.cmc_models import CmcTableRaw
+from pycommence.models.cmc_models import CmcModelRaw
 from pawsupport.convert import to_snake
 from pycommence import CsrCmc
 from pycommence.wrapper.cmc_db import get_csr
@@ -67,6 +67,6 @@ def create_pydantic_model_from_db(table_name):
         attributes[column_name] = Field(alias=alias)
 
     # Create the Pydantic model class dynamically
-    model_class = type(table_name, (CmcTableRaw,), attributes)
+    model_class = type(table_name, (CmcModelRaw,), attributes)
 
     return model_class

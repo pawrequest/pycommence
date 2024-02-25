@@ -10,8 +10,8 @@ from .api import (
     csr_cm,
     get_csr,
 )
-from .models import CmcModel, CmcTableRaw
+from .models import CmcModelIn, CmcModelRaw
 
 __all__ = ['Csr', 'csr_cm', 'get_csr', 'Cmc', 'CmcError', 'CmcFilter', 'FilterArray', 'CursorType',
            'OptionFlag',
-           'Bookmark', 'CmcModel', 'CmcTableRaw']
+           'Bookmark', 'CmcModelIn', 'CmcModelRaw']
