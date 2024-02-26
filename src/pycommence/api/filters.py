@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, Field
 
 if TYPE_CHECKING:
     from pycommence.csr_api import Csr
@@ -27,7 +27,20 @@ class NotFlag(StrEnum):
     BLANK = ''
 
 
-class FilterArray:
+class FilterArray(BaseModel):
+    filters: dict[int, CmcFilter] = Field(default_factory=dict)
+
+    def add_filters(self, *filters: CmcFilter):
+        for i, fil in enumerate(filters):
+            self.filters[i + 1] = fil
+        return self
+
+    def filter_csr(self, csr: Csr):
+        for slot, filter in self.filters.items():
+            filter.filter_csr(csr, slot)
+
+
+class FilterArray1:
     def __init__(self, *filters):
         self.filters = {i + 1: filters[i] for i in range(len(filters))}
 
@@ -52,6 +65,7 @@ class CmcFilter(BaseModel):
 
     def filter_csr(self, csr: Csr, slot: int = 1):
         csr.filter_py(self, slot)
+        return self
 
 # DEPREC DONT DELETE IN CASE!
 # class CmcFilter:

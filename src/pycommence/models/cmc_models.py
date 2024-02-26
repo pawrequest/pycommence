@@ -55,7 +55,7 @@ def sub_model_from_cmc[T](
 
 
 class CmcModelRaw(CmcBase, ABC):
-    table_name: ClassVar[str]
+    cmc_table_name: ClassVar[str]
     record: dict[str, str]
 
     class Config:
@@ -78,7 +78,7 @@ class CmcModelIn(CmcBase, ABC):
 
     @classmethod
     def from_name(cls, name: str) -> CmcModelIn:
-        csr = get_csr(cls.raw_table_class.table_name)
+        csr = get_csr(cls.raw_table_class.cmc_table_name)
         record = csr.get_record(name)
         cmc = cls.raw_table_class(**record, record=record)
         return cls.from_raw_cmc(cmc)
@@ -87,7 +87,7 @@ class CmcModelIn(CmcBase, ABC):
     def from_namedb(cls, name: str, session) -> CmcModelIn:
         if not hasattr(cls, 'from_raw'):
             raise NotImplementedError
-        csr = get_csr(cls.raw_table_class.table_name)
+        csr = get_csr(cls.raw_table_class.cmc_table_name)
         record = csr.get_record(name)
         cmc = cls.raw_table_class(**record, record=record)
         return cls.from_raw(cmc, session)
