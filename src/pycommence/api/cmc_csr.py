@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 class Csr:
     def __init__(self, cursor: CsrCmc):
-        self._cursor = cursor
+        self._cursor_cmc = cursor
 
     def edit_record(self, name: str, package: dict) -> None:
         """Modify a record in the cursor and commit.
@@ -27,7 +27,7 @@ class Csr:
             package (dict): A dictionary of field names and values to modify.
             """
         self.filter_by_name(name)
-        row_set = self._cursor.get_edit_row_set()
+        row_set = self._cursor_cmc.get_edit_row_set()
         for key, value in package.items():
             try:
                 col_idx = row_set.get_column_index(key)
@@ -46,22 +46,22 @@ class Csr:
             CmcError: If the record is not found or if more than one record is found.
             """
         self.filter_by_name(record_name)
-        records = self.get_all_records()
+        records = self.get_records()
         if not records:
             raise CmcError(f'No record found for {record_name}')
         if len(records) > 1:
             raise CmcError(f'Expected 1 record, got {len(records)}')
         return records[0]
 
-    def get_all_records(self) -> list[dict[str, str]]:
-        row_set = self._cursor.get_query_row_set()
+    def get_records(self, count: int or None = None) -> list[dict[str, str]]:
+        row_set = self._cursor_cmc.get_query_row_set(count)
         records = row_set.get_rows_dict()
         return records
 
     def delete_record(self, record_name):
         try:
             self.filter_by_name(record_name)
-            row_set = self._cursor.get_delete_row_set()
+            row_set = self._cursor_cmc.get_delete_row_set()
             row_set.delete_row(0)
             res = row_set.commit()
             return res
@@ -80,7 +80,7 @@ class Csr:
             bool: True on success, False on failure.
             """
         try:
-            row_set = self._cursor.get_add_row_set(1)
+            row_set = self._cursor_cmc.get_add_row_set(1)
             row_set.modify_row(0, 0, record_name)
             row_set.modify_row_dict(0, package)
             res = row_set.commit()
@@ -103,7 +103,7 @@ class Csr:
     ) -> None:
         val_cond = f', "{value}"' if value else ''
         filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
-        self._cursor.set_filter(filter_str)
+        self._cursor_cmc.set_filter(filter_str)
 
     def filter_by_connection(
             self,
@@ -114,7 +114,7 @@ class Csr:
     ):
         filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
                       f'{connection.to_table}, {item_name})]')
-        self._cursor.set_filter(filter_str)
+        self._cursor_cmc.set_filter(filter_str)
 
     def filter_by_name(self, name: str, *, fslot=1):
         self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
@@ -126,19 +126,19 @@ class Csr:
         self.filter_by_str(cmc_filter.filter_str(slot))
 
     def filter_by_str(self, filter_str: str):
-        self._cursor.set_filter(filter_str)
+        self._cursor_cmc.set_filter(filter_str)
 
     def set_filters(self, filters: list[CmcFilter], get_all=False):
         for i, fil in enumerate(filters, start=1):
             self.filter(fil, i)
         if get_all:
-            return self.get_all_records()
+            return self.get_records()
 
     def filter_by_array(self, fil_array: FilterArray, get=False) -> None | list[dict[str, str]]:
         for slot, fil in fil_array.filters.items():
             self.filter(fil, slot)
         if get:
-            return self.get_all_records()
+            return self.get_records()
 
     # @property
     # def get_schema(self):
