@@ -4,8 +4,7 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from .cmc_csr import Csr
-from .entities import CmcError
+from .cmc_types import CmcError
 from ..wrapper import CommenceConversation
 from ..wrapper import CsrCmc
 from ..wrapper import OptionFlag, CursorType
@@ -103,7 +102,7 @@ class Cmc(CmcConnection):
             name: str or None = None,
             mode: CursorType = CursorType.CATEGORY,
             flags: list[OptionFlag] or OptionFlag or None = None
-    ) -> Csr:
+    ) -> CsrCmc:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -142,10 +141,11 @@ class Cmc(CmcConnection):
                 )
 
         csr = CsrCmc(self._cmc.GetCursor(mode, name, flags))
-        csr_api = Csr(csr)
-        return csr_api
+        return csr
+        # csr_api = Csr(csr)
+        # return csr_api
 
-        # todo fix errors on non-standard modes
+        # todo non-standard modes
 
 
 # class CmcDB(CmcConnection):

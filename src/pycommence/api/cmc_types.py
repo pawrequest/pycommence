@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, model_validator, Field
 
 if TYPE_CHECKING:
-    from pycommence.csr_api import Csr
+    from pycommence.api import Csr
 
 
 class FilterCondition(StrEnum):
@@ -106,3 +107,20 @@ class CmcFilter(BaseModel):
 #
 #     def filter_csr(self, csr: Csr, slot: int = 1):
 #         csr.filter(self, slot)
+@dataclass
+class Connection:
+    name: str
+    from_table: str
+    to_table: str
+
+
+class CmcError(Exception):
+    def __init__(self, msg='Commence is not installed'):
+        self.msg = msg
+        super().__init__(self.msg)
+
+
+class NotFoundError(Exception):
+    def __init__(self, msg='No records found'):
+        self.msg = msg
+        super().__init__(self.msg)

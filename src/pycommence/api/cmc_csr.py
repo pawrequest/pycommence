@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import re
 from datetime import date, datetime, time
 from decimal import Decimal
@@ -7,8 +8,8 @@ from typing import TYPE_CHECKING
 
 from win32com.universal import com_error
 
-from .entities import CmcError, Connection
-from .filters import CmcFilter, FilterArray
+from .cmc_db import Cmc
+from .cmc_types import CmcError, CmcFilter, Connection, FilterArray
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cmc_cursor import CsrCmc
@@ -176,3 +177,23 @@ def infer_and_parse(value: str) -> date | time | Decimal | bool | str | None:
         value = int(value)
 
     return value or None
+
+
+@contextlib.contextmanager
+def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
+    """Context manager for a cursor object."""
+    cmc = Cmc(cmc_name)
+    csr_cmc = cmc.get_cursor(table_name)
+    csr_api = Csr(csr_cmc)
+    try:
+        yield csr_api
+    finally:
+        ...
+
+
+def get_csr(table_name, cmc_name: str = 'Commence.DB') -> Csr:
+    """ Easiest entry - Get a cursor for a table in a Commence database."""
+    cmc = Cmc(cmc_name)
+    csr_cmc = cmc.get_cursor(table_name)
+    csr_api = Csr(csr_cmc)
+    return csr_api

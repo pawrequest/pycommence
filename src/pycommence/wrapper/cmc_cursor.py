@@ -1,7 +1,7 @@
-import logging
 from typing import Optional
 
-from pycommence.api import entities as ent
+import pycommence.api.cmc_types
+import pycommence.cmc_models
 from pycommence.wrapper import cmc_enums as cenum
 from pycommence.wrapper import cmc_rowset as rs
 from pycommence.wrapper._icommence import ICommenceCursor
@@ -58,7 +58,7 @@ class CsrCmc:
         """
         res = self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
         if not res:
-            raise ent.CmcError(f'Could not set filter {filter_text}')
+            raise pycommence.api.cmc_types.CmcError(f'Could not set filter {filter_text}')
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -77,7 +77,7 @@ class CsrCmc:
         res = self._csr_cmc.SetLogic(logic_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
-            raise ent.CmcError('Unable to set filter logic')
+            raise pycommence.api.cmc_types.CmcError('Unable to set filter logic')
 
     def set_sort(self, sort_text: str):
         """
@@ -96,7 +96,7 @@ class CsrCmc:
         res = self._csr_cmc.SetSort(sort_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
-            raise ent.CmcError("Unable to sort")
+            raise pycommence.api.cmc_types.CmcError("Unable to sort")
 
     def set_column(self, column_index: int, field_name: str,
                    flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE) -> bool:
@@ -122,7 +122,7 @@ class CsrCmc:
         logger.info(f'Setting column {column_index} to {field_name}')
         res = self._csr_cmc.SetColumn(column_index, field_name, flags.value)
         if not res:
-            raise ent.CmcError("Unable to set column")
+            raise pycommence.api.cmc_types.CmcError("Unable to set column")
         return res
 
     def seek_row(self, start: int, rows: int) -> int:
@@ -149,7 +149,7 @@ class CsrCmc:
         """
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
-            raise ent.CmcError(f"Unable to seek {rows} rows")
+            raise pycommence.api.cmc_types.CmcError(f"Unable to seek {rows} rows")
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:
@@ -165,7 +165,7 @@ class CsrCmc:
         """
         res = self._csr_cmc.SeekRowApprox(numerator, denominator)
         if res == -1:
-            raise ent.CmcError(
+            raise pycommence.api.cmc_types.CmcError(
                 f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows")
         return res
 
@@ -191,7 +191,7 @@ class CsrCmc:
             count = self.row_count
         result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
         if result.rowcount == 0:
-            raise ent.NotFoundError()
+            raise pycommence.api.cmc_types.NotFoundError()
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -206,7 +206,7 @@ class CsrCmc:
         """
         res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, cenum.FLAGS_UNUSED))
         if res.row_count == 0:
-            raise ent.NotFoundError()
+            raise pycommence.api.cmc_types.NotFoundError()
         return res
 
     def get_add_row_set(self, count: int or None = None,
@@ -229,7 +229,7 @@ class CsrCmc:
             count = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
         if res.row_count == 0:
-            raise ent.NotFoundError()
+            raise pycommence.api.cmc_types.NotFoundError()
         return res
 
     def get_edit_row_set(self, count: int or None = None) -> rs.RowSetEdit:
@@ -269,7 +269,7 @@ class CsrCmc:
             cenum.FLAGS_UNUSED
         ))
         if res.row_count == 0:
-            raise ent.NotFoundError()
+            raise pycommence.api.cmc_types.NotFoundError()
         return res
 
     def get_delete_row_set(self, count: int or None = None) -> rs.RowSetDelete:

@@ -4,13 +4,13 @@ from pydantic.alias_generators import to_snake
 from sqlmodel import Session
 
 from pycommence.models import CmcModelIn
-from pycommence.models.cmc_models import CmcModelRaw
+from pycommence.cmc_models import CmcModel
 
 from pydantic._internal._model_construction import ModelMetaclass
 
 def sub_model_from_cmc_db[T](
         cls: type[T],
-        cmc_obj: CmcModelRaw | CmcModelIn,
+        cmc_obj: CmcModel | CmcModelIn,
         session: Session,
         # parent_id: int,
         *,
