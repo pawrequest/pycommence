@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum
+from enum import StrEnum, Enum
 from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, model_validator, Field
@@ -10,22 +10,23 @@ if TYPE_CHECKING:
     from pycommence.api import Csr
 
 
-class FilterCondition(StrEnum):
+class FilterCondition(str, Enum):
     EQUAL_TO = "Equal To"
     CONTAINS = "Contains"
     AFTER = "After"
 
 
+# FilterCondition = Literal['Equal To', 'Contains', 'After']
 class FilterTypeEnum(StrEnum):
-    FIELD = 'F'
-    CONNECTION = 'CTI'
-    CATEGORY = 'CTCF'
-    CATEGORY_ITEM = 'CTCTI'
+    FIELD = "F"
+    CONNECTION = "CTI"
+    CATEGORY = "CTCF"
+    CATEGORY_ITEM = "CTCTI"
 
 
 class NotFlag(StrEnum):
-    NOT = 'Not'
-    BLANK = ''
+    NOT = "Not"
+    BLANK = ""
 
 
 class FilterArray(BaseModel):
@@ -49,24 +50,27 @@ class FilterArray1:
 class CmcFilter(BaseModel):
     field_name: str
     condition: FilterCondition = FilterCondition.EQUAL_TO
-    value: str = ''
+    value: str = ""
     f_type: FilterTypeEnum = FilterTypeEnum.FIELD
     not_flag: NotFlag = NotFlag.BLANK
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def condition(self):
         if self.condition == FilterCondition.CONTAINS or self.condition == FilterCondition.EQUAL_TO:
             if not self.value:
                 raise ValueError('Value must be set when condition is "Contains"')
-        self.value = f', "{self.value}"' if self.value else ''
+        self.value = f', "{self.value}"' if self.value else ""
 
     def filter_str(self, slot) -> str:
-        filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]'
+        filter_str = (
+            f"[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]"
+        )
         return filter_str
 
     def filter_csr(self, csr: Csr, slot: int = 1):
         csr.filter_py(self, slot)
         return self
+
 
 # DEPREC DONT DELETE IN CASE!
 # class CmcFilter:
@@ -115,12 +119,12 @@ class Connection:
 
 
 class CmcError(Exception):
-    def __init__(self, msg='Commence is not installed'):
+    def __init__(self, msg="Commence is not installed"):
         self.msg = msg
         super().__init__(self.msg)
 
 
 class NotFoundError(Exception):
-    def __init__(self, msg='No records found'):
+    def __init__(self, msg="No records found"):
         self.msg = msg
         super().__init__(self.msg)
