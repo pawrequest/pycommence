@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 from abc import ABC
 from typing import TypeAlias
-from pycommence.wrapper import cmc_enums as cenum
+from pycommence.wrapper import cmc_enums as cenum, OptionFlag
 
 # todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
@@ -46,7 +46,7 @@ class RowSetBase(ABC):
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_value(self, row_index: int, column_index: int, flags: int = 0) -> str:
+    def get_value(self, row_index: int, column_index: int, flags: int = OptionFlag.CANONICAL) -> str:
         """
         Retrieves the value at the specified row and column.
 
