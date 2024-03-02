@@ -61,3 +61,5 @@ class OptionFlag(Enum):
 
 
 FLAGS_UNUSED = 0
+
+CmcDateFormat = '%y%m%d'
