@@ -3,7 +3,7 @@ from __future__ import annotations
 import typing
 from abc import ABC
 from typing import TypeAlias
-from pycommence.wrapper import cmc_enums as cenum, OptionFlag
+from . import cmc_enums
 
 # todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
@@ -46,7 +46,7 @@ class RowSetBase(ABC):
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_value(self, row_index: int, column_index: int, flags: int = OptionFlag.CANONICAL) -> str:
+    def get_value(self, row_index: int, column_index: int, flags: int = cmc_enums.OptionFlag.CANONICAL) -> str:
         """
         Retrieves the value at the specified row and column.
 
@@ -88,7 +88,7 @@ class RowSetBase(ABC):
         """
         return self._rs.GetColumnIndex(label, flags)
 
-    def get_row(self, row_index: int, delim: str = ';', flags: int = 0) -> str:
+    def get_row(self, row_index: int, delim: str = ';', flags: int = cmc_enums.OptionFlag.CANONICAL.value) -> str:
         """
         Retrieves the values of the specified row.
 
@@ -164,7 +164,7 @@ class RowSetModifies(RowSetBase):
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.ModifyRow(row_index, column_index, value, cenum.FLAGS_UNUSED)
+        return self._rs.ModifyRow(row_index, column_index, value, cmc_enums.FLAGS_UNUSED)
 
     def modify_row_dict(self, row_index: int, row_dict: dict) -> bool:
         """
@@ -191,7 +191,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
         After Commit(), the RowSet is no Longer valid and should be discarded.
         """
-        res = self._rs.Commit(cenum.FLAGS_UNUSED)
+        res = self._rs.Commit(cmc_enums.FLAGS_UNUSED)
         if res != 0:
             raise ValueError(f'Commit failed')
         return True
@@ -203,7 +203,7 @@ class RowSetModifies(RowSetBase):
         Returns:
             CommenceCursor: Cursor object with the committed data.
         """
-        return self._rs.CommitGetCursor(cenum.FLAGS_UNUSED)
+        return self._rs.CommitGetCursor(cmc_enums.FLAGS_UNUSED)
 
 
 class RowSetAdd(RowSetModifies):
@@ -248,7 +248,7 @@ class RowSetDelete(RowSetModifies):
             bool: True on success, False on failure.
         Deletion is not permanent until Commit() is called.
         """
-        return self._rs.DeleteRow(row_index, cenum.FLAGS_UNUSED)
+        return self._rs.DeleteRow(row_index, cmc_enums.FLAGS_UNUSED)
 
     def commit_get_cursor(self):
         raise NotImplementedError("Can not get a cursor for deleted rows.")
