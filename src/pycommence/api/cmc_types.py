@@ -1,32 +1,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum, Enum
-from typing import TYPE_CHECKING
+from typing import Literal, TYPE_CHECKING
 
-from pydantic import BaseModel, model_validator, Field
+from pydantic import BaseModel, Field, model_validator
 
 if TYPE_CHECKING:
-    from pycommence.api import Csr
+    from pycommence import Csr
 
+FilterConditionType = Literal['Equal To', 'Contains', 'After']
+FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 
-class FilterCondition(str, Enum):
-    EQUAL_TO = "Equal To"
-    CONTAINS = "Contains"
-    AFTER = "After"
-
-
-# FilterCondition = Literal['Equal To', 'Contains', 'After']
-class FilterTypeEnum(StrEnum):
-    FIELD = "F"
-    CONNECTION = "CTI"
-    CATEGORY = "CTCF"
-    CATEGORY_ITEM = "CTCTI"
-
-
-class NotFlag(StrEnum):
-    NOT = "Not"
-    BLANK = ""
+NotFlagType = Literal['Not', '']
 
 
 class FilterArray(BaseModel):
@@ -38,8 +23,8 @@ class FilterArray(BaseModel):
         return self
 
     def filter_csr(self, csr: Csr):
-        for slot, filter in self.filters.items():
-            filter.filter_csr(csr, slot)
+        for slot, fil in self.filters.items():
+            fil.filter_csr(csr, slot)
 
 
 class FilterArray1:
@@ -48,22 +33,22 @@ class FilterArray1:
 
 
 class CmcFilter(BaseModel):
-    field_name: str
-    condition: FilterCondition = FilterCondition.EQUAL_TO
+    cmc_col: str
+    condition: FilterConditionType = 'Equal To'
     value: str = ""
-    f_type: FilterTypeEnum = FilterTypeEnum.FIELD
-    not_flag: NotFlag = NotFlag.BLANK
+    f_type: FilterType = 'F'
+    not_flag: NotFlagType = ''
 
     @model_validator(mode="after")
-    def condition(self):
-        if self.condition == FilterCondition.CONTAINS or self.condition == FilterCondition.EQUAL_TO:
+    def condition_val(self):
+        if self.condition == 'Contains' or self.condition == 'Equal To':
             if not self.value:
                 raise ValueError('Value must be set when condition is "Contains"')
         self.value = f', "{self.value}"' if self.value else ""
 
-    def filter_str(self, slot) -> str:
+    def filter_str(self, slot: int) -> str:
         filter_str = (
-            f"[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]"
+            f"[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{self.value})]"
         )
         return filter_str
 
@@ -72,45 +57,6 @@ class CmcFilter(BaseModel):
         return self
 
 
-# DEPREC DONT DELETE IN CASE!
-# class CmcFilter:
-#     """
-#     ViewFilter
-#     Syntax: [ViewFilter(ClauseNumber, FilterType, NotFlag, FilterTypeParameters)]
-#     Request Item for the ViewData topic
-#     Defines the criteria for the multiple filter to be applied against the previously named category (see ViewCategory).
-#     ClauseNumber defines which filter clause is being defined, where ClauseNumber is between 1 and 4.
-#     FilterType sets the type of the filter to apply.
-#     NotFlag determines if a logical Not is applied against the entire clause. The NotFlag parameter must be specified; it may be either Not or left blank (by specifying the comma placeholder for that parameter). This is equivalent to the "Except" checkbox found in the Commence filter dialog boxes.
-#     The FilterTypeParameters specified with this REQUEST and the ViewConjunction REQUEST are similar to those available from the Commence main menu.
-#     """
-#
-#     def __init__(
-#             self,
-#             *,
-#             field_name,
-#             condition: FilterCondition = FilterCondition.EQUAL_TO,
-#             value: str = '',
-#             f_type: FilterTypeEnum = FilterTypeEnum.FIELD,
-#             not_flag: NotFlag = NotFlag.BLANK
-#     ):
-#         self.field_name = field_name
-#         self.condition = condition
-#         self.f_type = f_type
-#         self.not_flag = not_flag
-#         self.value = value
-#
-#         if self.condition == FilterCondition.CONTAINS or self.condition == FilterCondition.EQUAL_TO:
-#             if not self.value:
-#                 raise ValueError('Value must be set when condition is "Contains"')
-#         self.value = f', "{self.value}"' if self.value else ''
-#
-#     def filter_str(self, slot) -> str:
-#         filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.field_name}, {self.condition}{self.value})]'
-#         return filter_str
-#
-#     def filter_csr(self, csr: Csr, slot: int = 1):
-#         csr.filter(self, slot)
 @dataclass
 class Connection:
     name: str
