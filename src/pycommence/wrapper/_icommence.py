@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 """
 MakePy generated api for Commence Rm COM object
+mostly as generated
 """
 'Commence RM Type Library - WIP'
 # ruff: noqa
@@ -33,7 +35,7 @@ from win32com.client import DispatchBaseClass
 
 
 class IApp(DispatchBaseClass):
-    'IApp Interface'
+    """IApp Interface"""
 
     CLSID = IID('{9419F0A3-A8ED-11D4-824C-0050DAC366C6}')
     coclass_clsid = IID('{9419F0A4-A8ED-11D4-824C-0050DAC366C6}')

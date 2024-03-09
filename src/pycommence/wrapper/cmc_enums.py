@@ -2,9 +2,7 @@ from enum import Enum
 
 
 class CursorType(Enum):
-    """ note missing 4 as per original cmc spec
-        types 7+ appear in docs->Constants->GetCursor but not in GetCursor method spec
-                """
+    """ Commence Cursor Types to view based on category, view, or preferences. """
     # open based on a category, columns = all supported fields in the category (in no particular order).
     CATEGORY = 0
 
@@ -45,12 +43,14 @@ class CursorType(Enum):
 
 
 class Bookmark(Enum):
+    """ Starting point for cursor seek operations."""
     BEGINNING = 0
     CURRENT = 1
     END = 2
 
 
 class OptionFlag(Enum):
+    """ Flags for get_record and get_value methods."""
     NONE = 0
     FIELD_NAME = 0x0001
     ALL = 0x0002

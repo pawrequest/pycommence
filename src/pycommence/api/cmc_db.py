@@ -4,13 +4,14 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from . import cmc_types, cmc_csr
-from pycommence.wrapper import cmc_enums, cmc_conversation, cmc_cursor
+from . import cmc_csr, cmc_types
+from pycommence.wrapper import cmc_conversation, cmc_cursor, cmc_enums
 
 
 class CmcConnection:
     """
-    Handler for caching connections to multiple Commence instances"""
+    Handler for caching connections to one or more Commence instances
+    """
     connections = {}
 
     def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
@@ -32,10 +33,17 @@ class CmcConnection:
                     raise cmc_types.CmcError(
                         f'Db Name "{commence_instance}" does not exist - connection failed'
                     )
-                raise cmc_types.CmcError(f'Error connecting to {commence_instance}. Is Commence Running?\n{e}')
+                raise cmc_types.CmcError(
+                    f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
+                )
 
 
 class Cmc(CmcConnection):
+    # todo getter setter readonly props
+    """
+    Api for Commence database connection
+    """
+
     @property
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
@@ -114,10 +122,9 @@ class Cmc(CmcConnection):
             INTERNET - Save Item agents defined for the Internet/intranet will fire.
 
         Returns:
-        CsrApi: A CsrApi object on success.
+        CsrApi: A Csr object on success.
 
         Raises: ValueError if no name given for name based searches
-
         """
         # todo can ther be multiple flags?
         if flags:
@@ -140,40 +147,4 @@ class Cmc(CmcConnection):
 
         csr = cmc_cursor.CsrCmc(self._cmc.GetCursor(mode, name, flags))
         return csr
-        # csr_api = Csr(csr)
-        # return csr_api
-
         # todo non-standard modes
-
-
-# class CmcDB(CmcConnection):
-#     """ handler for caching connections to multiple Commence instances"""
-#     connections = {}
-#
-#     def __new__(cls, commence_instance='Commence.DB') -> 'CmcConnection':
-#         if (conn := cls.connections.get(commence_instance)) is not None:
-#             logger.info(f'Using cached connection to {commence_instance}')
-#             return conn
-#
-#         conn = CmcConnection(commence_instance)
-#         cls.connections[commence_instance] = conn
-#         return conn
-
-#
-# class CmcCache:
-#     connections = {}
-#
-#     def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
-#         if commence_instance in cls.connections:
-#             logger.info(f'Using cached connection to {commence_instance}')
-#             return cls.connections[commence_instance]
-#
-#         cls.connections[commence_instance] = super().__new__(cls)
-#
-#         # cls.connections[commence_instance] = Cmc(commence_instance)
-#         return cls.connections[commence_instance]
-#
-#     def __init__(self, commence_instance='Commence.DB'):
-#         if not hasattr(self, 'initialized'):  # Prevents reinitialization
-#             self.connection = CmcConnection(commence_instance)
-#             self.initialized = True

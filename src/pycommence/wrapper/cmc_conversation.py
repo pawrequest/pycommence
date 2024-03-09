@@ -1,4 +1,5 @@
 class CommenceConversation:
+    """ Thin Wrapper on Commence's Conversation object using DDE."""
     def __init__(self, cmc_conversation):
         self._conversation = cmc_conversation
 

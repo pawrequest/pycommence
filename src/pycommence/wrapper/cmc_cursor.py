@@ -9,11 +9,12 @@ from loguru import logger
 
 
 class CsrCmc:
-    """ Python wrapper for Cursor Com-object.
+    """ Thin wrapper on the Commence Cursor object using pywin32.
      Create with CmcDb.GetCursor().
     """
 
     def __init__(self, cmc_cursor: ICommenceCursor):
+        """ Internal use only. Use CmcDb.GetCursor() to create a cursor."""
         self._csr_cmc = cmc_cursor
 
     def __repr__(self):
