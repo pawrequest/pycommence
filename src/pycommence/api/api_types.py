@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Literal, TYPE_CHECKING
 
 from pydantic import BaseModel, Field, model_validator
@@ -27,11 +28,6 @@ class FilterArray(BaseModel):
             fil.filter_csr(csr, slot)
 
 
-class FilterArray1:
-    def __init__(self, *filters):
-        self.filters = {i + 1: filters[i] for i in range(len(filters))}
-
-
 class CmcFilter(BaseModel):
     cmc_col: str
     condition: FilterConditionType = 'Equal To'
@@ -53,7 +49,7 @@ class CmcFilter(BaseModel):
         return filter_str
 
     def filter_csr(self, csr: Csr, slot: int = 1):
-        csr.filter_py(self, slot)
+        csr.filter_by_obj(self, slot)
         return self
 
 
@@ -70,7 +66,15 @@ class CmcError(Exception):
         super().__init__(self.msg)
 
 
-class NotFoundError(Exception):
-    def __init__(self, msg="No records found"):
-        self.msg = msg
-        super().__init__(self.msg)
+CmcDateFormat = '%Y%m%d'
+CmcTimeFormat = '%H:%M'
+
+
+def get_cmc_date(datestr: str):
+    """ Use CMC Cannonical flag"""
+    return datetime.strptime(datestr, CmcDateFormat).date()
+
+
+def get_cmc_time(time_str: str):
+    """ Use CMC Cannonical flag"""
+    return datetime.strptime(time_str, CmcTimeFormat).time()

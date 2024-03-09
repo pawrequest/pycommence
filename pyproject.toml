@@ -8,10 +8,23 @@ authors = [
 dependencies = [
     "pywin32",
     "loguru",
+    "pydantic",
 ]
 readme = "README.md"
 requires-python = ">= 3.10"
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+]
+doc = [
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-autodoc2",
+    "sphinx-rtd-theme",
+    "sphinx-readme",
+    "myst-parser",
+]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

@@ -6,7 +6,7 @@ from typing import ClassVar
 from pydantic import BaseModel
 from pydantic._internal._model_construction import ModelMetaclass
 
-from pycommence.api.cmc_types import CmcFilter
+from pycommence.api.api_types import CmcFilter
 
 
 # def sub_model_from_cmc(cls, cmc_obj, *, prepend: str = ''):

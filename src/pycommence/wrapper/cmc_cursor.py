@@ -1,11 +1,9 @@
 from typing import Optional
 
-import pycommence.api.cmc_types
-import pycommence.cmc_models
-from pycommence.wrapper import cmc_enums as cenum
-from pycommence.wrapper import cmc_rowset as rs
-from pycommence.wrapper._icommence import ICommenceCursor
 from loguru import logger
+
+from . import cmc_enums as cenum, cmc_rowset as rs
+from ._icommence import ICommenceCursor
 
 
 class CsrCmc:
@@ -59,7 +57,7 @@ class CsrCmc:
         """
         res = self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
         if not res:
-            raise pycommence.api.cmc_types.CmcError(f'Could not set filter {filter_text}')
+            raise ValueError(f'Could not set Commence filter {filter_text}')
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -78,7 +76,7 @@ class CsrCmc:
         res = self._csr_cmc.SetLogic(logic_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
-            raise pycommence.api.cmc_types.CmcError('Unable to set filter logic')
+            raise ValueError('Unable to set filter logic')
 
     def set_sort(self, sort_text: str):
         """
@@ -97,10 +95,12 @@ class CsrCmc:
         res = self._csr_cmc.SetSort(sort_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
-            raise pycommence.api.cmc_types.CmcError("Unable to sort")
+            raise ValueError("Unable to sort")
 
-    def set_column(self, column_index: int, field_name: str,
-                   flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE) -> bool:
+    def set_column(
+            self, column_index: int, field_name: str,
+            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE
+    ) -> bool:
         """
         Defines the column set for the cursor.
 
@@ -123,22 +123,22 @@ class CsrCmc:
         logger.info(f'Setting column {column_index} to {field_name}')
         res = self._csr_cmc.SetColumn(column_index, field_name, flags.value)
         if not res:
-            raise pycommence.api.cmc_types.CmcError("Unable to set column")
+            raise ValueError("Unable to set column")
         return res
 
     def seek_row(self, start: int, rows: int) -> int:
         """
         Seek to a particular row in the cursor.
 
-        Parameters:
-        start (int): Position to move from. Can be one of the following:
-            - 0 (BOOKMARK_BEGINNING) - from first row
-            - 1 (BOOKMARK_CURRENT) - from current row
-            - 2 (BOOKMARK_END) - from last row
-        rows (int): Number of rows to move the current row pointer.
+        Args:
+            start (int): Position to move from. Can be one of the following:
+                - 0 (BOOKMARK_BEGINNING) - from first row
+                - 1 (BOOKMARK_CURRENT) - from current row
+                - 2 (BOOKMARK_END) - from last row
+            rows (int): Number of rows to move the current row pointer.
 
         Returns:
-        int: Number of rows moved.
+            int: Number of rows moved.
 
         Raises:
             CmcError on fail
@@ -150,7 +150,7 @@ class CsrCmc:
         """
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
-            raise pycommence.api.cmc_types.CmcError(f"Unable to seek {rows} rows")
+            raise ValueError(f"Unable to seek {rows} rows")
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:
@@ -166,10 +166,10 @@ class CsrCmc:
         """
         res = self._csr_cmc.SeekRowApprox(numerator, denominator)
         if res == -1:
-            raise pycommence.api.cmc_types.CmcError(
-                f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows")
+            raise ValueError(
+                f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows"
+            )
         return res
-
 
     def get_query_row_set(self, count: int or None = None) -> rs.RowSetQuery:
         """
@@ -192,26 +192,28 @@ class CsrCmc:
             count = self.row_count
         result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
         if result.rowcount == 0:
-            raise pycommence.api.cmc_types.NotFoundError()
+            raise ValueError()
         return rs.RowSetQuery(result)
 
-    def get_query_row_set_by_id(self, row_id: str):
+    def get_query_row_set_by_id(self, row_id: str, *, flags=0):
         """
         Returns: Pointer to rowset object on success, NULL on error.
         Parameters:
             row_id:str Unique ID string obtained from GetRowID().
             flags: unused, must be 0.
-        The rowset inherits to column set from the cursor.
+        The rowset inherits column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
 
         """
         res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, cenum.FLAGS_UNUSED))
         if res.row_count == 0:
-            raise pycommence.api.cmc_types.NotFoundError()
+            raise ValueError()
         return res
 
-    def get_add_row_set(self, count: int or None = None,
-                        flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE) -> rs.RowSetAdd:
+    def get_add_row_set(
+            self, count: int or None = None,
+            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE
+    ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
@@ -230,7 +232,7 @@ class CsrCmc:
             count = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
         if res.row_count == 0:
-            raise pycommence.api.cmc_types.NotFoundError()
+            raise ValueError()
         return res
 
     def get_edit_row_set(self, count: int or None = None) -> rs.RowSetEdit:
@@ -266,11 +268,14 @@ class CsrCmc:
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
         """
-        res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id,
-            cenum.FLAGS_UNUSED
-        ))
+        res = rs.RowSetEdit(
+            self._csr_cmc.GetEditRowSetByID(
+                row_id,
+                cenum.FLAGS_UNUSED
+            )
+        )
         if res.row_count == 0:
-            raise pycommence.api.cmc_types.NotFoundError()
+            raise ValueError()
         return res
 
     def get_delete_row_set(self, count: int or None = None) -> rs.RowSetDelete:
@@ -296,8 +301,10 @@ class CsrCmc:
         rs = self._csr_cmc.GetDeleteRowSet(count, 0)
         return rs.RowSetDelete(rs)
 
-    def get_delete_row_set_by_id(self, row_id: str,
-                                 flags: cenum.OptionFlag = cenum.OptionFlag.NONE) -> rs.RowSetDelete:
+    def get_delete_row_set_by_id(
+            self, row_id: str,
+            flags: cenum.OptionFlag = cenum.OptionFlag.NONE
+    ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
 

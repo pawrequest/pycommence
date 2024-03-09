@@ -1,6 +1,6 @@
 from win32com.universal import com_error
 
-from pycommence.api import cmc_types
+from pycommence.api import api_types
 from pycommence.wrapper.cmc_cursor import CsrCmc
 """
 Functional approach to creating an API, mostly unused in favor of the ORM.

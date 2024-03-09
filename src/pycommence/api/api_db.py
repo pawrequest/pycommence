@@ -4,8 +4,8 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from . import cmc_csr, cmc_types
-from pycommence.wrapper import cmc_conversation, cmc_cursor, cmc_enums
+from . import api_types
+from .. import wrapper
 
 
 class CmcConnection:
@@ -30,10 +30,10 @@ class CmcConnection:
                 self._cmc = Dispatch(commence_instance)
             except com_error as e:
                 if e.hresult == -2147221005:
-                    raise cmc_types.CmcError(
+                    raise api_types.CmcError(
                         f'Db Name "{commence_instance}" does not exist - connection failed'
                     )
-                raise cmc_types.CmcError(
+                raise api_types.CmcError(
                     f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
                 )
 
@@ -82,33 +82,36 @@ class Cmc(CmcConnection):
 
     def get_conversation(
             self, topic: str, application_name: str = 'Commence'
-    ) -> cmc_conversation.CommenceConversation:
+    ) -> wrapper.CommenceConversation:
         """
         Create a conversation object, except probably just don't and go get a cursor instead.
 
         Args:
-            application_name (str): DDE Application name. The only valid value is "Commence".
             topic (str): DDE Topic name, must be a valid Commence topic name.
                          Examples include "GetData", "ViewData", etc.
+            application_name (str): DDE Application name. The only valid value is "Commence".
 
         Returns:
             CommenceConversation: A CommenceConversation object on success.
 
-        Raises: ValueError if failure
+        Raises:
+            ValueError if failure.
+
         """
+
         conversation_obj = self._cmc.GetConversation(application_name, topic)
         if conversation_obj is None:
             raise ValueError(
                 f'Could not create conversation object for {application_name}!{topic}'
             )
-        return cmc_conversation.CommenceConversation(conversation_obj)
+        return wrapper.CommenceConversation(conversation_obj)
 
     def get_cursor(
             self,
             name: str or None = None,
-            mode: cmc_enums.CursorType = cmc_enums.CursorType.CATEGORY,
-            flags: list[cmc_enums.OptionFlag] or cmc_enums.OptionFlag or None = None
-    ) -> cmc_csr.CsrCmc:
+            mode: wrapper.CursorType = wrapper.CursorType.CATEGORY,
+            flags: list[wrapper.OptionFlag] or wrapper.OptionFlag or None = None
+    ) -> wrapper.CsrCmc:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -128,10 +131,10 @@ class Cmc(CmcConnection):
         """
         # todo can ther be multiple flags?
         if flags:
-            if isinstance(flags, cmc_enums.OptionFlag):
+            if isinstance(flags, wrapper.OptionFlag):
                 flags = [flags]
             for flag in flags:
-                if flag not in [cmc_enums.OptionFlag.PILOT, cmc_enums.OptionFlag.INTERNET]:
+                if flag not in [wrapper.OptionFlag.PILOT, wrapper.OptionFlag.INTERNET]:
                     raise ValueError(f'Invalid flag: {flag}')
             flags = ', '.join(str(f.value) for f in flags)
 
@@ -142,9 +145,9 @@ class Cmc(CmcConnection):
         if mode in [0, 1]:
             if name is None:
                 raise ValueError(
-                    f'Mode {mode} ("{cmc_enums.CursorType(mode).name}") requires name param to be set'
+                    f'Mode {mode} ("{wrapper.CursorType(mode).name}") requires name param to be set'
                 )
 
-        csr = cmc_cursor.CsrCmc(self._cmc.GetCursor(mode, name, flags))
+        csr = wrapper.CsrCmc(self._cmc.GetCursor(mode, name, flags))
         return csr
         # todo non-standard modes
