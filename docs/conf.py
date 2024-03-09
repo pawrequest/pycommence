@@ -5,7 +5,7 @@ copyright = f'2024, {author}'
 extensions = [
     'autodoc2',
     # 'sphinx_autodoc_typehints',
-    'sphinx_readme',
+    # 'sphinx_readme',
     "myst_parser",
     'sphinx.ext.napoleon',
 
@@ -19,7 +19,7 @@ autodoc2_packages = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-html_theme = 'alabaster'
+html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
 
 html_context = {
