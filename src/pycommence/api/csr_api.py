@@ -11,11 +11,11 @@ from typing import TYPE_CHECKING
 from loguru import logger
 from win32com.universal import com_error
 
-from .api_db import Cmc
-from .api_types import CmcError, CmcFilter, Connection, FilterArray
+from .db_api import Cmc
+from .types_api import CmcError, CmcFilter, Connection, FilterArray
 
 if TYPE_CHECKING:
-    from pycommence.wrapper.cmc_cursor import CsrCmc
+    from pycommence.wrapper.cursor import CsrCmc
 
 
 @contextlib.contextmanager

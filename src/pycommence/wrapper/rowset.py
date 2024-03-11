@@ -3,11 +3,11 @@ from __future__ import annotations
 import typing
 from abc import ABC
 from typing import TypeAlias
-from . import cmc_enums
+from . import enums_cmc
 
 # todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
-    from pycommence.wrapper.cmc_cursor import CsrCmc
+    from pycommence.wrapper.cursor import CsrCmc
 from pycommence.wrapper._icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
     ICommenceQueryRowSet
 

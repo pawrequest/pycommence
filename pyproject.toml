@@ -24,6 +24,8 @@ doc = [
     "sphinx-rtd-theme",
     "sphinx-readme",
     "myst-parser",
+    "sphinx_rtd_dark_mode",
+
 ]
 [build-system]
 requires = ["hatchling"]

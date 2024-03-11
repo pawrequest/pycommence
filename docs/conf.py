@@ -8,6 +8,7 @@ extensions = [
     # 'sphinx_readme',
     "myst_parser",
     'sphinx.ext.napoleon',
+    "sphinx_rtd_dark_mode",
 
 ]
 autodoc2_docstring_parser_regexes = [

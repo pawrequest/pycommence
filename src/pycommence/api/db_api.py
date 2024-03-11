@@ -4,7 +4,7 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from . import api_types
+from . import types_api
 from .. import wrapper
 
 

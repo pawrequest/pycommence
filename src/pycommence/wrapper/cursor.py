@@ -2,7 +2,7 @@ from typing import Optional
 
 from loguru import logger
 
-from . import cmc_enums as cenum, cmc_rowset as rs
+from . import enums_cmc as cenum, rowset as rs
 from ._icommence import ICommenceCursor
 
 
