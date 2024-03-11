@@ -7,8 +7,8 @@ from . import enums_cmc
 
 # todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
-    from pycommence.wrapper.cursor import CsrCmc
-from pycommence.wrapper._icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
+    from .cursor import CsrCmc
+from ._icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
     ICommenceQueryRowSet
 
 RowSetType: TypeAlias = ICommenceEditRowSet or ICommenceQueryRowSet or ICommenceAddRowSet or ICommenceDeleteRowSet
@@ -46,7 +46,7 @@ class RowSetBase(ABC):
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_value(self, row_index: int, column_index: int, flags: int = cmc_enums.OptionFlag.CANONICAL) -> str:
+    def get_value(self, row_index: int, column_index: int, flags: int = enums_cmc.OptionFlag.CANONICAL) -> str:
         """
         Retrieves the value at the specified row and column.
 
@@ -88,7 +88,7 @@ class RowSetBase(ABC):
         """
         return self._rs.GetColumnIndex(label, flags)
 
-    def get_row(self, row_index: int, delim: str = ';', flags: int = cmc_enums.OptionFlag.CANONICAL.value) -> str:
+    def get_row(self, row_index: int, delim: str = ';', flags: int = enums_cmc.OptionFlag.CANONICAL.value) -> str:
         """
         Retrieves the values of the specified row.
 
@@ -164,7 +164,7 @@ class RowSetModifies(RowSetBase):
         Returns:
             bool: True on success, False on failure.
         """
-        return self._rs.ModifyRow(row_index, column_index, value, cmc_enums.FLAGS_UNUSED)
+        return self._rs.ModifyRow(row_index, column_index, value, enums_cmc.FLAGS_UNUSED)
 
     def modify_row_dict(self, row_index: int, row_dict: dict) -> bool:
         """
@@ -191,7 +191,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
         After Commit(), the RowSet is no Longer valid and should be discarded.
         """
-        res = self._rs.Commit(cmc_enums.FLAGS_UNUSED)
+        res = self._rs.Commit(enums_cmc.FLAGS_UNUSED)
         if res != 0:
             raise ValueError(f'Commit failed')
         return True
@@ -203,7 +203,7 @@ class RowSetModifies(RowSetBase):
         Returns:
             CommenceCursor: Cursor object with the committed data.
         """
-        return self._rs.CommitGetCursor(cmc_enums.FLAGS_UNUSED)
+        return self._rs.CommitGetCursor(enums_cmc.FLAGS_UNUSED)
 
 
 class RowSetAdd(RowSetModifies):
@@ -248,7 +248,7 @@ class RowSetDelete(RowSetModifies):
             bool: True on success, False on failure.
         Deletion is not permanent until Commit() is called.
         """
-        return self._rs.DeleteRow(row_index, cmc_enums.FLAGS_UNUSED)
+        return self._rs.DeleteRow(row_index, enums_cmc.FLAGS_UNUSED)
 
     def commit_get_cursor(self):
         raise NotImplementedError("Can not get a cursor for deleted rows.")
