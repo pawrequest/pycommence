@@ -4,6 +4,7 @@ provides access to the Commence Cursor object and methods to interact with it.
 """
 from __future__ import annotations
 
+import typing as _t
 import contextlib
 from functools import partialmethod
 from typing import TYPE_CHECKING
@@ -77,25 +78,26 @@ class Csr:
     #         raise CmcError(f'Expected 1 record, got {len(records)}')
     #     return records[0]
 
-    def get_record_by_field(self, field_name: str, value: str) -> dict[str, str]:
+    def records_by_field(self, field_name: str, value: str, max_rtn=None) -> list[dict[str, str]]:
         """Get a record from the cursor by Column[0].
         Args:
             field_name (str): Name of the field to query.
             value (str): Value to filter by.
+            max_rtn (int): Maximum number of records to return. If more than this, raise CmcError.
         Returns:
             dict[str, str]: A dictionary of field names and values for the record.
         Raises:
-            CmcError: If the record is not found or if more than one record is found.
+            CmcError: If the record is not found or if more than max_rtn records are found.
             """
         self.filter_by_field(field_name, 'Equal To', value)
         records = self.get_records()
         if not records:
             raise CmcError(f'No record found for {field_name} {value}')
-        if len(records) > 1:
-            raise CmcError(f'Expected 1 record, got {len(records)}')
-        return records[0]
+        if max_rtn and len(records) > max_rtn:
+            raise CmcError(f'Expected max {max_rtn} records, got {len(records)}')
+        return records
 
-    get_record_by_name = partialmethod(get_record_by_field, 'Name')
+    get_record_by_name = partialmethod(records_by_field, 'Name')
 
     def get_records(self, count: int or None = None) -> list[dict[str, str]]:
         row_set = self._cursor_cmc.get_query_row_set(count)
@@ -112,20 +114,33 @@ class Csr:
         except Exception:
             ...
 
-    def add_record(self, record_name: str, package: dict) -> bool:
+    def add_record(
+            self,
+            col_0: str,
+            package: dict,
+            exists: _t.Literal['replace', 'update', 'raise'] = 'raise'
+    ) -> bool:
         """
         Add and commit a record to the cursor.
 
         Args:
             record_name (str): Name of the record to add at column0.
             package (dict): A dictionary of field names and values to add to the record.
+            allow_dupe (bool): If False, raise CmcError if record already exists.
 
         Returns:
             bool: True on success, False on failure.
             """
+        match exists:
+            case 'raise':
+                pass
+            case 'replace':
+                self.delete_record(col_0)
+            case 'update':
+                self.edit_record(col_0, package)
         try:
             row_set = self._cursor_cmc.get_add_row_set(1)
-            row_set.modify_row(0, 0, record_name)
+            row_set.modify_row(0, 0, col_0)
             row_set.modify_row_dict(0, package)
             res = row_set.commit()
             return res
@@ -143,29 +158,38 @@ class Csr:
             condition: str,
             value: str = '',
             *,
+            get=False,
             fslot: int = 1
-    ) -> None:
+    ) -> None | list[dict[str, str]]:
         val_cond = f', "{value}"' if value else ''
         filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
         self._cursor_cmc.set_filter(filter_str)
+        if get:
+            return self.get_records()
 
     def filter_by_connection(
             self,
             item_name: str,
             connection: Connection,
             *,
+            get=False,
             fslot=1
-    ):
+    ) -> None | list[dict[str, str]]:
         filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
                       f'{connection.to_table}, {item_name})]')
         self._cursor_cmc.set_filter(filter_str)
+        if get:
+            return self.get_records()
 
-    def filter_by_obj(self, cmc_filter: CmcFilter, slot=1):
+    def filter_by_cmcfil(self, cmc_filter: CmcFilter, slot=1, *, get=False) -> None | list[
+        dict[str, str]]:
         self.filter_by_str(cmc_filter.filter_str(slot))
+        if get:
+            return self.get_records()
 
     def filter_by_array(self, fil_array: FilterArray, get=False) -> None | list[dict[str, str]]:
         for slot, fil in fil_array.filters.items():
-            self.filter_by_obj(fil, slot)
+            self.filter_by_cmcfil(fil, slot)
         if get:
             return self.get_records()
 
@@ -175,8 +199,11 @@ class Csr:
     def filter_by_name(self, name: str, *, fslot=1):
         self.filter_by_field('Name', 'Equal To', value=name, fslot=fslot)
 
-    def set_filters(self, filters: list[CmcFilter], get_all=False):
-        for i, fil in enumerate(filters, start=1):
-            self.filter_by_obj(fil, i)
-        if get_all:
-            return self.get_records()
+    def filter_by_col0(self, col0: str, *, fslot=1):
+        self.filter_by_field('Column[0]', 'Equal To', value=col0, fslot=fslot)
+
+    # def set_filters(self, filters: list[CmcFilter], get_all=False):
+    #     for i, fil in enumerate(filters, start=1):
+    #         self.filter_by_cmcfil(fil, i)
+    #     if get_all:
+    #         return self.get_records()

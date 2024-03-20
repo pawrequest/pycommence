@@ -49,7 +49,7 @@ class CmcFilter(BaseModel):
         return filter_str
 
     def filter_csr(self, csr: Csr, slot: int = 1):
-        csr.filter_by_obj(self, slot)
+        csr.filter_by_cmcfil(self, slot)
         return self
 
 

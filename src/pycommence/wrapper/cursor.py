@@ -192,7 +192,7 @@ class CsrCmc:
             count = self.row_count
         result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
         if result.rowcount == 0:
-            raise ValueError()
+            raise ValueError('No rows found.')
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str, *, flags=0):
