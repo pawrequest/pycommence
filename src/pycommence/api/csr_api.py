@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import typing as _t
 import contextlib
-from functools import partialmethod
 from typing import TYPE_CHECKING
 
 from loguru import logger
@@ -97,7 +96,8 @@ class Csr:
             raise CmcError(f'Expected max {max_rtn} records, got {len(records)}')
         return records
 
-    get_record_by_name = partialmethod(records_by_field, 'Name')
+    def record_by_name(self, name: str) -> dict[str, str]:
+        return self.records_by_field('Name', name, 1)[0]
 
     def get_records(self, count: int or None = None) -> list[dict[str, str]]:
         row_set = self._cursor_cmc.get_query_row_set(count)
