@@ -30,10 +30,10 @@ class CmcConnection:
                 self._cmc = Dispatch(commence_instance)
             except com_error as e:
                 if e.hresult == -2147221005:
-                    raise api_types.CmcError(
+                    raise types_api.CmcError(
                         f'Db Name "{commence_instance}" does not exist - connection failed'
                     )
-                raise api_types.CmcError(
+                raise types_api.CmcError(
                     f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
                 )
 
