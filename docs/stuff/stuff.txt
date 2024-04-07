@@ -1,0 +1,4 @@
+.. automodule:: pycommence.api.csr_api
+   :members:
+   :undoc-members:
+   :show-inheritance:
