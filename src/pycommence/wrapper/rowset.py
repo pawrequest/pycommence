@@ -3,13 +3,15 @@ from __future__ import annotations
 import typing
 from abc import ABC
 from typing import TypeAlias
+
 from . import enums_cmc
 
-# todo is typechecking correct usage? is needed with import annotations?
 if typing.TYPE_CHECKING:
     from .cursor import CsrCmc
-from ._icommence import ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet, \
-    ICommenceQueryRowSet
+from ._icommence import (
+    ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet,
+    ICommenceQueryRowSet,
+)
 
 RowSetType: TypeAlias = ICommenceEditRowSet or ICommenceQueryRowSet or ICommenceAddRowSet or ICommenceDeleteRowSet
 
@@ -46,7 +48,12 @@ class RowSetBase(ABC):
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_value(self, row_index: int, column_index: int, flags: int = enums_cmc.OptionFlag.CANONICAL) -> str:
+    def get_value(
+            self,
+            row_index: int,
+            column_index: int,
+            flags: int = enums_cmc.OptionFlag.CANONICAL.value
+    ) -> str:
         """
         Retrieves the value at the specified row and column.
 
@@ -88,7 +95,12 @@ class RowSetBase(ABC):
         """
         return self._rs.GetColumnIndex(label, flags)
 
-    def get_row(self, row_index: int, delim: str = ';', flags: int = enums_cmc.OptionFlag.CANONICAL.value) -> str:
+    def get_row(
+            self,
+            row_index: int,
+            delim: str = ';',
+            flags: int = enums_cmc.OptionFlag.CANONICAL.value
+    ) -> str:
         """
         Retrieves the values of the specified row.
 
@@ -101,6 +113,18 @@ class RowSetBase(ABC):
             Values of the specified row.
         """
         return self._rs.GetRow(row_index, delim, flags)
+
+    def get_row_id(self, row_index: int, flags: int = enums_cmc.FLAGS_UNUSED) -> str:
+        """
+        Retrieves the ID of the specified row.
+
+        Args:
+            row_index: Index of the row.
+            flags: Unused.
+        Returns:
+            ID of the specified row.
+        """
+        return self._rs.GetRowID(row_index, flags)
 
     def get_rows_dict(self, num: int or None = None) -> list[dict[str, str]]:
         """Returns a dictionary of the first num rows."""
@@ -193,7 +217,7 @@ class RowSetModifies(RowSetBase):
         """
         res = self._rs.Commit(enums_cmc.FLAGS_UNUSED)
         if res != 0:
-            raise ValueError(f'Commit failed')
+            raise ValueError('Commit failed')
         return True
 
     def commit_get_cursor(self) -> CsrCmc:
@@ -212,6 +236,7 @@ class RowSetAdd(RowSetModifies):
 
     Inherits from:
         RowSetBase: Base class for Commence Row Set objects.
+        RowSetModifies: Base class for Write-Enabled RowSet objects.
     """
 
     def __init__(self, cmc_rs: ICommenceAddRowSet) -> None:
@@ -238,6 +263,9 @@ class RowSetDelete(RowSetModifies):
             cmc_rs: A Commence Row Set object.
         """
         super().__init__(cmc_rs)
+
+    def get_row_id(self, row_index: int) -> str:
+        raise NotImplementedError(f"Can not get a row id for {self.__class__.__name__}.")
 
     def delete_row(self, row_index: int) -> bool:
         """
