@@ -127,7 +127,7 @@ class Csr:
         row_set.modify_row_dict(0, package)
         return row_set.commit()
 
-    def delete_record_by_pk(self, pk_val: str):
+    def delete_record(self, pk_val: str):
         self.filter_by_pk(pk_val)
         if self.row_count > 1:
             raise CmcError(f'Expected max 1 records, got {self.row_count}')
@@ -158,7 +158,7 @@ class Csr:
                 case 'raise':
                     raise CmcError('Record already exists')
                 case 'replace':
-                    self.delete_record_by_pk(pk_val)
+                    self.delete_record(pk_val)
                 case 'update':
                     return self.edit_record(pk_val, package)
 
@@ -234,8 +234,3 @@ class Csr:
         if self.row_count > 1:
             raise CmcError(f'Expected 1 record, got {self.row_count}')
 
-    # def set_filters(self, filters: list[CmcFilter], get_all=False):
-    #     for i, fil in enumerate(filters, start=1):
-    #         self.filter_by_cmcfil(fil, i)
-    #     if get_all:
-    #         return self.get_records()
