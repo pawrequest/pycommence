@@ -5,7 +5,7 @@ from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from . import types_api
-from .. import wrapper
+from ..wrapper import conversation, enums_cmc, cursor
 
 
 class CmcConnection:
@@ -39,7 +39,6 @@ class CmcConnection:
 
 
 class Cmc(CmcConnection):
-    # todo getter setter readonly props
     """
     Api for Commence database connection
     """
@@ -82,7 +81,7 @@ class Cmc(CmcConnection):
 
     def get_conversation(
             self, topic: str, application_name: str = 'Commence'
-    ) -> wrapper.CommenceConversation:
+    ) -> conversation.CommenceConversation:
         """
         Create a conversation object, except probably just don't and go get a cursor instead.
 
@@ -104,14 +103,14 @@ class Cmc(CmcConnection):
             raise ValueError(
                 f'Could not create conversation object for {application_name}!{topic}'
             )
-        return wrapper.CommenceConversation(conversation_obj)
+        return conversation.CommenceConversation(conversation_obj)
 
     def get_cursor(
             self,
             name: str or None = None,
-            mode: wrapper.CursorType = wrapper.CursorType.CATEGORY,
-            flags: list[wrapper.OptionFlag] or wrapper.OptionFlag or None = None
-    ) -> wrapper.CsrCmc:
+            mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
+            flags: list[enums_cmc.OptionFlag] or enums_cmc.OptionFlag or None = None
+    ) -> cursor.CsrCmc:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -131,10 +130,10 @@ class Cmc(CmcConnection):
         """
         # todo can ther be multiple flags?
         if flags:
-            if isinstance(flags, wrapper.OptionFlag):
+            if isinstance(flags, enums_cmc.OptionFlag):
                 flags = [flags]
             for flag in flags:
-                if flag not in [wrapper.OptionFlag.PILOT, wrapper.OptionFlag.INTERNET]:
+                if flag not in [enums_cmc.OptionFlag.PILOT, enums_cmc.OptionFlag.INTERNET]:
                     raise ValueError(f'Invalid flag: {flag}')
             flags = ', '.join(str(f.value) for f in flags)
 
@@ -145,9 +144,11 @@ class Cmc(CmcConnection):
         if mode in [0, 1]:
             if name is None:
                 raise ValueError(
-                    f'Mode {mode} ("{wrapper.CursorType(mode).name}") requires name param to be set'
+                    f'Mode {mode} ("{enums_cmc.CursorType(mode).name}") requires name param to be set'
                 )
-
-        csr = wrapper.CsrCmc(self._cmc.GetCursor(mode, name, flags))
+        try:
+            csr = cursor.CsrCmc(self._cmc.GetCursor(mode, name, flags))
+        except com_error as e:
+            raise types_api.CmcError(f'Error creating cursor for {name}: {e}')
         return csr
         # todo non-standard modes
