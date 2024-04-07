@@ -35,6 +35,14 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "pytest",
+    "sphinx",
+    "sphinx-autodoc-typehints",
+    "sphinx-autodoc2",
+    "sphinx-rtd-theme",
+    "sphinx-readme",
+    "myst-parser",
+    "sphinx_rtd_dark_mode",
+
 ]
 
 [tool.hatch.metadata]
