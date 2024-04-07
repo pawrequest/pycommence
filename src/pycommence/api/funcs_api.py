@@ -1,10 +1,11 @@
+"""
+Functional approach to creating an API, mostly unused in favor of the ORM.
 from win32com.universal import com_error
+"""
 
 from pycommence.api import types_api
 from pycommence.wrapper.cursor import CsrCmc
-"""
-Functional approach to creating an API, mostly unused in favor of the ORM.
-"""
+
 
 def filter_by_field(cursor: CsrCmc, field_name: str, condition, value=None, fslot=1):
     val_cond = f', "{value}"' if value else ''
@@ -13,7 +14,7 @@ def filter_by_field(cursor: CsrCmc, field_name: str, condition, value=None, fslo
     return res
 
 
-def filter_by_connection(cursor: CsrCmc, item_name: str, connection: cmc_types.Connection, fslot=1):
+def filter_by_connection(cursor: CsrCmc, item_name: str, connection: types_api.Connection, fslot=1):
     filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
                   f'{connection.to_table}, {item_name})]')
     res = cursor.set_filter(filter_str)
@@ -35,7 +36,7 @@ def edit_record(cursor: CsrCmc, record, package: dict):
             col_idx = row_set.get_column_index(key)
             row_set.modify_row(0, col_idx, str(value))
         except Exception:
-            raise cmc_types.CmcError(f'Could not modify {key} to {value}')
+            raise types_api.CmcError(f'Could not modify {key} to {value}')
     row_set.commit()
     ...
 
@@ -48,7 +49,7 @@ def get_all_records(cursor: CsrCmc) -> list[dict[str, str]]:
 def get_record(cursor: CsrCmc, record_name):
     res = filter_by_name(cursor, record_name)
     if not res:
-        raise cmc_types.CmcError(f'Could not find {record_name}')
+        raise types_api.CmcError(f'Could not find {record_name}')
     row_set = cursor.get_query_row_set()
     record = row_set.get_rows_dict()[0]
     return record
@@ -77,4 +78,4 @@ def add_record(cursor: CsrCmc, record_name, package: dict):
         # todo this is horrible. the error is due to threading but we are not using threading?
         # maybe pywin32 uses threading when handling the underlying db error?
         if e.hresult == -2147483617:
-            raise cmc_types.CmcError('Record already exists')
+            raise types_api.CmcError('Record already exists')
