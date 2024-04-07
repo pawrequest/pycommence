@@ -68,14 +68,14 @@ class Csr:
         qs = self._cursor_cmc.get_query_row_set(1)
         return qs.get_column_label(0)
 
-    def get_records(self, count: int or None = None) -> list[dict[str, str]]:
+    def records(self, count: int or None = None) -> list[dict[str, str]]:
         row_set = self._cursor_cmc.get_query_row_set(count)
         records = row_set.get_rows_dict()
         return records
 
     def get_record(self, pk_val: str) -> dict[str, str]:
         self.filter_by_pk(pk_val)
-        return self.get_records(1)[0]
+        return self.records(1)[0]
 
     def records_by_field(
             self, field_name: str,
@@ -99,14 +99,14 @@ class Csr:
 
         """
         self.filter_by_field(field_name, 'Equal To', value)
-        records = self.get_records()
+        records = self.records()
         if not records and empty == 'raise':
             raise CmcError(f'No record found for {field_name} {value}')
         if max_rtn and len(records) > max_rtn:
             raise CmcError(f'Expected max {max_rtn} records, got {len(records)}')
         return records
 
-    def edit_record_by_pk(
+    def edit_record(
             self,
             pk_val: str,
             package: dict,
@@ -160,7 +160,7 @@ class Csr:
                 case 'replace':
                     self.delete_record_by_pk(pk_val)
                 case 'update':
-                    return self.edit_record_by_pk(pk_val, package)
+                    return self.edit_record(pk_val, package)
 
         add_set = self._cursor_cmc.get_add_row_set(1)
         add_set.modify_row(0, 0, pk_val)
@@ -191,7 +191,7 @@ class Csr:
         filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
         self._cursor_cmc.set_filter(filter_str)
         if get:
-            return self.get_records()
+            return self.records()
 
     def filter_by_connection(
             self,
@@ -205,19 +205,19 @@ class Csr:
                       f'{connection.to_table}, {item_name})]')
         self._cursor_cmc.set_filter(filter_str)
         if get:
-            return self.get_records()
+            return self.records()
 
     def filter_by_cmcfil(self, cmc_filter: CmcFilter, slot=1, *, get=False) -> None | list[
         dict[str, str]]:
         self.filter_by_str(cmc_filter.filter_str(slot))
         if get:
-            return self.get_records()
+            return self.records()
 
     def filter_by_array(self, fil_array: FilterArray, get=False) -> None | list[dict[str, str]]:
         for slot, fil in fil_array.filters.items():
             self.filter_by_cmcfil(fil, slot)
         if get:
-            return self.get_records()
+            return self.records()
 
     def filter_by_str(self, filter_str: str):
         """ commence syntax filter string"""

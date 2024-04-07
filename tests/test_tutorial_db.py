@@ -9,7 +9,7 @@ def test_contact_csr(contact_csr):
 
 
 def test_get_records(contact_csr: Csr):
-    res = contact_csr.get_records()
+    res = contact_csr.records()
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
 
@@ -36,5 +36,5 @@ def test_add_record(contact_csr: Csr):
 
 def test_tst():
     with csr_context("cat") as csr:
-        recs = csr.get_records()
+        recs = csr.records()
         ...
