@@ -2,15 +2,15 @@ import typing as _t
 
 import pydantic as _p
 
-from pycommence.api import CmcError, csr_api_handled
-from pycommence.api.csr_api_handled import EmptyKind
+from pycommence.api import CmcError, csr_api
+from pycommence.api.csr_api import EmptyKind
 
 
 class CmcHandler(_p.BaseModel):
     """
     handle cursors to retrieve data with different filter configurations
     """
-    csr: csr_api_handled.Csr
+    csr: csr_api.Csr
 
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,
@@ -125,4 +125,3 @@ class CmcHandler(_p.BaseModel):
             row_set.modify_row_dict(0, package)
             res = row_set.commit()
             return res
-

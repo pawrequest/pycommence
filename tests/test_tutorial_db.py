@@ -1,7 +1,7 @@
 import pytest
 
 from pycommence.api import Csr, csr_context
-from .conftest import GEOFF_DICT, GEOFF_KEY, JEFF_KEY, UPDATE_PKG_1
+from .conftest import JEFF_KEY
 
 
 @pytest.fixture
@@ -31,9 +31,7 @@ def test_clear_filter(contact_csr: Csr):
     assert contact_csr.row_count == row_count1
 
 
-
 def test_temp_filter(contact_csr: Csr):
     with contact_csr.temporary_filter_pk(JEFF_KEY):
         assert contact_csr.row_count == 1
     assert contact_csr.row_count > 1
-

@@ -2,7 +2,7 @@ import contextlib
 
 import pytest
 
-from pycommence.api.csr_api_handled import Csr, csr_context
+from pycommence.api.csr_api import Csr, csr_context
 from pycommence.api import csr_handler
 from .conftest import GEOFF_DICT, GEOFF_KEY, JEFF_KEY, UPDATE_PKG_1
 
