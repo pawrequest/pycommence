@@ -114,7 +114,7 @@ class RowSetBase(ABC):
         """
         return self._rs.GetRow(row_index, delim, flags)
 
-    def get_row_id(self, row_index: int, flags: int = enums_cmc.FLAGS_UNUSED) -> str:
+    def get_row_id(self, row_index: int) -> str:
         """
         Retrieves the ID of the specified row.
 
@@ -124,6 +124,7 @@ class RowSetBase(ABC):
         Returns:
             ID of the specified row.
         """
+        flags: int = enums_cmc.FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
 
     def get_rows_dict(self, num: int or None = None) -> list[dict[str, str]]:
