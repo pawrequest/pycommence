@@ -4,6 +4,8 @@
 /src/commence_py.egg-info/
 /.idea/
 *__pycache__*
-/.venv/
+.venv/
 *.egg-info/
-/dout/
+dout/
+#/docs_myst/dout/
+apidoc-out/
