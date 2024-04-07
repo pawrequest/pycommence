@@ -10,13 +10,13 @@ import contextlib
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from loguru import logger
-
 from .db_api import Cmc
 from .types_api import CmcError, CmcFilter, Connection, FilterArray
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cursor import CsrCmc
+
+EmptyKind = _t.Literal['ignore', 'raise']
 
 
 @contextlib.contextmanager
@@ -29,23 +29,18 @@ def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
         ...
 
 
-def get_csr(table_name, cmc_name: str = 'Commence.DB') -> Csr:
+def get_csr(table_name, cmc_instance: str = 'Commence.DB') -> Csr:
     """Create cached connection to Commence and return a Csr to operate on it."""
-    cmc = Cmc(cmc_name)
+    cmc = Cmc(cmc_instance)
     csr_cmc = cmc.get_cursor(table_name)
-    csr_api = Csr(csr_cmc)
+    csr_api = Csr(csr_cmc, db_name=cmc.name)
     return csr_api
 
 
-# def num_matches(table, k: str, v: str) -> bool:
-#     with csr_context(table) as csr:
-#         csr.filter_by_field(k, 'Equal To', v)
-#         return csr.row_count
-
-
 class Csr:
-    def __init__(self, cursor: CsrCmc):
+    def __init__(self, cursor: CsrCmc, db_name):
         self._cursor_cmc = cursor
+        self.db_name = db_name
 
     @property
     def category(self):
@@ -74,8 +69,8 @@ class Csr:
         return records
 
     def one_record(self, pk_val: str) -> dict[str, str]:
-        self.filter_by_pk(pk_val)
-        return self.records(1)[0]
+        with self.temporary_filter_pk(pk_val):
+            return self.records()[0]
 
     def records_by_field(
             self, field_name: str,
@@ -98,7 +93,7 @@ class Csr:
             CmcError: If the record is not found or if more than max_rtn records are found.
 
         """
-        self.filter_by_field(field_name, 'Equal To', value)
+        self.filter_by_field(field_name, 'Equal To', value, empty=empty)
         records = self.records()
         if not records and empty == 'raise':
             raise CmcError(f'No record found for {field_name} {value}')
@@ -122,18 +117,28 @@ class Csr:
             bool: True on success
 
             """
-        self.filter_by_pk(pk_val)
-        row_set = self._cursor_cmc.get_edit_row_set()
-        row_set.modify_row_dict(0, package)
-        return row_set.commit()
+        with self.temporary_filter_pk(pk_val):
+            row_set = self._cursor_cmc.get_edit_row_set()
+            row_set.modify_row_dict(0, package)
+            return row_set.commit()
 
-    def delete_record(self, pk_val: str):
-        self.filter_by_pk(pk_val)
-        if self.row_count > 1:
-            raise CmcError(f'Expected max 1 records, got {self.row_count}')
-        row_set = self._cursor_cmc.get_delete_row_set()
-        row_set.delete_row(0)
-        return row_set.commit()
+    def delete_record(self, pk_val: str, empty: EmptyKind = 'raise'):
+        """Delete a record from the cursor and commit.
+
+        Args:
+            pk_val (str): The value for the primary key field.
+            empty (str): Action to take if the record is not found. Options are 'ignore', 'raise'.
+
+        Returns:
+            bool: True on success
+        """
+        with self.temporary_filter_pk(pk_val, empty=empty):  # noqa: PyArgumentList
+            if self.row_count == 0 and empty == 'ignore':
+                return
+            row_set = self._cursor_cmc.get_delete_row_set()
+            row_set.delete_row(0)
+            res = row_set.commit()
+            return res
 
     def add_record(
             self,
@@ -152,23 +157,21 @@ class Csr:
         Returns:
             bool: True on success
             """
-        self.filter_by_pk(pk_val, empty='ignore')
-        if self.row_count == 1:
-            match existing:
-                case 'raise':
+        with self.temporary_filter_pk(pk_val, empty='ignore'):  # noqa: PyArgumentList
+            if self.row_count:
+                if existing == 'raise':
                     raise CmcError('Record already exists')
-                case 'replace':
-                    self.delete_record(pk_val)
-                case 'update':
-                    return self.edit_record(pk_val, package)
+                elif existing == 'update':
+                    row_set = self._cursor_cmc.get_edit_row_set()
+                elif existing == 'replace':
+                    self.delete_record(pk_val, empty='ignore')
+                    row_set = self.add_set_f_pk(pk_val)
+            else:
+                row_set = self.add_set_f_pk(pk_val)
 
-        add_set = self._cursor_cmc.get_add_row_set(1)
-        add_set.modify_row(0, 0, pk_val)
-        add_set.modify_row_dict(0, package)
-        if not add_set.get_value(0, 0):
-            raise CmcError('Column0 must be set')
-        res = add_set.commit()
-        return res
+            row_set.modify_row_dict(0, package)
+            res = row_set.commit()
+            return res
 
         # try:
         # except com_error as e:
@@ -178,6 +181,11 @@ class Csr:
         #         raise CmcError('Record already exists')
         #     raise
 
+    def add_set_f_pk(self, pk_val):
+        row_set = self._cursor_cmc.get_add_row_set()
+        row_set.modify_row(0, 0, pk_val)
+        return row_set
+
     def filter_by_field(
             self,
             field_name: str,
@@ -185,11 +193,16 @@ class Csr:
             value: str = '',
             *,
             get=False,
-            fslot: int = 1
+            fslot: int = 1,
+            empty: EmptyKind = 'raise',
     ) -> None | list[dict[str, str]]:
         val_cond = f', "{value}"' if value else ''
         filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
-        self._cursor_cmc.set_filter(filter_str)
+        if not self._cursor_cmc.set_filter(filter_str):
+            if empty == 'raise':
+                raise CmcError(f'Error setting filter: {filter_str}')
+            if empty == 'ignore':
+                return
         if get:
             return self.records()
 
@@ -226,11 +239,19 @@ class Csr:
     def clear_filter(self, slot=1):
         self.filter_by_str(f'[ViewFilter({slot},Clear)]')
 
-    def filter_by_pk(self, pk: str, *, fslot=1, empty: _t.Literal['raise', 'ignore'] = 'raise'):
-        self.filter_by_field(self.pk_label, 'Equal To', value=pk, fslot=fslot)
+    def filter_by_pk(self, pk: str, *, fslot=1, empty: EmptyKind = 'raise'):
+        if not pk:
+            raise ValueError('pk must be a non-empty string')
+        self.filter_by_field(self.pk_label, 'Equal To', value=pk, fslot=fslot, empty=empty)
         if self.row_count == 0:
             if empty == 'raise':
                 raise CmcError(f'No record found for {self.pk_label} {pk}')
         if self.row_count > 1:
             raise CmcError(f'Expected 1 record, got {self.row_count}')
 
+    @contextlib.contextmanager
+    def temporary_filter_pk(self, pk: str, *, slot=4, empty: EmptyKind = 'raise'):
+        try:
+            yield self.filter_by_pk(pk, fslot=slot, empty=empty)
+        finally:
+            self.clear_filter(slot)
