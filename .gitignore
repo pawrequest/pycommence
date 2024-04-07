@@ -6,6 +6,6 @@
 *__pycache__*
 .venv/
 *.egg-info/
-dout/
-#/docs_myst/dout/
+/dout/
+/docs_myst/dout/
 apidoc-out/
