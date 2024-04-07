@@ -1,3 +1,6 @@
+"""
+API module for PyCommence.
+"""
 from .db_api import Cmc
 from .csr_api import Csr, csr_context, get_csr
 from .types_api import (

@@ -9,7 +9,7 @@ extensions = [
     "myst_parser",
     'sphinx.ext.napoleon',
     "sphinx_rtd_dark_mode",
-
+    'sphinx.ext.linkcode',
 ]
 autodoc2_docstring_parser_regexes = [
     (r".*", "myst"),  # This will render all docstrings as Markdown
@@ -32,3 +32,12 @@ html_baseurl = "https://pycommence.readthedocs.io/en/latest"
 readme_src_files = "index.md"
 readme_docs_url_type = "html"
 add_module_names = False
+
+
+def linkcode_resolve(domain, info):
+    if domain != 'py':
+        return None
+    if not info['module']:
+        return None
+    filename = info['module'].replace('.', '/')
+    return f"https://github.com/pawrequest/pycommence/tree/main/src/{filename}.py"

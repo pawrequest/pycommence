@@ -1,10 +1,11 @@
+"""
+Commence RM Type Library - WIP
+
+MakePy generated api for Commence Rm COM object, mostly as generated
+"""
 from __future__ import annotations
 
-"""
-MakePy generated api for Commence Rm COM object
-mostly as generated
-"""
-'Commence RM Type Library - WIP'
+
 # ruff: noqa
 # -*- coding: mbcs -*-
 # Created by makepy.py version 0.5.01
