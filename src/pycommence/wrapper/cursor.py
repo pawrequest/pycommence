@@ -47,7 +47,6 @@ class CsrCmc:
 
         Raises:
             CmcError on fail
-            ent.NotFoundError if filter returns no rows
 
 
         If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor's secondary filter.
@@ -195,7 +194,7 @@ class CsrCmc:
             raise ValueError('No rows found.')
         return rs.RowSetQuery(result)
 
-    def get_query_row_set_by_id(self, row_id: str, *, flags=0):
+    def get_query_row_set_by_id(self, row_id: str):
         """
         Returns: Pointer to rowset object on success, NULL on error.
         Parameters:
@@ -240,7 +239,7 @@ class CsrCmc:
         Creates a rowset of existing items for editing.
 
         Parameters:
-        count (int): The number of rows to retrieve.
+        count (int): The number of rows to retrieve, defaults to all rows in csr.
         flags (int, optional): Unused at present, must be 0. Defaults to 0.
 
         Returns:
@@ -249,11 +248,10 @@ class CsrCmc:
         Comments:
         The rowset inherits the column set from the cursor.
         """
-        if count is None:
-            count = self.row_count
+        count = count or self.row_count
         return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, cenum.FLAGS_UNUSED))
 
-    def get_edit_row_set_by_id(self, row_id: str) -> rs.RowSetEdit:
+    def get_edit_row_set_by_id(self, row_id: str,) -> rs.RowSetEdit:
         """
         Creates a rowset for editing a particular row.
 
