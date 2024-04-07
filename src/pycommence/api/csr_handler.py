@@ -3,7 +3,7 @@ import typing as _t
 import pydantic as _p
 
 from pycommence.api import CmcError, csr_api_handled
-from pycommence.api.csr_api import EmptyKind
+from pycommence.api.csr_api_handled import EmptyKind
 
 
 class CmcHandler(_p.BaseModel):
