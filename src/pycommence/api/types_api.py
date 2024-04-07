@@ -1,13 +1,13 @@
 from __future__ import annotations
 
+import typing as _t
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Literal, TYPE_CHECKING
-
+from pycommence.api import csr_api
 from pydantic import BaseModel, Field, model_validator
-
 if TYPE_CHECKING:
-    from pycommence import Csr
+    ...
 
 FilterConditionType = Literal['Equal To', 'Contains', 'After']
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
@@ -23,7 +23,7 @@ class FilterArray(BaseModel):
             self.filters[i + 1] = fil
         return self
 
-    def filter_csr(self, csr: Csr):
+    def filter_csr(self, csr: csr_api.Csr):
         for slot, fil in self.filters.items():
             fil.filter_csr(csr, slot)
 
@@ -48,7 +48,7 @@ class CmcFilter(BaseModel):
         )
         return filter_str
 
-    def filter_csr(self, csr: Csr, slot: int = 1):
+    def filter_csr(self, csr: csr_api.Csr, slot: int = 1):
         csr.filter_by_cmcfil(self, slot)
         return self
 
@@ -78,3 +78,6 @@ def get_cmc_date(datestr: str):
 def get_cmc_time(time_str: str):
     """ Use CMC Cannonical flag"""
     return datetime.strptime(time_str, CmcTimeFormat).time()
+
+
+EmptyKind = _t.Literal['ignore', 'raise']

@@ -2,14 +2,10 @@ import typing as _t
 
 import pydantic as _p
 
-from pycommence.api import CmcError, csr_api
-from pycommence.api.csr_api import EmptyKind
+from pycommence.api import csr_api, types_api
 
 
 class CmcHandler(_p.BaseModel):
-    """
-    handle cursors to retrieve data with different filter configurations
-    """
     csr: csr_api.Csr
 
     model_config = _p.ConfigDict(
@@ -50,9 +46,9 @@ class CmcHandler(_p.BaseModel):
         with self.csr.temporary_filter_fields(field_name, 'Equal To', value, empty=empty):
             records = self.records()
             if not records and empty == 'raise':
-                raise CmcError(f'No record found for {field_name} {value}')
+                raise types_api.CmcError(f'No record found for {field_name} {value}')
             if max_rtn and len(records) > max_rtn:
-                raise CmcError(f'Expected max {max_rtn} records, got {len(records)}')
+                raise types_api.CmcError(f'Expected max {max_rtn} records, got {len(records)}')
             return records
 
     def edit_record(
@@ -60,7 +56,8 @@ class CmcHandler(_p.BaseModel):
             pk_val: str,
             package: dict,
     ) -> bool:
-        """Modify a record in the cursor and commit.
+        """
+        Modify a record in the cursor and commit.
 
         Args:
             pk_val (str): The value for the primary key field.
@@ -69,14 +66,15 @@ class CmcHandler(_p.BaseModel):
         Returns:
             bool: True on success
 
-            """
+        """
         with self.csr.temporary_filter_pk(pk_val):
             row_set = self.csr.get_edit_rowset()
             row_set.modify_row_dict(0, package)
             return row_set.commit()
 
-    def delete_record(self, pk_val: str, empty: EmptyKind = 'raise'):
-        """Delete a record from the cursor and commit.
+    def delete_record(self, pk_val: str, empty: types_api.EmptyKind = 'raise'):
+        """
+        Delete a record from the cursor and commit.
 
         Args:
             pk_val (str): The value for the primary key field.
@@ -84,6 +82,7 @@ class CmcHandler(_p.BaseModel):
 
         Returns:
             bool: True on success
+
         """
         with self.csr.temporary_filter_pk(pk_val, empty=empty):  # noqa: PyArgumentList
             if self.csr.row_count == 0 and empty == 'ignore':
@@ -109,13 +108,14 @@ class CmcHandler(_p.BaseModel):
 
         Returns:
             bool: True on success
-            """
+            
+        """
         with self.csr.temporary_filter_pk(pk_val, empty='ignore'):  # noqa: PyArgumentList
             if not self.csr.row_count:
                 row_set = self.csr.get_named_addset(pk_val)
             else:
                 if existing == 'raise':
-                    raise CmcError('Record already exists')
+                    raise types_api.CmcError('Record already exists')
                 elif existing == 'update':
                     row_set = self.csr.get_edit_rowset()
                 elif existing == 'replace':

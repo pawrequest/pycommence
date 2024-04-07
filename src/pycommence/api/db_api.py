@@ -1,16 +1,19 @@
 from __future__ import annotations
 
+import typing as _t
+
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from . import types_api
-from ..wrapper import conversation, enums_cmc, cursor
+from ..wrapper import conversation, cursor, enums_cmc
 
 
 class CmcConnection:
     """
     Handler for caching connections to one or more Commence instances
+
     """
     connections = {}
 
@@ -39,9 +42,7 @@ class CmcConnection:
 
 
 class Cmc(CmcConnection):
-    """
-    Api for Commence database connection
-    """
+    """ Api for Commence database connection """
 
     @property
     def name(self) -> str:
@@ -80,14 +81,13 @@ class Cmc(CmcConnection):
         return self._cmc.VersionExt
 
     def get_conversation(
-            self, topic: str, application_name: str = 'Commence'
+            self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> conversation.CommenceConversation:
         """
         Create a conversation object, except probably just don't and go get a cursor instead.
 
         Args:
             topic (str): DDE Topic name, must be a valid Commence topic name.
-                         Examples include "GetData", "ViewData", etc.
             application_name (str): DDE Application name. The only valid value is "Commence".
 
         Returns:
@@ -115,18 +115,21 @@ class Cmc(CmcConnection):
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
 
-        name (str|None): Name of an object in the database.
-            For CMC_CURSOR_CATEGORY, name is the category name.
-            For CMC_CURSOR_VIEW, name is the view name.
+        Args:
+            name (str|None): Name of an object in the database.
+                For CMC_CURSOR_CATEGORY, name is the category name.
+                For CMC_CURSOR_VIEW, name is the view name.
 
-        flags (optional): Additional option flags. Logical OR of the following option flags:
-            PILOT - Save Item agents defined for the Pilot subsystem will fire.
-            INTERNET - Save Item agents defined for the Internet/intranet will fire.
+            flags (optional): Additional option flags. Logical OR of the following option flags:
+                PILOT - Save Item agents defined for the Pilot subsystem will fire.
+                INTERNET - Save Item agents defined for the Internet/intranet will fire.
 
         Returns:
-        CsrApi: A Csr object on success.
+            CsrApi: A Csr object on success.
 
-        Raises: ValueError if no name given for name based searches
+        Raises:
+            ValueError if no name given for name based searches
+
         """
         # todo can ther be multiple flags?
         if flags:

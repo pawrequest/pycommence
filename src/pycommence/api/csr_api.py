@@ -10,8 +10,8 @@ import contextlib
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from pycommence.api.db_api import Cmc
-from pycommence.api.types_api import CmcError, CmcFilter, Connection, FilterArray
+from .db_api import Cmc
+from .types_api import CmcError, CmcFilter, Connection, FilterArray
 
 if TYPE_CHECKING:
     from pycommence.wrapper.cursor import CsrCmc
