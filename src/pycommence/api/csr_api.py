@@ -73,7 +73,7 @@ class Csr:
         records = row_set.get_rows_dict()
         return records
 
-    def get_record(self, pk_val: str) -> dict[str, str]:
+    def one_record(self, pk_val: str) -> dict[str, str]:
         self.filter_by_pk(pk_val)
         return self.records(1)[0]
 
