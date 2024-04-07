@@ -37,7 +37,7 @@ class CsrCmc:
     def shared(self):
         return self._csr_cmc.Shared
 
-    def set_filter(self, filter_text: str):
+    def set_filter(self, filter_text: str) -> bool:
         """
         Defines a filter clause for the cursor.
 
@@ -54,9 +54,7 @@ class CsrCmc:
         Items that match are then passed through the cursor's secondary filter.
         The rowset only contains items that satisfy both filters.
         """
-        res = self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
-        if not res:
-            raise ValueError(f'Could not set Commence filter {filter_text}')
+        return self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -210,8 +208,8 @@ class CsrCmc:
         return res
 
     def get_add_row_set(
-            self, count: int or None = None,
-            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE
+            self, count: int = 1,
+            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.SHARED
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
@@ -296,8 +294,8 @@ class CsrCmc:
             check = input(f'Are you sure you want to delete {self.row_count} rows? (y/n)')
             if check.lower() != 'y':
                 raise ValueError('Aborted deletion.')
-        rs = self._csr_cmc.GetDeleteRowSet(count, 0)
-        return rs.RowSetDelete(rs)
+        delset = self._csr_cmc.GetDeleteRowSet(count, 0)
+        return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
             self, row_id: str,
