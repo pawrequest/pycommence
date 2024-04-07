@@ -127,7 +127,7 @@ class RowSetBase(ABC):
         flags: int = enums_cmc.FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
 
-    def get_rows_dict(self, num: int or None = None) -> list[dict[str, str]]:
+    def get_row_dicts(self, num: int or None = None) -> list[dict[str, str]]:
         """Returns a dictionary of the first num rows."""
         if num is None:
             num = self.row_count

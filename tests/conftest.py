@@ -1,5 +1,3 @@
-
-
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff', 'homeAddress': '', 'businessNumber': '1800 3000 9009',
     'homeNumber': '', 'faxNumber': '', 'Notes': '', 'Nickname': '', 'Extension': '',
@@ -49,4 +47,4 @@ JEFF_KEY = JEFF_DICT.get('contactKey')
 
 UPDATE_PKG_1 = {'firstName': 'test2'}
 PK_VAL = 'Col0 Val'
-__all__ = ['contact_csr', 'JEFF_DICT', 'GEOFF_DICT', 'GEOFF_KEY', 'JEFF_KEY', 'UPDATE_PKG_1']
+__all__ = ['JEFF_DICT', 'GEOFF_DICT', 'GEOFF_KEY', 'JEFF_KEY', 'UPDATE_PKG_1']

@@ -43,7 +43,7 @@ def edit_record(cursor: CsrCmc, record, package: dict):
 
 def get_all_records(cursor: CsrCmc) -> list[dict[str, str]]:
     qs = cursor.get_query_row_set()
-    return qs.get_rows_dict()
+    return qs.get_row_dicts()
 
 
 def get_record(cursor: CsrCmc, record_name):
@@ -51,7 +51,7 @@ def get_record(cursor: CsrCmc, record_name):
     if not res:
         raise types_api.CmcError(f'Could not find {record_name}')
     row_set = cursor.get_query_row_set()
-    record = row_set.get_rows_dict()[0]
+    record = row_set.get_row_dicts()[0]
     return record
 
 
