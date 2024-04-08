@@ -17,19 +17,11 @@ RowSetType: TypeAlias = ICommenceEditRowSet or ICommenceQueryRowSet or ICommence
 
 
 class RowSetBase(ABC):
-    """
-    Base class representing a Commence Row Set.
-
-    Attributes:
-        _rs: Internal representation of a Commence Row Set object.
-    """
-
     def __init__(self, cmc_rs: RowSetType):
         """
-        Initializes a RowSetBase instance.
-
         Args:
             cmc_rs: A Commence Row Set object.
+
         """
         self._rs = cmc_rs
 
@@ -54,14 +46,13 @@ class RowSetBase(ABC):
             column_index: int,
             flags: int = enums_cmc.OptionFlag.CANONICAL.value
     ) -> str:
-        """
-        Retrieves the value at the specified row and column.
+        """Retrieves the value at the specified row and column.
 
         Args:
             row_index: Index of the row.
             column_index: Index of the column.
-            flags: Logical OR of following option flags:
-                    CMC_FLAG_CANONICAL - return field value in canonical form
+            flags: CMC_FLAG_CANONICAL - return field value in canonical form
+
         Returns:
             Value at the specified row and column.
 
@@ -69,16 +60,15 @@ class RowSetBase(ABC):
         return self._rs.GetRowValue(row_index, column_index, flags)
 
     def get_column_label(self, index: int, flags=0) -> str:
-        """
-        Retrieves the label of the specified column.
+        """Retrieves the label of the specified column.
 
         Args:
             index: Index of the column.
-            flags: Logical OR of following option flags:
-                CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
+            flags: CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
 
         Returns:
             Label of the specified column.
+
         """
         return self._rs.GetColumnLabel(index, flags)
 
@@ -88,10 +78,11 @@ class RowSetBase(ABC):
 
         Args:
             label: Label of the column.
-            flags: Logical OR of following option flags:
-                    CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
+            flags: CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
+
         Returns:
             Index of the specified column label.
+
         """
         return self._rs.GetColumnIndex(label, flags)
 
@@ -106,11 +97,12 @@ class RowSetBase(ABC):
 
         Args:
             row_index: Index of the row.
-            flags: Logical OR of following option flags:
-                    CMC_FLAG_CANONICAL - return field value in canonical form
+            flags: CMC_FLAG_CANONICAL - return field value in canonical form
             delim: Delimiter to use between values.
+
         Returns:
             Values of the specified row.
+
         """
         return self._rs.GetRow(row_index, delim, flags)
 
@@ -120,9 +112,10 @@ class RowSetBase(ABC):
 
         Args:
             row_index: Index of the row.
-            flags: Unused.
+
         Returns:
             ID of the specified row.
+
         """
         flags: int = enums_cmc.FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
@@ -145,6 +138,7 @@ class RowSetBase(ABC):
 
         Returns:
             True if the row is shared, False otherwise.
+
         """
         return self._rs.GetShared(row_index)
 
@@ -163,13 +157,11 @@ class RowSetQuery(RowSetBase):
             row_index (int): The index of the row.
             column_index (int): The index of the column.
             file_path (str): The path where the field value will be saved to.
-            flags: Logical OR of following option flags:
-                    CMC_FLAG_CANONICAL - return field value in canonical form
-
-
+            flags: CMC_FLAG_CANONICAL - return field value in canonical form
 
         Returns:
             bool: True on success, False on failure.
+
         """
         return self._rs.GetFieldToFile(row_index, column_index, file_path, flags)
 
@@ -188,6 +180,7 @@ class RowSetModifies(RowSetBase):
 
         Returns:
             bool: True on success, False on failure.
+
         """
         return self._rs.ModifyRow(row_index, column_index, value, enums_cmc.FLAGS_UNUSED)
 
@@ -201,6 +194,7 @@ class RowSetModifies(RowSetBase):
 
         Returns:
             bool: True on success, False on failure.
+
         """
         for key, value in row_dict.items():
             col_idx = self.get_column_index(key)
@@ -212,9 +206,11 @@ class RowSetModifies(RowSetBase):
     def commit(self) -> bool:
         """
         Commit to disk.
+        After Commit(), the RowSet is no Longer valid and should be discarded.
+
         Returns:
             bool: True on success, False on failure.
-        After Commit(), the RowSet is no Longer valid and should be discarded.
+
         """
         res = self._rs.Commit(enums_cmc.FLAGS_UNUSED)
         if res != 0:
@@ -227,6 +223,7 @@ class RowSetModifies(RowSetBase):
 
         Returns:
             CommenceCursor: Cursor object with the committed data.
+
         """
         return self._rs.CommitGetCursor(enums_cmc.FLAGS_UNUSED)
 
@@ -238,6 +235,7 @@ class RowSetAdd(RowSetModifies):
     Inherits from:
         RowSetBase: Base class for Commence Row Set objects.
         RowSetModifies: Base class for Write-Enabled RowSet objects.
+
     """
 
     def __init__(self, cmc_rs: ICommenceAddRowSet) -> None:
@@ -255,13 +253,16 @@ class RowSetDelete(RowSetModifies):
 
     Inherits from:
         RowSetBase: Base class for Commence Row Set objects.
+
     """
 
     def __init__(self, cmc_rs: ICommenceDeleteRowSet) -> None:
         """
         Initializes a RowSetDelete instance.
+
         Args:
             cmc_rs: A Commence Row Set object.
+
         """
         super().__init__(cmc_rs)
 
@@ -271,11 +272,14 @@ class RowSetDelete(RowSetModifies):
     def delete_row(self, row_index: int) -> bool:
         """
         Marks a row for deletion.
+        Deletion is not permanent until Commit() is called.
+
         Args:
             row_index (int): The index of the row to mark for deletion.
+
         Returns:
             bool: True on success, False on failure.
-        Deletion is not permanent until Commit() is called.
+
         """
         return self._rs.DeleteRow(row_index, enums_cmc.FLAGS_UNUSED)
 
@@ -288,7 +292,5 @@ class RowSetDelete(RowSetModifies):
 
 class RowSetEdit(RowSetModifies):
     def __init__(self, edit_rowset: ICommenceEditRowSet) -> None:
-        """
-            cmc_rs: A Commence EditRowSet COM object.
-        """
+        """ cmc_rs: A Commence EditRowSet COM object. """
         super().__init__(edit_rowset)

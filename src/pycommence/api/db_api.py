@@ -12,7 +12,7 @@ from ..wrapper import conversation, cursor, enums_cmc
 
 class CmcConnection:
     """
-    Handler for caching connections to one or more Commence instances
+    __new__ is overridden to cache connections to multiple Commence instances.
 
     """
     connections = {}
@@ -30,7 +30,7 @@ class CmcConnection:
             self._initialized = True
             self.db_name = commence_instance
             try:
-                self._cmc = Dispatch(commence_instance)
+                self._cmc_com = Dispatch(commence_instance)
             except com_error as e:
                 if e.hresult == -2147221005:
                     raise types_api.CmcError(
@@ -42,43 +42,48 @@ class CmcConnection:
 
 
 class Cmc(CmcConnection):
-    """ Api for Commence database connection """
+    """ Commence Database object.
+
+     provides access to :class:`.csr_api.Csr` and :class:`.conversation.CommenceConversation`.
+
+
+     """
 
     @property
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
-        return self._cmc.Name
+        return self._cmc_com.Name
 
     @property
     def path(self) -> str:
         """(read-only) Full path of the Commence database."""
-        return self._cmc.Path
+        return self._cmc_com.Path
 
     def __str__(self) -> str:
-        return f'<CmcDB: "{self.name}">'
+        return f'<Cmc: "{self.name}">'
 
     def __repr__(self):
-        return f"<CmcDB: {self.db_name}>"
+        return f"<Cmc: {self.name}>"
 
     @property
     def registered_user(self) -> str:
         """(read-only) CR/LF delimited string with username, company name, and serial number."""
-        return self._cmc.RegisteredUser
+        return self._cmc_com.RegisteredUser
 
     @property
     def shared(self) -> bool:
         """(read-only) TRUE if the database is enrolled in a workgroup."""
-        return self._cmc.Shared
+        return self._cmc_com.Shared
 
     @property
     def version(self) -> str:
         """(read-only) Version number in x.y format."""
-        return self._cmc.Version
+        return self._cmc_com.Version
 
     @property
     def version_ext(self) -> str:
         """(read-only) Version number in x.y.z.w format."""
-        return self._cmc.VersionExt
+        return self._cmc_com.VersionExt
 
     def get_conversation(
             self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
@@ -98,7 +103,7 @@ class Cmc(CmcConnection):
 
         """
 
-        conversation_obj = self._cmc.GetConversation(application_name, topic)
+        conversation_obj = self._cmc_com.GetConversation(application_name, topic)
         if conversation_obj is None:
             raise ValueError(
                 f'Could not create conversation object for {application_name}!{topic}'
@@ -116,16 +121,16 @@ class Cmc(CmcConnection):
         CursorTypes CATEGORY and VIEW require name to be set.
 
         Args:
-            name (str|None): Name of an object in the database.
-                For CMC_CURSOR_CATEGORY, name is the category name.
-                For CMC_CURSOR_VIEW, name is the view name.
+            name (str|None): Name of the category or view to open.
+
+            mode (enums_cmc.CursorType): Cursor type
 
             flags (optional): Additional option flags. Logical OR of the following option flags:
                 PILOT - Save Item agents defined for the Pilot subsystem will fire.
                 INTERNET - Save Item agents defined for the Internet/intranet will fire.
 
         Returns:
-            CsrApi: A Csr object on success.
+            Csr: A Csr object on success.
 
         Raises:
             ValueError if no name given for name based searches
@@ -150,7 +155,7 @@ class Cmc(CmcConnection):
                     f'Mode {mode} ("{enums_cmc.CursorType(mode).name}") requires name param to be set'
                 )
         try:
-            csr = cursor.CsrCmc(self._cmc.GetCursor(mode, name, flags))
+            csr = cursor.CsrCmc(self._cmc_com.GetCursor(mode, name, flags))
         except com_error as e:
             raise types_api.CmcError(f'Error creating cursor for {name}: {e}')
         return csr

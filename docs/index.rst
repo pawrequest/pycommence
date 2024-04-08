@@ -1,8 +1,10 @@
-# Pycommence
-Commence Rm Python API
-
+PyCommence Documentation
+============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
-   apidoc-out/pycommence
+   pycommence.api
+   pycommence.wrapper
+
+

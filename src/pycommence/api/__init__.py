@@ -1,8 +1,3 @@
-"""
-This module provides the API for Commence database access.
-
-"""
-
 # from .db_api import Cmc
 # # from .csr_api import Csr, csr_context, get_csr
 # from .csr_api import Csr, csr_context, get_csr

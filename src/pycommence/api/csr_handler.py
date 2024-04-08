@@ -6,6 +6,9 @@ from pycommence.api import csr_api, types_api
 
 
 class CmcHandler(_p.BaseModel):
+    """Handle Cursor operations to get, edit, delete and add records
+
+    """
     csr: csr_api.Csr
 
     model_config = _p.ConfigDict(
@@ -13,11 +16,13 @@ class CmcHandler(_p.BaseModel):
     )
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:
+        """Return all records from the cursor."""
         row_set = self.csr.get_query_rowset(count)
         records = row_set.get_row_dicts()
         return records
 
     def one_record(self, pk_val: str) -> dict[str, str]:
+        """Return a single record from the cursor by primary key."""
         with self.csr.temporary_filter_pk(pk_val):
             return self.records()[0]
 
@@ -57,7 +62,7 @@ class CmcHandler(_p.BaseModel):
             package: dict,
     ) -> bool:
         """
-        Modify a record in the cursor and commit.
+        Modify a record.
 
         Args:
             pk_val (str): The value for the primary key field.
@@ -74,7 +79,7 @@ class CmcHandler(_p.BaseModel):
 
     def delete_record(self, pk_val: str, empty: types_api.EmptyKind = 'raise'):
         """
-        Delete a record from the cursor and commit.
+        Delete a record.
 
         Args:
             pk_val (str): The value for the primary key field.
@@ -99,7 +104,7 @@ class CmcHandler(_p.BaseModel):
             existing: _t.Literal['replace', 'update', 'raise'] = 'raise'
     ) -> bool:
         """
-        Add and commit a record to the cursor.
+        Add a record.
 
         Args:
             pk_val: The value for the primary key field.
@@ -108,7 +113,7 @@ class CmcHandler(_p.BaseModel):
 
         Returns:
             bool: True on success
-            
+
         """
         with self.csr.temporary_filter_pk(pk_val, empty='ignore'):  # noqa: PyArgumentList
             if not self.csr.row_count:
