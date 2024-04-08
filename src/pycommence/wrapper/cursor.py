@@ -1,8 +1,7 @@
-from typing import Optional
-
 from loguru import logger
 
-from . import enums_cmc as cenum, rowset as rs
+from . import enums_cmc as cenum
+from . import rowset as rs
 from ._icommence import ICommenceCursor
 
 
@@ -96,11 +95,11 @@ class CsrCmc:
         res = self._csr_cmc.SetSort(sort_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
-            raise ValueError("Unable to sort")
+            raise ValueError('Unable to sort')
 
     def set_column(
             self, column_index: int, field_name: str,
-            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE
+            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -124,7 +123,7 @@ class CsrCmc:
         logger.info(f'Setting column {column_index} to {field_name}')
         res = self._csr_cmc.SetColumn(column_index, field_name, flags.value)
         if not res:
-            raise ValueError("Unable to set column")
+            raise ValueError('Unable to set column')
         return res
 
     def seek_row(self, start: int, rows: int) -> int:
@@ -153,7 +152,7 @@ class CsrCmc:
         """
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
-            raise ValueError(f"Unable to seek {rows} rows")
+            raise ValueError(f'Unable to seek {rows} rows')
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:
@@ -171,7 +170,7 @@ class CsrCmc:
         res = self._csr_cmc.SeekRowApprox(numerator, denominator)
         if res == -1:
             raise ValueError(
-                f"Unable to seek {numerator}/{denominator} rows of {self.row_count} rows"
+                f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows'
             )
         return res
 
@@ -218,7 +217,7 @@ class CsrCmc:
 
     def get_add_row_set(
             self, count: int = 1,
-            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.SHARED
+            flags: cenum.OptionFlag | None = cenum.OptionFlag.SHARED
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
@@ -370,7 +369,7 @@ class CsrCmc:
             con_name: str,
             connected_cat: str,
             col_name: str,
-            flags: Optional[cenum.OptionFlag] = cenum.OptionFlag.NONE
+            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.
