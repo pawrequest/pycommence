@@ -3,11 +3,11 @@ from __future__ import annotations
 import typing as _t
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Literal, TYPE_CHECKING
-from pycommence.api import csr_api
+from typing import Literal
+
 from pydantic import BaseModel, Field, model_validator
-if TYPE_CHECKING:
-    ...
+
+# from pycommence.api import csr_api
 
 FilterConditionType = Literal['Equal To', 'Contains', 'After']
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
@@ -18,39 +18,31 @@ NotFlagType = Literal['Not', '']
 class FilterArray(BaseModel):
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
 
-    def add_filters(self, *filters: CmcFilter):
+    def add_replace_filters(self, *filters: CmcFilter):
         for i, fil in enumerate(filters):
             self.filters[i + 1] = fil
         return self
-
-    def filter_csr(self, csr: csr_api.Csr):
-        for slot, fil in self.filters.items():
-            fil.filter_csr(csr, slot)
 
 
 class CmcFilter(BaseModel):
     cmc_col: str
     condition: FilterConditionType = 'Equal To'
-    value: str = ""
+    value: str = ''
     f_type: FilterType = 'F'
     not_flag: NotFlagType = ''
 
-    @model_validator(mode="after")
+    @model_validator(mode='after')
     def condition_val(self):
         if self.condition == 'Contains' or self.condition == 'Equal To':
             if not self.value:
                 raise ValueError('Value must be set when condition is "Contains"')
-        self.value = f', "{self.value}"' if self.value else ""
+        self.value = f', "{self.value}"' if self.value else ''
 
     def filter_str(self, slot: int) -> str:
         filter_str = (
-            f"[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{self.value})]"
+            f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{self.value})]'
         )
         return filter_str
-
-    def filter_csr(self, csr: csr_api.Csr, slot: int = 1):
-        csr.filter_by_cmcfil(self, slot)
-        return self
 
 
 @dataclass
@@ -61,7 +53,7 @@ class Connection:
 
 
 class CmcError(Exception):
-    def __init__(self, msg="Commence is not installed"):
+    def __init__(self, msg='Commence is not installed'):
         self.msg = msg
         super().__init__(self.msg)
 
