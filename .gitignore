@@ -11,3 +11,4 @@
 apidoc-out/
 /dout/
 /docs/out/
+*.db
