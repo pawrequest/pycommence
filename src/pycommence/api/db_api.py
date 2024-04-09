@@ -43,78 +43,16 @@ class CmcConnection:
 
 class Cmc(CmcConnection):
     """ Commence Database object.
-
      provides access to :class:`.csr_api.Csr` and :class:`.conversation.CommenceConversation`.
 
 
      """
 
-    @property
-    def name(self) -> str:
-        """(read-only) Name of the Commence database."""
-        return self._cmc_com.Name
-
-    @property
-    def path(self) -> str:
-        """(read-only) Full path of the Commence database."""
-        return self._cmc_com.Path
-
-    def __str__(self) -> str:
-        return f'<Cmc: "{self.name}">'
-
-    def __repr__(self):
-        return f"<Cmc: {self.name}>"
-
-    @property
-    def registered_user(self) -> str:
-        """(read-only) CR/LF delimited string with username, company name, and serial number."""
-        return self._cmc_com.RegisteredUser
-
-    @property
-    def shared(self) -> bool:
-        """(read-only) TRUE if the database is enrolled in a workgroup."""
-        return self._cmc_com.Shared
-
-    @property
-    def version(self) -> str:
-        """(read-only) Version number in x.y format."""
-        return self._cmc_com.Version
-
-    @property
-    def version_ext(self) -> str:
-        """(read-only) Version number in x.y.z.w format."""
-        return self._cmc_com.VersionExt
-
-    def get_conversation(
-            self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
-    ) -> conversation.CommenceConversation:
-        """
-        Create a conversation object, except probably just don't and go get a cursor instead.
-
-        Args:
-            topic (str): DDE Topic name, must be a valid Commence topic name.
-            application_name (str): DDE Application name. The only valid value is "Commence".
-
-        Returns:
-            CommenceConversation: A CommenceConversation object on success.
-
-        Raises:
-            ValueError if failure.
-
-        """
-
-        conversation_obj = self._cmc_com.GetConversation(application_name, topic)
-        if conversation_obj is None:
-            raise ValueError(
-                f'Could not create conversation object for {application_name}!{topic}'
-            )
-        return conversation.CommenceConversation(conversation_obj)
-
     def get_cursor(
             self,
-            name: str or None = None,
+            name: str | None = None,
             mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
-            flags: list[enums_cmc.OptionFlag] or enums_cmc.OptionFlag or None = None
+            flags: enums_cmc.OptionFlag | None = None
     ) -> cursor.CsrCmc:
         """
         Create a cursor object for accessing Commence data.
@@ -125,12 +63,12 @@ class Cmc(CmcConnection):
 
             mode (enums_cmc.CursorType): Cursor type
 
-            flags (optional): Additional option flags. Logical OR of the following option flags:
-                PILOT - Save Item agents defined for the Pilot subsystem will fire.
-                INTERNET - Save Item agents defined for the Internet/intranet will fire.
+            flags (enums_cmc.OptionFlag | None):
+                - PILOT - Save Item agents defined for the Pilot subsystem will fire.
+                - INTERNET - Save Item agents defined for the Internet/intranet will fire.
 
         Returns:
-            Csr: A Csr object on success.
+            CsrCmc: A Csr object on success.
 
         Raises:
             ValueError if no name given for name based searches
@@ -160,3 +98,64 @@ class Cmc(CmcConnection):
             raise types_api.CmcError(f'Error creating cursor for {name}: {e}')
         return csr
         # todo non-standard modes
+
+    def get_conversation(
+            self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
+    ) -> conversation.CommenceConversation:
+        """
+        Create a conversation object.
+
+        Args:
+            topic (str): DDE Topic name, must be a valid Commence topic name.
+            application_name (str): DDE Application name. The only valid value is "Commence".
+
+        Returns:
+            CommenceConversation: A CommenceConversation object on success.
+
+        Raises:
+            ValueError if failure.
+
+        """
+
+        conversation_obj = self._cmc_com.GetConversation(application_name, topic)
+        if conversation_obj is None:
+            raise ValueError(
+                f'Could not create conversation object for {application_name}!{topic}'
+            )
+        return conversation.CommenceConversation(conversation_obj)
+
+    @property
+    def name(self) -> str:
+        """(read-only) Name of the Commence database."""
+        return self._cmc_com.Name
+
+    @property
+    def path(self) -> str:
+        """(read-only) Full path of the Commence database."""
+        return self._cmc_com.Path
+
+    @property
+    def registered_user(self) -> str:
+        """(read-only) CR/LF delimited string with username, company name, and serial number."""
+        return self._cmc_com.RegisteredUser
+
+    @property
+    def shared(self) -> bool:
+        """(read-only) TRUE if the database is enrolled in a workgroup."""
+        return self._cmc_com.Shared
+
+    @property
+    def version(self) -> str:
+        """(read-only) Version number in x.y format."""
+        return self._cmc_com.Version
+
+    @property
+    def version_ext(self) -> str:
+        """(read-only) Version number in x.y.z.w format."""
+        return self._cmc_com.VersionExt
+
+    def __str__(self) -> str:
+        return f'<Cmc: "{self.name}">'
+
+    def __repr__(self):
+        return f"<Cmc: {self.name}>"

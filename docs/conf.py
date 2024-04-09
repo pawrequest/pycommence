@@ -5,7 +5,7 @@ copyright = f'2024, {author}'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
-    'sphinx_autodoc_typehints',
+    # 'sphinx_autodoc_typehints',
     'sphinx_rtd_dark_mode',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
@@ -27,3 +27,10 @@ readme_src_files = 'index.rst'
 readme_docs_url_type = 'html'
 add_module_names = False
 autodoc_member_order = 'bysource'
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'undoc-members': True,
+    'no-show-inheritance': True,
+
+}

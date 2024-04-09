@@ -18,8 +18,8 @@ NotFlagType = Literal['Not', '']
 class FilterArray(BaseModel):
     """Array of Cursor Filters.
 
-    Args:
-        filters (dict[int, CmcFilter]): Filters by Slot
+    Attributes:
+        filters (dict[int, CmcFilter]): Filters by Slot Number
 
     """
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
@@ -34,7 +34,7 @@ class FilterArray(BaseModel):
 class CmcFilter(BaseModel):
     """Commence Filter
 
-    Args:
+    Attributes:
         cmc_col (str): Commence Column Name
         condition (FilterConditionType): Filter Condition, defaults to 'Equal To'
         value (str): Filter Value

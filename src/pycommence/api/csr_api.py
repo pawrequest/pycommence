@@ -8,14 +8,14 @@ from loguru import logger
 
 from . import db_api
 from .types_api import CmcError, CmcFilter, Connection, FilterArray
-from pycommence.wrapper import cursor
+from pycommence.wrapper import cursor, rowset
 
 EmptyKind = _t.Literal['ignore', 'raise']
 
 
 @contextlib.contextmanager
 def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
-    """Context manager for Csr."""
+    """Context manager for :class:`Csr`."""
     try:
         csr_api = get_csr(table_name, cmc_name)
         yield csr_api
@@ -43,24 +43,24 @@ class Csr:
         self._cursor_cmc = csr_cmc
         self.db_name = db_name
 
-    def get_add_rowset(self, count=1):
+    def get_add_rowset(self, count=1) -> rowset.RowSetAdd:
         """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_add_row_set`."""
         return self._cursor_cmc.get_add_row_set(count=count)
 
-    def get_edit_rowset(self, count=1):
+    def get_edit_rowset(self, count=1) -> rowset.RowSetEdit:
         """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_edit_row_set`."""
         return self._cursor_cmc.get_edit_row_set(count=count)
 
-    def get_delete_rowset(self, count=1):
+    def get_delete_rowset(self, count=1) -> rowset.RowSetDelete:
         """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_delete_row_set`."""
         return self._cursor_cmc.get_delete_row_set(count=count)
 
-    def get_query_rowset(self, count=1):
+    def get_query_rowset(self, count=1) -> rowset.RowSetQuery:
         """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_query_row_set`."""
 
         return self._cursor_cmc.get_query_row_set(count=count)
 
-    def get_named_addset(self, pk_val):
+    def get_named_addset(self, pk_val) -> rowset.RowSetAdd:
         """Get an add rowset and set the primary key value."""
         row_set = self.get_add_rowset()
         row_set.modify_row(0, 0, pk_val)
