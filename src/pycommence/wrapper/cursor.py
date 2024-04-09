@@ -280,7 +280,7 @@ class CsrCmc:
             raise ValueError()
         return res
 
-    def get_delete_row_set(self, count: int or None = None) -> rs.RowSetDelete:
+    def get_delete_row_set(self, count: int = 1) -> rs.RowSetDelete:
         """
         Creates a rowset of existing items for deletion.
 
@@ -293,12 +293,6 @@ class CsrCmc:
         The rowset inherits the column set from the cursor.
 
         """
-        if count is None:
-            count = self.row_count
-        if count > 1:
-            check = input(f'Are you sure you want to delete {self.row_count} rows? (y/n)')
-            if check.lower() != 'y':
-                raise ValueError('Aborted deletion.')
         delset = self._csr_cmc.GetDeleteRowSet(count, 0)
         return rs.RowSetDelete(delset)
 
