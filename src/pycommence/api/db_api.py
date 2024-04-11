@@ -6,8 +6,8 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from . import types_api
 from ..wrapper import conversation, cursor, enums_cmc
+from . import types_api
 
 
 class CmcConnection:
@@ -96,6 +96,7 @@ class Cmc(CmcConnection):
             csr = cursor.CsrCmc(self._cmc_com.GetCursor(mode, name, flags))
         except com_error as e:
             raise types_api.CmcError(f'Error creating cursor for {name}: {e}')
+
         return csr
         # todo non-standard modes
 
@@ -158,4 +159,4 @@ class Cmc(CmcConnection):
         return f'<Cmc: "{self.name}">'
 
     def __repr__(self):
-        return f"<Cmc: {self.name}>"
+        return f'<Cmc: {self.name}>'
