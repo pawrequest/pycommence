@@ -36,7 +36,7 @@ class PyCommence(_p.BaseModel):
     def records_by_field(
             self, field_name: str,
             value: str,
-            max_rtn=None,
+            max_rtn: int | None = None,
             empty: _t.Literal['ignore', 'raise'] = 'raise'
     ) -> list[dict[str, str]]:
         """
@@ -135,7 +135,7 @@ class PyCommence(_p.BaseModel):
     def add_record(
             self,
             pk_val: str,
-            package: dict,
+            package: dict[str, str],
             existing: _t.Literal['replace', 'update', 'raise'] = 'raise'
     ) -> bool:
         """

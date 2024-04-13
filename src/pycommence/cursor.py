@@ -7,7 +7,7 @@ from functools import cached_property
 from loguru import logger
 
 from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray
-from pycommence.wrapper import rowset, cmc_db, cmc_csr
+from pycommence.wrapper import cmc_csr, cmc_db, rowset
 
 EmptyKind = _t.Literal['ignore', 'raise']
 
@@ -39,24 +39,24 @@ class Csr:
         self._cursor_cmc = csr_cmc
         self.db_name = db_name
 
-    def get_add_rowset(self, count=1) -> rowset.RowSetAdd:
+    def get_add_rowset(self, count: int = 1) -> rowset.RowSetAdd:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_add_row_set`."""
         return self._cursor_cmc.get_add_row_set(count=count)
 
-    def get_edit_rowset(self, count=1) -> rowset.RowSetEdit:
+    def get_edit_rowset(self, count: int = 1) -> rowset.RowSetEdit:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_edit_row_set`."""
         return self._cursor_cmc.get_edit_row_set(count=count)
 
-    def get_delete_rowset(self, count=1) -> rowset.RowSetDelete:
+    def get_delete_rowset(self, count: int = 1) -> rowset.RowSetDelete:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_delete_row_set`."""
         return self._cursor_cmc.get_delete_row_set(count=count)
 
-    def get_query_rowset(self, count=1) -> rowset.RowSetQuery:
+    def get_query_rowset(self, count: int = 1) -> rowset.RowSetQuery:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_query_row_set`."""
 
         return self._cursor_cmc.get_query_row_set(count=count)
 
-    def get_named_addset(self, pk_val) -> rowset.RowSetAdd:
+    def get_named_addset(self, pk_val: str) -> rowset.RowSetAdd:
         """Get an add rowset and set the primary key value."""
         row_set = self.get_add_rowset()
         row_set.modify_row(0, 0, pk_val)
