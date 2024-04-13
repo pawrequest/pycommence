@@ -57,10 +57,11 @@ def linkcode_resolve(domain, info):
         return None
 
     filename = info['module'].replace('.', '/')
-    if hasattr(mod, '__path__'):  # This attribute exists for packages
-        filename = f'{filename}/__init__.py'
+    if hasattr(mod, '__path__'):
+        filename = os.path.join(filename, '__init__.py')
     else:
-        filename = f'{filename}.py'
+        filename += '.py'
+
     return f'{repo_src}/{filename}'
 
 
