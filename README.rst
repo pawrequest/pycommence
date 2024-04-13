@@ -79,7 +79,7 @@
 .. |OptionFlag| replace:: ``OptionFlag``
 .. _OptionFlag: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper.enums_cmc.OptionFlag
 .. |PyCommence| replace:: ``PyCommence``
-.. _PyCommence: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence
+.. _PyCommence: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.__init__.PyCommence
 .. |RowSetAdd| replace:: ``RowSetAdd``
 .. _RowSetAdd: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper.rowset.RowSetAdd
 .. |RowSetBase| replace:: ``RowSetBase``
@@ -100,15 +100,12 @@
 .. _UIObj: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper._icommence.UIObj
 
 
-.. |Generic badge| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
-   :target: https://pawrequest.github.io/pycommence/
-
 PyCommence Documentation
 ============================
 
 * `Pycommence <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence API <https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence-api>`_
+  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
 
     * |PyCommence|_
 

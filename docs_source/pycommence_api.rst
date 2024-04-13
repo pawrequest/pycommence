@@ -1,9 +1,9 @@
 Pycommence
 ==============
 
-PyCommence API
+PyCommence Object
 -------------------------
-.. autoclass:: pycommence.PyCommence
+.. automodule:: pycommence.__init__
 
 
 Cursor

@@ -1,7 +1,4 @@
-import importlib
 import logging
-import os
-import pathlib
 
 project = 'Pycommence'
 author = 'PawRequest'
@@ -46,56 +43,13 @@ autodoc_default_options = {
 
 repo_src = 'https://github.com/pawrequest/pycommence/blob/main/src'
 
+
 def linkcode_resolve(domain, info):
-    logging.basicConfig(level=logging.DEBUG)
     if domain != 'py':
-        logging.debug("Skipping non-Python domain")
         return None
     if not info['module']:
-        logging.debug("No module information provided")
-        return None
-
-    try:
-        mod = importlib.import_module(info['module'])
-        logging.debug(f"Module {info['module']} imported successfully")
-    except ImportError as e:
-        logging.debug(f"Failed to import {info['module']}: {e}")
         return None
 
     filename = info['module'].replace('.', '/')
-    if hasattr(mod, '__path__'):
-        filename = os.path.join(filename, '__init__.py')
-    else:
-        filename += '.py'
-
-    url = f'{repo_src}/{filename}'
-    logging.debug(f"URL resolved: {url}")
+    url = f'{repo_src}/{filename}.py'
     return url
-# def linkcode_resolve(domain, info):
-#     if domain != 'py':
-#         return None
-#     if not info['module']:
-#         return None
-#     try:
-#         mod = importlib.import_module(info['module'])
-#         logging.debug(f"Module {info['module']} imported successfully")
-#
-#     except ImportError:
-#         return None
-#
-#     filename = info['module'].replace('.', '/')
-#     if hasattr(mod, '__path__'):
-#         filename = os.path.join(filename, '__init__.py')
-#     else:
-#         filename += '.py'
-#
-#     return f'{repo_src}/{filename}'
-#
-
-
-    # full_path = pathlib.Path(filename)
-    #
-    # if full_path.is_dir():
-    #     return f"{repo_src}/{filename}/__init__.py"
-    # else:
-    #     return f"{repo_src}/{filename}.py"
