@@ -1,5 +1,5 @@
-Pycommence
-==============
+Pycommence API
+==================
 
 PyCommence Object
 -------------------------
