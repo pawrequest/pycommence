@@ -30,7 +30,7 @@ jobs:
       - name: Build Sphinx Documentation
         run: |
           cd docs_source
-          sphinx-build -E -a -b code . ../docs  
+          sphinx-build -E -a -b html . ../docs  
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
