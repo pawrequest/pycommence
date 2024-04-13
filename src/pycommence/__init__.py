@@ -11,6 +11,23 @@ class PyCommence(_p.BaseModel):
     Args:
         csr: A cursor.Csr object best obtained via from_table_name classmethod.
 
+    Examples:
+        >>> pycmc = PyCommence.from_table_name('Contact')
+        >>> pycmc.records()
+        [{'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
+        >>> pycmc.one_record('Jeff')
+        {'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
+        >>> pycmc.records_by_field('firstName', 'Jeff')
+        [{'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
+        >>> pycmc.edit_record('Jeff', {'firstName': 'Geoff'})
+        True
+        >>> pycmc.one_record('Geoff')
+        {'firstName': 'Geoff', 'lastName': 'Smith', 'email': '
+        >>> pycmc.delete_record('Geoff')
+        True
+        >>> pycmc.add_record('Geoff', {'firstName': 'Geoff', 'lastName': 'Smith')
+        True
+
     """
     csr: cursor.Csr
 
