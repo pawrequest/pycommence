@@ -6,9 +6,4 @@
 *__pycache__*
 .venv/
 *.egg-info/
-/docs_out/
-/docs_myst/dout/
-apidoc-out/
-/dout/
-/docs/out/
 *.db
