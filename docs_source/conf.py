@@ -9,7 +9,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.linkcode',
-    # 'sphinx.ext.viewcode',
+    # 'myst_parser',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
     'sphinx_autodoc_typehints',
@@ -18,6 +18,7 @@ extensions = [
 ]
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+master_doc = 'README'
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
@@ -31,8 +32,8 @@ html_context = {
     "conf_py_path": "/docs_source/",
 }
 html_baseurl = 'https://pawrequest.github.io/pycommence/'
-readme_src_files = {'index.rst': 'README.md'}
-readme_docs_url_type = 'code'
+readme_src_files = 'README.rst'
+readme_docs_url_type = 'html'
 add_module_names = False
 autodoc_default_options = {
     'exclude-members': 'model_config, model_fields, model_computed_fields',
