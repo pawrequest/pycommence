@@ -6,7 +6,7 @@ from functools import cached_property
 
 from loguru import logger
 
-from .pycommence_types import CmcError, CmcFilter, Connection, FilterArray
+from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray
 from pycommence.wrapper import rowset, cmc_db, cmc_csr
 
 EmptyKind = _t.Literal['ignore', 'raise']
@@ -23,13 +23,12 @@ def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
 
 
 def get_csr(table_name, cmc_instance: str = 'Commence.DB') -> Csr:
-    """Get Csr via (cached) :class:`.db_api.Cmc` instance.
+    """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance.
 
     """
-    cmc = cmc_db.Cmc(cmc_instance)
-    csr_cmc = cmc.get_cursor(table_name)
-    csr_api = Csr(csr_cmc, db_name=cmc.name)
-    return csr_api
+    cmc: cmc_db.Cmc = cmc_db.Cmc(cmc_instance)
+    csr_cmc: cmc_csr.CsrCmc = cmc.get_cursor(table_name)
+    return Csr(csr_cmc, db_name=cmc.name)
 
 
 class Csr:
@@ -43,19 +42,19 @@ class Csr:
         self.db_name = db_name
 
     def get_add_rowset(self, count=1) -> rowset.RowSetAdd:
-        """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_add_row_set`."""
+        """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_add_row_set`."""
         return self._cursor_cmc.get_add_row_set(count=count)
 
     def get_edit_rowset(self, count=1) -> rowset.RowSetEdit:
-        """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_edit_row_set`."""
+        """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_edit_row_set`."""
         return self._cursor_cmc.get_edit_row_set(count=count)
 
     def get_delete_rowset(self, count=1) -> rowset.RowSetDelete:
-        """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_delete_row_set`."""
+        """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_delete_row_set`."""
         return self._cursor_cmc.get_delete_row_set(count=count)
 
     def get_query_rowset(self, count=1) -> rowset.RowSetQuery:
-        """See :meth:`~pycommence.wrapper.cursor.CsrCmc.get_query_row_set`."""
+        """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_query_row_set`."""
 
         return self._cursor_cmc.get_query_row_set(count=count)
 

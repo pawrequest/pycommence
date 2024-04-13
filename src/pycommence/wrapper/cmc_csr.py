@@ -6,17 +6,12 @@ from ._icommence import ICommenceCursor
 
 
 class CsrCmc:
-    """
-    Thin wrapper on the Commence Cursor object using pywin32.
-    Create with CmcDb.GetCursor() or cursorcontext.
+    """Thin wrapper on the Commence Cursor object using pywin32.
 
-    """
+    Create with :meth:`.cmc_db.Cmc.get_cursor`."""
 
     def __init__(self, cmc_cursor: ICommenceCursor):
-        """
-        Internal use only. Use CmcDb.GetCursor() to create a cursor.
-
-        """
+        """Internal use only. Use :meth:`.cmc_db.Cmc.get_cursor` to create a cursor."""
         self._csr_cmc = cmc_cursor
 
     def __repr__(self):

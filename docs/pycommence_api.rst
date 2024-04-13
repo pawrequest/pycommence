@@ -1,26 +1,17 @@
-Api Layer
+Pycommence
 ==============
 
-Database
-----------------------
+.. autoclass:: pycommence.PyCommence
+   :exclude-members: model_config, model_fields, model_computed_fields
 
-.. automodule:: pycommence.api.db_api
 
 Cursor
------------------------
-
-.. automodule:: pycommence.api.csr_api
-
-Cursor Handler
----------------------------
-
-.. automodule:: pycommence.api.csr_handler
+-------------------------
+.. automodule:: pycommence.cursor
 
 Types
-------------------------
-
-.. automodule:: pycommence.api.types_api
-   :no-inherited-members:
+--------------
+.. automodule:: pycommence.pycmc_types
 
 
 

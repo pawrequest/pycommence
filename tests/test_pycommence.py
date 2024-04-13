@@ -2,9 +2,9 @@ import contextlib
 
 import pytest
 
-from pycommence.api.cursor import get_csr
+from pycommence.cursor import get_csr
 from .conftest import GEOFF_DICT, GEOFF_KEY, JEFF_KEY, UPDATE_PKG_1
-from pycommence.api.pycommence_types import CmcError
+from pycommence.pycmc_types import CmcError
 from pycommence import PyCommence
 
 

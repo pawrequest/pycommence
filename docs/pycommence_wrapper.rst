@@ -1,13 +1,18 @@
-Wrapper Layer
+Commence Wrapper
 ==================
 
-Direct access to the Commence API is provided by the wrapper layer.
+Direct access to the Commence Com object is provided by the wrapper layer.
 
+
+DB Wrapper
+-------------------------
+
+.. automodule:: pycommence.wrapper.cmc_db
 
 Cursor Wrapper
 -------------------------
 
-.. automodule:: pycommence.wrapper.cursor
+.. automodule:: pycommence.wrapper.cmc_csr
 
 RowSet Wrappers
 -------------------------

@@ -6,9 +6,8 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from . import cmc_csr
-from ..api import pycommence_types
-from ..wrapper import conversation, enums_cmc
+from pycommence import pycmc_types
+from . import conversation, enums_cmc, cmc_csr
 
 
 class CmcConnection:
@@ -34,18 +33,19 @@ class CmcConnection:
                 self._cmc_com = Dispatch(commence_instance)
             except com_error as e:
                 if e.hresult == -2147221005:
-                    raise pycommence_types.CmcError(
+                    raise pycmc_types.CmcError(
                         f'Db Name "{commence_instance}" does not exist - connection failed'
                     )
-                raise pycommence_types.CmcError(
+                raise pycmc_types.CmcError(
                     f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
                 )
 
 
 class Cmc(CmcConnection):
     """ Commence Database object.
-     provides access to :class:`.csr_api.Csr` and :class:`.conversation.CommenceConversation`.
+     provides access to :class:`.cmc_csr.CsrCmc` and :class:`.conversation.CommenceConversation`.
 
+     Caching Inherited from :class:`.CmcConnection`.
 
      """
 
@@ -55,15 +55,13 @@ class Cmc(CmcConnection):
             mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
             flags: enums_cmc.OptionFlag | None = None
     ) -> cmc_csr.CsrCmc:
-        """
-        Create a cursor object for accessing Commence data.
+        """Create a cursor object for accessing Commence data.
+
         CursorTypes CATEGORY and VIEW require name to be set.
 
         Args:
             name (str|None): Name of the category or view to open.
-
             mode (enums_cmc.CursorType): Cursor type
-
             flags (enums_cmc.OptionFlag | None):
                 - PILOT - Save Item agents defined for the Pilot subsystem will fire.
                 - INTERNET - Save Item agents defined for the Internet/intranet will fire.
@@ -96,7 +94,7 @@ class Cmc(CmcConnection):
         try:
             csr = cmc_csr.CsrCmc(self._cmc_com.GetCursor(mode, name, flags))
         except com_error as e:
-            raise pycommence_types.CmcError(f'Error creating cursor for {name}: {e}')
+            raise pycmc_types.CmcError(f'Error creating cursor for {name}: {e}')
 
         return csr
         # todo non-standard modes

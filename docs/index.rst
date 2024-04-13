@@ -2,9 +2,9 @@ PyCommence Documentation
 ============================
 
 .. toctree::
-   :maxdepth: 3
+    :maxdepth: 3
 
-   pycommence_api
-   pycommence_wrapper
+    pycommence_api
+    pycommence_wrapper
 
 
