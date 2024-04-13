@@ -23,9 +23,7 @@ def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
 
 
 def get_csr(table_name, cmc_instance: str = 'Commence.DB') -> Csr:
-    """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance.
-
-    """
+    """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
     cmc: cmc_db.Cmc = cmc_db.Cmc(cmc_instance)
     csr_cmc: cmc_csr.CsrCmc = cmc.get_cursor(table_name)
     return Csr(csr_cmc, db_name=cmc.name)
