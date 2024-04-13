@@ -35,11 +35,11 @@ class CmcFilter(BaseModel):
     """Commence Filter
 
     Args:
-        cmc_col (str): Commence Column Name
-        condition (FilterConditionType): Filter Condition, defaults to 'Equal To'
-        value (str): Filter Value
-        f_type (FilterType): Filter Type defaults to `Field`
-        not_flag (NotFlagType): '' (default) or 'Not' to invert the filter
+        cmc_col: Commence Column Name
+        condition: Filter Condition, defaults to 'Equal To'
+        value: Filter Value
+        f_type: Filter Type defaults to `Field`
+        not_flag: '' (default) or 'Not' to invert the filter
 
     """
     cmc_col: str
