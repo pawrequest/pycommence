@@ -36,10 +36,10 @@ class CmcFilter(BaseModel):
 
     Args:
         cmc_col: Commence Column Name
-        condition: Filter Condition, defaults to 'Equal To'
+        condition: Filter Condition
         value: Filter Value
-        f_type: Filter Type defaults to `Field`
-        not_flag: '' (default) or 'Not' to invert the filter
+        f_type: Filter Type
+        not_flag: ''  or 'Not' to invert the filter
 
     """
     cmc_col: str
