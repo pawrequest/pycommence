@@ -1,4 +1,5 @@
 import importlib
+import logging
 import os
 import pathlib
 
@@ -53,6 +54,8 @@ def linkcode_resolve(domain, info):
         return None
     try:
         mod = importlib.import_module(info['module'])
+        logging.debug(f"Module {info['module']} imported successfully")
+
     except ImportError:
         return None
 
