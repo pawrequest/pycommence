@@ -36,7 +36,7 @@ class CmcFilter(BaseModel):
 
     Args:
         cmc_col: Column Name in Commence
-        condition: Filter Condition
+        condition (FilterConditionType): Filter Condition
         value: Filter Value
         f_type: Filter Type
         not_flag: ''  or 'Not' to invert the filter
