@@ -1,11 +1,11 @@
 project = 'Pycommence'
 author = 'PawRequest'
-release = '0.0.1'
+release = '0.1.1'
 copyright = f'2024, {author}'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
-    # 'sphinx_autodoc_typehints',
+    'sphinx_autodoc_typehints',
     'sphinx_rtd_dark_mode',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosectionlabel',
