@@ -12,6 +12,7 @@ extensions = [
 ]
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+autodoc_mock_imports = ["win32com", "pywintypes", "win32api", "win32con", "pywin32", "comtypes", "com_error"]
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
