@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycommence.wrapper.enums_cmc &mdash; Pycommence 0.1.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e6a37869" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/dark_mode_css/general.css?v=c0a7eb24" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/dark_mode_css/dark.css?v=70edf1c7" />
+
+  
+    <link rel="canonical" href="https://pycommence.readthedocs.io/en/latest/_modules/pycommence/wrapper/enums_cmc.html" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=a58bc63e"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+        <script src="../../../_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Pycommence
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pycommence_api.html">Pycommence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pycommence_wrapper.html">Commence Wrapper</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Pycommence</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../pycommence.html">pycommence</a></li>
+      <li class="breadcrumb-item active">pycommence.wrapper.enums_cmc</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycommence.wrapper.enums_cmc</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="CursorType">
+<a class="viewcode-back" href="../../../pycommence_wrapper.html#pycommence.wrapper.enums_cmc.CursorType">[docs]</a>
+<span class="k">class</span> <span class="nc">CursorType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Commence Cursor Types to view based on category, view, or preferences. &quot;&quot;&quot;</span>
+    <span class="c1"># open based on a category, columns = all supported fields in the category (in no particular order).</span>
+    <span class="n">CATEGORY</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Valid view-types: report, grid, report viewer, and book/address book.</span>
+    <span class="c1"># inherit the view&#39;s filter, sort, and column set.</span>
+    <span class="c1"># ICommenceCursor methods can be used to change these attributes.</span>
+    <span class="n">VIEW</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># All Pilot* cursor column-sets =  defined by the Commence preferences (in no particular order).</span>
+    <span class="c1"># It is not possible to change the filter, sort, or column set.</span>
+
+    <span class="c1"># Category and fields defined by Preferences-&gt; Other Apps -&gt; 3Com Pilot Address Book.</span>
+    <span class="n">PILOT_ADDRESS</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="c1"># Category and fields defined by Preferences-&gt; Other Apps -&gt; 3Com Pilot Memo Pad.</span>
+    <span class="n">PILOT_MEMO</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="c1"># Category and fields defined by Preferences -&gt; Other Apps -&gt; 3Com Pilot To Do List.</span>
+    <span class="n">PILOT_TODO</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="c1"># Category and fields defined by Preferences -&gt; Other Apps -&gt; 3Com Pilot Date Book.</span>
+    <span class="n">PILOT_APPOINT</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="c1"># MS Outlook contacts preference</span>
+    <span class="n">OUTLOOK_ADDRESS</span> <span class="o">=</span> <span class="mi">7</span>
+
+    <span class="c1"># MS Outlook calendar preference</span>
+    <span class="n">OUTLOOK_APPOINT</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="c1"># MS Outlook Email Log preference</span>
+    <span class="n">OUTLOOK_EMAIL_LOG</span> <span class="o">=</span> <span class="mi">9</span>
+
+    <span class="c1"># MS Outlook Task preference</span>
+    <span class="n">OUTLOOK_TASK</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="c1"># open based on the view data used with the Send Letter command</span>
+    <span class="n">LETTER_MERGE</span> <span class="o">=</span> <span class="mi">11</span></div>
+
+
+
+<div class="viewcode-block" id="Bookmark">
+<a class="viewcode-back" href="../../../pycommence_wrapper.html#pycommence.wrapper.enums_cmc.Bookmark">[docs]</a>
+<span class="k">class</span> <span class="nc">Bookmark</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Starting point for cursor seek operations.&quot;&quot;&quot;</span>
+    <span class="n">BEGINNING</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">CURRENT</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">END</span> <span class="o">=</span> <span class="mi">2</span></div>
+
+
+
+<div class="viewcode-block" id="OptionFlag">
+<a class="viewcode-back" href="../../../pycommence_wrapper.html#pycommence.wrapper.enums_cmc.OptionFlag">[docs]</a>
+<span class="k">class</span> <span class="nc">OptionFlag</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Flags for get_record and get_value methods.&quot;&quot;&quot;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">FIELD_NAME</span> <span class="o">=</span> <span class="mh">0x0001</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="mh">0x0002</span>
+    <span class="n">SHARED</span> <span class="o">=</span> <span class="mh">0x0004</span>
+    <span class="n">PILOT</span> <span class="o">=</span> <span class="mh">0x0008</span>
+    <span class="n">CANONICAL</span> <span class="o">=</span> <span class="mh">0x0010</span>
+    <span class="n">INTERNET</span> <span class="o">=</span> <span class="mh">0x0020</span></div>
+
+
+
+<span class="n">FLAGS_UNUSED</span> <span class="o">=</span> <span class="mi">0</span>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, PawRequest.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
