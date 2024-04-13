@@ -6,3 +6,4 @@ sphinx_rtd_dark_mode
 loguru
 pydantic
 -e .
+pycommence[dev]
