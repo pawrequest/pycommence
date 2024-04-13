@@ -10,7 +10,7 @@ dependencies = [
     "loguru",
     "pydantic",
 ]
-readme = "README.md"
+readme = "README.rst"
 requires-python = ">= 3.10"
 
 [project.optional-dependencies]
