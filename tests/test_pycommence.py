@@ -11,7 +11,7 @@ from pycommence import PyCommence
 @pytest.fixture
 def pycmc():
     """Get a Contact handler. Guarded against accidental use in non-Tutorial DB.
-    in actual use we would likely use :meth:`Pycommence.from_table_name('Contact')` instead."""
+    in actual use we would likely use `Pycommence.from_table_name('Contact')` instead."""
     csr = get_csr("Contact")
     if not csr.db_name == 'Tutorial':
         raise ValueError("Expected Tutorial DB")
