@@ -35,7 +35,7 @@ class CmcFilter(BaseModel):
     """Commence Filter
 
     Args:
-        cmc_col: Column Name in Commence
+        cmc_col: Commence Column Name
         condition: Filter Condition
         value: Filter Value
         f_type: Filter Type
