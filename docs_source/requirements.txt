@@ -1,4 +1,0 @@
-loguru
-pydantic
--e .
-pycommence[dev]
