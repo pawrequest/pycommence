@@ -1,5 +1,5 @@
-.. include:: shields.md
-    :parser: myst_parser.sphinx_
+.. |Documentation Badge| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
+   :target: https://pawrequest.github.io/pycommence/
 
 
 PyCommence Documentation

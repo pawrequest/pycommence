@@ -100,7 +100,8 @@
 .. _UIObj: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper._icommence.UIObj
 
 
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://pawrequest.github.io/pycommence/)
+.. |Documentation Badge| image:: https://img.shields.io/badge/docs-latest-brightgreen.svg
+   :target: https://pawrequest.github.io/pycommence/
 
 
 PyCommence Documentation

@@ -34,7 +34,7 @@ html_context = {
 }
 html_baseurl = 'https://pawrequest.github.io/pycommence/'
 readme_src_files = 'README.rst'
-readme_docs_url_type = 'html'
+readme_docs_url_type = 'code'
 add_module_names = False
 autodoc_default_options = {
     'exclude-members': 'model_config, model_fields, model_computed_fields',
