@@ -3,6 +3,5 @@ sphinx-autodoc-typehints
 sphinx-rtd-theme
 sphinx-readme
 sphinx_rtd_dark_mode
-pywin32
 loguru
 pydantic
