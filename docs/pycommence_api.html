@@ -204,7 +204,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>field_name</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Name of the field to query.</p></li>
 <li><p><strong>value</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – Value to filter by.</p></li>
-<li><p><strong>max_rtn</strong> – Maximum number of records to return. If more than this, raise CmcError.</p></li>
+<li><p><strong>max_rtn</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span>) – Maximum number of records to return. If more than this, raise CmcError.</p></li>
 <li><p><strong>empty</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'ignore'</span></code>, <code class="docutils literal notranslate"><span class="pre">'raise'</span></code>]</span>) – Action to take if no records are found. Options are ‘ignore’, ‘raise’.</p></li>
 </ul>
 </dd>
@@ -293,7 +293,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pk_val</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – The value for the primary key field.</p></li>
-<li><p><strong>package</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></span>) – A dictionary of field names and values to add to the record.</p></li>
+<li><p><strong>package</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span>) – A dictionary of field names and values to add to the record.</p></li>
 <li><p><strong>existing</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code>[<code class="docutils literal notranslate"><span class="pre">'replace'</span></code>, <code class="docutils literal notranslate"><span class="pre">'update'</span></code>, <code class="docutils literal notranslate"><span class="pre">'raise'</span></code>]</span>) – Action to take if the record already exists. Options are ‘replace’, ‘update’, ‘raise’.</p></li>
 </ul>
 </dd>
