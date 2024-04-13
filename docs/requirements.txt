@@ -3,4 +3,3 @@ sphinx-autodoc-typehints
 sphinx-rtd-theme
 sphinx-readme
 sphinx_rtd_dark_mode
-pycommence
