@@ -1,6 +1,6 @@
 sphinx
 sphinx-autodoc-typehints
-sphinx-autodoc
 sphinx-rtd-theme
 sphinx-readme
 sphinx_rtd_dark_mode
+pycommence
