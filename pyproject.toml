@@ -18,6 +18,7 @@ dev = [
     "sphinx",
     "sphinx-autodoc-typehints",
     "sphinx-rtd-theme",
+    "myst-parser",
     "sphinx-readme",
     "sphinx_rtd_dark_mode",
     'pytest',
@@ -36,6 +37,8 @@ dev-dependencies = [
     "sphinx-rtd-theme",
     "sphinx-readme",
     "sphinx_rtd_dark_mode",
+    "myst-parser",
+
 ]
 
 [tool.hatch.metadata]

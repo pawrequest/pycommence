@@ -1,3 +1,7 @@
+.. include:: shields.md
+    :parser: myst_parser.sphinx_
+
+
 PyCommence Documentation
 ============================
 

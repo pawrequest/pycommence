@@ -1,6 +1,8 @@
 Pycommence
 ==============
 
+PyCommence API
+-------------------------
 .. autoclass:: pycommence.PyCommence
 
 

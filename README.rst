@@ -80,24 +80,6 @@
 .. _OptionFlag: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper.enums_cmc.OptionFlag
 .. |PyCommence| replace:: ``PyCommence``
 .. _PyCommence: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence
-.. |PyCommence.add_record()| replace:: ``PyCommence.add_record()``
-.. _PyCommence.add_record(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.add_record
-.. |PyCommence.csr| replace:: ``PyCommence.csr``
-.. _PyCommence.csr: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.csr
-.. |PyCommence.delete_multiple()| replace:: ``PyCommence.delete_multiple()``
-.. _PyCommence.delete_multiple(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.delete_multiple
-.. |PyCommence.delete_record()| replace:: ``PyCommence.delete_record()``
-.. _PyCommence.delete_record(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.delete_record
-.. |PyCommence.edit_record()| replace:: ``PyCommence.edit_record()``
-.. _PyCommence.edit_record(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.edit_record
-.. |PyCommence.from_table_name()| replace:: ``PyCommence.from_table_name()``
-.. _PyCommence.from_table_name(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.from_table_name
-.. |PyCommence.one_record()| replace:: ``PyCommence.one_record()``
-.. _PyCommence.one_record(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.one_record
-.. |PyCommence.records()| replace:: ``PyCommence.records()``
-.. _PyCommence.records(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.records
-.. |PyCommence.records_by_field()| replace:: ``PyCommence.records_by_field()``
-.. _PyCommence.records_by_field(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.PyCommence.records_by_field
 .. |RowSetAdd| replace:: ``RowSetAdd``
 .. _RowSetAdd: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper.rowset.RowSetAdd
 .. |RowSetBase| replace:: ``RowSetBase``
@@ -118,22 +100,19 @@
 .. _UIObj: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper._icommence.UIObj
 
 
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://pawrequest.github.io/pycommence/)
+
+
 PyCommence Documentation
 ============================
 
 * `Pycommence <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * |PyCommence|_
+  * `PyCommence API <https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence-api>`_
 
-    * |PyCommence.csr|_
-    * |PyCommence.from_table_name()|_
-    * |PyCommence.records()|_
-    * |PyCommence.one_record()|_
-    * |PyCommence.records_by_field()|_
-    * |PyCommence.edit_record()|_
-    * |PyCommence.delete_record()|_
-    * |PyCommence.delete_multiple()|_
-    * |PyCommence.add_record()|_
+    * |PyCommence|_
+
+
 
   * `Cursor <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.cursor>`_
 

@@ -1,3 +1,4 @@
+import importlib
 import os
 import pathlib
 
@@ -9,7 +10,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.linkcode',
-    # 'myst_parser',
+    'myst_parser',
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.githubpages',
     'sphinx_autodoc_typehints',
@@ -45,30 +46,28 @@ autodoc_default_options = {
 repo_src = 'https://github.com/pawrequest/pycommence/blob/main/src'
 
 
-# def linkcode_resolve(domain, info):
-#     if domain != 'py':
-#         return None
-#     if not info['module']:
-#         return None
-#     filename = info['module'].replace('.', '/')
-#     return f"{repo_src}/{filename}.py"
 def linkcode_resolve(domain, info):
     if domain != 'py':
-        return None  # Only resolve links for Python domain
+        return None
     if not info['module']:
-        return None  # Ensure there's a module name available
+        return None
+    try:
+        mod = importlib.import_module(info['module'])
+    except ImportError:
+        return None
 
-    # Convert the module path to a GitHub path
     filename = info['module'].replace('.', '/')
-
-    # Determine the full path to check if it's a package or a module
-    # full_path = os.path.join(sys.path[0], 'src', 'pycommence', filename)
-    full_path = pathlib.Path(filename)
-
-    # Check if the path is a directory (indicating a package)
-    if full_path.is_dir():
-        # Append __init__.py for packages
-        return f"{repo_src}/{filename}/__init__.py"
+    if hasattr(mod, '__path__'):  # This attribute exists for packages
+        filename = f'{filename}/__init__.py'
     else:
-        # Append .py for regular modules
-        return f"{repo_src}/{filename}.py"
+        filename = f'{filename}.py'
+    return f'{repo_src}/{filename}'
+
+
+
+    # full_path = pathlib.Path(filename)
+    #
+    # if full_path.is_dir():
+    #     return f"{repo_src}/{filename}/__init__.py"
+    # else:
+    #     return f"{repo_src}/{filename}.py"
