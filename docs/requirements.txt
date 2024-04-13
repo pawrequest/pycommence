@@ -5,3 +5,4 @@ sphinx-readme
 sphinx_rtd_dark_mode
 loguru
 pydantic
+-e .
