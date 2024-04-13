@@ -6,8 +6,9 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from ..wrapper import conversation, cursor, enums_cmc
-from . import types_api
+from . import cmc_csr
+from ..api import pycommence_types
+from ..wrapper import conversation, enums_cmc
 
 
 class CmcConnection:
@@ -33,10 +34,10 @@ class CmcConnection:
                 self._cmc_com = Dispatch(commence_instance)
             except com_error as e:
                 if e.hresult == -2147221005:
-                    raise types_api.CmcError(
+                    raise pycommence_types.CmcError(
                         f'Db Name "{commence_instance}" does not exist - connection failed'
                     )
-                raise types_api.CmcError(
+                raise pycommence_types.CmcError(
                     f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
                 )
 
@@ -53,7 +54,7 @@ class Cmc(CmcConnection):
             name: str | None = None,
             mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
             flags: enums_cmc.OptionFlag | None = None
-    ) -> cursor.CsrCmc:
+    ) -> cmc_csr.CsrCmc:
         """
         Create a cursor object for accessing Commence data.
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -93,9 +94,9 @@ class Cmc(CmcConnection):
                     f'Mode {mode} ("{enums_cmc.CursorType(mode).name}") requires name param to be set'
                 )
         try:
-            csr = cursor.CsrCmc(self._cmc_com.GetCursor(mode, name, flags))
+            csr = cmc_csr.CsrCmc(self._cmc_com.GetCursor(mode, name, flags))
         except com_error as e:
-            raise types_api.CmcError(f'Error creating cursor for {name}: {e}')
+            raise pycommence_types.CmcError(f'Error creating cursor for {name}: {e}')
 
         return csr
         # todo non-standard modes

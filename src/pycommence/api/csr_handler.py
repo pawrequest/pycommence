@@ -2,18 +2,21 @@ import typing as _t
 
 import pydantic as _p
 
-from pycommence.api import csr_api, types_api
+from pycommence.api import cursor, pycommence_types
 
 
 class CmcHandler(_p.BaseModel):
-    """Handle Cursor operations to get, edit, delete and add records
-
-    """
+    """Handle Cursor operations to get, edit, delete and add records."""
     csr: csr_api.Csr
 
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,
     )
+
+    @classmethod
+    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'CmcHandler':
+        """Create a CmcHandler from a table name."""
+        return cls(csr=csr_api.get_csr(table_name, cmc_name))
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:
         """Return all records from the cursor."""
@@ -92,10 +95,36 @@ class CmcHandler(_p.BaseModel):
         with self.csr.temporary_filter_pk(pk_val, empty=empty):  # noqa: PyArgumentList
             if self.csr.row_count == 0 and empty == 'ignore':
                 return
-            row_set = self.csr.get_delete_rowset()
+            row_set = self.csr.get_delete_rowset(1)
             row_set.delete_row(0)
             res = row_set.commit()
             return res
+
+    def delete_multiple(
+            self,
+            *,
+            pk_vals: list[str],
+            max_delete: int | None = 1,
+            empty: types_api.EmptyKind = 'raise'
+    ):
+        """
+        Delete multiple records.
+
+        Args:
+            pk_vals (list): A list of primary key values.
+            empty (str): Action to take if a record is not found. Options are 'ignore', 'raise'.
+            max_delete (int): Maximum number of records to delete. If less than the number of records to delete, raise CmcError. Set None to disabl safety check
+
+        Returns:
+            bool: True on success
+
+        """
+        if max_delete and len(pk_vals) > max_delete:
+            raise types_api.CmcError(
+                f'max_delete ({max_delete}) is less than the number of records to delete ({len(pk_vals)})'
+            )
+        for pk_val in pk_vals:
+            self.delete_record(pk_val, empty=empty)
 
     def add_record(
             self,

@@ -6,16 +6,15 @@ from functools import cached_property
 
 from loguru import logger
 
-from . import db_api
-from .types_api import CmcError, CmcFilter, Connection, FilterArray
-from pycommence.wrapper import cursor, rowset
+from .pycommence_types import CmcError, CmcFilter, Connection, FilterArray
+from pycommence.wrapper import rowset, cmc_db, cmc_csr
 
 EmptyKind = _t.Literal['ignore', 'raise']
 
 
 @contextlib.contextmanager
 def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
-    """Context manager for :class:`Csr`."""
+    """Context manager for :class:`Csr`. pywincom handles teardown afaik, so this is a redundant placeholder."""
     try:
         csr_api = get_csr(table_name, cmc_name)
         yield csr_api
@@ -27,7 +26,7 @@ def get_csr(table_name, cmc_instance: str = 'Commence.DB') -> Csr:
     """Get Csr via (cached) :class:`.db_api.Cmc` instance.
 
     """
-    cmc = db_api.Cmc(cmc_instance)
+    cmc = cmc_db.Cmc(cmc_instance)
     csr_cmc = cmc.get_cursor(table_name)
     csr_api = Csr(csr_cmc, db_name=cmc.name)
     return csr_api
@@ -39,7 +38,7 @@ class Csr:
     Provides access to rowsets and filter methods
     """
 
-    def __init__(self, csr_cmc: cursor.CsrCmc, db_name: str):
+    def __init__(self, csr_cmc: cmc_csr.CsrCmc, db_name: str):
         self._cursor_cmc = csr_cmc
         self.db_name = db_name
 

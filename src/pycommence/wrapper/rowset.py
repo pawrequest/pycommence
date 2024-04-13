@@ -7,7 +7,7 @@ from typing import TypeAlias
 from . import enums_cmc
 
 if typing.TYPE_CHECKING:
-    from .cursor import CsrCmc
+    from .cmc_csr import CsrCmc
 from ._icommence import (
     ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet,
     ICommenceQueryRowSet,
