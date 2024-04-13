@@ -14,7 +14,7 @@ class PyCommence(_p.BaseModel):
     Examples:
         >>> pycmc = PyCommence.from_table_name('Contact')
         >>> pycmc.records()
-        [{'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
+        [{'firstName': 'Jeff', 'lastName': 'Smith', .... }]
         >>> pycmc.one_record('Jeff')
         {'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
         >>> pycmc.records_by_field('firstName', 'Jeff')
