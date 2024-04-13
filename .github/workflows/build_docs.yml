@@ -1,4 +1,4 @@
-name: Build Documentation
+name: Build and Deploy Documentation
 
 on:
   push:
@@ -11,14 +11,11 @@ on:
 jobs:
   build-docs:
     runs-on: windows-latest
-
-
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
-
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,17 +33,8 @@ jobs:
           cd docs_source
           sphinx-build -b html . ../docs  
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: documentation
-          path: docs/
-
-
       - name: Deploy to GitHub Pages
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add -f docs/
-          git commit -m "Deploy updated documentation" -a  
-          git push
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
