@@ -1,9 +1,3 @@
-"""Main module for the PyCommence package.
-
-The PyCommence class is the main interface for interacting with Commence databases.
-PyCommence can be instantiated with a table name to create a managed connection to the Commence Api, and cursors for operating on the DB
-
-"""
 import typing as _t
 
 import pydantic as _p
@@ -12,10 +6,10 @@ from . import cursor, pycmc_types
 
 
 class PyCommence(_p.BaseModel):
-    """Handle cursors and their operations to get, edit, delete and add records.
+    """Main interface for handling cursors and their operations to get, edit, delete and add records in a Commence Table.
 
     Args:
-        csr: A cursor.Csr object.
+        csr: A cursor.Csr object best obtained via from_table_name classmethod.
 
     """
     csr: cursor.Csr
