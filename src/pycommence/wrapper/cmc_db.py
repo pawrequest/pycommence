@@ -11,7 +11,7 @@ from . import conversation, enums_cmc, cmc_csr
 
 
 class CmcConnection:
-    """Base Class for caching multiple Commence connections by overriding  __new__."""
+    """Base Class to cache multiple Commence connections by overriding  __new__."""
     connections = {}
 
     def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
