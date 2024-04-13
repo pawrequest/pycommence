@@ -11,6 +11,8 @@ on:
 jobs:
   build-docs:
     runs-on: windows-latest
+    environment: github-pages
+
 
     steps:
       - uses: actions/checkout@v3
