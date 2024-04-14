@@ -1,4 +1,4 @@
-Pycommence API test
+Pycommence API
 =====================
 
 PyCommence Object
