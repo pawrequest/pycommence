@@ -18,5 +18,7 @@ PyCommence is built atop :mod:`pycommence.wrapper._icommence` - a makepy generat
     cmc_api
 
 
+Index
+-----------
 
 * :ref:`modindex`
