@@ -11,17 +11,11 @@ from pydantic import BaseModel, Field, model_validator
 
 FilterConditionType = Literal['Equal To', 'Contains', 'After']
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
-
 NotFlagType = Literal['Not', '']
 
 
 class FilterArray(BaseModel):
-    """Array of Cursor Filters.
-
-    Args:
-        filters (dict[int, CmcFilter]): Filters by Slot
-
-    """
+    """ Array of Cursor Filters. """
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
 
     def add_replace_filters(self, *filters: CmcFilter):
@@ -32,20 +26,11 @@ class FilterArray(BaseModel):
 
 
 class CmcFilter(BaseModel):
-    """Commence Filter
-
-    Args:
-        cmc_col: Column Name in Commence
-        condition (FilterConditionType): Filter Condition
-        value: Filter Value
-        f_type: Filter Type
-        not_flag: ''  or 'Not' to invert the filter
-
-    """
+    """Cursor Filter."""
     cmc_col: str
-    condition: FilterConditionType = 'Equal To'
-    value: str = ''
     f_type: FilterType = 'F'
+    value: str = ''
+    condition: FilterConditionType = 'Equal To'
     not_flag: NotFlagType = ''
 
     @model_validator(mode='after')

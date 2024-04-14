@@ -12,18 +12,13 @@ class PyCommence(_p.BaseModel):
     High-level abstraction for managing records in a Commence database table,
     including creating, reading, updating, and deleting records.
 
-    Args:
-        csr: A :class:`cursor.Csr` object, best obtained via the `from_table_name` class method.
-
     Examples:
-        Establish context
+        Establish context and initialize PyCommence object
 
         >>> JEFF_KEY = 'JeffJones'
         >>> GEOFF_KEY = 'GeoffSmith'
         >>> GEOFF_DICT = {'firstName': 'Geoff', 'lastName': 'Smith', 'email': 'geoff@example.com'}
         >>> UPDATE_PKG = {'email': 'geoff.updated@example.com'}
-
-        Instantiate a PyCommence object from table name
 
         >>> cmc = PyCommence.from_table_name('Contact')
 
@@ -60,7 +55,7 @@ class PyCommence(_p.BaseModel):
         True
 
     """
-    csr: cursor.Csr
+    csr: cursor.Csr  # Obtained from cursor.get_csr, or via PyCommence.from_table_name
 
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,

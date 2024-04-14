@@ -18,7 +18,7 @@ PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated 
 
 * `PyCommence Api <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence-object>`_
+  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
 
 
   * `Cursor <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.cursor>`_

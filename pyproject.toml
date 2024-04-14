@@ -15,6 +15,7 @@ requires-python = ">= 3.10"
 
 [project.optional-dependencies]
 dev = [
+    'autodoc_pydantic',
     "sphinx",
     "sphinx-autodoc-typehints",
     "sphinx-rtd-theme",

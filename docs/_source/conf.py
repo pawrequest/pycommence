@@ -19,6 +19,7 @@ extensions = [
     'sphinx_autodoc_typehints',
     'sphinx_readme',
     'sphinx_rtd_dark_mode',
+    'sphinxcontrib.autodoc_pydantic',
 ]
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -47,6 +48,7 @@ autodoc_default_options = {
 }
 
 repo_src = 'https://github.com/pawrequest/pycommence/blob/main/src'
+autodoc_pydantic_model_show_json = False
 
 
 # def linkcode_resolve(domain, info):
