@@ -33,7 +33,7 @@ html_context = {
     "github_user": "PawRequest",
     "github_repo": "pycommence",
     "github_version": "main",
-    "conf_py_path": "/docs_source/",
+    "conf_py_path": "/docs/_source/",
 }
 html_baseurl = 'https://pawrequest.github.io/pycommence/'
 readme_src_files = 'index.rst'
