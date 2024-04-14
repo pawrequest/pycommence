@@ -26,18 +26,30 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[dev]
 
-      - name: Build Sphinx Documentation
-        run: |
-          sphinx-build -E -a -b html ./docs_source/ ./build/html
+      - name: sphinx-build
+        run: make html
 
-#      - name: Rename README.html to index.html
-#        run: |
-#          cp ./build/html/README.html ./build/html/index.html
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
         with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./build/html
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
+#
+#      - name: Build Sphinx Documentation
+#        run: |
+#          sphinx-build -b html ./docs/_source/ ./docs/_build/html
+#
+##      - name: Rename README.html to index.html
+##        run: |
+##          cp ./build/html/README.html ./build/html/index.html
+#
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v4
+#        if: github.ref == 'refs/heads/main'
+#        with:
+##          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+#          publish_dir: ./build/html
+
+
