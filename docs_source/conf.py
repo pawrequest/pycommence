@@ -1,10 +1,9 @@
-import importlib
-import logging
-import os
-import pkgutil
 import sys
+import inspect
+import pathlib
 
-sys.path.insert(0, os.path.abspath('../src/pycommence'))
+from loguru import logger
+
 project = 'PyCommence'
 author = 'PawRequest'
 release = '0.1.1'
@@ -58,24 +57,56 @@ repo_src = 'https://github.com/pawrequest/pycommence/blob/main/src'
 #     filename = info['module'].replace('.', '/')
 #     url = f'{repo_src}/{filename}.py'
 #     return url
+
+
 def linkcode_resolve(domain, info):
-    if domain != 'py':
-        return None
-    if not info['module']:
+    if domain != 'py' or not info['module']:
         return None
 
+    modname = info['module']
+    fullname = info['fullname']
+    topname = modname.split('.')[0]
+    logger.info(f'modname: {modname}')
+    logger.info(f'fullname: {fullname}')
+    logger.info(f'topname: {topname}')
 
-    # Check if the module is a package
-    loader = pkgutil.get_loader(info['module'])
-    if loader is not None and hasattr(loader, 'get_filename'):
-        path = loader.get_filename(info['module'])
-        if path.endswith('__init__.py'):
-            # filename = info['module'].replace('.', '/') + '/__init__.py'
-            filename = info['module'].replace('.', '/') + '.py'
-            ...
-        else:
-            filename = info['module'].replace('.', '/') + '.py'
-    else:
-        return None  # Unable to resolve the path or loader not found
+    topmod = sys.modules.get(topname)
 
-    return f'{repo_src}/{filename}'
+    # Get the module object
+    submod = sys.modules.get(modname)
+    if submod is None:
+        return None
+
+    # Resolve the object from its fullname
+    obj = submod
+    for part in fullname.split('.'):
+        try:
+            obj = getattr(obj, part)
+        except AttributeError:
+            return None
+
+    # Find the source file and adjust path as necessary
+    try:
+        source_file = inspect.getsourcefile(obj)
+        if source_file is None:
+            return None
+        # Ensure the use of forward slashes
+        rel_path = pathlib.Path(source_file).relative_to(
+            pathlib.Path(topmod.__file__).parent
+        ).as_posix()
+        logger.info(f'rel_path: {rel_path}')
+    except Exception as e:
+        return None
+
+    # Determine line numbers for hyperlinking specific lines
+    try:
+        source, lineno = inspect.getsourcelines(obj)
+        linestart = lineno
+        linestop = lineno + len(source) - 1
+    except OSError:
+        return None
+
+    res = f"{repo_src}/{modname.replace('.', r'/')}.py#L{linestart}-L{linestop}"
+    # res = f"{repo_src}/{rel_path}#L{linestart}-L{linestop}"
+    logger.info(f'res: {res}')
+    return res
