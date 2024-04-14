@@ -1,7 +1,7 @@
-Pycommence
+Pycommence api
 =====================
 
-PyCmc Object
+PyCommence Object
 -------------------------
 .. autoclass:: pycommence.__init__.PyCmc
 
