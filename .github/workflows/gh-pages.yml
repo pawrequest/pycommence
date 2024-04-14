@@ -14,6 +14,9 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v4
+      - uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,18 +29,35 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[dev]
 
-      - name: Build Sphinx Documentation
+      - name: Commit documentation changes
         run: |
-          sphinx-build -E -a -b html ./docs_source/ ./build/html
-
-#      - name: Rename README.html to index.html
-#        run: |
-#          cp ./build/html/README.html ./build/html/index.html
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        if: github.ref == 'refs/heads/main'
+          git clone https://github.com/pawrequest/pycommence.git --branch gh-pages --single-branch gh-pages
+          cp -r docs/_build/html/* gh-pages/
+          cd gh-pages
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update documentation" -a || true
+          # The above command will fail if no changes were present, so we ignore
+          # the return code.
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./build/html
+          branch: gh-pages
+          directory: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+#      - uses: actions/upload-artifact@v4
+#        with:
+#          name: DocumentationHTML
+#          path: docs/_build/html/
+#
+#
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v4
+#        if: github.ref == 'refs/heads/main'
+#        with:
+##          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+#          publish_dir: ./build/html
