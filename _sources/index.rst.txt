@@ -1,4 +1,4 @@
-PyCommence - Commence RM for Python
+PyCommence - Python OOP for Commence RM
 ====================================================
 
 .. toctree::

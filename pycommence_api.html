@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pycommence API &mdash; PyCommence 0.1.1 documentation</title>
+  <title>Pycommence &mdash; PyCommence 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e6a37869" />
@@ -28,7 +28,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Commence Wrapper" href="pycommence_wrapper.html" />
-    <link rel="prev" title="PyCommence - Commence RM for Python" href="index.html" /> 
+    <link rel="prev" title="PyCommence - Python OOP for Commence RM" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,18 +51,18 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Pycommence API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-pycommence.__init__">PyCommence Object</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pycommence.__init__.PyCommence"><code class="docutils literal notranslate"><span class="pre">PyCommence</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.csr"><code class="docutils literal notranslate"><span class="pre">PyCommence.csr</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.from_table_name"><code class="docutils literal notranslate"><span class="pre">PyCommence.from_table_name()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.records"><code class="docutils literal notranslate"><span class="pre">PyCommence.records()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.one_record"><code class="docutils literal notranslate"><span class="pre">PyCommence.one_record()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.records_by_field"><code class="docutils literal notranslate"><span class="pre">PyCommence.records_by_field()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.edit_record"><code class="docutils literal notranslate"><span class="pre">PyCommence.edit_record()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.delete_record"><code class="docutils literal notranslate"><span class="pre">PyCommence.delete_record()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.delete_multiple"><code class="docutils literal notranslate"><span class="pre">PyCommence.delete_multiple()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCommence.add_record"><code class="docutils literal notranslate"><span class="pre">PyCommence.add_record()</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Pycommence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pycmc-object">PyCmc Object</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.__init__.PyCmc"><code class="docutils literal notranslate"><span class="pre">PyCmc</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.csr"><code class="docutils literal notranslate"><span class="pre">PyCmc.csr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.from_table_name"><code class="docutils literal notranslate"><span class="pre">PyCmc.from_table_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.records"><code class="docutils literal notranslate"><span class="pre">PyCmc.records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.one_record"><code class="docutils literal notranslate"><span class="pre">PyCmc.one_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.records_by_field"><code class="docutils literal notranslate"><span class="pre">PyCmc.records_by_field()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.edit_record"><code class="docutils literal notranslate"><span class="pre">PyCmc.edit_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.delete_record"><code class="docutils literal notranslate"><span class="pre">PyCmc.delete_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.delete_multiple"><code class="docutils literal notranslate"><span class="pre">PyCmc.delete_multiple()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.__init__.PyCmc.add_record"><code class="docutils literal notranslate"><span class="pre">PyCmc.add_record()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -140,7 +140,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Pycommence API</li>
+      <li class="breadcrumb-item active">Pycommence</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/PawRequest/pycommence/blob/main/docs/_source/pycommence_api.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -150,15 +150,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="pycommence-api">
-<h1>Pycommence API<a class="headerlink" href="#pycommence-api" title="Link to this heading"></a></h1>
-<section id="module-pycommence.__init__">
-<span id="pycommence-object"></span><h2>PyCommence Object<a class="headerlink" href="#module-pycommence.__init__" title="Link to this heading"></a></h2>
+  <section id="pycommence">
+<h1>Pycommence<a class="headerlink" href="#pycommence" title="Link to this heading"></a></h1>
+<section id="pycmc-object">
+<h2>PyCmc Object<a class="headerlink" href="#pycmc-object" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PyCommence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L8-L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PyCmc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L8-L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc" title="Link to this definition"></a></dt>
 <dd><p>Main interface for interacting with Commence.</p>
-<p>This class provides a high-level interface for managing records in a Commence database table,
+<p>High-level abstraction for managing records in a Commence database table,
 including creating, reading, updating, and deleting records.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -174,7 +174,7 @@ including creating, reading, updating, and deleting records.</p>
 </pre></div>
 </div>
 <p>Instantiate a PyCommence object from table name</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmc</span> <span class="o">=</span> <span class="n">PyCommence</span><span class="o">.</span><span class="n">from_table_name</span><span class="p">(</span><span class="s1">&#39;Contact&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cmc</span> <span class="o">=</span> <span class="n">PyCmc</span><span class="o">.</span><span class="n">from_table_name</span><span class="p">(</span><span class="s1">&#39;Contact&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Get all records in the cursor</p>
@@ -210,23 +210,23 @@ including creating, reading, updating, and deleting records.</p>
 </pre></div>
 </div>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.csr">
-<span class="sig-name descname"><span class="pre">csr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pycommence.cursor.Csr" title="pycommence.cursor.Csr"><code class="xref py py-class docutils literal notranslate"><span class="pre">Csr</span></code></a></em><a class="headerlink" href="#pycommence.__init__.PyCommence.csr" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.csr">
+<span class="sig-name descname"><span class="pre">csr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pycommence.cursor.Csr" title="pycommence.cursor.Csr"><code class="xref py py-class docutils literal notranslate"><span class="pre">Csr</span></code></a></em><a class="headerlink" href="#pycommence.__init__.PyCmc.csr" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.from_table_name">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_table_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmc_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence.DB'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L69-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.from_table_name" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.from_table_name">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_table_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmc_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence.DB'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L69-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.from_table_name" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pycommence.__init__.PyCommence" title="pycommence.__init__.PyCommence"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyCommence</span></code></a></span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#pycommence.__init__.PyCmc" title="pycommence.__init__.PyCmc"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyCmc</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.records">
-<span class="sig-name descname"><span class="pre">records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L73-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.records" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.records">
+<span class="sig-name descname"><span class="pre">records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L73-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.records" title="Link to this definition"></a></dt>
 <dd><p>Return all or first <cite>count</cite> records from the cursor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -236,8 +236,8 @@ including creating, reading, updating, and deleting records.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.one_record">
-<span class="sig-name descname"><span class="pre">one_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L79-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.one_record" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.one_record">
+<span class="sig-name descname"><span class="pre">one_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L79-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.one_record" title="Link to this definition"></a></dt>
 <dd><p>Return a single record from the cursor by primary key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -247,8 +247,8 @@ including creating, reading, updating, and deleting records.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.records_by_field">
-<span class="sig-name descname"><span class="pre">records_by_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_rtn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L84-L114"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.records_by_field" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.records_by_field">
+<span class="sig-name descname"><span class="pre">records_by_field</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_rtn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L84-L114"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.records_by_field" title="Link to this definition"></a></dt>
 <dd><p>Get records from the cursor by field name and value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -276,8 +276,8 @@ including creating, reading, updating, and deleting records.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.edit_record">
-<span class="sig-name descname"><span class="pre">edit_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L116-L135"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.edit_record" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.edit_record">
+<span class="sig-name descname"><span class="pre">edit_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L116-L135"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.edit_record" title="Link to this definition"></a></dt>
 <dd><p>Modify a record.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -296,8 +296,8 @@ including creating, reading, updating, and deleting records.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.delete_record">
-<span class="sig-name descname"><span class="pre">delete_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L137-L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.delete_record" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.delete_record">
+<span class="sig-name descname"><span class="pre">delete_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L137-L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.delete_record" title="Link to this definition"></a></dt>
 <dd><p>Delete a record.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -316,8 +316,8 @@ including creating, reading, updating, and deleting records.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.delete_multiple">
-<span class="sig-name descname"><span class="pre">delete_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L157-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.delete_multiple" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.delete_multiple">
+<span class="sig-name descname"><span class="pre">delete_multiple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk_vals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_delete</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L157-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.delete_multiple" title="Link to this definition"></a></dt>
 <dd><p>Delete multiple records.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -337,8 +337,8 @@ including creating, reading, updating, and deleting records.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.__init__.PyCommence.add_record">
-<span class="sig-name descname"><span class="pre">add_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L183-L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCommence.add_record" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.__init__.PyCmc.add_record">
+<span class="sig-name descname"><span class="pre">add_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">package</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">existing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/__init__.py#L183-L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.__init__.PyCmc.add_record" title="Link to this definition"></a></dt>
 <dd><p>Add a record.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -741,7 +741,7 @@ Value must be set when condition is ‘Contains’ or ‘Equal To’</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="PyCommence - Commence RM for Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="PyCommence - Python OOP for Commence RM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pycommence_wrapper.html" class="btn btn-neutral float-right" title="Commence Wrapper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
