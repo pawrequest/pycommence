@@ -8,6 +8,7 @@ DB Wrapper
 -------------------------
 
 .. automodule:: pycommence.wrapper.cmc_db
+    :private-members:
 
 Cursor Wrapper
 -------------------------
