@@ -7,16 +7,18 @@
 PyCommence - Python vs Commence RM
 ====================================================
 
-Commence RM is a powerful and flexible database application for customer relationship management, but it is decidedly dated, and its API is not very user-friendly.
+`Commence RM <https://commence.com/information-for-customers-81/>`_ is a powerful and flexible database application for customer relationship management, but it is decidedly dated, and its API is not very user-friendly.
 
-This package wraps the Commence RM API to make it easier to use - a complete installation of Commence is required.
+Commence Designer Edition is a particuarly cranky beast that demands super-brittle VBS and DDE approaches to integration and offers little support for modern tooling.
+
+This package wraps the Commence API in a python interface for convenience; a complete installation of Commence is required.
 
 PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated Com-Object wrapper, via the `win32com` package.
 
 
-* `Public Api <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
+* `PyCommence Api <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence-object>`_
+  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
 
 
   * `Cursor <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.cursor>`_
@@ -47,10 +49,14 @@ PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated 
 
 
 
+* `Commence RM API <https://pawrequest.github.io/pycommence/cmc_api.html>`_
 
-    |
+  |
 
 
 
+
+Index
+-----------
 
 * |.modindex|_

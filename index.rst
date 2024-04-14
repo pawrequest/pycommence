@@ -56,5 +56,7 @@ PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated 
 
 
 
+Index
+-----------
 
 * |.modindex|_
