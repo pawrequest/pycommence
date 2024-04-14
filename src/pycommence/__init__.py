@@ -5,11 +5,11 @@ import pydantic as _p
 from . import cursor, pycmc_types
 
 
-class PyCommence(_p.BaseModel):
+class PyCmc(_p.BaseModel):
     """
     Main interface for interacting with Commence.
 
-    This class provides a high-level interface for managing records in a Commence database table,
+    High-level abstraction for managing records in a Commence database table,
     including creating, reading, updating, and deleting records.
 
     Args:
@@ -25,7 +25,7 @@ class PyCommence(_p.BaseModel):
 
         Instantiate a PyCommence object from table name
 
-        >>> cmc = PyCommence.from_table_name('Contact')
+        >>> cmc = PyCmc.from_table_name('Contact')
 
         Get all records in the cursor
 
@@ -67,7 +67,7 @@ class PyCommence(_p.BaseModel):
     )
 
     @classmethod
-    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
+    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCmc':
         return cls(csr=cursor.get_csr(table_name, cmc_name))
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:

@@ -5,9 +5,9 @@
 PyCommence - Commence RM for Python
 ====================================================
 
-* `Pycommence API <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
+* `Pycommence <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
+  * `PyCommence <https://pawrequest.github.io/pycommence/pycommence_api.html#id1>`_
 
 
   * `Cursor <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.cursor>`_

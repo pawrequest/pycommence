@@ -5,7 +5,7 @@ import pytest
 from pycommence.cursor import get_csr
 from .conftest import GEOFF_DICT, GEOFF_KEY, JEFF_KEY, UPDATE_PKG_1
 from pycommence.pycmc_types import CmcError
-from pycommence import PyCommence
+from pycommence import PyCmc
 
 
 @pytest.fixture
@@ -15,15 +15,15 @@ def pycmc():
     csr = get_csr("Contact")
     if not csr.db_name == 'Tutorial':
         raise ValueError("Expected Tutorial DB")
-    yield PyCommence(csr=csr)
+    yield PyCmc(csr=csr)
 
 
 def test_pycmc(pycmc):
-    assert isinstance(pycmc, PyCommence)
+    assert isinstance(pycmc, PyCmc)
 
 
 @contextlib.contextmanager
-def temp_geoff(pycmc: PyCommence):
+def temp_geoff(pycmc: PyCmc):
     """Temporarily add GEOFF_DICT to Contact table. Remove after use."""
     try:
         pycmc.add_record(pk_val=GEOFF_KEY, package=GEOFF_DICT)
@@ -43,26 +43,26 @@ def test_temp_geoff(pycmc):
         pycmc.one_record(GEOFF_KEY)
 
 
-def test_get_records(pycmc: PyCommence):
+def test_get_records(pycmc: PyCmc):
     res = pycmc.records()
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
 
 
-def test_get_one_record(pycmc: PyCommence):
+def test_get_one_record(pycmc: PyCmc):
     res = pycmc.one_record(JEFF_KEY)
     assert isinstance(res, dict)
     assert res['firstName'] == 'Jeff'
 
 
-def test_get_records_by_field(pycmc: PyCommence):
+def test_get_records_by_field(pycmc: PyCmc):
     res = pycmc.records_by_field('firstName', 'Jeff')
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
     assert res[0]['firstName'] == 'Jeff'
 
 
-def test_edit_record(pycmc: PyCommence):
+def test_edit_record(pycmc: PyCmc):
     with temp_geoff(pycmc):
         original = pycmc.one_record(GEOFF_KEY)
 
@@ -76,13 +76,13 @@ def test_edit_record(pycmc: PyCommence):
         assert reverted == original
 
 
-def test_add_record(pycmc: PyCommence):
+def test_add_record(pycmc: PyCmc):
     row_count1 = pycmc.csr.row_count
     with temp_geoff(pycmc):
         row_count2 = pycmc.csr.row_count
         assert row_count2 == row_count1 + 1
 
-        handler2 = PyCommence.from_table_name('Contact')
+        handler2 = PyCmc.from_table_name('Contact')
         res = handler2.one_record(GEOFF_KEY)
         assert len(res) == 61  # 61 fields in Contact
         for k, v in GEOFF_DICT.items():
@@ -92,13 +92,13 @@ def test_add_record(pycmc: PyCommence):
     assert row_count3 == row_count1
 
 
-def test_add_duplicate_raises(pycmc: PyCommence):
+def test_add_duplicate_raises(pycmc: PyCmc):
     with temp_geoff(pycmc):
         with pytest.raises(CmcError):
             pycmc.add_record(pk_val=GEOFF_KEY, package=GEOFF_DICT)
 
 
-def test_add_replace(pycmc: PyCommence):
+def test_add_replace(pycmc: PyCmc):
     with temp_geoff(pycmc):
         pycmc.add_record(pk_val=GEOFF_KEY, package=UPDATE_PKG_1, existing='replace')
         res = pycmc.one_record(GEOFF_KEY)
@@ -106,7 +106,7 @@ def test_add_replace(pycmc: PyCommence):
             assert res[k] == v
 
 
-def test_add_update(pycmc: PyCommence):
+def test_add_update(pycmc: PyCmc):
     with temp_geoff(pycmc):
         pycmc.add_record(pk_val=GEOFF_KEY, package=UPDATE_PKG_1, existing='update')
         res = pycmc.one_record(GEOFF_KEY)
