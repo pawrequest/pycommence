@@ -1,13 +1,9 @@
-.. |.genindex| replace:: Index
-.. _.genindex: https://pawrequest.github.io/pycommence/genindex.html
 .. |.modindex| replace:: Module Index
 .. _.modindex: https://pawrequest.github.io/pycommence/py-modindex.html
-.. |.search| replace:: Search Page
-.. _.search: https://pawrequest.github.io/pycommence/search.html
 
 
-PyCommence Documentation
-============================
+PyCommence - Commence RM for Python
+====================================================
 
 * `Pycommence API <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
@@ -51,6 +47,4 @@ PyCommence Documentation
 Indices and tables
 ==================
 
-* |.genindex|_
 * |.modindex|_
-* |.search|_

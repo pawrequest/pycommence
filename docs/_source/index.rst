@@ -1,5 +1,5 @@
-PyCommence Documentation
-============================
+PyCommence - Commence RM for Python
+====================================================
 
 .. toctree::
     :maxdepth: 2
@@ -11,6 +11,4 @@ PyCommence Documentation
 Indices and tables
 ==================
 
-* :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

@@ -6,26 +6,57 @@ from . import cursor, pycmc_types
 
 
 class PyCommence(_p.BaseModel):
-    """Main interface for handling cursors and their operations to get, edit, delete and add records to a Commence Table.
+    """
+    Main interface for interacting with Commence.
+
+    This class provides a high-level interface for managing records in a Commence database table,
+    including creating, reading, updating, and deleting records.
 
     Args:
-        csr: A cursor.Csr object best obtained via from_table_name classmethod.
+        csr: A :class:`cursor.Csr` object, best obtained via the `from_table_name` class method.
 
     Examples:
-        >>> pycmc = PyCommence.from_table_name('Contact')
-        >>> pycmc.records()
-        [{'firstName': 'Jeff', 'lastName': 'Smith', .... }]
-        >>> pycmc.one_record('Jeff')
-        {'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
-        >>> pycmc.records_by_field('firstName', 'Jeff')
-        [{'firstName': 'Jeff', 'lastName': 'Smith', 'email': '
-        >>> pycmc.edit_record('Jeff', {'firstName': 'Geoff'})
+        Establish context
+
+        >>> JEFF_KEY = 'JeffJones'
+        >>> GEOFF_KEY = 'GeoffSmith'
+        >>> GEOFF_DICT = {'firstName': 'Geoff', 'lastName': 'Smith', 'email': 'geoff@example.com'}
+        >>> UPDATE_PKG = {'email': 'geoff.updated@example.com'}
+
+        Instantiate a PyCommence object from table name
+
+        >>> cmc = PyCommence.from_table_name('Contact')
+
+        Get all records in the cursor
+
+        >>> records = cmc.records()
+        >>> print(records)
+        [{'firstName': 'Jeff', 'lastName': 'Jones', ...}, {...}]
+
+        Get a single record by primary key
+
+        >>> print(cmc.one_record(JEFF_KEY))
+        {'firstName': 'Jeff', 'lastName': 'Jones', 'email': 'jeff@example.com'}
+
+        Add a new record
+
+        >>> cmc.add_record(pk_val=GEOFF_KEY, package=GEOFF_DICT)
         True
-        >>> pycmc.one_record('Geoff')
-        {'firstName': 'Geoff', 'lastName': 'Smith', 'email': '
-        >>> pycmc.delete_record('Geoff')
+
+        Modify a record
+
+        >>> cmc.edit_record(pk_val=GEOFF_KEY, package=UPDATE_PKG)
         True
-        >>> pycmc.add_record('Geoff', {'firstName': 'Geoff', 'lastName': 'Smith')
+
+        Verify the updated record
+
+        >>> updated_geoff = cmc.one_record(GEOFF_KEY)
+        >>> print(updated_geoff['email'])
+        'geoff.updated@example.com'
+
+        Delete a record
+
+        >>> cmc.delete_record(pk_val=GEOFF_KEY)
         True
 
     """
