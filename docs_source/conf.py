@@ -4,8 +4,8 @@ import os
 import pkgutil
 import sys
 
-sys.path.insert(0, os.path.abspath('../src'))
-project = 'Pycommence'
+sys.path.insert(0, os.path.abspath('../src/pycommence'))
+project = 'PyCommence'
 author = 'PawRequest'
 release = '0.1.1'
 copyright = f'2024, {author}'
@@ -37,7 +37,7 @@ html_context = {
 }
 html_baseurl = 'https://pawrequest.github.io/pycommence/'
 readme_src_files = 'README.rst'
-readme_docs_url_type = 'code'
+readme_docs_url_type = 'html'
 add_module_names = False
 autodoc_default_options = {
     'exclude-members': 'model_config, model_fields, model_computed_fields',
