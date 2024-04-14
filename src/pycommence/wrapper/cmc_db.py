@@ -2,47 +2,71 @@ from __future__ import annotations
 
 import typing as _t
 
+import win32com.client
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from pycommence import pycmc_types
-from . import conversation, enums_cmc, cmc_csr
+from . import cmc_csr, conversation, enums_cmc
 
 
-class CmcConnection:
-    """Base Class for caching multiple Commence connections by overriding  __new__."""
-    connections = {}
+class CmcConnector:
+    """Singleton managing cached connections to multiple Commence databases."""
+    _connections: dict[str, 'Cmc'] = {}
 
-    def __new__(cls, commence_instance: str = 'Commence.DB') -> Cmc:
-        if commence_instance in cls.connections:
+    def __new__(cls, commence_instance: str = 'Commence.DB') -> CmcConnector:
+        if commence_instance in cls._connections:
             logger.info(f'Using cached connection to {commence_instance}')
         else:
-            cls.connections[commence_instance] = super().__new__(cls)
+            cls._connections[commence_instance] = super().__new__(Cmc)
+            logger.info(f'Created new connection to {commence_instance}')
 
-        return cls.connections[commence_instance]
+        return cls._connections[commence_instance]
 
-    def __init__(self, commence_instance='Commence.DB'):
-        if not hasattr(self, '_initialized'):
+    def __init__(self, db_name: str):
+        self.db_name: str = db_name  # The name of the Commence instance.
+        self._cmc_com: Dispatch = self._initialize_connection()  # The Commence COM object.
+        self._initialized: bool = False  # True if the connection is established.
+
+    def _initialize_connection(self) -> Dispatch:
+        """Initialize the COM connection to the Commence database. """
+        try:
+            cmc_com: win32com.client.Dispatch = Dispatch(self.db_name)
             self._initialized = True
-            self.db_name = commence_instance
-            try:
-                self._cmc_com = Dispatch(commence_instance)
-            except com_error as e:
-                if e.hresult == -2147221005:
-                    raise pycmc_types.CmcError(
-                        f'Db Name "{commence_instance}" does not exist - connection failed'
-                    )
-                raise pycmc_types.CmcError(
-                    f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
-                )
+            return cmc_com
+        except com_error as e:
+            error_msg = f'Error connecting to {self.db_name}: {str(e)}'
+            logger.error(error_msg)
+            raise Exception(error_msg)
+
+    # def __init__(self, commence_instance='Commence.DB'):
+    #     if not hasattr(self, '_initialized'):
+    #         self.db_name = commence_instance
+    #         try:
+    #             self._cmc_com: Dispatch = Dispatch(commence_instance)
+    #             self._initialized = True
+    #         except com_error as e:
+    #             if e.hresult == -2147221005:
+    #                 raise pycmc_types.CmcError(
+    #                     f'Db Name "{commence_instance}" does not exist - connection failed'
+    #                 )
+    #             raise pycmc_types.CmcError(
+    #                 f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
+    #             )
 
 
-class Cmc(CmcConnection):
+class Cmc(CmcConnector):
     """ Commence Database object.
-     provides access to :class:`.cmc_csr.CsrCmc` and :class:`.conversation.CommenceConversation`.
 
-     Caching Inherited from :class:`.CmcConnection`.
+     Entry point for :class:`.cmc_csr.CsrCmc` and :class:`.conversation.CommenceConversation`.
+
+     Caching Inherited from :class:`.CmcConnector`.
+
+     Attributes:
+        db_name (str): The name of the Commence instance.
+        _cmc_com (Dispatch): The Commence COM object.
+        _initialized (bool): True if the connection is established.
 
      """
 
