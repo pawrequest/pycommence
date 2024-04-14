@@ -30,9 +30,9 @@ jobs:
         run: |
           sphinx-build -E -a -b html ./docs_source/ ./build/html
 
-      - name: Rename README.html to index.html
-        run: |
-          cp ./build/html/README.html ./build/html/index.html
+#      - name: Rename README.html to index.html
+#        run: |
+#          cp ./build/html/README.html ./build/html/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
