@@ -3,6 +3,7 @@ import inspect
 import pathlib
 
 from loguru import logger
+# README needs copying from index.rst manually
 
 project = 'PyCommence'
 author = 'PawRequest'
@@ -21,7 +22,7 @@ extensions = [
 ]
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-master_doc = 'README'
+# master_doc = 'README'
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
@@ -35,8 +36,8 @@ html_context = {
     "conf_py_path": "/docs_source/",
 }
 html_baseurl = 'https://pawrequest.github.io/pycommence/'
-readme_src_files = 'README.rst'
-readme_docs_url_type = 'html'
+readme_src_files = 'index.rst'
+readme_docs_url_type = 'code'
 add_module_names = False
 autodoc_default_options = {
     'exclude-members': 'model_config, model_fields, model_computed_fields',
@@ -65,19 +66,11 @@ def linkcode_resolve(domain, info):
 
     modname = info['module']
     fullname = info['fullname']
-    topname = modname.split('.')[0]
-    logger.info(f'modname: {modname}')
-    logger.info(f'fullname: {fullname}')
-    logger.info(f'topname: {topname}')
 
-    topmod = sys.modules.get(topname)
-
-    # Get the module object
     submod = sys.modules.get(modname)
     if submod is None:
         return None
 
-    # Resolve the object from its fullname
     obj = submod
     for part in fullname.split('.'):
         try:
@@ -85,20 +78,13 @@ def linkcode_resolve(domain, info):
         except AttributeError:
             return None
 
-    # Find the source file and adjust path as necessary
     try:
         source_file = inspect.getsourcefile(obj)
         if source_file is None:
             return None
-        # Ensure the use of forward slashes
-        rel_path = pathlib.Path(source_file).relative_to(
-            pathlib.Path(topmod.__file__).parent
-        ).as_posix()
-        logger.info(f'rel_path: {rel_path}')
     except Exception as e:
         return None
 
-    # Determine line numbers for hyperlinking specific lines
     try:
         source, lineno = inspect.getsourcelines(obj)
         linestart = lineno
@@ -106,7 +92,4 @@ def linkcode_resolve(domain, info):
     except OSError:
         return None
 
-    res = f"{repo_src}/{modname.replace('.', r'/')}.py#L{linestart}-L{linestop}"
-    # res = f"{repo_src}/{rel_path}#L{linestart}-L{linestop}"
-    logger.info(f'res: {res}')
-    return res
+    return f"{repo_src}/{modname.replace('.', r'/')}.py#L{linestart}-L{linestop}"

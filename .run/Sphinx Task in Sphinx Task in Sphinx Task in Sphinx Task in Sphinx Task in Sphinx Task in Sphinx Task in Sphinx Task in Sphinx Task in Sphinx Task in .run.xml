@@ -1,0 +1,21 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in Sphinx Task in " type="docs" factoryName="Sphinx task" nameIsGenerated="true">
+    <module name="pycommence" />
+    <option name="ENV_FILES" value="" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SDK_HOME" value="C:\Users\RYZEN\prdev\workbench\.venv\Scripts\python.exe" />
+    <option name="SDK_NAME" value="Python 3.12 (workbench)" />
+    <option name="WORKING_DIRECTORY" value="" />
+    <option name="IS_MODULE_SDK" value="false" />
+    <option name="ADD_CONTENT_ROOTS" value="true" />
+    <option name="ADD_SOURCE_ROOTS" value="true" />
+    <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+    <option name="docutils_input_file" value="C:\Users\RYZEN\prdev\workbench\pycommence\docs_source" />
+    <option name="docutils_output_file" value="C:\Users\RYZEN\prdev\workbench\pycommence\docs" />
+    <option name="docutils_params" value="-E -a" />
+    <option name="docutils_task" value="html" />
+    <option name="docutils_open_in_browser" value="false" />
+    <method v="2" />
+  </configuration>
+</component>
