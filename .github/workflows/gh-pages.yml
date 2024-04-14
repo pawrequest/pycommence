@@ -14,13 +14,12 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
 
       - name: Install dependencies
         run: |
@@ -29,11 +28,13 @@ jobs:
 
       - name: Build Sphinx Documentation
         run: |
-          cd docs_source
-          sphinx-build -E -a -b html . ../docs  
+          sphinx-build -E -a -b html ./docs_source/ ./build/html
+
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          publish_dir: ./build/html

@@ -9,7 +9,7 @@
 PyCommence Documentation
 ============================
 
-* `Pycommence API <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
+* `Pycommence API test <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
   * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
 
