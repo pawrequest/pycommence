@@ -78,8 +78,8 @@
 .. _IUIObj: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper._icommence.IUIObj
 .. |OptionFlag| replace:: ``OptionFlag``
 .. _OptionFlag: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper.enums_cmc.OptionFlag
-.. |PyCommence| replace:: ``PyCommence``
-.. _PyCommence: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.__init__.PyCommence
+.. |PyCommenceObj| replace:: ``PyCommenceObj``
+.. _PyCommenceObj: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.__init__.PyCommenceObj
 .. |RowSetAdd| replace:: ``RowSetAdd``
 .. _RowSetAdd: https://pawrequest.github.io/pycommence/pycommence_wrapper.html#pycommence.wrapper.rowset.RowSetAdd
 .. |RowSetBase| replace:: ``RowSetBase``
@@ -105,9 +105,9 @@ PyCommence Documentation
 
 * `Pycommence API <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence-object>`_
+  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
 
-    * |PyCommence|_
+    * |PyCommenceObj|_
 
 
 

@@ -5,14 +5,14 @@ import pydantic as _p
 from . import cursor, pycmc_types
 
 
-class PyCommence(_p.BaseModel):
+class PyCommenceObj(_p.BaseModel):
     """Main interface for handling cursors and their operations to get, edit, delete and add records in a Commence Table.
 
     Args:
         csr: A cursor.Csr object best obtained via from_table_name classmethod.
 
     Examples:
-        >>> pycmc = PyCommence.from_table_name('Contact')
+        >>> pycmc = PyCommenceObj.from_table_name('Contact')
         >>> pycmc.records()
         [{'firstName': 'Jeff', 'lastName': 'Smith', .... }]
         >>> pycmc.one_record('Jeff')
@@ -36,7 +36,7 @@ class PyCommence(_p.BaseModel):
     )
 
     @classmethod
-    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
+    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommenceObj':
         return cls(csr=cursor.get_csr(table_name, cmc_name))
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:
