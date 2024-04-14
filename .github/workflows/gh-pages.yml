@@ -26,8 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install .[dev]
 
-      - name: sphinx-build
-        run: make html
+      - name: Build Documentation with Sphinx
+        run: .\make.bat html
+        shell: cmd
+
+#      - name: sphinx-build
+#        run: make html
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
