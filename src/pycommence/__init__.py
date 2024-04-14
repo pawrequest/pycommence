@@ -5,7 +5,7 @@ import pydantic as _p
 from . import cursor, pycmc_types
 
 
-class PyCmc(_p.BaseModel):
+class PyCommence(_p.BaseModel):
     """
     Main interface for interacting with Commence.
 
@@ -25,7 +25,7 @@ class PyCmc(_p.BaseModel):
 
         Instantiate a PyCommence object from table name
 
-        >>> cmc = PyCmc.from_table_name('Contact')
+        >>> cmc = PyCommence.from_table_name('Contact')
 
         Get all records in the cursor
 
@@ -67,7 +67,7 @@ class PyCmc(_p.BaseModel):
     )
 
     @classmethod
-    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCmc':
+    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
         return cls(csr=cursor.get_csr(table_name, cmc_name))
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:

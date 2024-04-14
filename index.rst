@@ -2,12 +2,12 @@
 .. _.modindex: https://pawrequest.github.io/pycommence/py-modindex.html
 
 
-PyCommence - Commence RM for Python
+PyCommence - Python OOP for Commence RM
 ====================================================
 
 * `Pycommence <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence <https://pawrequest.github.io/pycommence/pycommence_api.html#id1>`_
+  * `PyCmc Object <https://pawrequest.github.io/pycommence/pycommence_api.html#pycmc-object>`_
 
 
   * `Cursor <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.cursor>`_
