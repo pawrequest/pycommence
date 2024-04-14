@@ -6,7 +6,7 @@ from . import cursor, pycmc_types
 
 
 class PyCommence(_p.BaseModel):
-    """Main interface for handling cursors and their operations to get, edit, delete and add records in a Commence Table.
+    """Main interface for handling cursors and their operations to get, edit, delete and add records to a Commence Table.
 
     Args:
         csr: A cursor.Csr object best obtained via from_table_name classmethod.
