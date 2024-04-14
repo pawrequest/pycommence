@@ -1,4 +1,6 @@
+import importlib
 import logging
+import pkgutil
 
 project = 'Pycommence'
 author = 'PawRequest'
@@ -44,12 +46,33 @@ autodoc_default_options = {
 repo_src = 'https://github.com/pawrequest/pycommence/blob/main/src'
 
 
+# def linkcode_resolve(domain, info):
+#     if domain != 'py':
+#         return None
+#     if not info['module']:
+#         return None
+#
+#     filename = info['module'].replace('.', '/')
+#     url = f'{repo_src}/{filename}.py'
+#     return url
 def linkcode_resolve(domain, info):
     if domain != 'py':
         return None
     if not info['module']:
         return None
 
-    filename = info['module'].replace('.', '/')
-    url = f'{repo_src}/{filename}.py'
-    return url
+
+    # Check if the module is a package
+    loader = pkgutil.get_loader(info['module'])
+    if loader is not None and hasattr(loader, 'get_filename'):
+        path = loader.get_filename(info['module'])
+        if path.endswith('__init__.py'):
+            # filename = info['module'].replace('.', '/') + '/__init__.py'
+            filename = info['module'].replace('.', '/') + '.py'
+            ...
+        else:
+            filename = info['module'].replace('.', '/') + '.py'
+    else:
+        return None  # Unable to resolve the path or loader not found
+
+    return f'{repo_src}/{filename}'

@@ -105,7 +105,7 @@ PyCommence Documentation
 
 * `Pycommence API <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.__init__>`_
+  * `PyCommence Object <https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence-object>`_
 
     * |PyCommence|_
 
