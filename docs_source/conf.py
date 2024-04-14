@@ -1,7 +1,10 @@
 import importlib
 import logging
+import os
 import pkgutil
+import sys
 
+sys.path.insert(0, os.path.abspath('../src'))
 project = 'Pycommence'
 author = 'PawRequest'
 release = '0.1.1'
