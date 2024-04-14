@@ -3,7 +3,7 @@ Pycommence API
 
 PyCommence Object
 -------------------------
-.. autoclass:: pycommence.__init__.PyCommence
+.. automodule:: pycommence.__init__
 
 
 Cursor
