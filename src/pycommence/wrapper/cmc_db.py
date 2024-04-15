@@ -2,18 +2,20 @@ from __future__ import annotations
 
 import typing as _t
 
+import comtypes
 import win32com.client
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from pycommence import pycmc_types
+
 from . import cmc_csr, conversation, enums_cmc
 
 
 class CmcConnector:
     """Singleton managing cached connections to multiple Commence databases."""
-    _connections: dict[str, 'Cmc'] = {}
+    _connections: dict[str, Cmc] = {}
 
     def __new__(cls, commence_instance: str = 'Commence.DB') -> CmcConnector:
         if commence_instance in cls._connections:
@@ -39,6 +41,7 @@ class CmcConnector:
             error_msg = f'Error connecting to {self.db_name}: {str(e)}'
             logger.error(error_msg)
             raise Exception(error_msg)
+
 
     # def __init__(self, commence_instance='Commence.DB'):
     #     if not hasattr(self, '_initialized'):
