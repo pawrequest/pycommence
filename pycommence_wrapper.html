@@ -176,6 +176,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper.conversation.CommenceConversation"><code class="docutils literal notranslate"><span class="pre">CommenceConversation</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.conversation.CommenceConversation.execute"><code class="docutils literal notranslate"><span class="pre">CommenceConversation.execute()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.conversation.CommenceConversation.request"><code class="docutils literal notranslate"><span class="pre">CommenceConversation.request()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.conversation.CommenceConversation.get_field_definition"><code class="docutils literal notranslate"><span class="pre">CommenceConversation.get_field_definition()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -513,7 +514,7 @@
 <span id="db-wrapper"></span><h2>DB Wrapper<a class="headerlink" href="#module-pycommence.wrapper.cmc_db" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.cmc_db.CmcConnector">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcConnector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_db.py#L14-L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_db.CmcConnector" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcConnector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence.DB'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_db.py#L14-L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_db.CmcConnector" title="Link to this definition"></a></dt>
 <dd><p>Singleton managing cached connections to multiple Commence databases.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.wrapper.cmc_db.CmcConnector._connections">
@@ -535,7 +536,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.cmc_db.Cmc">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cmc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_db.py#L59-L182"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_db.Cmc" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cmc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence.DB'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_db.py#L59-L182"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_db.Cmc" title="Link to this definition"></a></dt>
 <dd><p>Commence Database object.</p>
 <p>Entry point for <a class="reference internal" href="#pycommence.wrapper.cmc_csr.CsrCmc" title="pycommence.wrapper.cmc_csr.CsrCmc"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmc_csr.CsrCmc</span></code></a> and <a class="reference internal" href="#pycommence.wrapper.conversation.CommenceConversation" title="pycommence.wrapper.conversation.CommenceConversation"><code class="xref py py-class docutils literal notranslate"><span class="pre">conversation.CommenceConversation</span></code></a>.</p>
 <p>Caching Inherited from <a class="reference internal" href="#pycommence.wrapper.cmc_db.CmcConnector" title="pycommence.wrapper.cmc_db.CmcConnector"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmcConnector</span></code></a>.</p>
@@ -1520,11 +1521,11 @@ Deletion is not permanent until Commit() is called.</p>
 <span id="commence-conversation-wrapper"></span><h2>Commence Conversation Wrapper<a class="headerlink" href="#module-pycommence.wrapper.conversation" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.conversation.CommenceConversation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommenceConversation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_conversation</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L1-L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommenceConversation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_conversation</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L6-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation" title="Link to this definition"></a></dt>
 <dd><p>Thin Wrapper on Commence’s Conversation object using DDE.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.conversation.CommenceConversation.execute">
-<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dde_command</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L6-L16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation.execute" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dde_command</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L13-L23"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation.execute" title="Link to this definition"></a></dt>
 <dd><p>Executes the DDE Command.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1541,7 +1542,7 @@ Deletion is not permanent until Commit() is called.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.conversation.CommenceConversation.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dde_command</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L18-L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation.request" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dde_command</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L25-L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation.request" title="Link to this definition"></a></dt>
 <dd><p>Processes the DDE Request.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1552,6 +1553,26 @@ Deletion is not permanent until Commit() is called.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.conversation.CommenceConversation.get_field_definition">
+<span class="sig-name descname"><span class="pre">get_field_definition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/conversation.py#L37-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.conversation.CommenceConversation.get_field_definition" title="Link to this definition"></a></dt>
+<dd><p>Get the Field Definition for a given field in a category.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>category_name</strong> (<em>str</em>) – The Category name.</p></li>
+<li><p><strong>field_name</strong> (<em>str</em>) – The Field name.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The Field Definition.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>CmcFieldDefinition</p>
 </dd>
 </dl>
 </dd></dl>
