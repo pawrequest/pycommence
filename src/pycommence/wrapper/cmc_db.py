@@ -24,7 +24,7 @@ class CmcConnector:
 
         return cls._connections[commence_instance]
 
-    def __init__(self, db_name: str):
+    def __init__(self, db_name: str = 'Commence.DB'):
         self.db_name: str = db_name  # The name of the Commence instance.
         self._cmc_com: Dispatch = self._initialize_connection()  # The Commence COM object.
         self._initialized: bool = False  # True if the connection is established.

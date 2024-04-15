@@ -1,3 +1,13 @@
+import pytest
+import pythoncom
+
+@pytest.fixture(scope="function", autouse=True)
+def com_setup():
+    pythoncom.CoInitialize()
+    yield
+    pythoncom.CoUninitialize()
+
+
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff', 'homeAddress': '', 'businessNumber': '1800 3000 9009',
     'homeNumber': '', 'faxNumber': '', 'Notes': '', 'Nickname': '', 'Extension': '',
