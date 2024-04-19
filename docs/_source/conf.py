@@ -1,8 +1,6 @@
-import sys
 import inspect
-import pathlib
+import sys
 
-from loguru import logger
 # README needs copying from index.rst manually
 
 project = 'PyCommence'
@@ -30,11 +28,11 @@ html_static_path = ['_static']
 html_css_files = ['custom.css']
 
 html_context = {
-    "display_github": True,
-    "github_user": "PawRequest",
-    "github_repo": "pycommence",
-    "github_version": "main",
-    "conf_py_path": "/docs/_source/",
+    'display_github': True,
+    'github_user': 'PawRequest',
+    'github_repo': 'pycommence',
+    'github_version': 'main',
+    'conf_py_path': '/docs/_source/',
 }
 html_baseurl = 'https://pawrequest.github.io/pycommence/'
 readme_src_files = 'index.rst'
@@ -84,7 +82,7 @@ def linkcode_resolve(domain, info):
         source_file = inspect.getsourcefile(obj)
         if source_file is None:
             return None
-    except Exception as e:
+    except Exception:
         return None
 
     try:
