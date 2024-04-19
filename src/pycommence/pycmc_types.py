@@ -15,7 +15,8 @@ NotFlagType = Literal['Not', '']
 
 
 class FilterArray(BaseModel):
-    """ Array of Cursor Filters. """
+    """Array of Cursor Filters."""
+
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
 
     def add_replace_filters(self, *filters: CmcFilter):
@@ -68,8 +69,10 @@ CmcTimeFormat = '%H:%M'
 
 
 def get_cmc_date(datestr: str):
-    """ Use CMC Cannonical flag"""
-    return datetime.strptime(datestr, CmcDateFormat).date()
+    """Use CMC Cannonical flag"""
+    if datestr.isdigit() and len(datestr) == 8:
+        return datetime.strptime(datestr, CmcDateFormat).date()
+    return datetime.fromisoformat(datestr).date()
 
 
 def get_cmc_time(time_str: str):
