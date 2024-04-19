@@ -39,7 +39,6 @@ dev-dependencies = [
     "sphinx-readme",
     "sphinx_rtd_dark_mode",
     "myst-parser",
-
 ]
 
 [tool.hatch.metadata]
@@ -47,3 +46,9 @@ allow-direct-references = true
 
 [tool.pytest.ini_options]
 addopts = "-p no:faulthandler"
+
+[tool.ruff]
+line-length = 120
+extend-select = ["Q", "RUF100", "UP", "I"]
+flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
+format.quote-style = "single"
