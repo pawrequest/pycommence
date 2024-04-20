@@ -21,7 +21,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=a58bc63e"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
         <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
@@ -626,7 +626,7 @@ including creating, reading, updating, and deleting records.</p>
 <span id="types"></span><h2>Types<a class="headerlink" href="#module-pycommence.pycmc_types" title="Link to this heading"></a></h2>
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.FilterArray">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FilterArray</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L17-L25"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.FilterArray" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FilterArray</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L17-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.FilterArray" title="Link to this definition"></a></dt>
 <dd><p>Array of Cursor Filters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
@@ -642,7 +642,7 @@ including creating, reading, updating, and deleting records.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.FilterArray.add_replace_filters">
-<span class="sig-name descname"><span class="pre">add_replace_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L21-L25"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.FilterArray.add_replace_filters" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_replace_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L22-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.FilterArray.add_replace_filters" title="Link to this definition"></a></dt>
 <dd><p>Add Filters by their index. Overwrites if index exists.</p>
 </dd></dl>
 
@@ -650,7 +650,7 @@ including creating, reading, updating, and deleting records.</p>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFilter">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L28-L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFilter" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L29-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFilter" title="Link to this definition"></a></dt>
 <dd><p>Cursor Filter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
@@ -730,14 +730,14 @@ including creating, reading, updating, and deleting records.</p>
 
 <dl class="py method pydantic_validator">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFilter.condition_val">
-<em class="property"><span class="pre">validator</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">condition_val</span></span><em class="autodoc_pydantic_validator_arrow property">&#160; <span class="pre">»</span>&#160; </em><em class="xref py py-obj"><span class="pre">all</span> <span class="pre">fields</span></em><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L36-L44"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFilter.condition_val" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">validator</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">condition_val</span></span><em class="autodoc_pydantic_validator_arrow property">&#160; <span class="pre">»</span>&#160; </em><em class="xref py py-obj"><span class="pre">all</span> <span class="pre">fields</span></em><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L37-L45"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFilter.condition_val" title="Link to this definition"></a></dt>
 <dd><p>Validate Condition and Value.
 Value must be set when condition is ‘Contains’ or ‘Equal To’</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFilter.filter_str">
-<span class="sig-name descname"><span class="pre">filter_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L46-L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFilter.filter_str" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">filter_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L47-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFilter.filter_str" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
@@ -749,7 +749,7 @@ Value must be set when condition is ‘Contains’ or ‘Equal To’</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.Connection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_table</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L53-L57"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Connection" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_table</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L54-L58"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Connection" title="Link to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.Connection.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection.name" title="Link to this definition"></a></dt>
@@ -769,18 +769,18 @@ Value must be set when condition is ‘Contains’ or ‘Equal To’</p>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.CmcError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">installed'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L60-L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcError" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">installed'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L61-L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcError" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.get_cmc_date">
-<span class="sig-name descname"><span class="pre">get_cmc_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datestr</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L70-L72"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.get_cmc_date" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_cmc_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datestr</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L71-L75"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.get_cmc_date" title="Link to this definition"></a></dt>
 <dd><p>Use CMC Cannonical flag</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.get_cmc_time">
-<span class="sig-name descname"><span class="pre">get_cmc_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_str</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L75-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.get_cmc_time" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_cmc_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_str</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L78-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.get_cmc_time" title="Link to this definition"></a></dt>
 <dd><p>Use CMC Cannonical flag</p>
 </dd></dl>
 
