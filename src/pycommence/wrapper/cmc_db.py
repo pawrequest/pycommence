@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import typing as _t
 
-import comtypes
 import win32com.client
 from loguru import logger
 from win32com.client import Dispatch
@@ -41,7 +40,6 @@ class CmcConnector:
             error_msg = f'Error connecting to {self.db_name}: {str(e)}'
             logger.error(error_msg)
             raise Exception(error_msg)
-
 
     # def __init__(self, commence_instance='Commence.DB'):
     #     if not hasattr(self, '_initialized'):
