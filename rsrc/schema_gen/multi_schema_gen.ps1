@@ -1,10 +1,11 @@
+using namespace Vovin.CmcLibNet.Database;
 using namespace Newtonsoft.Json.Schema;
 using namespace Newtonsoft.Json.Schema.Generation;
 using namespace System;
 using namespace System.Reflection;
 
 Add-Type -Path "C:\Program Files\Vovin\Vovin.CmcLibNet\Vovin.CmcLibNet.dll"
-Add-Type -Path "C:\Program Files (x86)\Commence\Commence RM\Newtonsoft.Json.dll"
+Add-Type -Path "./Newtonsoft.Json.dll"
 Add-Type -Path "./JsonSchema30r15/Bin/net45/Newtonsoft.Json.Schema.dll"
 
 $generator = New-Object Newtonsoft.Json.Schema.Generation.JSchemaGenerator
@@ -13,7 +14,8 @@ $generator = New-Object Newtonsoft.Json.Schema.Generation.JSchemaGenerator
 $compositeSchema = New-Object Newtonsoft.Json.Schema.JSchema
 $compositeSchema.Id = new-object Uri("http://example.com/vovin/composite")
 $compositeSchema.Type = [Newtonsoft.Json.Schema.JSchemaType]::Object
-$compositeSchema.Definitions = new-object Newtonsoft.Json.Schema.JSchemaDictionary
+#$compositeSchema.Definitions = new-object Newtonsoft.Json.Schema.JSchemaDictionary
+$compositeSchema.Definitions = New-Object 'System.Collections.Generic.Dictionary[String,Newtonsoft.Json.Schema.JSchema]'
 
 # Fetch all classes in the Vovin.CmcLibNet.Database namespace and generate schemas
 $namespace = "Vovin.CmcLibNet.Database"

@@ -1,25 +1,3 @@
-#using namespace Vovin.CmcLibNet.Database;
-#using namespace Newtonsoft.Json.Schema;
-#using namespace Newtonsoft.Json.Schema.Generation;
-#using namespace System;
-#using namespace System.Reflection;
-#
-#Add-Type -Path "C:\Program Files\Vovin\Vovin.CmcLibNet\Vovin.CmcLibNet.dll"
-#Add-Type -Path "C:\Program Files (x86)\Commence\Commence RM\Newtonsoft.Json.dll"
-#Add-Type -Path "C:\Users\RYZEN\prdev\rsrc\JsonSchema30r15\Bin\net45\Newtonsoft.Json.Schema.dll"
-#
-#$generator = New-Object Newtonsoft.Json.Schema.Generation.JSchemaGenerator
-#
-## Example for generating schema for a specific class
-#$type = [Vovin.CmcLibNet.Database.ICommenceQueryRowSet]  # Change to the specific interface/class you need
-#$schema = $generator.Generate($type)
-#$schemaString = $schema.ToString()
-#Write-Output "Generated Schema: "
-#Write-Output $schemaString
-#
-## Save the schema to a file
-#$schemaString | Out-File -FilePath "C:\Users\RYZEN\prdev\rsrc\genSchema.json"
-
 using namespace Vovin.CmcLibNet.Database;
 using namespace Newtonsoft.Json.Schema;
 using namespace Newtonsoft.Json.Schema.Generation;
@@ -27,7 +5,7 @@ using namespace System;
 using namespace System.Reflection;
 
 Add-Type -Path "C:\Program Files\Vovin\Vovin.CmcLibNet\Vovin.CmcLibNet.dll"
-Add-Type -Path "C:\Program Files (x86)\Commence\Commence RM\Newtonsoft.Json.dll"
+Add-Type -Path "./Newtonsoft.Json.dll"
 Add-Type -Path "./JsonSchema30r15/Bin/net45/Newtonsoft.Json.Schema.dll"
 
 $generator = New-Object Newtonsoft.Json.Schema.Generation.JSchemaGenerator
@@ -40,19 +18,6 @@ $types = [System.AppDomain]::CurrentDomain.GetAssemblies() |
              $_.GetTypes() |
              Where-Object { $_.Namespace -eq $namespace -and $_.IsClass }
          }
-#
-#foreach ($type in $types) {
-#    $schema = $generator.Generate($type)
-#    $schemaString = $schema.ToString()
-#    $fileName = "C:\Users\RYZEN\prdev\rsrc\" + $type.Name + ".json"
-#
-#    Write-Output "Generated Schema for $type.Name: "
-#    Write-Output $schemaString
-#
-#    # Save each schema to a separate file
-#    $schemaString | Out-File -FilePath $fileName
-#}
-
 
 foreach ($type in $types) {
     $schema = $generator.Generate($type)
