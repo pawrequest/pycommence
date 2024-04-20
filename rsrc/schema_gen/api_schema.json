@@ -1,0 +1,872 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "COM Library API",
+    "type": "object",
+    "properties": {
+        "GetCursor": {
+            "type": "object",
+            "properties": {
+                "nMode": {
+                    "type": "string"
+                },
+                "nFlag": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nMode",
+                "nFlag"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetCursor"
+            }
+        },
+        "Version": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Version"
+            }
+        },
+        "quit": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from quit"
+            }
+        },
+        "__iter__": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from __iter__"
+            }
+        },
+        "IsScriptLevelSupported": {
+            "type": "object",
+            "properties": {
+                "level": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "level"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from IsScriptLevelSupported"
+            }
+        },
+        "Commit": {
+            "type": "object",
+            "properties": {
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Commit"
+            }
+        },
+        "CommitGetCursor": {
+            "type": "object",
+            "properties": {
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from CommitGetCursor"
+            }
+        },
+        "GetColumnIndex": {
+            "type": "object",
+            "properties": {
+                "pLabel": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pLabel",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetColumnIndex"
+            }
+        },
+        "GetColumnLabel": {
+            "type": "object",
+            "properties": {
+                "nCol": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nCol",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetColumnLabel"
+            }
+        },
+        "GetShared": {
+            "type": "object",
+            "properties": {
+                "nRow": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nRow"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetShared"
+            }
+        },
+        "SetShared": {
+            "type": "object",
+            "properties": {
+                "Value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Value"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SetShared"
+            }
+        },
+        "Execute": {
+            "type": "object",
+            "properties": {
+                "pszCommand": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pszCommand"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Execute"
+            }
+        },
+        "Request": {
+            "type": "object",
+            "properties": {
+                "pszCommand": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pszCommand"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Request"
+            }
+        },
+        "SeekRow": {
+            "type": "object",
+            "properties": {
+                "bkOrigin": {
+                    "type": "string"
+                },
+                "nRows": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "bkOrigin",
+                "nRows"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SeekRow"
+            }
+        },
+        "SetActiveDate": {
+            "type": "object",
+            "properties": {
+                "sDate": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sDate",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SetActiveDate"
+            }
+        },
+        "SetFilter": {
+            "type": "object",
+            "properties": {
+                "pFilter": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pFilter",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SetFilter"
+            }
+        },
+        "SetLogic": {
+            "type": "object",
+            "properties": {
+                "pLogic": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pLogic",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SetLogic"
+            }
+        },
+        "SetSort": {
+            "type": "object",
+            "properties": {
+                "pSort": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pSort",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SetSort"
+            }
+        },
+        "MLValidate": {
+            "type": "object",
+            "properties": {
+                "pszRequiredVersion": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pszRequiredVersion"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from MLValidate"
+            }
+        },
+        "DeleteRow": {
+            "type": "object",
+            "properties": {
+                "nRow": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nRow",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from DeleteRow"
+            }
+        },
+        "GetRowID": {
+            "type": "object",
+            "properties": {
+                "nRow": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nRow",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetRowID"
+            }
+        },
+        "GetRowTimeStamp": {
+            "type": "object",
+            "properties": {
+                "nRow": {
+                    "type": "string"
+                },
+                "flags": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "nRow",
+                "flags"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetRowTimeStamp"
+            }
+        },
+        "Clear": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Clear"
+            }
+        },
+        "ClearAll": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from ClearAll"
+            }
+        },
+        "FieldValue": {
+            "type": "object",
+            "properties": {
+                "FieldName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "FieldName"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from FieldValue"
+            }
+        },
+        "RestoreFilter": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from RestoreFilter"
+            }
+        },
+        "__call__": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from __call__"
+            }
+        },
+        "__str__": {
+            "type": "object",
+            "properties": {
+                "*args": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "*args"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from __str__"
+            }
+        },
+        "__int__": {
+            "type": "object",
+            "properties": {
+                "*args": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "*args"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from __int__"
+            }
+        },
+        "Abort": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Abort"
+            }
+        },
+        "Cancel": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Cancel"
+            }
+        },
+        "Control": {
+            "type": "object",
+            "properties": {
+                "ControlName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlName"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Control"
+            }
+        },
+        "Field": {
+            "type": "object",
+            "properties": {
+                "FieldName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "FieldName"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Field"
+            }
+        },
+        "MoveToField": {
+            "type": "object",
+            "properties": {
+                "FieldName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "FieldName"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from MoveToField"
+            }
+        },
+        "MoveToTab": {
+            "type": "object",
+            "properties": {
+                "TabName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "TabName"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from MoveToTab"
+            }
+        },
+        "Save": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Save"
+            }
+        },
+        "SetValue": {
+            "type": "object",
+            "properties": {
+                "Value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Value"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from SetValue"
+            }
+        },
+        "myfunction": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "type": "string"
+                },
+                "y": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "x",
+                "y"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from myfunction"
+            }
+        },
+        "Test": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Test"
+            }
+        },
+        "Application": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from Application"
+            }
+        },
+        "GetTest": {
+            "type": "object",
+            "properties": {
+                "bstrVal": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "bstrVal"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GetTest"
+            }
+        },
+        "GoToURL": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from GoToURL"
+            }
+        },
+        "HelloHTML": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from HelloHTML"
+            }
+        },
+        "OnClick": {
+            "type": "object",
+            "properties": {
+                "ControlID": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlID"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnClick"
+            }
+        },
+        "clickIn": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "type": "string"
+                },
+                "y": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "x",
+                "y"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from clickIn"
+            }
+        },
+        "__init__": {
+            "type": "object",
+            "properties": {
+                "oobj": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "oobj"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from __init__"
+            }
+        },
+        "__del__": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from __del__"
+            }
+        },
+        "close": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from close"
+            }
+        },
+        "_query_interface_": {
+            "type": "object",
+            "properties": {
+                "iid": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "iid"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from _query_interface_"
+            }
+        },
+        "OnLoad": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnLoad"
+            }
+        },
+        "OnSave": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnSave"
+            }
+        },
+        "OnCancel": {
+            "type": "object",
+            "properties": {},
+            "required": [],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnCancel"
+            }
+        },
+        "OnEnterTab": {
+            "type": "object",
+            "properties": {
+                "Tab": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Tab"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnEnterTab"
+            }
+        },
+        "OnLeaveTab": {
+            "type": "object",
+            "properties": {
+                "Tab": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Tab"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnLeaveTab"
+            }
+        },
+        "OnEnterField": {
+            "type": "object",
+            "properties": {
+                "Field": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Field"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnEnterField"
+            }
+        },
+        "OnLeaveField": {
+            "type": "object",
+            "properties": {
+                "Field": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Field"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnLeaveField"
+            }
+        },
+        "OnEnterControl": {
+            "type": "object",
+            "properties": {
+                "ControlID": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlID"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnEnterControl"
+            }
+        },
+        "OnLeaveControl": {
+            "type": "object",
+            "properties": {
+                "ControlID": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlID"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnLeaveControl"
+            }
+        },
+        "OnChange": {
+            "type": "object",
+            "properties": {
+                "ControlID": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlID"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnChange"
+            }
+        },
+        "OnKeyPress": {
+            "type": "object",
+            "properties": {
+                "ControlID": {
+                    "type": "string"
+                },
+                "KeyAscii": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlID",
+                "KeyAscii"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnKeyPress"
+            }
+        },
+        "OnActiveXControlEvent": {
+            "type": "object",
+            "properties": {
+                "ControlName": {
+                    "type": "string"
+                },
+                "EventName": {
+                    "type": "string"
+                },
+                "ParameterArr": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ControlName",
+                "EventName",
+                "ParameterArr"
+            ],
+            "return": {
+                "type": "string",
+                "description": "Returns a result from OnActiveXControlEvent"
+            }
+        }
+    }
+}
