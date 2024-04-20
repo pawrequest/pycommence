@@ -1,11 +1,20 @@
+import time
+
 import pytest
 import pythoncom
 
-@pytest.fixture(scope="function", autouse=True)
-def com_setup():
-    pythoncom.CoInitialize()
-    yield
-    pythoncom.CoUninitialize()
+
+# @pytest.fixture(autouse=True)
+# def delay_between_tests():
+#     yield
+#     time.sleep(1)
+
+
+# @pytest.fixture(scope='function', autouse=True)
+# def com_setup():
+#     pythoncom.CoInitialize()
+#     yield
+#     pythoncom.CoUninitialize()
 
 
 JEFF_DICT = {
