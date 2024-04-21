@@ -32,6 +32,7 @@ build-backend = "hatchling.build"
 [tool.rye]
 managed = true
 dev-dependencies = [
+    'autodoc_pydantic',
     "pytest",
     "sphinx",
     "sphinx-autodoc-typehints",
@@ -49,6 +50,6 @@ addopts = "-p no:faulthandler"
 
 [tool.ruff]
 line-length = 120
-extend-select = ["Q", "RUF100", "UP", "I"]
+extend-select = ["Q", "RUF100", "UP"]
 flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
 format.quote-style = "single"
