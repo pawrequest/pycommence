@@ -13,7 +13,7 @@ Commence Designer Edition is a particuarly cranky beast that demands super-britt
 
 This package wraps the Commence API in a python interface for convenience; a complete installation of Commence is required.
 
-PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated Com-Object wrapper, via the `win32com` package.
+PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated Com-Object wrapper - via the `win32com` package.
 
 
 * `PyCommence Api <https://pawrequest.github.io/pycommence/pycommence_api.html>`_

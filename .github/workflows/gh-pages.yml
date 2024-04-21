@@ -28,7 +28,7 @@ jobs:
 
       - name: Build Sphinx Documentation
         run: |
-          sphinx-build -b html ./docs/_source/ ./docs/_build/html
+          sphinx-build -b html ./docs/source/ ./docs/build/html
 
 
       - name: Deploy
