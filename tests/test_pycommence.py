@@ -12,9 +12,9 @@ from pycommence import PyCommence
 def pycmc():
     """Get a Contact handler. Guarded against accidental use in non-Tutorial DB.
     in actual use we would likely use `Pycommence.from_table_name('Contact')` instead."""
-    csr = get_csr("Contact")
+    csr = get_csr('Contact')
     if not csr.db_name == 'Tutorial':
-        raise ValueError("Expected Tutorial DB")
+        raise ValueError('Expected Tutorial DB')
     yield PyCommence(csr=csr)
 
 
