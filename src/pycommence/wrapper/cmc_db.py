@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typing as _t
 
+import pythoncom
 import win32com.client
 from loguru import logger
 from win32com.client import Dispatch
@@ -27,8 +28,15 @@ class CmcConnector:
 
     def __init__(self, db_name: str = 'Commence.DB'):
         self.db_name: str = db_name  # The name of the Commence instance.
-        self._cmc_com: Dispatch = self._initialize_connection()  # The Commence COM object.
         self._initialized: bool = False  # True if the connection is established.
+        pythoncom.CoInitialize()
+        # logger.info(f'Initializing COM connection to {self.db_name}')
+        # try:
+        self._cmc_com: Dispatch = self._initialize_connection()  # The Commence COM object.
+
+        # finally:
+        #     pythoncom.CoUninitialize()
+        #     logger.info(f'COM connection to {self.db_name} UnInitialized')
 
     def _initialize_connection(self) -> Dispatch:
         """Initialize the COM connection to the Commence database. """
