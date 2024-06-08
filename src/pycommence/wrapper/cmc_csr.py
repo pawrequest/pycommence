@@ -5,7 +5,7 @@ from . import rowset as rs
 from ._icommence import ICommenceCursor
 
 
-class CsrCmc:
+class CursorWrapper:
     """Thin wrapper on the Commence Cursor object using pywin32.
 
     Create with :meth:`.cmc_db.Cmc.get_cursor`."""

@@ -1,8 +1,10 @@
+import contextlib
 import typing as _t
 
 import pydantic as _p
 
 from . import cursor, pycmc_types
+from .cursor import csr_context
 
 
 class PyCommence(_p.BaseModel):
@@ -35,12 +37,12 @@ class PyCommence(_p.BaseModel):
 
         Add a new record
 
-        >>> cmc.add_record(pk_val=GEOFF_KEY, package=GEOFF_DICT)
+        >>> cmc.add_record(pk_val=GEOFF_KEY, row_dict=GEOFF_DICT)
         True
 
         Modify a record
 
-        >>> cmc.edit_record(pk_val=GEOFF_KEY, package=UPDATE_PKG)
+        >>> cmc.edit_record(pk_val=GEOFF_KEY, row_dict=UPDATE_PKG)
         True
 
         Verify the updated record
@@ -55,7 +57,7 @@ class PyCommence(_p.BaseModel):
         True
 
     """
-    csr: cursor.Csr  # Obtained from cursor.get_csr, or via PyCommence.from_table_name
+    csr: cursor.CursorAPI  # Obtained from cursor.get_csr, or via PyCommence.from_table_name
 
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,
@@ -64,6 +66,15 @@ class PyCommence(_p.BaseModel):
     @classmethod
     def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
         return cls(csr=cursor.get_csr(table_name, cmc_name))
+
+    @classmethod
+    @contextlib.contextmanager
+    def from_table_name_context(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
+        """Context manager for :meth:`from_table_name`."""
+        with csr_context(table_name, cmc_name) as csr:
+            yield cls(csr=csr)
+
+
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:
         """Return all or first `count` records from the cursor."""
@@ -111,14 +122,14 @@ class PyCommence(_p.BaseModel):
     def edit_record(
             self,
             pk_val: str,
-            package: dict,
+            row_dict: dict,
     ) -> bool:
         """
         Modify a record.
 
         Args:
             pk_val (str): The value for the primary key field.
-            package (dict): A dictionary of field names and values to modify.
+            row_dict (dict): A dictionary of field names and values to modify.
 
         Returns:
             bool: True on success
@@ -126,7 +137,7 @@ class PyCommence(_p.BaseModel):
         """
         with self.csr.temporary_filter_pk(pk_val):
             row_set = self.csr.get_edit_rowset()
-            row_set.modify_row_dict(0, package)
+            row_set.modify_row_dict(0, row_dict)
             return row_set.commit()
 
     def delete_record(self, pk_val: str, empty: pycmc_types.EmptyKind = 'raise'):
@@ -178,7 +189,7 @@ class PyCommence(_p.BaseModel):
     def add_record(
             self,
             pk_val: str,
-            package: dict[str, str],
+            row_dict: dict[str, str],
             existing: _t.Literal['replace', 'update', 'raise'] = 'raise'
     ) -> bool:
         """
@@ -186,7 +197,7 @@ class PyCommence(_p.BaseModel):
 
         Args:
             pk_val: The value for the primary key field.
-            package: A dictionary of field names and values to add to the record.
+            row_dict: A dictionary of field names and values to add to the record.
             existing: Action to take if the record already exists. Options are 'replace', 'update', 'raise'.
 
         Returns:
@@ -205,6 +216,6 @@ class PyCommence(_p.BaseModel):
                     self.delete_record(pk_val)
                     row_set = self.csr.get_named_addset(pk_val)
 
-            row_set.modify_row_dict(0, package)
+            row_set.modify_row_dict(0, row_dict)
             res = row_set.commit()
             return res

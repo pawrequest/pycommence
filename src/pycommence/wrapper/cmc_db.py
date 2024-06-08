@@ -1,90 +1,76 @@
 from __future__ import annotations
 
+import contextlib
 import typing as _t
 
-import pythoncom
-import win32com.client
+from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from pycommence import pycmc_types
-
 from . import cmc_csr, conversation, enums_cmc
 
 
 class CmcConnector:
     """Singleton managing cached connections to multiple Commence databases."""
-    _connections: dict[str, Cmc] = {}
 
-    def __new__(cls, commence_instance: str = 'Commence.DB') -> CmcConnector:
-        if commence_instance in cls._connections:
-            logger.info(f'Using cached connection to {commence_instance}')
-        else:
-            cls._connections[commence_instance] = super().__new__(Cmc)
-            logger.info(f'Created new connection to {commence_instance}')
+    _connections: dict[str, CommenceWrapper] = {}
 
-        return cls._connections[commence_instance]
+    # caching breaks multi-threaded
+    # def __new__(cls, commence_instance_name: str = 'Commence.DB') -> CmcConnector:
+    #     if commence_instance_name in cls._connections:
+    #         logger.info(f'Using cached connection to {commence_instance_name}')
+    #     else:
+    #         new__ = super().__new__(CommenceWrapper)
+    #         cls._connections[commence_instance_name] = new__
+    #         logger.info(f'Created new connection to {commence_instance_name}')
+    #
+    #     return cls._connections[commence_instance_name]
 
-    def __init__(self, db_name: str = 'Commence.DB'):
-        self.db_name: str = db_name  # The name of the Commence instance.
-        self._initialized: bool = False  # True if the connection is established.
-        pythoncom.CoInitialize()
-        # logger.info(f'Initializing COM connection to {self.db_name}')
-        # try:
-        self._cmc_com: Dispatch = self._initialize_connection()  # The Commence COM object.
-
-        # finally:
-        #     pythoncom.CoUninitialize()
-        #     logger.info(f'COM connection to {self.db_name} UnInitialized')
+    def __init__(self, commence_instance_name: str = 'Commence.DB'):
+        self.commence_instance_name = commence_instance_name
+        logger.info(f'Initializing COM connection to {self.commence_instance_name}')
+        self.commence_dispatch: Dispatch = self._initialize_connection()
 
     def _initialize_connection(self) -> Dispatch:
-        """Initialize the COM connection to the Commence database. """
+        """Initialize the COM connection to the Commence database."""
         try:
-            cmc_com: win32com.client.Dispatch = Dispatch(self.db_name)
-            self._initialized = True
-            return cmc_com
+            return Dispatch(self.commence_instance_name)
         except com_error as e:
-            error_msg = f'Error connecting to {self.db_name}: {str(e)}'
+            error_msg = f'Error connecting to {self.commence_instance_name}: {str(e)}'
             logger.error(error_msg)
-            raise Exception(error_msg)
-
-    # def __init__(self, commence_instance='Commence.DB'):
-    #     if not hasattr(self, '_initialized'):
-    #         self.db_name = commence_instance
-    #         try:
-    #             self._cmc_com: Dispatch = Dispatch(commence_instance)
-    #             self._initialized = True
-    #         except com_error as e:
-    #             if e.hresult == -2147221005:
-    #                 raise pycmc_types.CmcError(
-    #                     f'Db Name "{commence_instance}" does not exist - connection failed'
-    #                 )
-    #             raise pycmc_types.CmcError(
-    #                 f'Error connecting to {commence_instance}. Is Commence Running?\n{e}'
-    #             )
+            raise
 
 
-class Cmc(CmcConnector):
-    """ Commence Database object.
+class CommenceWrapper(CmcConnector):
+    """Commence Database object.
 
-     Entry point for :class:`.cmc_csr.CsrCmc` and :class:`.conversation.CommenceConversation`.
+    Entry point for :class:`.cmc_csr.CsrCmc` and :class:`.conversation.CommenceConversation`.
 
-     Caching Inherited from :class:`.CmcConnector`.
+    Caching Inherited from :class:`.CmcConnector`.
 
-     Attributes:
-        db_name (str): The name of the Commence instance.
-        _cmc_com (Dispatch): The Commence COM object.
-        _initialized (bool): True if the connection is established.
+    Attributes:
+       commence_instance_name (str): The name of the Commence instance.
+       commence_dispatch (Dispatch): The Commence COM object.
 
-     """
+    """
+
+    @contextlib.contextmanager
+    def cursor_context_manager(self, table_name: str) -> cmc_csr.CursorWrapper:
+        CoInitialize()
+        try:
+            csr_api = self.get_cursor(table_name)
+            yield csr_api
+        finally:
+            CoUninitialize()
 
     def get_cursor(
-            self,
-            name: str | None = None,
-            mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
-            flags: enums_cmc.OptionFlag | None = None
-    ) -> cmc_csr.CsrCmc:
+        self,
+        name: str | None = None,
+        mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
+        flags: enums_cmc.OptionFlag | None = None,
+    ) -> cmc_csr.CursorWrapper:
         """Create a cursor object for accessing Commence data.
 
         CursorTypes CATEGORY and VIEW require name to be set.
@@ -118,11 +104,9 @@ class Cmc(CmcConnector):
         mode = mode.value
         if mode in [0, 1]:
             if name is None:
-                raise ValueError(
-                    f'Mode {mode} ("{enums_cmc.CursorType(mode).name}") requires name param to be set'
-                )
+                raise ValueError(f'Mode {mode} ("{enums_cmc.CursorType(mode).name}") requires name param to be set')
         try:
-            csr = cmc_csr.CsrCmc(self._cmc_com.GetCursor(mode, name, flags))
+            csr = cmc_csr.CursorWrapper(self.commence_dispatch.GetCursor(mode, name, flags))
         except com_error as e:
             raise pycmc_types.CmcError(f'Error creating cursor for {name}: {e}')
 
@@ -130,7 +114,7 @@ class Cmc(CmcConnector):
         # todo non-standard modes
 
     def get_conversation(
-            self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
+        self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> conversation.CommenceConversation:
         """
         Create a conversation object.
@@ -147,42 +131,40 @@ class Cmc(CmcConnector):
 
         """
 
-        conversation_obj = self._cmc_com.GetConversation(application_name, topic)
+        conversation_obj = self.commence_dispatch.GetConversation(application_name, topic)
         if conversation_obj is None:
-            raise ValueError(
-                f'Could not create conversation object for {application_name}!{topic}'
-            )
+            raise ValueError(f'Could not create conversation object for {application_name}!{topic}')
         return conversation.CommenceConversation(conversation_obj)
 
     @property
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
-        return self._cmc_com.Name
+        return self.commence_dispatch.Name
 
     @property
     def path(self) -> str:
         """(read-only) Full path of the Commence database."""
-        return self._cmc_com.Path
+        return self.commence_dispatch.Path
 
     @property
     def registered_user(self) -> str:
         """(read-only) CR/LF delimited string with username, company name, and serial number."""
-        return self._cmc_com.RegisteredUser
+        return self.commence_dispatch.RegisteredUser
 
     @property
     def shared(self) -> bool:
         """(read-only) TRUE if the database is enrolled in a workgroup."""
-        return self._cmc_com.Shared
+        return self.commence_dispatch.Shared
 
     @property
     def version(self) -> str:
         """(read-only) Version number in x.y format."""
-        return self._cmc_com.Version
+        return self.commence_dispatch.Version
 
     @property
     def version_ext(self) -> str:
         """(read-only) Version number in x.y.z.w format."""
-        return self._cmc_com.VersionExt
+        return self.commence_dispatch.VersionExt
 
     def __str__(self) -> str:
         return f'<Cmc: "{self.name}">'

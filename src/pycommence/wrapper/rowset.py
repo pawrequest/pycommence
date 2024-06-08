@@ -7,7 +7,7 @@ from typing import TypeAlias
 from . import enums_cmc
 
 if typing.TYPE_CHECKING:
-    from .cmc_csr import CsrCmc
+    from .cmc_csr import CursorWrapper
 from ._icommence import (
     ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet,
     ICommenceQueryRowSet,
@@ -197,6 +197,8 @@ class RowSetModifies(RowSetBase):
 
         """
         for key, value in row_dict.items():
+            if isinstance(value, bool):
+                value = 'TRUE' if value else 'FALSE'
             col_idx = self.get_column_index(key)
             if col_idx == -1:
                 raise ValueError(f'Invalid column name: {key}')
@@ -217,7 +219,7 @@ class RowSetModifies(RowSetBase):
             raise ValueError('Commit failed')
         return True
 
-    def commit_get_cursor(self) -> CsrCmc:
+    def commit_get_cursor(self) -> CursorWrapper:
         """
         Makes row modifications permanent (commit to disk) and returns a cursor.
 

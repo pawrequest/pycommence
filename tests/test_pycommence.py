@@ -3,7 +3,7 @@ import contextlib
 import pytest
 
 from pycommence.cursor import get_csr
-from .conftest import GEOFF_DICT, GEOFF_KEY, JEFF_KEY, UPDATE_PKG_1
+from .conftest import GEOFF_DICT, GEOFF_KEY, JEFF_KEY, UPDATE_PKG_1, RICHARD_KEY
 from pycommence.pycmc_types import CmcError
 from pycommence import PyCommence
 
@@ -26,7 +26,7 @@ def test_pycmc(pycmc):
 def temp_geoff(pycmc: PyCommence):
     """Temporarily add GEOFF_DICT to Contact table. Remove after use."""
     try:
-        pycmc.add_record(pk_val=GEOFF_KEY, package=GEOFF_DICT)
+        pycmc.add_record(pk_val=GEOFF_KEY, row_dict=GEOFF_DICT)
         yield
     finally:
         pycmc.delete_record(pk_val=GEOFF_KEY)
@@ -66,14 +66,20 @@ def test_edit_record(pycmc: PyCommence):
     with temp_geoff(pycmc):
         original = pycmc.one_record(GEOFF_KEY)
 
-        pycmc.edit_record(pk_val=GEOFF_KEY, package=UPDATE_PKG_1)
+        pycmc.edit_record(pk_val=GEOFF_KEY, row_dict=UPDATE_PKG_1)
         edited = pycmc.one_record(GEOFF_KEY)
         for k, v in UPDATE_PKG_1.items():
             assert edited[k] == v
 
-        pycmc.edit_record(pk_val=GEOFF_KEY, package=original)
+        pycmc.edit_record(pk_val=GEOFF_KEY, row_dict=original)
         reverted = pycmc.one_record(GEOFF_KEY)
         assert reverted == original
+
+def test_edit_record2(pycmc: PyCommence):
+        pycmc.edit_record(pk_val=RICHARD_KEY, row_dict=UPDATE_PKG_1)
+        edited = pycmc.one_record(RICHARD_KEY)
+        for k, v in UPDATE_PKG_1.items():
+            assert edited[k] == v
 
 
 def test_add_record(pycmc: PyCommence):
@@ -95,12 +101,12 @@ def test_add_record(pycmc: PyCommence):
 def test_add_duplicate_raises(pycmc: PyCommence):
     with temp_geoff(pycmc):
         with pytest.raises(CmcError):
-            pycmc.add_record(pk_val=GEOFF_KEY, package=GEOFF_DICT)
+            pycmc.add_record(pk_val=GEOFF_KEY, row_dict=GEOFF_DICT)
 
 
 def test_add_replace(pycmc: PyCommence):
     with temp_geoff(pycmc):
-        pycmc.add_record(pk_val=GEOFF_KEY, package=UPDATE_PKG_1, existing='replace')
+        pycmc.add_record(pk_val=GEOFF_KEY, row_dict=UPDATE_PKG_1, existing='replace')
         res = pycmc.one_record(GEOFF_KEY)
         for k, v in UPDATE_PKG_1.items():
             assert res[k] == v
@@ -108,7 +114,7 @@ def test_add_replace(pycmc: PyCommence):
 
 def test_add_update(pycmc: PyCommence):
     with temp_geoff(pycmc):
-        pycmc.add_record(pk_val=GEOFF_KEY, package=UPDATE_PKG_1, existing='update')
+        pycmc.add_record(pk_val=GEOFF_KEY, row_dict=UPDATE_PKG_1, existing='update')
         res = pycmc.one_record(GEOFF_KEY)
         for k, v in UPDATE_PKG_1.items():
             assert res[k] == v

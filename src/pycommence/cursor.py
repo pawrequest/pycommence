@@ -4,57 +4,61 @@ import typing as _t
 import contextlib
 from functools import cached_property
 
+from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
 from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray
 from pycommence.wrapper import cmc_csr, cmc_db, rowset
+from .wrapper.cmc_csr import CursorWrapper
+from .wrapper.cmc_db import CommenceWrapper
 
 EmptyKind = _t.Literal['ignore', 'raise']
 
 
 @contextlib.contextmanager
-def csr_context(table_name, cmc_name: str = 'Commence.DB') -> Csr:
-    """Context manager for :class:`Csr`. pywincom handles teardown afaik, so this is a redundant placeholder."""
+def csr_context(table_name, cmc_name: str = 'Commence.DB') -> CursorAPI:
+    """Context manager for :class:`Csr`. pywincom handles teardown afaik."""
+    CoInitialize()
     try:
         csr_api = get_csr(table_name, cmc_name)
         yield csr_api
     finally:
-        ...
+        CoUninitialize()
 
 
-def get_csr(table_name, cmc_instance: str = 'Commence.DB') -> Csr:
+def get_csr(table_name, cmc_name: str = 'Commence.DB') -> CursorAPI:
     """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
-    cmc: cmc_db.Cmc = cmc_db.Cmc(cmc_instance)
-    csr_cmc: cmc_csr.CsrCmc = cmc.get_cursor(table_name)
-    return Csr(csr_cmc, db_name=cmc.name)
+    cmc = CommenceWrapper(cmc_name)
+    csr_cmc = cmc.get_cursor(table_name)
+    return CursorAPI(csr_cmc, db_name=cmc.name)
 
 
-class Csr:
+class CursorAPI:
     """Commence Cursor object.
 
     Provides access to rowsets and filter methods
     """
 
-    def __init__(self, csr_cmc: cmc_csr.CsrCmc, db_name: str):
-        self._cursor_cmc = csr_cmc
+    def __init__(self, csr_cmc: CursorWrapper, db_name: str):
+        self.cursor_wrapper = csr_cmc
         self.db_name = db_name
 
     def get_add_rowset(self, count: int = 1) -> rowset.RowSetAdd:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_add_row_set`."""
-        return self._cursor_cmc.get_add_row_set(count=count)
+        return self.cursor_wrapper.get_add_row_set(count=count)
 
     def get_edit_rowset(self, count: int = 1) -> rowset.RowSetEdit:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_edit_row_set`."""
-        return self._cursor_cmc.get_edit_row_set(count=count)
+        return self.cursor_wrapper.get_edit_row_set(count=count)
 
     def get_delete_rowset(self, count: int = 1) -> rowset.RowSetDelete:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_delete_row_set`."""
-        return self._cursor_cmc.get_delete_row_set(count=count)
+        return self.cursor_wrapper.get_delete_row_set(count=count)
 
     def get_query_rowset(self, count: int = 1) -> rowset.RowSetQuery:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_query_row_set`."""
 
-        return self._cursor_cmc.get_query_row_set(count=count)
+        return self.cursor_wrapper.get_query_row_set(count=count)
 
     def get_named_addset(self, pk_val: str) -> rowset.RowSetAdd:
         """Get an add rowset and set the primary key value."""
@@ -107,27 +111,27 @@ class Csr:
     @property
     def category(self):
         """Commence Category name."""
-        return self._cursor_cmc.category
+        return self.cursor_wrapper.category
 
     @property
     def column_count(self):
         """Number of columns in the Cursor."""
-        return self._cursor_cmc.column_count
+        return self.cursor_wrapper.column_count
 
     @property
     def row_count(self):
         """Number of rows in the Cursor."""
-        return self._cursor_cmc.row_count
+        return self.cursor_wrapper.row_count
 
     @property
     def shared(self):
         """True if the database is enrolled in a workgroup."""
-        return self._cursor_cmc.shared
+        return self.cursor_wrapper.shared
 
     @cached_property
     def pk_label(self):
         """Primary key label."""
-        qs = self._cursor_cmc.get_query_row_set(1)
+        qs = self.cursor_wrapper.get_query_row_set(1)
         return qs.get_column_label(0)
 
     def filter_by_field(
@@ -151,7 +155,7 @@ class Csr:
         """
         val_cond = f', "{value}"' if value else ''
         filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
-        res = self._cursor_cmc.set_filter(filter_str)
+        res = self.cursor_wrapper.set_filter(filter_str)
         if res:
             logger.debug(f'Filter set: {filter_str}')
         else:
@@ -177,7 +181,7 @@ class Csr:
         """
         filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
                       f'{connection.to_table}, {item_name})]')
-        self._cursor_cmc.set_filter(filter_str)
+        self.cursor_wrapper.set_filter(filter_str)
 
     def filter_by_cmcfil(self, cmc_filter: CmcFilter, slot=1) -> None:
         """Filter by CmcFilter object
@@ -201,7 +205,7 @@ class Csr:
 
     def filter_by_str(self, filter_str: str) -> None:
         """Filter by commence-style filter string."""
-        self._cursor_cmc.set_filter(filter_str)
+        self.cursor_wrapper.set_filter(filter_str)
 
     def clear_filter(self, slot=1) -> None:
         self.filter_by_str(f'[ViewFilter({slot},Clear)]')
