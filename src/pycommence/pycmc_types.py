@@ -68,18 +68,18 @@ CmcDateFormat = '%Y%m%d'
 CmcTimeFormat = '%H:%M'
 
 
-def get_cmc_date(datestr: str):
+def get_cmc_date(v: str):
     """Use CMC Cannonical flag"""
-    if isinstance(datestr, datetime):
-        return datestr.date()
-    elif isinstance(datestr, date):
-        return datestr
-    elif isinstance(datestr, str):
-        if datestr.isdigit():
-            if len(datestr) == 8:
-                return datetime.strptime(datestr, CmcDateFormat).date()
-        if len(datestr) == 10:
-            return datetime.fromisoformat(datestr).date()
+    if isinstance(v, datetime):
+        return v.date()
+    elif isinstance(v, date):
+        return v
+    elif isinstance(v, str):
+        if v.isdigit():
+            if len(v) == 8:
+                return datetime.strptime(v, CmcDateFormat).date()
+        if len(v) == 10:
+            return datetime.fromisoformat(v).date()
 
 
 def get_cmc_time(time_str: str):
