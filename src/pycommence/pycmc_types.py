@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typing as _t
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
@@ -70,9 +70,16 @@ CmcTimeFormat = '%H:%M'
 
 def get_cmc_date(datestr: str):
     """Use CMC Cannonical flag"""
-    if datestr.isdigit() and len(datestr) == 8:
-        return datetime.strptime(datestr, CmcDateFormat).date()
-    return datetime.fromisoformat(datestr).date()
+    if isinstance(datestr, datetime):
+        return datestr.date()
+    elif isinstance(datestr, date):
+        return datestr
+    elif isinstance(datestr, str):
+        if datestr.isdigit():
+            if len(datestr) == 8:
+                return datetime.strptime(datestr, CmcDateFormat).date()
+        if len(datestr) == 10:
+            return datetime.fromisoformat(datestr).date()
 
 
 def get_cmc_time(time_str: str):
