@@ -68,7 +68,7 @@ CmcDateFormat = '%Y%m%d'
 CmcTimeFormat = '%H:%M'
 
 
-def get_cmc_date(v: str):
+def get_cmc_date(v: str) -> date:
     """Use CMC Cannonical flag"""
     if isinstance(v, datetime):
         return v.date()
