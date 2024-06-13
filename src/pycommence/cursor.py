@@ -8,7 +8,7 @@ from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
 from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray
-from pycommence.wrapper import cmc_csr, cmc_db, rowset
+from pycommence.wrapper import rowset
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
 
@@ -202,6 +202,20 @@ class CursorAPI:
         """
         for slot, fil in fil_array.filters.items():
             self.filter_by_cmcfil(fil, slot)
+
+    @contextlib.contextmanager
+    def temporary_filter_by_array(self, fil_array: FilterArray):
+        """Temporarily filter by FilterArray object.
+
+        Args:
+            fil_array: FilterArray object
+
+        """
+        try:
+            self.filter_by_array(fil_array)
+            yield
+        finally:
+            [self.clear_filter(slot=_) for _ in fil_array.filters.keys()]
 
     def filter_by_str(self, filter_str: str) -> None:
         """Filter by commence-style filter string."""

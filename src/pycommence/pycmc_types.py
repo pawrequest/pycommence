@@ -39,10 +39,11 @@ class CmcFilter(BaseModel):
         """ Validate Condition and Value.
         Value must be set when condition is 'Contains' or 'Equal To'
         """
-        if self.condition == 'Contains' or self.condition == 'Equal To':
-            if not self.value:
-                raise ValueError('Value must be set when condition is "Contains"')
+        # if self.condition == 'Contains' or self.condition == 'Equal To':
+        #     if not self.value:
+        #         raise ValueError('Value must be set when condition is "Contains"')
         self.value = f', "{self.value}"' if self.value else ''
+        return self
 
     def filter_str(self, slot: int) -> str:
         filter_str = (
