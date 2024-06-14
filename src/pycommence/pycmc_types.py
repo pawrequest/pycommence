@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, model_validator
 
 # from pycommence.api import csr_api
 
-FilterConditionType = Literal['Equal To', 'Contains', 'After', 'Between', 'Before', 'Not Equal To', 'Not Contains']
+FilterConditionType = Literal['Equal To', 'Contains', 'After']
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
 
@@ -25,9 +25,6 @@ class FilterArray(BaseModel):
             self.filters[i + 1] = fil
         return self
 
-    def __str__(self):
-        return ', '.join([str(fil) for fil in self.filters.values()])
-
 
 class CmcFilter(BaseModel):
     """Cursor Filter."""
@@ -36,23 +33,16 @@ class CmcFilter(BaseModel):
     value: str = ''
     condition: FilterConditionType = 'Equal To'
     not_flag: NotFlagType = ''
-    value_set: bool = False
-
-    def __str__(self):
-        return f'{self.cmc_col} {self.condition} {self.value}'
 
     @model_validator(mode='after')
     def condition_val(self):
         """ Validate Condition and Value.
         Value must be set when condition is 'Contains' or 'Equal To'
         """
-        if self.value_set:
-            return self
         # if self.condition == 'Contains' or self.condition == 'Equal To':
         #     if not self.value:
         #         raise ValueError('Value must be set when condition is "Contains"')
         self.value = f', "{self.value}"' if self.value else ''
-        self.value_set = True
         return self
 
     def filter_str(self, slot: int) -> str:

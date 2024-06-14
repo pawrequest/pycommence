@@ -5,7 +5,6 @@ import pydantic as _p
 
 from . import cursor, pycmc_types
 from .cursor import csr_context
-from .pycmc_types import FilterArray
 
 
 class PyCommence(_p.BaseModel):
@@ -71,11 +70,7 @@ class PyCommence(_p.BaseModel):
 
     @classmethod
     @contextlib.contextmanager
-    def from_table_name_context(
-            cls,
-            table_name: str,
-            cmc_name: str = 'Commence.DB'
-    ) -> 'PyCommence':
+    def from_table_name_context(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
         """Context manager for :meth:`from_table_name`."""
         with csr_context(table_name, cmc_name) as csr:
             yield cls(csr=csr)
@@ -91,18 +86,8 @@ class PyCommence(_p.BaseModel):
         with self.csr.temporary_filter_pk(pk_val):
             return self.records()[0]
 
-    def records_by_array(self, filter_array: FilterArray, count: int | None = None) \
-            -> list[dict[str, str]]:
-        """Return records from the cursor by filter array."""
-        with self.csr.temporary_filter_by_array(filter_array):
-            return self.records(count)
-
     def records_by_field(
-            self,
-            field_name: str,
-            value: str,
-            max_rtn: int | None = None,
-            empty: _t.Literal['ignore', 'raise'] = 'raise'
+        self, field_name: str, value: str, max_rtn: int | None = None, empty: _t.Literal['ignore', 'raise'] = 'raise'
     ) -> list[dict[str, str]]:
         """
         Get records from the cursor by field name and value.
@@ -131,9 +116,9 @@ class PyCommence(_p.BaseModel):
             return records
 
     def edit_record(
-            self,
-            pk_val: str,
-            row_dict: dict,
+        self,
+        pk_val: str,
+        row_dict: dict,
     ) -> bool:
         """
         Modify a record.
@@ -172,11 +157,7 @@ class PyCommence(_p.BaseModel):
             return res
 
     def delete_multiple(
-            self,
-            *,
-            pk_vals: list[str],
-            max_delete: int | None = 1,
-            empty: pycmc_types.EmptyKind = 'raise'
+        self, *, pk_vals: list[str], max_delete: int | None = 1, empty: pycmc_types.EmptyKind = 'raise'
     ):
         """
         Delete multiple records.
@@ -198,10 +179,7 @@ class PyCommence(_p.BaseModel):
             self.delete_record(pk_val, empty=empty)
 
     def add_record(
-            self,
-            pk_val: str,
-            row_dict: dict[str, str],
-            existing: _t.Literal['replace', 'update', 'raise'] = 'raise'
+        self, pk_val: str, row_dict: dict[str, str], existing: _t.Literal['replace', 'update', 'raise'] = 'raise'
     ) -> bool:
         """
         Add a record.
