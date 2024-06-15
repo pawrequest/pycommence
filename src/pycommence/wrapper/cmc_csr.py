@@ -185,11 +185,8 @@ class CursorWrapper:
         GetQueryRowSet will advance the 'current row pointer' by the number of rows in the rowset.
 
         """
-        if count is None:
-            count = self.row_count
+        count = count or self.row_count
         result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
-        if result.rowcount == 0:
-            raise ValueError('No rows found.')
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
