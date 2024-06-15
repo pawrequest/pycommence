@@ -3,15 +3,22 @@ from __future__ import annotations
 import typing as _t
 from dataclasses import dataclass
 from datetime import date, datetime
+from enum import StrEnum, auto
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
 # from pycommence.api import csr_api
 
-FilterConditionType = Literal['Equal To', 'Contains', 'After', 'Between', 'Before', 'Not Equal To', 'Not Contains']
+FilterConditionType = Literal[
+    'Equal To', 'Contains', 'After', 'Between', 'Before', 'Not Equal To', 'Not Contains']
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
+
+
+class NoneFoundHandler(StrEnum):
+    ignore = auto()
+    error = auto()
 
 
 class FilterArray(BaseModel):
@@ -70,7 +77,7 @@ class Connection:
 
 
 class CmcError(Exception):
-    def __init__(self, msg='Commence is not installed'):
+    def __init__(self, msg: str = ''):
         self.msg = msg
         super().__init__(self.msg)
 

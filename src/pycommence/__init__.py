@@ -89,7 +89,10 @@ class PyCommence(_p.BaseModel):
     def one_record(self, pk_val: str) -> dict[str, str]:
         """Return a single record from the cursor by primary key."""
         with self.csr.temporary_filter_pk(pk_val):
-            return self.records()[0]
+            try:
+                return self.records()[0]
+            except IndexError:
+                raise pycmc_types.CmcError(f'No record found for primary key {pk_val}')
 
     def records_by_array(self, filter_array: FilterArray, count: int | None = None) \
             -> list[dict[str, str]]:
@@ -122,7 +125,7 @@ class PyCommence(_p.BaseModel):
                 - If max return is not None and more than max_rtn records are found.
 
         """
-        with self.csr.temporary_filter_fields(field_name, 'Equal To', value, empty=empty):
+        with self.csr.temporary_filter_fields(field_name, 'Equal To', value, none_found=empty):
             records = self.records()
             if not records and empty == 'raise':
                 raise pycmc_types.CmcError(f'No record found for {field_name} {value}')
@@ -163,7 +166,7 @@ class PyCommence(_p.BaseModel):
             bool: True on success
 
         """
-        with self.csr.temporary_filter_pk(pk_val, empty=empty):  # noqa: PyArgumentList
+        with self.csr.temporary_filter_pk(pk_val, none_found=empty):  # noqa: PyArgumentList
             if self.csr.row_count == 0 and empty == 'ignore':
                 return
             row_set = self.csr.get_delete_rowset(1)
@@ -215,7 +218,7 @@ class PyCommence(_p.BaseModel):
             bool: True on success
 
         """
-        with self.csr.temporary_filter_pk(pk_val, empty='ignore'):  # noqa: PyArgumentList
+        with self.csr.temporary_filter_pk(pk_val, none_found='ignore'):  # noqa: PyArgumentList
             if not self.csr.row_count:
                 row_set = self.csr.get_named_addset(pk_val)
             else:

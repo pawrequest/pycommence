@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-import typing as _t
 import contextlib
 from functools import cached_property
 
 from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
-from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray
+from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray, NoneFoundHandler
 from pycommence.wrapper import rowset
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
-
-EmptyKind = _t.Literal['ignore', 'raise']
 
 
 @contextlib.contextmanager
@@ -67,17 +64,23 @@ class CursorAPI:
         return row_set
 
     @contextlib.contextmanager
-    def temporary_filter_pk(self, pk: str, *, slot: int = 4, empty: EmptyKind = 'raise'):
+    def temporary_filter_pk(
+            self,
+            pk: str,
+            *,
+            slot: int = 4,
+            none_found: NoneFoundHandler = NoneFoundHandler.error
+    ):
         """Temporarily filter by primary key.
 
         Args:
             pk: Primary key value
             slot: Filter slot
-            empty: What to do if no record is found
+            none_found: What to do if no record is found
 
         """
         try:
-            self.filter_by_pk(pk, fslot=slot, empty=empty)
+            self.filter_by_pk(pk, fslot=slot, none_found=none_found)
             yield
         finally:
             self.clear_filter(slot)
@@ -90,7 +93,8 @@ class CursorAPI:
             field_value: str,
             *,
             slot: int = 4,
-            empty: EmptyKind = 'raise'
+            none_found: NoneFoundHandler = NoneFoundHandler.error
+
     ):
         """Temporarily filter by field.
 
@@ -99,11 +103,11 @@ class CursorAPI:
             condition: Filter condition
             field_value: Value to filter by
             slot: Filter slot
-            empty: What to do if no record is found
+            none_found: What to do if no record is found
 
         """
         try:
-            self.filter_by_field(field_key, condition, field_value, fslot=slot, empty=empty)
+            self.filter_by_field(field_key, condition, field_value, fslot=slot, none_found=none_found)
             yield
         finally:
             self.clear_filter(slot)
@@ -141,7 +145,7 @@ class CursorAPI:
             value: str = '',
             *,
             fslot: int = 1,
-            empty: EmptyKind = 'raise',
+            none_found: NoneFoundHandler = NoneFoundHandler.error,
     ) -> bool:
         """Filter by field.
 
@@ -150,7 +154,7 @@ class CursorAPI:
             condition: Filter condition
             value: Value to filter by
             fslot: Filter slot
-            empty: What to do if no record is found
+            none_found: What to do if no record is found
 
         """
         val_cond = f', "{value}"' if value else ''
@@ -160,7 +164,7 @@ class CursorAPI:
             logger.debug(f'Filter set: {filter_str}')
         else:
             logger.info(f'Filter: {filter_str}')
-            if empty == 'raise':
+            if none_found == NoneFoundHandler.error:
                 raise CmcError(f'Error setting filter: {filter_str}')
         return res
 
@@ -224,20 +228,32 @@ class CursorAPI:
     def clear_filter(self, slot=1) -> None:
         self.filter_by_str(f'[ViewFilter({slot},Clear)]')
 
-    def filter_by_pk(self, pk: str, *, fslot=1, empty: EmptyKind = 'raise'):
+    def filter_by_pk(
+            self,
+            pk: str,
+            *,
+            fslot=1,
+            none_found: NoneFoundHandler = NoneFoundHandler.error
+    ):
         """Filter by primary key.
 
         Args:
             pk: Primary key value
             fslot: Filter slot
-            empty: What to do if no record is found
+            none_found: What to do if no record is found
 
         """
         if not pk:
             raise ValueError('pk must be a non-empty string')
-        self.filter_by_field(self.pk_label, 'Equal To', value=pk, fslot=fslot, empty=empty)
+        self.filter_by_field(
+            self.pk_label,
+            'Equal To',
+            value=pk,
+            fslot=fslot,
+            none_found=none_found
+        )
         if self.row_count == 0:
-            if empty == 'raise':
+            if none_found == 'raise':
                 raise CmcError(f'No record found for {self.pk_label} {pk}')
         if self.row_count > 1:
             raise CmcError(f'Expected 1 record, got {self.row_count}')

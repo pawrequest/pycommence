@@ -1,7 +1,6 @@
 from loguru import logger
 
-from . import enums_cmc as cenum
-from . import rowset as rs
+from . import enums_cmc as cenum, rowset as rs
 from ._icommence import ICommenceCursor
 
 
