@@ -96,7 +96,7 @@ def get_cmc_date(v: str) -> date:
         if v.isdigit():
             if len(v) == 8:
                 return datetime.strptime(v, CmcDateFormat).date()
-        if len(v) == 10:
+        if len(v) in [7, 10]:
             return datetime.fromisoformat(v).date()
 
 

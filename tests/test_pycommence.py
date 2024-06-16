@@ -160,5 +160,5 @@ def test_fiters(pycmc_radios_hire, fil_array):
     count = pycmc_radios_hire.csr.row_count
     with pycmc_radios_hire.csr.temporary_filter_by_array(fil_array):
         c2 = pycmc_radios_hire.csr.row_count
-        assert c2 > count
+        assert c2 < count
         ...
