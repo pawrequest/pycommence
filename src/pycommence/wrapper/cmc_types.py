@@ -43,27 +43,27 @@ class CmcFieldDataType(enum.Enum):
     CALCULATION = str
     SEQUENCE = int
     SELECTION = str
-    EMAIL = _p.EmailStr
+    EMAIL = str
     URL = _p.HttpUrl
 
 
-CmcFieldDataTypeMap = {
-    'TEXT': str,
-    'NUMBER': Decimal,
-    'DATE': datetime.date,
-    'TELEPHONE': str,
-    'CHECKBOX': bool,
-    'NAME': str,
-    'DATAFILE': pathlib.Path,
-    'IMAGE': pathlib.Path,
-    'TIME': datetime.time,
-    'EXCEL_CELL': str,
-    'CALCULATION': str,
-    'SEQUENCE': int,
-    'SELECTION': str,
-    'EMAIL': _p.EmailStr,
-    'URL': _p.HttpUrl
-}
+# CmcFieldDataTypeMap = {
+#     'TEXT': str,
+#     'NUMBER': Decimal,
+#     'DATE': datetime.date,
+#     'TELEPHONE': str,
+#     'CHECKBOX': bool,
+#     'NAME': str,
+#     'DATAFILE': pathlib.Path,
+#     'IMAGE': pathlib.Path,
+#     'TIME': datetime.time,
+#     'EXCEL_CELL': str,
+#     'CALCULATION': str,
+#     'SEQUENCE': int,
+#     'SELECTION': str,
+#     'EMAIL': str,
+#     'URL': _p.HttpUrl
+# }
 
 
 class CmcFieldDefinition(_p.BaseModel):
