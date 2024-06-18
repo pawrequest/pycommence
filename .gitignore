@@ -1,6 +1,5 @@
 /venv/
 /build/
-/dist/
 /src/commence_py.egg-info/
 /.idea/
 *__pycache__*
