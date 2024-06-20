@@ -5,19 +5,21 @@ from functools import cached_property
 
 from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
+from pycommence.wrapper import rowset
 
 from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray, NoneFoundHandler
-from pycommence.wrapper import rowset
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
 
 
 @contextlib.contextmanager
-def csr_context(table_name, cmc_name: str = 'Commence.DB') -> CursorAPI:
+def csr_context(table_name, cmc_name: str = 'Commence.DB', filter_array: FilterArray | None = None) -> CursorAPI:
     """Context manager for :class:`Csr`. pywincom handles teardown afaik."""
     CoInitialize()
     try:
         csr_api = get_csr(table_name, cmc_name)
+        if filter_array:
+            csr_api.filter_by_array(filter_array)
         yield csr_api
     finally:
         CoUninitialize()
@@ -39,6 +41,10 @@ class CursorAPI:
     def __init__(self, csr_cmc: CursorWrapper, db_name: str):
         self.cursor_wrapper = csr_cmc
         self.db_name = db_name
+
+    # @property
+    # def table_name(self):
+    #     return self.cursor_wrapper.
 
     def get_add_rowset(self, count: int = 1) -> rowset.RowSetAdd:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_add_row_set`."""
@@ -158,7 +164,7 @@ class CursorAPI:
 
         """
         val_cond = f', "{value}"' if value else ''
-        filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'  # noqa: E231
+        filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'
         res = self.cursor_wrapper.set_filter(filter_str)
         if res:
             logger.debug(f'Filter set: {filter_str}')
@@ -183,7 +189,7 @@ class CursorAPI:
             fslot: Filter slot
 
         """
-        filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '  # noqa: E231
+        filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '
                       f'{connection.to_table}, {item_name})]')
         self.cursor_wrapper.set_filter(filter_str)
 

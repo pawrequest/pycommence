@@ -19,6 +19,7 @@ class CursorWrapper:
     def __str__(self):
         return f'CmcCursor: "{self.category}"'
 
+
     @property
     def category(self):
         return self._csr_cmc.Category

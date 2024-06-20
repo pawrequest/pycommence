@@ -60,24 +60,24 @@ class PyCommence(_p.BaseModel):
     """
 
     csr: cursor.CursorAPI  # Obtained from cursor.get_csr, or via PyCommence.from_table_name
-
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,
     )
 
-    @classmethod
-    def from_table_name(cls, table_name: str, cmc_name: str = 'Commence.DB') -> 'PyCommence':
-        return cls(csr=cursor.get_csr(table_name, cmc_name))
+    @property
+    def row_count(self) -> int:
+        return self.csr.row_count
 
     @classmethod
     @contextlib.contextmanager
     def from_table_name_context(
             cls,
             table_name: str,
-            cmc_name: str = 'Commence.DB'
+            cmc_name: str = 'Commence.DB',
+            filter_array: FilterArray | None = None,
     ) -> 'PyCommence':
         """Context manager for :meth:`from_table_name`."""
-        with csr_context(table_name, cmc_name) as csr:
+        with csr_context(table_name, cmc_name, filter_array=filter_array) as csr:
             yield cls(csr=csr)
 
     def records(self, count: int or None = None) -> list[dict[str, str]]:
