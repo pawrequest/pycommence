@@ -30,7 +30,7 @@ class CmcConnector:
 
     def __init__(self, commence_instance_name: str = 'Commence.DB'):
         self.commence_instance_name = commence_instance_name
-        logger.info(f'Initializing COM connection to {self.commence_instance_name}')
+        logger.debug(f'Initializing COM connection to {self.commence_instance_name}')
         self.commence_dispatch: Dispatch = self._initialize_connection()
 
     def _initialize_connection(self) -> Dispatch:

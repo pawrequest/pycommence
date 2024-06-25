@@ -10,15 +10,28 @@ from pydantic import BaseModel, Field, model_validator
 
 # from pycommence.api import csr_api
 
-FilterConditionType = Literal[
-    'Equal To', 'Contains', 'After', 'Between', 'Before', 'Not Equal To', 'Not Contains']
+FilterConditionType = Literal['Equal To', 'Contains', 'After', 'Between', 'Before', 'Not Equal To', 'Not Contains']
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
+
+
+class ConditionType(StrEnum):
+    EQUAL = 'Equal To'
+    CONTAIN = 'Contains'
+    AFTER = 'After'
+    BETWEEN = 'Between'
+    BEFORE = 'Before'
+    NOT_EQUAL = 'Not Equal To'
+    NOT_CONTAIN = 'Not Contains'
 
 
 class NoneFoundHandler(StrEnum):
     ignore = auto()
     error = auto()
+
+
+class RadioType(StrEnum):
+    HYT = 'Hytera Digital'
 
 
 class FilterArray(BaseModel):
@@ -38,19 +51,20 @@ class FilterArray(BaseModel):
 
 class CmcFilter(BaseModel):
     """Cursor Filter."""
+
     cmc_col: str
     f_type: FilterType = 'F'
     value: str = ''
-    condition: FilterConditionType = 'Equal To'
+    condition: FilterConditionType | ConditionType = 'Equal To'
     not_flag: NotFlagType = ''
     value_set: bool = False
 
     def __str__(self):
-        return f'{self.cmc_col} {self.condition} {self.value}'
+        return f'{self.cmc_col} {self.not_flag} {self.condition} {self.value}'
 
     @model_validator(mode='after')
     def condition_val(self):
-        """ Validate Condition and Value.
+        """Validate Condition and Value.
         Value must be set when condition is 'Contains' or 'Equal To'
         """
         if self.value_set:
@@ -101,7 +115,7 @@ def get_cmc_date(v: str) -> date:
 
 
 def get_cmc_time(time_str: str):
-    """ Use CMC Cannonical flag"""
+    """Use CMC Cannonical flag"""
     return datetime.strptime(time_str, CmcTimeFormat).time()
 
 
