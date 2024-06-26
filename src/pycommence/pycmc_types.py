@@ -40,11 +40,9 @@ class FilterArray(BaseModel):
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
 
-    def add_replace_filters(self, *filters: CmcFilter):
-        """Add Filters by their index. Overwrites if index exists."""
-        for i, fil in enumerate(filters):
-            self.filters[i + 1] = fil
-        return self
+    @classmethod
+    def from_filters(cls, *filters: CmcFilter):
+        return cls(filters={i: fil for i, fil in enumerate(list(filters), 1)})
 
     def __str__(self):
         return ', '.join([str(fil) for fil in self.filters.values()])
