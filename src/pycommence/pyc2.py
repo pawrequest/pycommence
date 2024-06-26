@@ -6,7 +6,13 @@ from pydantic import Field, field_validator
 
 from . import cursor, pycmc_types
 from .cursor import CursorAPI
-from .pycmc_types import FilterArray, NoneFoundHandler, PyCommenceExistsError
+from .pycmc_types import (
+    FilterArray,
+    NoneFoundHandler,
+    PyCommenceExistsError,
+    PyCommenceMaxExceededError,
+    PyCommenceNotFoundError,
+)
 from .wrapper.cmc_db import CommenceWrapper
 
 
@@ -60,6 +66,10 @@ class PyCommence(_p.BaseModel):
         """Return a single record from the cursor by primary key."""
         csr = self.csrs[tblname]
         with csr.temporary_filter_pk(pk_val):
+            if csr.row_count == 0:
+                raise PyCommenceNotFoundError(f'No record found for primary key {pk_val}')
+            elif csr.row_count > 1:
+                raise PyCommenceMaxExceededError(f'Multiple records found for primary key {pk_val}')
             try:
                 return self.records(tblname)[0]
             except IndexError:
@@ -71,23 +81,6 @@ class PyCommence(_p.BaseModel):
         csr = self.csrs[tblname]
         with csr.temporary_filter_by_array(filter_array):
             return self.records(tblname, count)
-
-    def records_by_field(
-            self,
-            tblname: str,
-            field_name: str,
-            value: str,
-            max_rtn: int | None = None,
-            empty: _t.Literal['ignore', 'raise'] = 'raise',
-    ) -> list[dict[str, str]]:
-        csr = self.csrs[tblname]
-        with csr.temporary_filter_fields(field_name, 'Equal To', value, none_found=empty):
-            records = self.records(tblname)
-            if not records and empty == 'raise':
-                raise pycmc_types.CmcError(f'No record found for {field_name} {value}')
-            if max_rtn and len(records) > max_rtn:
-                raise pycmc_types.CmcError(f'Expected max {max_rtn} records, got {len(records)}')
-            return records
 
     def edit_record(self, tblname: str, pk_val: str, row_dict: dict) -> _t.Self:
         csr = self.csrs[tblname]
@@ -149,4 +142,3 @@ class PyCommence(_p.BaseModel):
             row_set.commit()
             self.set_csr(tblname)
             return self
-
