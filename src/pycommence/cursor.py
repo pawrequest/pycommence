@@ -227,7 +227,7 @@ class CursorAPI:
         """
         for slot, fil in fil_array.filters.items():
             self.filter_by_cmcfil(fil, slot)
-            return self
+        return self
 
     def filter_by_str(self, filter_str: str) -> None:
         """Filter by commence-style filter string."""

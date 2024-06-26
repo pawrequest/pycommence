@@ -30,7 +30,7 @@ class PyCommence(_p.BaseModel):
         csr.filter_by_array(filter_array)
         return self
 
-    def clear_csr_filter(self, tblname: str):
+    def clear_csr_filters(self, tblname: str):
         csr = self.csrs[tblname]
         csr.clear_all_filters()
         return self
