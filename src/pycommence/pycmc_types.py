@@ -23,6 +23,7 @@ class ConditionType(StrEnum):
     BEFORE = 'Before'
     NOT_EQUAL = 'Not Equal To'
     NOT_CONTAIN = 'Not Contains'
+    ON = 'On'
 
 
 class NoneFoundHandler(StrEnum):
@@ -98,6 +99,10 @@ class CmcError(Exception):
 
 CmcDateFormat = '%Y%m%d'
 CmcTimeFormat = '%H:%M'
+
+
+def to_cmc_date(datecheck: date):
+    return datecheck.strftime(CmcDateFormat)
 
 
 def get_cmc_date(v: str) -> date:
