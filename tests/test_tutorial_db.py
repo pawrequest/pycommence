@@ -74,7 +74,7 @@ def test_get_one_record(pycmc_contact: PyCommence):
 
 
 def test_get_records_by_field(pycmc_contact: PyCommence):
-    res = pycmc_contact.records_by_field('firstName', 'Jeff')
+    res = pycmc_contact.records_by_field(, 'firstName', 'Jeff'
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
     assert res[0]['firstName'] == 'Jeff'
