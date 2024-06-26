@@ -59,7 +59,7 @@ class CursorAPI:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_delete_row_set`."""
         return self.cursor_wrapper.get_delete_row_set(count=count)
 
-    def get_query_rowset(self, count: int = 1) -> rowset.RowSetQuery:
+    def get_query_rowset(self, count: int | None = None) -> rowset.RowSetQuery:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_query_row_set`."""
 
         return self.cursor_wrapper.get_query_row_set(count=count)
