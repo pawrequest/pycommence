@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import contextlib
 from functools import cached_property
+from typing import Self
 
 from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
-from pycommence.wrapper import rowset
 
+from pycommence.wrapper import rowset
 from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray, NoneFoundHandler
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
@@ -38,8 +39,8 @@ class CursorAPI:
     Provides access to rowsets and filter methods
     """
 
-    def __init__(self, csr_cmc: CursorWrapper, db_name: str):
-        self.cursor_wrapper = csr_cmc
+    def __init__(self, cursor_wrapper: CursorWrapper, db_name: str):
+        self.cursor_wrapper = cursor_wrapper
         self.db_name = db_name
 
     # @property
@@ -144,6 +145,20 @@ class CursorAPI:
         qs = self.cursor_wrapper.get_query_row_set(1)
         return qs.get_column_label(0)
 
+    @contextlib.contextmanager
+    def temporary_filter_by_array(self, fil_array: FilterArray):
+        """Temporarily filter by FilterArray object.
+
+        Args:
+            fil_array: FilterArray object
+
+        """
+        try:
+            self.filter_by_array(fil_array)
+            yield
+        finally:
+            [self.clear_filter(slot=_) for _ in fil_array.filters.keys()]
+
     def filter_by_field(
             self,
             field_name: str,
@@ -203,7 +218,7 @@ class CursorAPI:
         """
         self.filter_by_str(cmc_filter.filter_str(slot))
 
-    def filter_by_array(self, fil_array: FilterArray) -> None:
+    def filter_by_array(self, fil_array: FilterArray) -> Self:
         """Filter by FilterArray object
 
         Args:
@@ -212,20 +227,7 @@ class CursorAPI:
         """
         for slot, fil in fil_array.filters.items():
             self.filter_by_cmcfil(fil, slot)
-
-    @contextlib.contextmanager
-    def temporary_filter_by_array(self, fil_array: FilterArray):
-        """Temporarily filter by FilterArray object.
-
-        Args:
-            fil_array: FilterArray object
-
-        """
-        try:
-            self.filter_by_array(fil_array)
-            yield
-        finally:
-            [self.clear_filter(slot=_) for _ in fil_array.filters.keys()]
+            return self
 
     def filter_by_str(self, filter_str: str) -> None:
         """Filter by commence-style filter string."""
@@ -233,6 +235,10 @@ class CursorAPI:
 
     def clear_filter(self, slot=1) -> None:
         self.filter_by_str(f'[ViewFilter({slot},Clear)]')
+
+    def clear_all_filters(self) -> None:
+        """Clear all filters."""
+        [self.clear_filter(i) for i in range(1, 9)]
 
     def filter_by_pk(
             self,

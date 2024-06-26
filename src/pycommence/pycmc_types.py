@@ -97,6 +97,22 @@ class CmcError(Exception):
         super().__init__(self.msg)
 
 
+class PyCommenceError(Exception):
+    pass
+
+
+class PyCommenceExistsError(PyCommenceError):
+    pass
+
+
+class PyCommenceNotFoundError(PyCommenceError):
+    pass
+
+
+class PyCommenceMaxExceededError(PyCommenceError):
+    pass
+
+
 CmcDateFormat = '%Y%m%d'
 CmcTimeFormat = '%H:%M'
 
