@@ -4,146 +4,6 @@
 #     time.sleep(1)
 import pytest
 
-# @pytest.fixture(scope='function', autouse=True)
-# def com_setup():
-#     pythoncom.CoInitialize()
-#     yield
-#     pythoncom.CoUninitialize()
-
-
-# JEFF_DICT = {
-#     'contactKey': 'Bezos.Jeff',
-#     'homeAddress': '',
-#     'businessNumber': '1800 3000 9009',
-#     'homeNumber': '',
-#     'faxNumber': '',
-#     'Notes': '',
-#     'Nickname': '',
-#     'Extension': '',
-#     'Title': 'CEO of Amazon',
-#     'mobileNumber': '',
-#     'pagerNumber': '',
-#     'Birthday': '',
-#     'emailHome': '',
-#     'firstName': 'Jeff',
-#     'MI': '',
-#     'Salutation': 'None',
-#     'City': '',
-#     'stateProvince': '',
-#     'zipPostal': '',
-#     'properName': 'Mr. Jeff Bezos',
-#     'spouseName': '',
-#     'lastName': 'Bezos',
-#     'emailBusiness': '',
-#     'doNotSolicit': 'FALSE',
-#     'busCity': 'Seattle',
-#     'busCountry': 'USA',
-#     'busState': 'WA',
-#     'busStreet': '410 Terry Ave N',
-#     'busZip': '98109',
-#     'Account': 'Amazon',
-#     'otherTelephone': '',
-#     'mainTelephone': '',
-#     'addModifyUser': 'Simpson.Barry.T',
-#     'addModifyDate': '20190815',
-#     'mailCode': '',
-#     'nextContact': '',
-#     'lastContact': '20190807',
-#     'DOB': '',
-#     'Relates to Activity': '',
-#     'Relates to Account': 'Amazon',
-#     'Relates to Opportunity': '',
-#     'LinkedInLink': '',
-#     'Relates to mailingType': '',
-#     'Relates to Attachment': '',
-#     'twitterLink': 'https://twitter.com/jeffbezos',
-#     'Relates to Address': 'Customer service_code PO Box',
-#     'Relates to History': '',
-#     'Relates to Expense': '',
-#     'FacebookLink': 'https://www.facebook.com/groups/1654560838132448/',
-#     'Relates to contactType': '',
-#     'Relates to contactInterest': '',
-#     'Relates to Employee': 'Simpson.Barry.T',
-#     'Handheld Device Employee': 'Simpson.Barry.T',
-#     'ID': '27BH1B',
-#     'cityStateZip': 'Seattle, WA 98109',
-#     'Influence': 'Low',
-#     'Relates to detailNote': '',
-#     'Manager of Contact': '',
-#     'Managed by Contact': '',
-#     'isPrimary': 'FALSE',
-#     'Relates to Salutation': 'Mr.',
-# }
-# JEFF_DICT_EDITED = {
-#     'Account': 'Amazon',
-#     'Birthday': '',
-#     'City': '',
-#     'DOB': '',
-#     'Extension': '',
-#     'FacebookLink': 'https://www.facebook.com/groups/1654560838132448/',
-#     'Handheld Device Employee': 'Simpson.Barry.T',
-#     'ID': '27BH1B',
-#     'Influence': 'Low',
-#     'LinkedInLink': '',
-#     'MI': '',
-#     'Managed by Contact': '',
-#     'Manager of Contact': '',
-#     'Nickname': '',
-#     'Notes': 'GEOFF',
-#     'Relates to Account': 'Amazon',
-#     'Relates to Activity': '',
-#     'Relates to Address': 'Customer service_code PO Box',
-#     'Relates to Attachment': '',
-#     'Relates to Employee': 'Simpson.Barry.T',
-#     'Relates to Expense': '',
-#     'Relates to History': '',
-#     'Relates to Opportunity': '',
-#     'Relates to Salutation': 'Mr.',
-#     'Relates to contactInterest': '',
-#     'Relates to contactType': '',
-#     'Relates to detailNote': '',
-#     'Relates to mailingType': '',
-#     'Salutation': 'None',
-#     'Title': 'CEO of Amazon',
-#     'addModifyDate': '20190815',
-#     'addModifyUser': 'Simpson.Barry.T',
-#     'busCity': 'Seattle',
-#     'busCountry': 'USA',
-#     'busState': 'WA',
-#     'busStreet': '410 Terry Ave N',
-#     'busZip': '98109',
-#     'businessNumber': '1800 3000 9009',
-#     'cityStateZip': 'Seattle, WA 98109',
-#     'contactKey': 'Bezos.Geoff',
-#     'doNotSolicit': 'FALSE',
-#     'emailBusiness': '',
-#     'emailHome': '',
-#     'faxNumber': '',
-#     'firstName': 'Geoff',
-#     'homeAddress': 'GEOFF',
-#     'homeNumber': '',
-#     'isPrimary': 'FALSE',
-#     'lastContact': '20190807',
-#     'lastName': 'Bezos',
-#     'mailCode': '',
-#     'mainTelephone': '',
-#     'mobileNumber': '',
-#     'nextContact': '',
-#     'otherTelephone': '',
-#     'pagerNumber': '',
-#     'properName': 'Mr. Jeff Bezos',
-#     'spouseName': '',
-#     'stateProvince': '',
-#     'twitterLink': 'https://twitter.com/jeffbezos',
-#     'zipPostal': '',
-# }
-# RICHARD_KEY = 'Branson.Richard'
-# JEFF_EDITED_KEY = JEFF_DICT_EDITED.get('contactKey')
-# JEFF_KEY = JEFF_DICT.get('contactKey')
-#
-# UPDATE_PKG_1 = {'firstName': 'test2', 'doNotSolicit': 'TRUE'}
-# PK_VAL = 'Col0 Val'
-#
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff',
     'businessNumber': '1800 3000 9009',
@@ -168,7 +28,7 @@ JEFF_DICT = {
     'isPrimary': 'FALSE',
 }
 
-JEFF_DICT_EDITED = {
+JEFF_EDITED_DICT = {
     'contactKey': 'Bezos.Geoff', 'homeAddress': 'GEOFF', 'businessNumber': '1800 3000 9009', 'homeNumber': '',
     'faxNumber': '', 'Notes': 'GEOFF', 'Nickname': '', 'Extension': '', 'Title': 'CEO of Amazon', 'mobileNumber': '',
     'pagerNumber': '', 'Birthday': '', 'emailHome': '', 'firstName': 'Geoff', 'MI': '', 'Salutation': 'None',
@@ -197,6 +57,46 @@ NEW_DICT = {
     'busStreet': '410 Terry Ave N',
 }
 
+RICHARD_KEY = 'Branson.Richard'
+JEFF_EDITED_KEY = JEFF_EDITED_DICT.get('contactKey')
+JEFF_KEY = JEFF_DICT.get('contactKey')
+
+UPDATE_PKG_1 = {'firstName': 'test2', 'doNotSolicit': 'TRUE'}
+PK_VAL = 'Col0 Val'
+
+
+def pyc_contact_old():
+    from pycommence import PyCommence
+    from pycommence.cursor import get_csr
+    csr = get_csr('Contact')
+    if not csr.db_name == 'Tutorial':
+        raise ValueError('Expected Tutorial DB')
+    return PyCommence(csr=csr)
+
+
+def get_new_pycmc(tblname: str | None = None):
+    from pycommence.pyc2 import PyCommence
+    pycmc = PyCommence()
+    if tblname:
+        pycmc.set_csr(tblname=tblname)
+    if not pycmc.cmc_wrapper.name == 'Tutorial':
+        raise ValueError('Expected Tutorial DB')
+    return pycmc
+
+
+def pyc_contact_new():
+    return get_new_pycmc('Contact')
+
+
+def pyc_empty_new():
+    return get_new_pycmc()
+
+
+@pytest.fixture(scope='session', params=[pyc_contact_old, pyc_contact_new])
+def pyc_contact_prm(request):
+    param = request.param
+    return param()
+
 
 @pytest.fixture(scope='session')
 def new_dict():
@@ -208,22 +108,14 @@ def new_key():
     return NEW_DICT.get('contactKey')
 
 
-RICHARD_KEY = 'Branson.Richard'
-JEFF_EDITED_KEY = JEFF_DICT_EDITED.get('contactKey')
-JEFF_KEY = JEFF_DICT.get('contactKey')
-
-UPDATE_PKG_1 = {'firstName': 'test2', 'doNotSolicit': 'TRUE'}
-PK_VAL = 'Col0 Val'
-
-
 @pytest.fixture(scope='session')
 def jeff_dict():
     return JEFF_DICT
 
 
 @pytest.fixture(scope='session')
-def jeff_dict_edited():
-    return JEFF_DICT_EDITED
+def jeff_edited_dict():
+    return JEFF_EDITED_DICT
 
 
 @pytest.fixture(scope='session')
@@ -251,4 +143,4 @@ def pk_val():
     return PK_VAL
 
 
-__all__ = ['JEFF_DICT', 'JEFF_DICT_EDITED', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'UPDATE_PKG_1']
+__all__ = ['JEFF_DICT', 'JEFF_EDITED_DICT', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'UPDATE_PKG_1', 'PK_VAL', 'RICHARD_KEY']
