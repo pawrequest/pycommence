@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, StrEnum
 
 
 class CursorType(Enum):
@@ -58,6 +58,7 @@ class OptionFlag(Enum):
     PILOT = 0x0008
     CANONICAL = 0x0010
     INTERNET = 0x0020
+    UNUSED = 0
 
 
 FLAGS_UNUSED = 0
