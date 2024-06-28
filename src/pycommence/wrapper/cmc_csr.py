@@ -2,6 +2,7 @@ from loguru import logger
 
 from . import enums_cmc as cenum, rowset as rs
 from ._icommence import ICommenceCursor
+from .. import PyCommenceNotFoundError
 
 
 class CursorWrapper:
@@ -43,8 +44,6 @@ class CursorWrapper:
         Args:
             filter_text (str): Text defining the new filter clause. Syntax is identical to the one used by the DDE ViewFilter request.
 
-        Raises:
-            CmcError on fail
 
         Returns:
             bool: True on success.
@@ -229,7 +228,7 @@ class CursorWrapper:
             count = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
         if res.row_count == 0:
-            raise ValueError()
+            raise PyCommenceNotFoundError()
         return res
 
     def get_edit_row_set(self, count: int or None = None) -> rs.RowSetEdit:

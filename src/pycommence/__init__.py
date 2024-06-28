@@ -3,9 +3,9 @@ import typing as _t
 
 import pydantic as _p
 
-from . import cursor, pycmc_types
-from .cursor import csr_context
-from .pycmc_types import FilterArray, PyCommenceNotFoundError, PyCommenceExistsError
+from . import pycmc_types
+from .cursor import CursorAPI, csr_context
+from .pycmc_types import FilterArray, PyCommenceExistsError, PyCommenceNotFoundError
 
 
 # def init_logging(external_logger=None):
@@ -64,7 +64,7 @@ class PyCommence(_p.BaseModel):
 
     """
 
-    csr: cursor.CursorAPI  # Obtained from cursor.get_csr, or via PyCommence.from_table_name
+    csr: CursorAPI  # Obtained from cursor.get_csr, or via PyCommence.from_table_name
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,
     )
@@ -73,8 +73,15 @@ class PyCommence(_p.BaseModel):
     def row_count(self) -> int:
         return self.csr.row_count
 
-    def get_csr(self):
+    def get_csr(self) -> CursorAPI:
         return self.csr
+
+    @contextlib.contextmanager
+    def temporary_filter_cursor(self, filter_array: FilterArray) -> _t.Iterator[CursorAPI]:
+        csr = self.get_csr()
+        csr.filter_by_array(filter_array)
+        yield csr
+        csr.clear_all_filters()
 
     @classmethod
     @contextlib.contextmanager

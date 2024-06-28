@@ -82,7 +82,7 @@ class PyCommence(_p.BaseModel):
         return self
 
     @contextlib.contextmanager
-    def temporary_filter_cursor(self, tblname: str, filter_array: FilterArray) -> _t.Iterator[CursorAPI]:
+    def temporary_filter_cursor(self, filter_array: FilterArray, tblname: str | None = None) -> _t.Iterator[CursorAPI]:
         csr = self.get_csr(tblname)
         csr.filter_by_array(filter_array)
         yield csr
