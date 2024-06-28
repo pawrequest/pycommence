@@ -5,7 +5,6 @@ MakePy generated api for Commence Rm COM object, mostly as generated
 """
 from __future__ import annotations
 
-from pycommence.wrapper.enums_cmc import OptionFlag, FLAGS_UNUSED
 
 # ruff: noqa
 # -*- coding: mbcs -*-
@@ -178,8 +177,8 @@ class ICommenceAddRowSet(DispatchBaseClass):
             nRow=defaultNamedNotOptArg,
             nCol=defaultNamedNotOptArg,
             pBuf=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
-        flags = FLAGS_UNUSED
         return self._oleobj_.InvokeTypes(
             23,
             LCID,
@@ -254,8 +253,9 @@ class ICommenceCursor(DispatchBaseClass):
         return ret
 
     # Result is of type ICommenceDeleteRowSet
-    def GetDeleteRowSet(self, nCount=defaultNamedNotOptArg) -> 'ICommenceDeleteRowSet':
-        flags = OptionFlag.UNUSED
+    def GetDeleteRowSet(
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+    ) -> 'ICommenceDeleteRowSet':
         ret = self._oleobj_.InvokeTypes(
             31, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
         )
@@ -266,8 +266,9 @@ class ICommenceCursor(DispatchBaseClass):
         return ret
 
     # Result is of type ICommenceDeleteRowSet
-    def GetDeleteRowSetByID(self, pRowID=defaultNamedNotOptArg) -> 'ICommenceDeleteRowSet':
-        flags = OptionFlag.UNUSED
+    def GetDeleteRowSetByID(
+            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+    ) -> 'ICommenceDeleteRowSet':
         ret = self._oleobj_.InvokeTypes(
             32, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
         )
@@ -278,8 +279,9 @@ class ICommenceCursor(DispatchBaseClass):
         return ret
 
     # Result is of type ICommenceEditRowSet
-    def GetEditRowSet(self, nCount=defaultNamedNotOptArg) -> 'ICommenceEditRowSet':
-        flags = OptionFlag.UNUSED
+    def GetEditRowSet(
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
+    ) -> 'ICommenceEditRowSet':
         ret = self._oleobj_.InvokeTypes(
             29, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
         )
@@ -291,9 +293,8 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceEditRowSet
     def GetEditRowSetByID(
-            self, pRowID=defaultNamedNotOptArg
+            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceEditRowSet':
-        flags = OptionFlag.UNUSED
         ret = self._oleobj_.InvokeTypes(
             30, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
         )
@@ -305,9 +306,8 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceQueryRowSet
     def GetQueryRowSet(
-            self, nCount=defaultNamedNotOptArg
+            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceQueryRowSet':
-        flags = OptionFlag.NONE
         ret = self._oleobj_.InvokeTypes(
             26, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
         )
@@ -319,9 +319,8 @@ class ICommenceCursor(DispatchBaseClass):
 
     # Result is of type ICommenceQueryRowSet
     def GetQueryRowSetByID(
-            self, pRowID=defaultNamedNotOptArg
+            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
     ) -> 'ICommenceQueryRowSet':
-        flags = OptionFlag.UNUSED
         ret = self._oleobj_.InvokeTypes(
             27, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
         )
@@ -343,8 +342,7 @@ class ICommenceCursor(DispatchBaseClass):
             25, LCID, 1, (3, 0), ((3, 1), (3, 1)), nNumerator, nDenom
         )
 
-    def SetActiveDate(self, sDate=defaultNamedNotOptArg):
-        flags = OptionFlag.UNUSED
+    def SetActiveDate(self, sDate=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(
             34, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags
         )
@@ -353,8 +351,8 @@ class ICommenceCursor(DispatchBaseClass):
             self,
             startDate=defaultNamedNotOptArg,
             endDate=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
-        flags = OptionFlag.UNUSED
         return self._oleobj_.InvokeTypes(
             35, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags
         )
@@ -363,8 +361,8 @@ class ICommenceCursor(DispatchBaseClass):
             self,
             pCategoryName=defaultNamedNotOptArg,
             pRowID=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
-        flags = OptionFlag.UNUSED
         return self._oleobj_.InvokeTypes(
             33, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), pCategoryName, pRowID, flags
         )
@@ -379,14 +377,12 @@ class ICommenceCursor(DispatchBaseClass):
             23, LCID, 1, (11, 0), ((3, 1), (8, 1), (3, 1)), nColumn, pName, flags
         )
 
-    def SetFilter(self, pFilter=defaultNamedNotOptArg):
-        flags = OptionFlag.NONE
+    def SetFilter(self, pFilter=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(
             20, LCID, 1, (11, 0), ((8, 1), (3, 1)), pFilter, flags
         )
 
-    def SetLogic(self, pLogic=defaultNamedNotOptArg):
-        flags = OptionFlag.NONE
+    def SetLogic(self, pLogic=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(
             21, LCID, 1, (11, 0), ((8, 1), (3, 1)), pLogic, flags
         )
@@ -412,8 +408,7 @@ class ICommenceCursor(DispatchBaseClass):
             flags,
         )
 
-    def SetSort(self, pSort=defaultNamedNotOptArg):
-        flags = OptionFlag.NONE
+    def SetSort(self, pSort=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(
             22, LCID, 1, (11, 0), ((8, 1), (3, 1)), pSort, flags
         )
@@ -653,8 +648,8 @@ class ICommenceEditRowSet(DispatchBaseClass):
             nRow=defaultNamedNotOptArg,
             nCol=defaultNamedNotOptArg,
             pBuf=defaultNamedNotOptArg,
+            flags=defaultNamedNotOptArg,
     ):
-        flags = FLAGS_UNUSED
         return self._oleobj_.InvokeTypes(
             23,
             LCID,

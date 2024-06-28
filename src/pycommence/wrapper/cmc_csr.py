@@ -2,7 +2,6 @@ from loguru import logger
 
 from . import enums_cmc as cenum, rowset as rs
 from ._icommence import ICommenceCursor
-from .enums_cmc import OptionFlag
 from .. import PyCommenceNotFoundError
 
 
@@ -20,6 +19,7 @@ class CursorWrapper:
 
     def __str__(self):
         return f'CmcCursor: "{self.category}"'
+
 
     @property
     def category(self):
@@ -54,7 +54,7 @@ class CursorWrapper:
         The rowset only contains items that satisfy both filters.
 
         """
-        return self._csr_cmc.SetFilter(filter_text)
+        return self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -68,7 +68,7 @@ class CursorWrapper:
 
         """
         logger.info(f'Setting filter logic to {logic_text}')
-        res = self._csr_cmc.SetLogic(logic_text)
+        res = self._csr_cmc.SetLogic(logic_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
             raise ValueError('Unable to set filter logic')
@@ -86,14 +86,14 @@ class CursorWrapper:
 
         """
         logger.info(f'Setting sort to {sort_text}')
-        res = self._csr_cmc.SetSort(sort_text)
+        res = self._csr_cmc.SetSort(sort_text, cenum.FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
             raise ValueError('Unable to sort')
 
     def set_column(
             self, column_index: int, field_name: str,
-            all_columns: bool = False,
+            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -101,7 +101,7 @@ class CursorWrapper:
         Args:
             column_index (int): The (0-based) index of the column to set.
             field_name (str): Name of the field to use in this column.
-            all_columns (bool): If True, all fields are included in the column set.
+            flags (int): Option flags (Logical OR of option flags like CMC_FLAG_ALL to create column set of all fields).
 
         Returns:
             bool: True on success, False on error.
@@ -115,7 +115,6 @@ class CursorWrapper:
 
         """
         logger.info(f'Setting column {column_index} to {field_name}')
-        flags = cenum.OptionFlag.ALL if all_columns else cenum.OptionFlag.NONE
         res = self._csr_cmc.SetColumn(column_index, field_name, flags.value)
         if not res:
             raise ValueError('Unable to set column')
@@ -187,7 +186,7 @@ class CursorWrapper:
 
         """
         count = count or self.row_count
-        result = self._csr_cmc.GetQueryRowSet(count)
+        result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -202,21 +201,21 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        rowset = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id))
-        if rowset.row_count == 0:
+        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, cenum.FLAGS_UNUSED))
+        if res.row_count == 0:
             raise ValueError()
-        return rowset
+        return res
 
     def get_add_row_set(
             self, count: int = 1,
-            shared: bool = True,
+            flags: cenum.OptionFlag | None = cenum.OptionFlag.SHARED
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
         Args:
             count (int): The number of rows to create.
-            shared (bool): If True, all rows default to shared (default True)
+            flags (int): Option flags. Use CMC_FLAG_SHARED to default all rows to shared.
 
         Returns:
             RowSetAdd: A rowset object for adding new items.
@@ -225,7 +224,6 @@ class CursorWrapper:
         When first created, each row is initialized to field default values.
 
         """
-        flags = OptionFlag.SHARED if shared else OptionFlag.NONE
         if count is None:
             count = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
@@ -247,7 +245,7 @@ class CursorWrapper:
 
         """
         count = count or self.row_count
-        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count))
+        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, cenum.FLAGS_UNUSED))
 
     def get_edit_row_set_by_id(self, row_id: str, ) -> rs.RowSetEdit:
         """
@@ -266,6 +264,7 @@ class CursorWrapper:
         res = rs.RowSetEdit(
             self._csr_cmc.GetEditRowSetByID(
                 row_id,
+                cenum.FLAGS_UNUSED
             )
         )
         if res.row_count == 0:
@@ -285,11 +284,12 @@ class CursorWrapper:
         The rowset inherits the column set from the cursor.
 
         """
-        delset = self._csr_cmc.GetDeleteRowSet(count)
+        delset = self._csr_cmc.GetDeleteRowSet(count, 0)
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
             self, row_id: str,
+            flags: cenum.OptionFlag = cenum.OptionFlag.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -305,7 +305,7 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        return rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id))
+        return rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id, flags.value))
 
     def set_active_item(self, category: str, row_id: str):
         """
@@ -319,7 +319,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveItem(category, row_id)
+        return self._csr_cmc.SetActiveItem(category, row_id, cenum.FLAGS_UNUSED)
 
     def set_active_date(self, active_date: str):
         """
@@ -332,7 +332,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDate(active_date)
+        return self._csr_cmc.SetActiveDate(active_date, cenum.FLAGS_UNUSED)
 
     def set_active_date_range(self, start: str, end: str):
         """
@@ -346,7 +346,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDateRange(start, end)
+        return self._csr_cmc.SetActiveDateRange(start, end, cenum.FLAGS_UNUSED)
 
     def set_related_column(
             self,
@@ -354,17 +354,18 @@ class CursorWrapper:
             con_name: str,
             connected_cat: str,
             col_name: str,
-            all_fields: bool = False,
+            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
     ):
         """
-        Adds a related (indirect/connected field) column to the cursor via connection.
+        Adds a related (indirect/connected field) column to the cursor.
 
         Args:
             col (int): The (0-based) index of the column to set.
             con_name (str): Name of the connection to use in this column.
             connected_cat (str): Name of the connected Category to use in this column.
             col_name (str): Name of the field in the connected Category to use in this column.
-            all_fields (bool): If True, all fields from the connected record are included in the column set.
+            flags (int): Option flags (Logical OR of option flags like CMC_FLAG_ALL to create column set of all fields).
+
         Returns:
             bool: True on success, False on error.
 
@@ -373,5 +374,4 @@ class CursorWrapper:
             This call will add the Date field to the cursor via the 'Relates to History' connection.
 
         """
-        flags = cenum.OptionFlag.ALL if all_fields else cenum.OptionFlag.NONE
         return self._csr_cmc.SetRelatedColumn(col, con_name, connected_cat, col_name, flags.value)

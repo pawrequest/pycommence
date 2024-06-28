@@ -5,7 +5,6 @@ from abc import ABC
 from typing import TypeAlias
 
 from . import enums_cmc
-from .enums_cmc import OptionFlag, FLAGS_UNUSED
 
 if typing.TYPE_CHECKING:
     from .cmc_csr import CursorWrapper
@@ -45,70 +44,66 @@ class RowSetBase(ABC):
             self,
             row_index: int,
             column_index: int,
-            cannonical: bool = True,
+            flags: int = enums_cmc.OptionFlag.CANONICAL.value
     ) -> str:
         """Retrieves the value at the specified row and column.
 
         Args:
             row_index: Index of the row.
             column_index: Index of the column.
-            cannonical: True to return the value in canonical form.
+            flags: CMC_FLAG_CANONICAL - return field value in canonical form
 
         Returns:
             Value at the specified row and column.
 
         """
-        flags = OptionFlag.CANONICAL.value if cannonical else FLAGS_UNUSED
         return self._rs.GetRowValue(row_index, column_index, flags)
 
-    def get_column_label(self, index: int, by_field_name: bool = False) -> str:
+    def get_column_label(self, index: int, flags=0) -> str:
         """Retrieves the label of the specified column.
 
         Args:
             index: Index of the column.
-            by_field_name: True to return field label (ignore view labels).
+            flags: CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
 
         Returns:
             Label of the specified column.
 
         """
-        flags = OptionFlag.FIELD_NAME.value if by_field_name else FLAGS_UNUSED
         return self._rs.GetColumnLabel(index, flags)
 
-    def get_column_index(self, label: str, by_field_name:bool = False) -> int:
+    def get_column_index(self, label: str, flags: int = 0) -> int:
         """
         Searches and retrieves the index of the specified column label.
 
         Args:
             label: Label of the column.
-            by_field_name: True to search by field name (ignore view labels).
+            flags: CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
 
         Returns:
             Index of the specified column label.
 
         """
-        flags = OptionFlag.FIELD_NAME.value if by_field_name else FLAGS_UNUSED
         return self._rs.GetColumnIndex(label, flags)
 
     def get_row(
             self,
             row_index: int,
             delim: str = ';',
-            cannonical: bool = True,
+            flags: int = enums_cmc.OptionFlag.CANONICAL.value
     ) -> str:
         """
         Retrieves the values of the specified row.
 
         Args:
             row_index: Index of the row.
-            cannonical: True to return the value in canonical form.
+            flags: CMC_FLAG_CANONICAL - return field value in canonical form
             delim: Delimiter to use between values.
 
         Returns:
             Values of the specified row.
 
         """
-        flags = OptionFlag.CANONICAL.value if cannonical else FLAGS_UNUSED
         return self._rs.GetRow(row_index, delim, flags)
 
     def get_row_id(self, row_index: int) -> str:
@@ -153,7 +148,7 @@ class RowSetQuery(RowSetBase):
         super().__init__(cmc_rs)
 
     def get_field_to_file(
-            self, row_index: int, column_index: int, file_path: str, cannonical: bool = True
+            self, row_index: int, column_index: int, file_path: str, flags: int = 0
     ) -> bool:
         """
         Saves the field value at the given (row, column) to a file.
@@ -162,13 +157,12 @@ class RowSetQuery(RowSetBase):
             row_index (int): The index of the row.
             column_index (int): The index of the column.
             file_path (str): The path where the field value will be saved to.
-            cannonical (bool): True to save the value in canonical form.
+            flags: CMC_FLAG_CANONICAL - return field value in canonical form
 
         Returns:
             bool: True on success, False on failure.
 
         """
-        flags = OptionFlag.CANONICAL.value if cannonical else FLAGS_UNUSED
         return self._rs.GetFieldToFile(row_index, column_index, file_path, flags)
 
 
@@ -188,7 +182,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
 
         """
-        return self._rs.ModifyRow(row_index, column_index, value)
+        return self._rs.ModifyRow(row_index, column_index, value, enums_cmc.FLAGS_UNUSED)
 
     def modify_row_dict(self, row_index: int, row_dict: dict) -> bool:
         """
