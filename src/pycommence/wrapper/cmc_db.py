@@ -10,7 +10,8 @@ from win32com.universal import com_error
 
 from pycommence.exceptions import PyCommenceServerError
 from . import cmc_csr, conversation, enums_cmc
-from .enums_cmc import CursorType, OptionFlag, OptionFlagInt
+from .conversation import ConversationTopic
+from .enums_cmc import CursorType, OptionFlagInt, OptionFlagInt
 
 
 class CmcConnector:
@@ -61,12 +62,12 @@ class CommenceWrapper(CmcConnector):
     def cursor_context_manager(self, table_name: str) -> cmc_csr.CursorWrapper:
         CoInitialize()
         try:
-            csr_api = self.get_cursor(table_name)
+            csr_api = self.get_new_cursor(table_name)
             yield csr_api
         finally:
             CoUninitialize()
 
-    def get_cursor(
+    def get_new_cursor(
             self,
             name: str | None = None,
             mode: CursorType = CursorType.CATEGORY,
@@ -110,7 +111,7 @@ class CommenceWrapper(CmcConnector):
         # todo non-standard modes
 
     def get_conversation_api(
-            self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
+            self, topic: ConversationTopic, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> conversation.ConversationAPI:
         """
         Create a conversation object.

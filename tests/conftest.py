@@ -4,6 +4,9 @@
 #     time.sleep(1)
 import pytest
 
+from pycommence.wrapper.enums_cmc import CursorType
+from pycommence.pycommence_v2 import PyCommence
+
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff',
     'businessNumber': '1800 3000 9009',
@@ -44,41 +47,105 @@ JEFF_EDITED_DICT = {
     'Influence': 'Low', 'Relates to detailNote': '', 'Manager of Contact': '', 'Managed by Contact': '',
     'isPrimary': 'FALSE', 'Relates to Salutation': ''
 }
+
 NEW_DICT = {
     'contactKey': 'Some.Guy',
     'businessNumber': '1800 3000 9009',
-    'Title': 'CEO of Amazon',
-    'firstName': 'Some',
-    'properName': 'Mr. Some Guy',
-    'lastName': 'Guy',
-    'busCity': 'Seattle',
-    'busCountry': 'USA',
-    'busState': 'WA',
-    'busStreet': '410 Terry Ave N',
+    'Title': 'CEO of SOMmeBix',
+    'Notes': 'Some Notes',
+    'Nickname': 'somnivkbname',
 }
+
+NEW_DICT_RESPONSE = {
+    'Account': '',
+    'Birthday': '',
+    'City': '',
+    'DOB': '',
+    'Extension': '',
+    'FacebookLink': '',
+    'Handheld Device Employee': '',
+    'ID': '',
+    'Influence': 'Low',
+    'LinkedInLink': '',
+    'MI': '',
+    'Managed by Contact': '',
+    'Manager of Contact': '',
+    'Nickname': 'somnivkbname',
+    'Notes': 'Some Notes',
+    'Relates to Account': '',
+    'Relates to Activity': '',
+    'Relates to Address': '',
+    'Relates to Attachment': '',
+    'Relates to Employee': '',
+    'Relates to Expense': '',
+    'Relates to History': '',
+    'Relates to Opportunity': '',
+    'Relates to Salutation': '',
+    'Relates to contactInterest': '',
+    'Relates to contactType': '',
+    'Relates to detailNote': '',
+    'Relates to mailingType': '',
+    'Salutation': 'None',
+    'Title': 'CEO of SOMmeBix',
+    'addModifyDate': '',
+    'addModifyUser': '',
+    'busCity': '',
+    'busCountry': '',
+    'busState': '',
+    'busStreet': '',
+    'busZip': '',
+    'businessNumber': '1800 3000 9009',
+    'cityStateZip': '',
+    'contactKey': 'Some.Guy',
+    'doNotSolicit': 'FALSE',
+    'emailBusiness': '',
+    'emailHome': '',
+    'faxNumber': '',
+    'firstName': '',
+    'homeAddress': '',
+    'homeNumber': '',
+    'isPrimary': 'FALSE',
+    'lastContact': '20240629',
+    'lastName': '',
+    'mailCode': '',
+    'mainTelephone': '',
+    'mobileNumber': '',
+    'nextContact': '',
+    'otherTelephone': '',
+    'pagerNumber': '',
+    'properName': '',
+    'spouseName': '',
+    'stateProvince': '',
+    'twitterLink': '',
+    'zipPostal': ''
+}
+
+UpdateDict = {
+    'businessNumber': '1800 3000 3333',
+    'Title': 'CEO of AnotherBix',
+    'Notes': 'Updated Notes',
+}
+
+NEW_KEY = NEW_DICT.get('contactKey')
 
 RICHARD_KEY = 'Branson.Richard'
 JEFF_EDITED_KEY = JEFF_EDITED_DICT.get('contactKey')
 JEFF_KEY = JEFF_DICT.get('contactKey')
 
-UPDATE_PKG_1 = {'firstName': 'test2', 'doNotSolicit': 'TRUE'}
 PK_VAL = 'Col0 Val'
 
 
-def pyc_contact_old():
-    from pycommence import PyCommence
-    from pycommence.cursor import get_csr
-    csr = get_csr('Contact')
-    if not csr.db_name == 'Tutorial':
-        raise ValueError('Expected Tutorial DB')
-    return PyCommence(csr=csr)
-
-
 def get_new_pycmc(tblname: str | None = None):
-    from pycommence.pyc2 import PyCommence
     pycmc = PyCommence()
     if tblname:
-        pycmc.set_csr(tblname=tblname)
+        pycmc.set_csr(csrname=tblname)
+    if not pycmc.cmc_wrapper.name == 'Tutorial':
+        raise ValueError('Expected Tutorial DB')
+    return pycmc
+
+
+def pycmc_view_cursor():
+    pycmc = PyCommence.with_csr('All Contacts-By Company', mode=CursorType.VIEW)
     if not pycmc.cmc_wrapper.name == 'Tutorial':
         raise ValueError('Expected Tutorial DB')
     return pycmc
@@ -92,55 +159,10 @@ def pyc_empty_new():
     return get_new_pycmc()
 
 
-@pytest.fixture(scope='session', params=[pyc_contact_old, pyc_contact_new])
+@pytest.fixture(scope='function', params=[pyc_contact_new, pycmc_view_cursor])
 def pyc_contact_prm(request):
     param = request.param
     return param()
 
 
-@pytest.fixture(scope='session')
-def new_dict():
-    return NEW_DICT
-
-
-@pytest.fixture(scope='session')
-def new_key():
-    return NEW_DICT.get('contactKey')
-
-
-@pytest.fixture(scope='session')
-def jeff_dict():
-    return JEFF_DICT
-
-
-@pytest.fixture(scope='session')
-def jeff_edited_dict():
-    return JEFF_EDITED_DICT
-
-
-@pytest.fixture(scope='session')
-def jeff_key():
-    return JEFF_KEY
-
-
-@pytest.fixture(scope='session')
-def jeff_edited_key():
-    return JEFF_EDITED_KEY
-
-
-@pytest.fixture(scope='session')
-def richard_key():
-    return RICHARD_KEY
-
-
-@pytest.fixture(scope='session')
-def update_pkg_1():
-    return UPDATE_PKG_1
-
-
-@pytest.fixture(scope='session')
-def pk_val():
-    return PK_VAL
-
-
-__all__ = ['JEFF_DICT', 'JEFF_EDITED_DICT', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'UPDATE_PKG_1', 'PK_VAL', 'RICHARD_KEY']
+__all__ = ['JEFF_DICT', 'JEFF_EDITED_DICT', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'NEW_DICT', 'PK_VAL', 'RICHARD_KEY']

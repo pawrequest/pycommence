@@ -4,7 +4,10 @@ import typing
 from abc import ABC
 from typing import TypeAlias
 
+from loguru import logger
+
 from . import enums_cmc
+from .enums_cmc import OptionFlagInt, OptionFlagInt
 
 if typing.TYPE_CHECKING:
     from .cmc_csr import CursorWrapper
@@ -44,7 +47,7 @@ class RowSetBase(ABC):
             self,
             row_index: int,
             column_index: int,
-            flags: int = enums_cmc.OptionFlag.CANONICAL.value
+            flags: int = enums_cmc.OptionFlagInt.CANONICAL.value
     ) -> str:
         """Retrieves the value at the specified row and column.
 
@@ -59,51 +62,54 @@ class RowSetBase(ABC):
         """
         return self._rs.GetRowValue(row_index, column_index, flags)
 
-    def get_column_label(self, index: int, flags=0) -> str:
+    def get_column_label(self, index: int, by_field: bool = True) -> str:
         """Retrieves the label of the specified column.
 
         Args:
             index: Index of the column.
-            flags: CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
+            by_field: Return field label (ignore view labels).
 
         Returns:
             Label of the specified column.
 
         """
+        flags = OptionFlagInt.FIELD_NAME if by_field else 0
         return self._rs.GetColumnLabel(index, flags)
 
-    def get_column_index(self, label: str, flags: int = 0) -> int:
+    def get_column_index(self, label: str, by_field: bool = True) -> int:
         """
         Searches and retrieves the index of the specified column label.
 
         Args:
             label: Label of the column.
-            flags: CMC_FLAG_FIELD_NAME - return field label (ignore view labels)
+            by_field: Search by field label (ignore view labels).
 
         Returns:
             Index of the specified column label.
 
         """
+        flags = OptionFlagInt.FIELD_NAME if by_field else 0
         return self._rs.GetColumnIndex(label, flags)
 
     def get_row(
             self,
             row_index: int,
             delim: str = ';',
-            flags: int = enums_cmc.OptionFlag.CANONICAL.value
+            cannonical: bool = True,
     ) -> str:
         """
         Retrieves the values of the specified row.
 
         Args:
             row_index: Index of the row.
-            flags: CMC_FLAG_CANONICAL - return field value in canonical form
             delim: Delimiter to use between values.
+            cannonical: Return field value in canonical form.
 
         Returns:
             Values of the specified row.
 
         """
+        flags = OptionFlagInt.CANONICAL if cannonical else 0
         return self._rs.GetRow(row_index, delim, flags)
 
     def get_row_id(self, row_index: int) -> str:
@@ -124,10 +130,9 @@ class RowSetBase(ABC):
         """Returns a dictionary of the first num rows."""
         if num is None:
             num = self.row_count
-        labels = self.headers
         delim = '%^&*'
         rows = [self.get_row(i, delim=delim) for i in range(num)]
-        return [dict(zip(labels, row.split(delim))) for row in rows]
+        return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
     def get_shared(self, row_index: int) -> bool:
         """
@@ -148,7 +153,7 @@ class RowSetQuery(RowSetBase):
         super().__init__(cmc_rs)
 
     def get_field_to_file(
-            self, row_index: int, column_index: int, file_path: str, flags: int = 0
+            self, row_index: int, column_index: int, file_path: str, canonical: bool = True
     ) -> bool:
         """
         Saves the field value at the given (row, column) to a file.
@@ -157,17 +162,18 @@ class RowSetQuery(RowSetBase):
             row_index (int): The index of the row.
             column_index (int): The index of the column.
             file_path (str): The path where the field value will be saved to.
-            flags: CMC_FLAG_CANONICAL - return field value in canonical form
+            canonical (bool): Return field value in canonical form.
 
         Returns:
             bool: True on success, False on failure.
 
         """
+        flags = OptionFlagInt.CANONICAL if canonical else 0
         return self._rs.GetFieldToFile(row_index, column_index, file_path, flags)
 
 
 class RowSetModifies(RowSetBase):
-    """ adds functionality to modify rows """""
+    """ adds functionality to modify rows """''
 
     def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
         """
@@ -184,16 +190,12 @@ class RowSetModifies(RowSetBase):
         """
         return self._rs.ModifyRow(row_index, column_index, value, enums_cmc.FLAGS_UNUSED)
 
-    def modify_row_dict(self, row_index: int, row_dict: dict) -> bool:
+    def modify_row_dict(self, row_index: int, row_dict: dict) -> None:
         """
         Modifies a row in the rowset.
-
         Args:
             row_index (int): The index of the row to modify.
             row_dict (dict): A dictionary of column names and values to modify.
-
-        Returns:
-            bool: True on success, False on failure.
 
         """
         for key, value in row_dict.items():
@@ -202,8 +204,8 @@ class RowSetModifies(RowSetBase):
             col_idx = self.get_column_index(key)
             if col_idx == -1:
                 raise ValueError(f'Invalid column name: {key}')
+            logger.debug(f'Modifying row {row_index}, column {col_idx}({key}) with value {value}')
             self.modify_row(row_index, col_idx, value)
-        return True
 
     def commit(self) -> bool:
         """
@@ -269,7 +271,7 @@ class RowSetDelete(RowSetModifies):
         super().__init__(cmc_rs)
 
     def get_row_id(self, row_index: int) -> str:
-        raise NotImplementedError(f"Can not get a row id for {self.__class__.__name__}.")
+        raise NotImplementedError(f'Can not get a row id for {self.__class__.__name__}.')
 
     def delete_row(self, row_index: int) -> bool:
         """
@@ -286,10 +288,10 @@ class RowSetDelete(RowSetModifies):
         return self._rs.DeleteRow(row_index, enums_cmc.FLAGS_UNUSED)
 
     def commit_get_cursor(self):
-        raise NotImplementedError("Can not get a cursor for deleted rows.")
+        raise NotImplementedError('Can not get a cursor for deleted rows.')
 
     def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
-        raise NotImplementedError("Can not modify a row for deletion.")
+        raise NotImplementedError('Can not modify a row for deletion.')
 
 
 class RowSetEdit(RowSetModifies):

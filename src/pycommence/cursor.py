@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 import contextlib
-from functools import cached_property
 from typing import Self
 
 from comtypes import CoInitialize, CoUninitialize
-from loguru import logger
 
 from pycommence.wrapper import rowset
-from .pycmc_types import CmcFilter, Connection, FilterArray, NoneFoundHandler
-from .exceptions import CmcError
+from .pycmc_types import CmcFilter, ConditionType, Connection, FilterArray, NoneFoundHandler
+from .exceptions import PyCommenceMaxExceededError, PyCommenceNotFoundError
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
 from .wrapper.enums_cmc import CursorType
@@ -34,7 +32,7 @@ def get_csr(
 ) -> CursorAPI:
     """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
     cmc = CommenceWrapper(cmc_name)
-    csr_cmc = cmc.get_cursor(table_name, mode=mode)
+    csr_cmc = cmc.get_new_cursor(table_name, mode=mode)
     return CursorAPI(csr_cmc, db_name=cmc.name)
 
 
@@ -44,9 +42,11 @@ class CursorAPI:
     Provides access to rowsets and filter methods
     """
 
-    def __init__(self, cursor_wrapper: CursorWrapper, db_name: str):
+    def __init__(self, cursor_wrapper: CursorWrapper, db_name: str, mode: CursorType = CursorType.CATEGORY, name: str = ''):
         self.cursor_wrapper = cursor_wrapper
         self.db_name = db_name
+        self.mode = mode
+        self.name = name
 
     # @property
     # def table_name(self):
@@ -91,38 +91,19 @@ class CursorAPI:
             none_found: What to do if no record is found
 
         """
+        filtered = False
         try:
             self.filter_by_pk(pk, fslot=slot, none_found=none_found)
+            filtered = True
             yield
         finally:
-            self.clear_filter(slot)
+            if filtered:
+                self.clear_filter(slot)
 
-    @contextlib.contextmanager
-    def temporary_filter_fields(
-            self,
-            field_key: str,
-            condition: str,
-            field_value: str,
-            *,
-            slot: int = 4,
-            none_found: NoneFoundHandler = NoneFoundHandler.error
-
-    ):
-        """Temporarily filter by field.
-
-        Args:
-            field_key: Field name
-            condition: Filter condition
-            field_value: Value to filter by
-            slot: Filter slot
-            none_found: What to do if no record is found
-
-        """
-        try:
-            self.filter_by_field(field_key, condition, field_value, fslot=slot, none_found=none_found)
-            yield
-        finally:
-            self.clear_filter(slot)
+    def pk_exists(self, pk: str) -> bool:
+        """Check if primary key exists in the Cursor."""
+        with self.temporary_filter_pk(pk, none_found=NoneFoundHandler.ignore):
+            return self.row_count > 0
 
     @property
     def category(self):
@@ -144,11 +125,12 @@ class CursorAPI:
         """True if the database is enrolled in a workgroup."""
         return self.cursor_wrapper.shared
 
-    @cached_property
+    @property
     def pk_label(self):
         """Primary key label."""
         qs = self.cursor_wrapper.get_query_row_set(1)
-        return qs.get_column_label(0)
+        pk_label = qs.get_column_label(0)
+        return pk_label
 
     @contextlib.contextmanager
     def temporary_filter_by_array(self, fil_array: FilterArray):
@@ -162,37 +144,7 @@ class CursorAPI:
             self.filter_by_array(fil_array)
             yield
         finally:
-            [self.clear_filter(slot=_) for _ in fil_array.filters.keys()]
-
-    def filter_by_field(
-            self,
-            field_name: str,
-            condition: str,
-            value: str = '',
-            *,
-            fslot: int = 1,
-            none_found: NoneFoundHandler = NoneFoundHandler.error,
-    ) -> bool:
-        """Filter by field.
-
-        Args:
-            field_name: Field name
-            condition: Filter condition
-            value: Value to filter by
-            fslot: Filter slot
-            none_found: What to do if no record is found
-
-        """
-        val_cond = f', "{value}"' if value else ''
-        filter_str = f'[ViewFilter({fslot}, F,, {field_name}, {condition}{val_cond})]'
-        res = self.cursor_wrapper.set_filter(filter_str)
-        if res:
-            logger.debug(f'Filter set: {filter_str}')
-        else:
-            logger.info(f'Filter: {filter_str}')
-            if none_found == NoneFoundHandler.error:
-                raise CmcError(f'Error setting filter: {filter_str}')
-        return res
+            self.clear_all_filters()
 
     def filter_by_connection(
             self,
@@ -213,7 +165,7 @@ class CursorAPI:
                       f'{connection.to_table}, {item_name})]')
         self.cursor_wrapper.set_filter(filter_str)
 
-    def filter_by_cmcfil(self, cmc_filter: CmcFilter, slot=1) -> None:
+    def set_filter(self, cmc_filter: CmcFilter, slot=1) -> None:
         """Filter by CmcFilter object
 
         Args:
@@ -231,7 +183,7 @@ class CursorAPI:
 
         """
         for slot, fil in fil_array.filters.items():
-            self.filter_by_cmcfil(fil, slot)
+            self.set_filter(fil, slot)
         return self
 
     def filter_by_str(self, filter_str: str) -> None:
@@ -250,7 +202,8 @@ class CursorAPI:
             pk: str,
             *,
             fslot=1,
-            none_found: NoneFoundHandler = NoneFoundHandler.error
+            none_found: NoneFoundHandler = NoneFoundHandler.error,
+            max_return: int = 1,
     ):
         """Filter by primary key.
 
@@ -258,19 +211,16 @@ class CursorAPI:
             pk: Primary key value
             fslot: Filter slot
             none_found: What to do if no record is found
+            max_return: Maximum number of records to return
 
         """
-        if not pk:
-            raise ValueError('pk must be a non-empty string')
-        self.filter_by_field(
-            self.pk_label,
-            'Equal To',
-            value=pk,
-            fslot=fslot,
-            none_found=none_found
+        filter_array = FilterArray(
+            filters={fslot: CmcFilter(cmc_col=self.pk_label, condition=ConditionType.EQUAL, value=pk)}
         )
-        if self.row_count == 0:
-            if none_found == 'raise':
-                raise CmcError(f'No record found for {self.pk_label} {pk}')
-        if self.row_count > 1:
-            raise CmcError(f'Expected 1 record, got {self.row_count}')
+        self.filter_by_array(filter_array)
+        count = self.row_count
+        if count == 0:
+            if none_found == 'error':
+                raise PyCommenceNotFoundError(f'No record found for {self.pk_label} {pk}')
+        if count > max_return:
+            raise PyCommenceMaxExceededError(f'Expected max {max_return} record/s, got {count}')

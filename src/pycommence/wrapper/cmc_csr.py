@@ -93,7 +93,7 @@ class CursorWrapper:
 
     def set_column(
             self, column_index: int, field_name: str,
-            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
+            flags: cenum.OptionFlagInt | None = cenum.OptionFlagInt.NONE
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -208,7 +208,7 @@ class CursorWrapper:
 
     def get_add_row_set(
             self, count: int = 1,
-            flags: cenum.OptionFlag | None = cenum.OptionFlag.SHARED
+            flags: cenum.OptionFlagInt | None = cenum.OptionFlagInt.SHARED
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
@@ -289,7 +289,7 @@ class CursorWrapper:
 
     def get_delete_row_set_by_id(
             self, row_id: str,
-            flags: cenum.OptionFlag = cenum.OptionFlag.NONE
+            flags: cenum.OptionFlagInt = cenum.OptionFlagInt.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -354,7 +354,7 @@ class CursorWrapper:
             con_name: str,
             connected_cat: str,
             col_name: str,
-            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
+            flags: cenum.OptionFlagInt | None = cenum.OptionFlagInt.NONE
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.

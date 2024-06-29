@@ -1,8 +1,8 @@
 import pytest
 
-from pycommence import FilterArray, PyCommence
+from pycommence import FilterArray
+from pycommence.bench.pycommence_v1 import PyCommenceV1
 from pycommence.pycmc_types import CmcFilter
-from pycommence.pyc2 import PyCommence
 
 
 @pytest.fixture
@@ -16,8 +16,8 @@ def fil1():
 
 @pytest.fixture
 def pycmc_radios_hire():
-    pycmc = PyCommence.with_csr('Hire')
-    assert isinstance(pycmc, PyCommence)
+    pycmc = PyCommenceV1.with_csr('Hire')
+    assert isinstance(pycmc, PyCommenceV1)
     return pycmc
 
 

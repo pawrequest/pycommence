@@ -106,4 +106,3 @@ def get_cmc_time(time_str: str):
     return datetime.strptime(time_str, CmcTimeFormat).time()
 
 
-EmptyKind = _t.Literal['ignore', 'raise']

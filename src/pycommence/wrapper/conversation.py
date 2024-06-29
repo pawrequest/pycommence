@@ -1,7 +1,13 @@
 from __future__ import annotations
 
+from enum import StrEnum
+
 from pycommence.wrapper._icommence import ICommenceConversation
 from pycommence.wrapper.cmc_types import CmcFieldDefinition
+
+
+class ConversationTopic(StrEnum):
+    VIEW_DATA = 'ViewData'
 
 
 class ConversationAPI:

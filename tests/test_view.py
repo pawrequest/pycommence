@@ -14,15 +14,3 @@ def pycmc():
 
 def test_view(pycmc):
     print(len(pycmc.records()), 'records')
-#
-# @pytest.fixture
-# def pycmc():
-#     pycmc = PyCommence.with_csr('newView', mode=CursorType.VIEW)
-#     if not pycmc.cmc_wrapper.name == 'Tutorial':
-#         raise ValueError('Expected Tutorial DB')
-#     return pycmc
-#
-#
-# def test_view(pycmc):
-#     assert pycmc.cmc_wrapper.name == 'Tutorial'
-#     print(len(pycmc.records()), 'records')
