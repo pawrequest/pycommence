@@ -33,6 +33,11 @@ class NoneFoundHandler(StrEnum):
 
 class RadioType(StrEnum):
     HYT = 'Hytera Digital'
+    K_UHF = 'Kirisun UHF'
+    K_VHF = 'Kirisun VHF'
+    TES_289 = 'Tesunho SIM TH289'
+    TES_288 = 'Tesunho SIM TH288'
+    TES_389 = 'Tesunho SIM TH388'
 
 
 class FilterArray(BaseModel):
