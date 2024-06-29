@@ -3,7 +3,7 @@ import contextlib
 import pytest
 
 from .conftest import JEFF_EDITED_DICT, JEFF_EDITED_KEY, JEFF_KEY, UPDATE_PKG_1
-from .. import PyCommenceExistsError, PyCommenceNotFoundError
+from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 
 
 def test_pycmc(pyc_contact_prm):

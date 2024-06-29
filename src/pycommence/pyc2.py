@@ -14,6 +14,7 @@ from .pycmc_types import (
 )
 from .exceptions import PyCommenceMaxExceededError
 from .wrapper.cmc_db import CommenceWrapper
+from .wrapper.conversation import ConversationAPI
 from .wrapper.enums_cmc import CursorType
 
 
@@ -44,6 +45,7 @@ def with_csr2(func):
 class PyCommence(_p.BaseModel):
     cmc_wrapper: CommenceWrapper | None = None
     csrs: dict[str, CursorAPI] = Field(default_factory=dict)
+    conversation: ConversationAPI | None = None
     model_config = _p.ConfigDict(
         arbitrary_types_allowed=True,
     )
@@ -63,6 +65,10 @@ class PyCommence(_p.BaseModel):
         if self.csrs:
             return next(iter(self.csrs.values()))
         raise PyCommenceNotFoundError('No cursor available')
+
+    def set_conversation(self, topic: str = 'ViewData'):
+        self.conversation = self.cmc_wrapper.get_conversation_api(topic)
+        return self
 
     def set_csr(
             self, tblname: str,
@@ -90,6 +96,11 @@ class PyCommence(_p.BaseModel):
         csr.filter_by_array(filter_array)
         yield csr
         csr.clear_all_filters()
+
+    @classmethod
+    def with_conversation(cls, topic: str = 'ViewData'):
+        pyc = cls(cmc_wrapper=CommenceWrapper()).set_conversation(topic)
+        return pyc
 
     @classmethod
     def with_csr(

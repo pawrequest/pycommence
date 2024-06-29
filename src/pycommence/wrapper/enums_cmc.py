@@ -1,7 +1,6 @@
-from enum import Enum
+from enum import Enum, IntEnum
 
-
-class CursorType(Enum):
+class CursorType(IntEnum):
     """ Commence Cursor Types to view based on category, view, or preferences. """
     # open based on a category, columns = all supported fields in the category (in no particular order).
     CATEGORY = 0
@@ -50,6 +49,16 @@ class Bookmark(Enum):
 
 
 class OptionFlag(Enum):
+    """ Flags for get_record and get_value methods."""
+    NONE = 0
+    FIELD_NAME = 0x0001
+    ALL = 0x0002
+    SHARED = 0x0004
+    PILOT = 0x0008
+    CANONICAL = 0x0010
+    INTERNET = 0x0020
+
+class OptionFlagInt(IntEnum):
     """ Flags for get_record and get_value methods."""
     NONE = 0
     FIELD_NAME = 0x0001

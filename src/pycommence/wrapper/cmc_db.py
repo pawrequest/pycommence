@@ -10,6 +10,7 @@ from win32com.universal import com_error
 
 from pycommence.exceptions import PyCommenceServerError
 from . import cmc_csr, conversation, enums_cmc
+from .enums_cmc import CursorType, OptionFlag, OptionFlagInt
 
 
 class CmcConnector:
@@ -68,8 +69,9 @@ class CommenceWrapper(CmcConnector):
     def get_cursor(
             self,
             name: str | None = None,
-            mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
-            flags: enums_cmc.OptionFlag | None = None,
+            mode: CursorType = CursorType.CATEGORY,
+            pilot: bool = False,
+            internet: bool = False,
     ) -> cmc_csr.CursorWrapper:
         """Create a cursor object for accessing Commence data.
 
@@ -78,9 +80,8 @@ class CommenceWrapper(CmcConnector):
         Args:
             name (str|None): Name of the category or view to open.
             mode (enums_cmc.CursorType): Cursor type
-            flags (enums_cmc.OptionFlag | None):
-                - PILOT - Save Item agents defined for the Pilot subsystem will fire.
-                - INTERNET - Save Item agents defined for the Internet/intranet will fire.
+            pilot (bool): Pilot flag - use palmpilot preferences
+            internet (bool): Internet flag - use internet preferences
 
         Returns:
             CsrCmc: A Csr object on success.
@@ -89,33 +90,28 @@ class CommenceWrapper(CmcConnector):
             ValueError if no name given for name based searches
 
         """
-        # todo can ther be multiple flags?
-        if flags:
-            if isinstance(flags, enums_cmc.OptionFlag):
-                flags = [flags]
-            for flag in flags:
-                if flag not in [enums_cmc.OptionFlag.PILOT, enums_cmc.OptionFlag.INTERNET]:
-                    raise ValueError(f'Invalid flag: {flag}')
-            flags = ', '.join(str(f.value) for f in flags)
+        if pilot and internet:
+            raise ValueError('Only one of pilot or internet can be set')
+        if mode in [CursorType.CATEGORY, CursorType.VIEW] and name is None:
+            raise ValueError(f'{mode.name} cursor mode requires name param to be set')
 
-        else:
-            flags = 0
+        flags = OptionFlagInt.NONE
+        if pilot:
+            flags |= OptionFlagInt.PILOT
+        if internet:
+            flags |= OptionFlagInt.INTERNET
 
-        mode = mode.value
-        if mode in [0, 1]:
-            if name is None:
-                raise ValueError(f'Mode {mode} ("{enums_cmc.CursorType(mode).name}") requires name param to be set')
         try:
-            csr = cmc_csr.CursorWrapper(self.commence_dispatch.GetCursor(mode, name, flags))
+            csr = cmc_csr.CursorWrapper(self.commence_dispatch.GetCursor(mode.value, name, flags.value))
         except com_error as e:
             raise PyCommenceServerError(f'Error creating cursor for {name} in {self.name}: {e}')
 
         return csr
         # todo non-standard modes
 
-    def get_conversation(
+    def get_conversation_api(
             self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
-    ) -> conversation.CommenceConversation:
+    ) -> conversation.ConversationAPI:
         """
         Create a conversation object.
 
@@ -134,7 +130,7 @@ class CommenceWrapper(CmcConnector):
         conversation_obj = self.commence_dispatch.GetConversation(application_name, topic)
         if conversation_obj is None:
             raise ValueError(f'Could not create conversation object for {application_name}!{topic}')
-        return conversation.CommenceConversation(conversation_obj)
+        return conversation.ConversationAPI(conversation_obj)
 
     @property
     def name(self) -> str:
