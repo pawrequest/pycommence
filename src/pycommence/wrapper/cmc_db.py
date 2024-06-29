@@ -8,7 +8,7 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from pycommence import pycmc_types
+from pycommence.exceptions import PyCommenceServerError
 from . import cmc_csr, conversation, enums_cmc
 
 
@@ -66,10 +66,10 @@ class CommenceWrapper(CmcConnector):
             CoUninitialize()
 
     def get_cursor(
-        self,
-        name: str | None = None,
-        mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
-        flags: enums_cmc.OptionFlag | None = None,
+            self,
+            name: str | None = None,
+            mode: enums_cmc.CursorType = enums_cmc.CursorType.CATEGORY,
+            flags: enums_cmc.OptionFlag | None = None,
     ) -> cmc_csr.CursorWrapper:
         """Create a cursor object for accessing Commence data.
 
@@ -108,13 +108,13 @@ class CommenceWrapper(CmcConnector):
         try:
             csr = cmc_csr.CursorWrapper(self.commence_dispatch.GetCursor(mode, name, flags))
         except com_error as e:
-            raise pycmc_types.CmcError(f'Error creating cursor for {name}: {e}')
+            raise PyCommenceServerError(f'Error creating cursor for {name} in {self.name}: {e}')
 
         return csr
         # todo non-standard modes
 
     def get_conversation(
-        self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
+            self, topic: str, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> conversation.CommenceConversation:
         """
         Create a conversation object.

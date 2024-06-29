@@ -1,8 +1,9 @@
 from loguru import logger
 
-from . import enums_cmc as cenum, rowset as rs
-from ._icommence import ICommenceCursor
-from .. import PyCommenceNotFoundError
+from pycommence.wrapper import enums_cmc as cenum, rowset as rs
+from pycommence.wrapper._icommence import ICommenceCursor
+from pycommence.exceptions import PyCommenceNotFoundError
+from pycommence.wrapper.enums_cmc import FLAGS_UNUSED
 
 
 class CursorWrapper:
@@ -19,7 +20,6 @@ class CursorWrapper:
 
     def __str__(self):
         return f'CmcCursor: "{self.category}"'
-
 
     @property
     def category(self):
@@ -54,7 +54,7 @@ class CursorWrapper:
         The rowset only contains items that satisfy both filters.
 
         """
-        return self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetFilter(filter_text, FLAGS_UNUSED)
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -68,7 +68,7 @@ class CursorWrapper:
 
         """
         logger.info(f'Setting filter logic to {logic_text}')
-        res = self._csr_cmc.SetLogic(logic_text, cenum.FLAGS_UNUSED)
+        res = self._csr_cmc.SetLogic(logic_text, FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
             raise ValueError('Unable to set filter logic')
@@ -86,7 +86,7 @@ class CursorWrapper:
 
         """
         logger.info(f'Setting sort to {sort_text}')
-        res = self._csr_cmc.SetSort(sort_text, cenum.FLAGS_UNUSED)
+        res = self._csr_cmc.SetSort(sort_text, FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
             raise ValueError('Unable to sort')
@@ -186,7 +186,7 @@ class CursorWrapper:
 
         """
         count = count or self.row_count
-        result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
+        result = self._csr_cmc.GetQueryRowSet(count, FLAGS_UNUSED)
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -201,7 +201,7 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, cenum.FLAGS_UNUSED))
+        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
         if res.row_count == 0:
             raise ValueError()
         return res
@@ -245,7 +245,7 @@ class CursorWrapper:
 
         """
         count = count or self.row_count
-        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, cenum.FLAGS_UNUSED))
+        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, FLAGS_UNUSED))
 
     def get_edit_row_set_by_id(self, row_id: str, ) -> rs.RowSetEdit:
         """
@@ -264,7 +264,7 @@ class CursorWrapper:
         res = rs.RowSetEdit(
             self._csr_cmc.GetEditRowSetByID(
                 row_id,
-                cenum.FLAGS_UNUSED
+                FLAGS_UNUSED
             )
         )
         if res.row_count == 0:
@@ -319,7 +319,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveItem(category, row_id, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveItem(category, row_id, FLAGS_UNUSED)
 
     def set_active_date(self, active_date: str):
         """
@@ -332,7 +332,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDate(active_date, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveDate(active_date, FLAGS_UNUSED)
 
     def set_active_date_range(self, start: str, end: str):
         """
@@ -346,7 +346,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDateRange(start, end, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
             self,

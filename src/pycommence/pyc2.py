@@ -5,16 +5,16 @@ from functools import wraps
 import pydantic as _p
 from pydantic import Field, model_validator
 
-from . import cursor, pycmc_types
+import pycommence.exceptions
+from . import PyCommenceExistsError, PyCommenceNotFoundError, cursor, pycmc_types
 from .cursor import CursorAPI
 from .pycmc_types import (
     FilterArray,
     NoneFoundHandler,
-    PyCommenceExistsError,
-    PyCommenceMaxExceededError,
-    PyCommenceNotFoundError,
 )
+from .exceptions import PyCommenceMaxExceededError
 from .wrapper.cmc_db import CommenceWrapper
+from .wrapper.enums_cmc import CursorType
 
 
 def csr_f_tblname(func):
@@ -64,10 +64,13 @@ class PyCommence(_p.BaseModel):
             return next(iter(self.csrs.values()))
         raise PyCommenceNotFoundError('No cursor available')
 
-    def set_csr(self, tblname: str):
+    def set_csr(
+            self, tblname: str,
+            mode: CursorType = CursorType.CATEGORY,
+    ):
         if not tblname:
             raise ValueError('tblname parameter is required')
-        self.csrs[tblname] = cursor.get_csr(tblname)
+        self.csrs[tblname] = cursor.get_csr(tblname, mode=mode)
         return self
 
     def filter_cursor(self, tblname: str, filter_array: FilterArray) -> _t.Self:
@@ -89,8 +92,11 @@ class PyCommence(_p.BaseModel):
         csr.clear_all_filters()
 
     @classmethod
-    def with_csr(cls, tblname: str, filter_array: FilterArray | None = None):
-        pyc = cls(cmc_wrapper=CommenceWrapper()).set_csr(tblname)
+    def with_csr(
+            cls, tblname: str, filter_array: FilterArray | None = None,
+            mode: CursorType = CursorType.CATEGORY,
+    ):
+        pyc = cls(cmc_wrapper=CommenceWrapper()).set_csr(tblname, mode=mode)
         if filter_array:
             pyc.filter_cursor(tblname, filter_array)
         return pyc
@@ -114,7 +120,7 @@ class PyCommence(_p.BaseModel):
             try:
                 return self.records(tblname)[0]
             except IndexError:
-                raise pycmc_types.PyCommenceNotFoundError(f'No record found for primary key {pk_val}')
+                raise pycommence.exceptions.PyCommenceNotFoundError(f'No record found for primary key {pk_val}')
 
     def records_by_array(
             self,
@@ -170,7 +176,7 @@ class PyCommence(_p.BaseModel):
             tblname: str | None = None,
     ) -> _t.Self:
         if max_delete and len(pk_vals) > max_delete:
-            raise pycmc_types.CmcError(
+            raise pycommence.exceptions.CmcError(
                 f'max_delete ({max_delete}) is less than the number of records to delete ({len(pk_vals)})'
             )
         for pk_val in pk_vals:

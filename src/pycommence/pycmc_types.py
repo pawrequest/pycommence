@@ -6,7 +6,7 @@ from datetime import date, datetime
 from enum import StrEnum, auto
 from typing import Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 
 # from pycommence.api import csr_api
 
@@ -19,7 +19,7 @@ class ConditionType(StrEnum):
     EQUAL = 'Equal To'
     CONTAIN = 'Contains'
     AFTER = 'After'
-    BETWEEN = 'Between'
+    BETWEEN = 'Is Between'
     BEFORE = 'Before'
     NOT_EQUAL = 'Not Equal To'
     NOT_CONTAIN = 'Not Contains'
@@ -54,30 +54,15 @@ class CmcFilter(BaseModel):
     cmc_col: str
     f_type: FilterType = 'F'
     value: str = ''
-    condition: FilterConditionType | ConditionType = 'Equal To'
+    condition: ConditionType = 'Equal To'
     not_flag: NotFlagType = ''
-    value_set: bool = False
 
     def __str__(self):
-        return f'{self.cmc_col} {self.not_flag} {self.condition} {self.value}'
+        return self.filter_str2(0)
 
-    @model_validator(mode='after')
-    def condition_val(self):
-        """Validate Condition and Value.
-        Value must be set when condition is 'Contains' or 'Equal To'
-        """
-        if self.value_set:
-            return self
-        # if self.condition == 'Contains' or self.condition == 'Equal To':
-        #     if not self.value:
-        #         raise ValueError('Value must be set when condition is "Contains"')
-        self.value = f', "{self.value}"' if self.value else ''
-        self.value_set = True
-        return self
-
-    def filter_str(self, slot: int) -> str:
+    def filter_str2(self, slot: int) -> str:
         filter_str = (
-            f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{self.value})]'
+            f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{f', {self.value}' if self.value else ''})]'
         )
         return filter_str
 
@@ -87,28 +72,6 @@ class Connection:
     name: str
     from_table: str
     to_table: str
-
-
-class CmcError(Exception):
-    def __init__(self, msg: str = ''):
-        self.msg = msg
-        super().__init__(self.msg)
-
-
-class PyCommenceError(Exception):
-    pass
-
-
-class PyCommenceExistsError(PyCommenceError):
-    pass
-
-
-class PyCommenceNotFoundError(PyCommenceError):
-    pass
-
-
-class PyCommenceMaxExceededError(PyCommenceError):
-    pass
 
 
 CmcDateFormat = '%Y%m%d'

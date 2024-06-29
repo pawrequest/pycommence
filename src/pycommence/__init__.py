@@ -3,9 +3,11 @@ import typing as _t
 
 import pydantic as _p
 
+import pycommence.exceptions
 from . import pycmc_types
 from .cursor import CursorAPI, csr_context
-from .pycmc_types import FilterArray, PyCommenceExistsError, PyCommenceNotFoundError
+from .pycmc_types import FilterArray
+from .exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 
 
 # def init_logging(external_logger=None):
@@ -142,9 +144,9 @@ class PyCommence(_p.BaseModel):
         with self.csr.temporary_filter_fields(field_name, 'Equal To', value, none_found=empty):
             records = self.records()
             if not records and empty == 'raise':
-                raise pycmc_types.CmcError(f'No record found for {field_name} {value}')
+                raise pycommence.exceptions.CmcError(f'No record found for {field_name} {value}')
             if max_rtn and len(records) > max_rtn:
-                raise pycmc_types.CmcError(f'Expected max {max_rtn} records, got {len(records)}')
+                raise pycommence.exceptions.CmcError(f'Expected max {max_rtn} records, got {len(records)}')
             return records
 
     def edit_record(
@@ -204,7 +206,7 @@ class PyCommence(_p.BaseModel):
 
         """
         if max_delete and len(pk_vals) > max_delete:
-            raise pycmc_types.CmcError(
+            raise pycommence.exceptions.CmcError(
                 f'max_delete ({max_delete}) is less than the number of records to delete ({len(pk_vals)})'
             )
         for pk_val in pk_vals:

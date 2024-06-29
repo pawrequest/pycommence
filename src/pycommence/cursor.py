@@ -8,9 +8,11 @@ from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
 from pycommence.wrapper import rowset
-from .pycmc_types import CmcError, CmcFilter, Connection, FilterArray, NoneFoundHandler
+from .pycmc_types import CmcFilter, Connection, FilterArray, NoneFoundHandler
+from .exceptions import CmcError
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
+from .wrapper.enums_cmc import CursorType
 
 
 @contextlib.contextmanager
@@ -26,10 +28,13 @@ def csr_context(table_name, cmc_name: str = 'Commence.DB', filter_array: FilterA
         CoUninitialize()
 
 
-def get_csr(table_name, cmc_name: str = 'Commence.DB') -> CursorAPI:
+def get_csr(
+        table_name, cmc_name: str = 'Commence.DB',
+        mode: CursorType = CursorType.CATEGORY,
+) -> CursorAPI:
     """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
     cmc = CommenceWrapper(cmc_name)
-    csr_cmc = cmc.get_cursor(table_name)
+    csr_cmc = cmc.get_cursor(table_name, mode=mode)
     return CursorAPI(csr_cmc, db_name=cmc.name)
 
 
@@ -216,7 +221,7 @@ class CursorAPI:
             slot: Filter slot
 
         """
-        self.filter_by_str(cmc_filter.filter_str(slot))
+        self.filter_by_str(cmc_filter.filter_str2(slot))
 
     def filter_by_array(self, fil_array: FilterArray) -> Self:
         """Filter by FilterArray object
