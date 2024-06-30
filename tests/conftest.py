@@ -165,4 +165,4 @@ def pyc_contact_prm(request):
     return param()
 
 
-__all__ = ['JEFF_DICT', 'JEFF_EDITED_DICT', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'NEW_DICT', 'PK_VAL', 'RICHARD_KEY']
+__all__ = ['JEFF_DICT', 'JEFF_EDITED_DICT', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'NEW_DICT', 'PK_VAL', 'RICHARD_KEY', 'UpdateDict', 'NEW_KEY']

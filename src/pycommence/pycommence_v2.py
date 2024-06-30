@@ -76,14 +76,7 @@ class PyCommence(_p.BaseModel):
         logger.debug(f'Set cursor on {csrname}')
         return self
 
-    def reset_csr(self, csrname: str | None = None):
-        csr = self.get_csr(csrname)
-        cursor_wrapper = self.cmc_wrapper.get_new_cursor(csr.name, mode=csr.mode)
-        cursor_api = CursorAPI(cursor_wrapper, db_name=self.cmc_wrapper.name, mode=csr.mode, name=csr.name)
-        self.csrs[cursor_api.name] = cursor_api
-        logger.debug(f'Reset cursor on {csrname}')
-
-    def reset_csr2(self, csr):
+    def reset_csr(self, csr):
         cursor_wrapper = self.cmc_wrapper.get_new_cursor(csr.name, mode=csr.mode)
         cursor_api = CursorAPI(cursor_wrapper, db_name=self.cmc_wrapper.name, mode=csr.mode, name=csr.name)
         self.csrs[cursor_api.name] = cursor_api
@@ -96,6 +89,7 @@ class PyCommence(_p.BaseModel):
             if len(self.csrs) > 1:
                 raise ValueError('Multiple cursors available, specify csrname')
             csrname = next(iter(self.csrs.keys()))
+            logger.debug(f'Using cursorname {csrname}')
         return csrname
 
     def filter_cursor(self, filter_array: FilterArray, tblname: str | None = None) -> _t.Self:
@@ -125,14 +119,22 @@ class PyCommence(_p.BaseModel):
             cls, csrname: str, filter_array: FilterArray | None = None,
             mode: CursorType = CursorType.CATEGORY,
     ):
+        logger.debug(f'Creating PyCommence with cursor {csrname}')
         pyc = cls(cmc_wrapper=CommenceWrapper()).set_csr(csrname, mode=mode)
         if filter_array:
             pyc.filter_cursor(filter_array, csrname)
+        logger.debug(f'Created PyCommence with cursor {csrname}{f" and filter {filter_array}" if filter_array else ""}')
         return pyc
 
-    def records(self, tblname: str | None = None, count: int or None = None) -> list[dict[str, str]]:
+    def generate_records(self, csrname: str | None = None, count: int | None = None) -> _t.Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
-        csr = self.get_csr(tblname)
+        csr = self.get_csr(csrname)
+        row_set = csr.get_query_rowset(count)
+        yield from row_set.gen_row_dicts()
+
+    def records(self, csrname: str | None = None, count: int or None = None) -> list[dict[str, str]]:
+        """Return all or first `count` records from the cursor."""
+        csr = self.get_csr(csrname)
         row_set = csr.get_query_rowset(count)
         records = row_set.get_row_dicts()
         return records
@@ -176,7 +178,7 @@ class PyCommence(_p.BaseModel):
         row_set.modify_row_dict(0, row_dict)
         row_set.commit()
         logger.debug(f'Edited record with primary key {pk_val}')
-        self.reset_csr2(csr)
+        self.reset_csr(csr)
         # self.reset_csr(csr.category)
         return self
 
@@ -194,7 +196,7 @@ class PyCommence(_p.BaseModel):
         row_set.delete_row(0)
         row_set.commit()
         logger.debug(f'Deleted record with primary key {pk_val}')
-        self.reset_csr2(csr)
+        self.reset_csr(csr)
         # self.set_csr(csr.category)
         return self
 
@@ -233,7 +235,7 @@ class PyCommence(_p.BaseModel):
         row_set.modify_row_dict(0, row_dict)
         row_set.commit()
         logger.debug(f'Added record with primary key {pk_val}')
-        self.reset_csr2(csr)
+        self.reset_csr(csr)
         return self
 
         # with csr.temporary_filter_pk(pk_val, none_found=NoneFoundHandler.ignore):

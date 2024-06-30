@@ -202,8 +202,8 @@ class CursorWrapper:
 
         """
         res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
-        if res.row_count == 0:
-            raise ValueError()
+        if res.row_count != 1:
+            raise ValueError(f'{res.row_count} results for id= {row_id}')
         return res
 
     def get_add_row_set(

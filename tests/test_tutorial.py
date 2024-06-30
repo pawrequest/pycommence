@@ -1,21 +1,16 @@
 import contextlib
-from pprint import pprint
 
 import pytest
 from loguru import logger
 
-from .conftest import NEW_DICT, NEW_KEY, NEW_DICT, JEFF_KEY, UpdateDict, NEW_DICT_RESPONSE
+from .conftest import NEW_DICT, NEW_KEY, UpdateDict
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
+from pycommence.pycommence_v2 import PyCommence
 
 
 def test_pycmc(pyc_contact_prm):
     assert pyc_contact_prm
     print(len(pyc_contact_prm.records()), 'records')
-
-
-# def test_view(pycmc_view_cursor):
-#     assert pycmc_view_cursor.cmc_wrapper.name == 'Tutorial'
-#     print(len(pycmc_view_cursor.records()), 'records')
 
 
 @contextlib.contextmanager
@@ -44,6 +39,11 @@ def test_get_records(pyc_contact_prm):
     res = pyc_contact_prm.records()
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
+
+
+def test_gen_records(pyc_contact_prm: PyCommence):
+    for rec in pyc_contact_prm.generate_records():
+        print(rec)
 
 
 def test_get_one_record(pyc_contact_prm):
@@ -90,5 +90,8 @@ def test_add_duplicate_raises(pyc_contact_prm):
             pyc_contact_prm.add_record(pk_val=NEW_KEY, row_dict=NEW_DICT)
 
 
-
-
+def test_multiple_csrs(pyc_contact_prm: PyCommence):
+    assert pyc_contact_prm
+    pyc_contact_prm.set_csr(csrname='Account')
+    assert pyc_contact_prm.get_csr(csrname='Account').name == 'Account'
+    [print(len(pyc_contact_prm.records(csrname=key)), f'{key} records') for key in pyc_contact_prm.csrs.keys()]

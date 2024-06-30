@@ -2,16 +2,16 @@ from __future__ import annotations
 
 import typing
 from abc import ABC
+from collections.abc import Generator
 from typing import TypeAlias
 
 from loguru import logger
 
-from . import enums_cmc
-from .enums_cmc import OptionFlagInt, OptionFlagInt
+from pycommence.wrapper.enums_cmc import FLAGS_UNUSED, OptionFlagInt
 
 if typing.TYPE_CHECKING:
     from .cmc_csr import CursorWrapper
-from ._icommence import (
+from pycommence.wrapper._icommence import (
     ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet,
     ICommenceQueryRowSet,
 )
@@ -47,7 +47,7 @@ class RowSetBase(ABC):
             self,
             row_index: int,
             column_index: int,
-            flags: int = enums_cmc.OptionFlagInt.CANONICAL.value
+            flags: int = OptionFlagInt.CANONICAL.value
     ) -> str:
         """Retrieves the value at the specified row and column.
 
@@ -123,7 +123,7 @@ class RowSetBase(ABC):
             ID of the specified row.
 
         """
-        flags: int = enums_cmc.FLAGS_UNUSED
+        flags: int = FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
 
     def get_row_dicts(self, num: int or None = None) -> list[dict[str, str]]:
@@ -133,6 +133,15 @@ class RowSetBase(ABC):
         delim = '%^&*'
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
+
+    def gen_row_dicts(self, count: int or None = None) -> Generator[dict[str, str], None, None]:
+        """Returns a dictionary of the first num rows."""
+        if count is None:
+            count = self.row_count
+        delim = '%^&*'
+        for i in range(count):
+            row = self.get_row(i, delim=delim)
+            yield dict(zip(self.headers, row.split(delim)))
 
     def get_shared(self, row_index: int) -> bool:
         """
@@ -188,7 +197,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
 
         """
-        return self._rs.ModifyRow(row_index, column_index, value, enums_cmc.FLAGS_UNUSED)
+        return self._rs.ModifyRow(row_index, column_index, value, FLAGS_UNUSED)
 
     def modify_row_dict(self, row_index: int, row_dict: dict) -> None:
         """
@@ -216,7 +225,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
 
         """
-        res = self._rs.Commit(enums_cmc.FLAGS_UNUSED)
+        res = self._rs.Commit(FLAGS_UNUSED)
         if res != 0:
             raise ValueError('Commit failed')
         return True
@@ -229,7 +238,7 @@ class RowSetModifies(RowSetBase):
             CommenceCursor: Cursor object with the committed data.
 
         """
-        return self._rs.CommitGetCursor(enums_cmc.FLAGS_UNUSED)
+        return self._rs.CommitGetCursor(FLAGS_UNUSED)
 
 
 class RowSetAdd(RowSetModifies):
@@ -285,7 +294,7 @@ class RowSetDelete(RowSetModifies):
             bool: True on success, False on failure.
 
         """
-        return self._rs.DeleteRow(row_index, enums_cmc.FLAGS_UNUSED)
+        return self._rs.DeleteRow(row_index, FLAGS_UNUSED)
 
     def commit_get_cursor(self):
         raise NotImplementedError('Can not get a cursor for deleted rows.')

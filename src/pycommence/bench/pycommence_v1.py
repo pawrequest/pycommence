@@ -4,9 +4,9 @@ import typing as _t
 import pydantic as _p
 
 from pycommence.cursor import CursorAPI, csr_context
-from pycommence.exceptions import PyCommenceNotFoundError, PyCommenceMaxExceededError, PyCommenceExistsError
-from pycommence.pyc2 import handle_none
+from pycommence.exceptions import PyCommenceExistsError, PyCommenceMaxExceededError, PyCommenceNotFoundError
 from pycommence.pycmc_types import FilterArray, NoneFoundHandler
+from pycommence.pycommence_v2 import handle_none
 
 
 class PyCommenceV1(_p.BaseModel):
