@@ -9,9 +9,9 @@ from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from pycommence.exceptions import PyCommenceServerError
-from . import cmc_csr, conversation, enums_cmc
+from . import cmc_csr, conversation
 from .conversation import ConversationTopic
-from .enums_cmc import CursorType, OptionFlagInt, OptionFlagInt
+from .enums_cmc import CursorType, OptionFlagInt
 
 
 class CmcConnector:
@@ -20,15 +20,15 @@ class CmcConnector:
     _connections: dict[str, CommenceWrapper] = {}
 
     # caching breaks multi-threaded
-    # def __new__(cls, commence_instance_name: str = 'Commence.DB') -> CmcConnector:
-    #     if commence_instance_name in cls._connections:
-    #         logger.info(f'Using cached connection to {commence_instance_name}')
-    #     else:
-    #         new__ = super().__new__(CommenceWrapper)
-    #         cls._connections[commence_instance_name] = new__
-    #         logger.info(f'Created new connection to {commence_instance_name}')
-    #
-    #     return cls._connections[commence_instance_name]
+    def __new__(cls, commence_instance_name: str = 'Commence.DB') -> CmcConnector:
+        if commence_instance_name in cls._connections:
+            logger.info(f'Using cached connection to {commence_instance_name}')
+        else:
+            new__ = super().__new__(CommenceWrapper)
+            cls._connections[commence_instance_name] = new__
+            logger.info(f'Created new connection to {commence_instance_name}')
+
+        return cls._connections[commence_instance_name]
 
     def __init__(self, commence_instance_name: str = 'Commence.DB'):
         self.commence_instance_name = commence_instance_name

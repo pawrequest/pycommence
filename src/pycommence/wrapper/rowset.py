@@ -3,6 +3,7 @@ from __future__ import annotations
 import typing
 from abc import ABC
 from collections.abc import Generator
+from functools import cached_property
 from typing import TypeAlias
 
 from loguru import logger
@@ -28,7 +29,7 @@ class RowSetBase(ABC):
         """
         self._rs = cmc_rs
 
-    @property
+    @cached_property
     def headers(self) -> list:
         """Returns a list of all column labels."""
         return [self.get_column_label(i) for i in range(self.column_count)]
@@ -135,13 +136,24 @@ class RowSetBase(ABC):
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
     def gen_row_dicts(self, count: int or None = None) -> Generator[dict[str, str], None, None]:
-        """Returns a dictionary of the first num rows."""
+        """Generates dicts of the first count rows."""
         if count is None:
             count = self.row_count
         delim = '%^&*'
         for i in range(count):
             row = self.get_row(i, delim=delim)
             yield dict(zip(self.headers, row.split(delim)))
+
+    def gen_rows_with_id(self, count: int or None = None) -> Generator[dict[str, str], None, None]:
+        """Generates dicts with row_id as key and data_dict as val."""
+        if count is None:
+            count = self.row_count
+        delim = '%^&*'
+        for i in range(count):
+            row = self.get_row(i, delim=delim)
+            row_id = self.get_row_id(i)
+            yield dict(zip(self.headers, row.split(delim))) | {'row_id': row_id}
+
 
     def get_shared(self, row_index: int) -> bool:
         """

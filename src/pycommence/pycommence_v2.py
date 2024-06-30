@@ -132,6 +132,13 @@ class PyCommence(_p.BaseModel):
         row_set = csr.get_query_rowset(count)
         yield from row_set.gen_row_dicts()
 
+    def generate_records_ids(self, csrname: str | None = None, count: int | None = None) -> _t.Generator[dict[str, str], None, None]:
+        """Return all or first `count` records from the cursor."""
+        csr = self.get_csr(csrname)
+        row_set = csr.get_query_rowset(count)
+        yield from row_set.gen_rows_with_id()
+
+
     def records(self, csrname: str | None = None, count: int or None = None) -> list[dict[str, str]]:
         """Return all or first `count` records from the cursor."""
         csr = self.get_csr(csrname)

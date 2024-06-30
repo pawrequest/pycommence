@@ -1,6 +1,5 @@
-from __future__ import annotations
+# from __future__ import annotations
 
-import typing as _t
 from dataclasses import dataclass
 from datetime import date, datetime
 from enum import StrEnum, auto
@@ -40,19 +39,6 @@ class RadioType(StrEnum):
     TES_389 = 'Tesunho SIM TH388'
 
 
-class FilterArray(BaseModel):
-    """Array of Cursor Filters."""
-
-    filters: dict[int, CmcFilter] = Field(default_factory=dict)
-
-    @classmethod
-    def from_filters(cls, *filters: CmcFilter):
-        return cls(filters={i: fil for i, fil in enumerate(list(filters), 1)})
-
-    def __str__(self):
-        return ', '.join([str(fil) for fil in self.filters.values()])
-
-
 class CmcFilter(BaseModel):
     """Cursor Filter."""
 
@@ -70,6 +56,19 @@ class CmcFilter(BaseModel):
             f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{f', {self.value}' if self.value else ''})]'
         )
         return filter_str
+
+
+class FilterArray(BaseModel):
+    """Array of Cursor Filters."""
+
+    filters: dict[int, CmcFilter] = Field(default_factory=dict)
+
+    @classmethod
+    def from_filters(cls, *filters: CmcFilter):
+        return cls(filters={i: fil for i, fil in enumerate(list(filters), 1)})
+
+    def __str__(self):
+        return ', '.join([str(fil) for fil in self.filters.values()])
 
 
 @dataclass
@@ -104,5 +103,3 @@ def get_cmc_date(v: str) -> date:
 def get_cmc_time(time_str: str):
     """Use CMC Cannonical flag"""
     return datetime.strptime(time_str, CmcTimeFormat).time()
-
-
