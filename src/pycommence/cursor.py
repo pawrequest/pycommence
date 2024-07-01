@@ -6,8 +6,8 @@ from typing import Self
 from comtypes import CoInitialize, CoUninitialize
 
 from pycommence.wrapper import rowset
-from .pycmc_types import CmcFilter, ConditionType, Connection, FilterArray, NoneFoundHandler
 from .exceptions import PyCommenceMaxExceededError, PyCommenceNotFoundError
+from .pycmc_types import CmcFilter, ConditionType, Connection, FilterArray, NoneFoundHandler
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.cmc_db import CommenceWrapper
 from .wrapper.enums_cmc import CursorType
@@ -27,8 +27,9 @@ def csr_context(table_name, cmc_name: str = 'Commence.DB', filter_array: FilterA
 
 
 def get_csr(
-        table_name, cmc_name: str = 'Commence.DB',
-        mode: CursorType = CursorType.CATEGORY,
+    table_name,
+    cmc_name: str = 'Commence.DB',
+    mode: CursorType = CursorType.CATEGORY,
 ) -> CursorAPI:
     """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
     cmc = CommenceWrapper(cmc_name)
@@ -42,11 +43,27 @@ class CursorAPI:
     Provides access to rowsets and filter methods
     """
 
-    def __init__(self, cursor_wrapper: CursorWrapper, db_name: str, mode: CursorType = CursorType.CATEGORY, name: str = ''):
+    def __init__(
+        self,
+        cursor_wrapper: CursorWrapper,
+        db_name: str,
+        mode: CursorType = CursorType.CATEGORY,
+        name: str = '',
+        filter_array: FilterArray | None = None,
+    ):
         self.cursor_wrapper = cursor_wrapper
         self.db_name = db_name
         self.mode = mode
         self.name = name
+        self.filter_array = filter_array
+
+    def enable_filter_array(self):
+        """Enable the filter array."""
+        self.filter_by_array(self.filter_array)
+
+    def disable_filter_array(self):
+        """Disable the filter array."""
+        self.clear_all_filters()
 
     # @property
     # def table_name(self):
@@ -76,13 +93,7 @@ class CursorAPI:
         return row_set
 
     @contextlib.contextmanager
-    def temporary_filter_pk(
-            self,
-            pk: str,
-            *,
-            slot: int = 4,
-            none_found: NoneFoundHandler = NoneFoundHandler.error
-    ):
+    def temporary_filter_pk(self, pk: str, *, slot: int = 4, none_found: NoneFoundHandler = NoneFoundHandler.error):
         """Temporarily filter by primary key.
 
         Args:
@@ -146,13 +157,7 @@ class CursorAPI:
         finally:
             self.clear_all_filters()
 
-    def filter_by_connection(
-            self,
-            item_name: str,
-            connection: Connection,
-            *,
-            fslot=1
-    ) -> None:
+    def filter_by_connection(self, item_name: str, connection: Connection, *, fslot=1) -> None:
         """Filter by connection.
 
         Args:
@@ -161,8 +166,7 @@ class CursorAPI:
             fslot: Filter slot
 
         """
-        filter_str = (f'[ViewFilter({fslot}, CTI,, {connection.name}, '
-                      f'{connection.to_table}, {item_name})]')
+        filter_str = f'[ViewFilter({fslot}, CTI,, {connection.name}, ' f'{connection.to_table}, {item_name})]'
         self.cursor_wrapper.set_filter(filter_str)
 
     def set_filter(self, cmc_filter: CmcFilter, slot=1) -> None:
@@ -198,12 +202,12 @@ class CursorAPI:
         [self.clear_filter(i) for i in range(1, 9)]
 
     def filter_by_pk(
-            self,
-            pk: str,
-            *,
-            fslot=1,
-            none_found: NoneFoundHandler = NoneFoundHandler.error,
-            max_return: int = 1,
+        self,
+        pk: str,
+        *,
+        fslot=1,
+        none_found: NoneFoundHandler = NoneFoundHandler.error,
+        max_return: int = 1,
     ):
         """Filter by primary key.
 

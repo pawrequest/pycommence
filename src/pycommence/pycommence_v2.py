@@ -70,8 +70,6 @@ class PyCommence(_p.BaseModel):
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
     ):
-        if not csrname:
-            raise ValueError('csrname parameter is required')
         cursor_wrapper = self.cmc_wrapper.get_new_cursor(csrname, mode=mode)
         cursor_api = CursorAPI(cursor_wrapper, db_name=self.cmc_wrapper.name, mode=mode, name=csrname)
         self.csrs[csrname] = cursor_api

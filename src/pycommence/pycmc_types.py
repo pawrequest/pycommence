@@ -52,9 +52,7 @@ class CmcFilter(BaseModel):
         return self.filter_str2(0)
 
     def filter_str2(self, slot: int) -> str:
-        filter_str = (
-            f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{f', {self.value}' if self.value else ''})]'
-        )
+        filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{f', {self.value}' if self.value else ''})]'
         return filter_str
 
 
@@ -62,6 +60,18 @@ class FilterArray(BaseModel):
     """Array of Cursor Filters."""
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
+
+    def update(self, pkg: dict):
+        self.filters.update(pkg)
+
+    def add_filter(self, cmc_filter: CmcFilter):
+        if len(self.filters) >= 8:
+            raise ValueError('FilterArray can only have 8 filters')
+        self.filters[len(self.filters) + 1] = cmc_filter
+
+    def add_filters(self, *filters: CmcFilter):
+        for cmcfilter in filters:
+            self.add_filter(cmcfilter)
 
     @classmethod
     def from_filters(cls, *filters: CmcFilter):
