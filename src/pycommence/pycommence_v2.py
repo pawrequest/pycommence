@@ -6,9 +6,10 @@ import pydantic as _p
 from loguru import logger
 from pydantic import Field
 
+from pycommence.cursor import CursorAPI
+
 # from pycommence import cursor
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceMaxExceededError, PyCommenceNotFoundError
-from pycommence.cursor import CursorAPI
 from pycommence.pycmc_types import CmcFilter, FilterArray, NoneFoundHandler
 from pycommence.wrapper.cmc_db import CommenceWrapper
 from pycommence.wrapper.conversation import ConversationAPI, ConversationTopic
@@ -18,7 +19,7 @@ from pycommence.wrapper.enums_cmc import CursorType
 def csr_f_tblname(func):
     @wraps(func)
     def wrapper(self, tblname: str, *args, **kwargs):
-        tblname = kwargs.get('tblname')
+        tblname = kwargs.get('csrname')
         csr = self.get_csr(tblname)
         return func(self, csr=csr, *args, **kwargs)
 
@@ -28,10 +29,10 @@ def csr_f_tblname(func):
 def with_csr2(func):
     @wraps(func)
     def wrapper(self, *args, **kwargs):
-        if 'tblname' in kwargs:
-            tblname = kwargs['tblname']
+        if 'csrname' in kwargs:
+            tblname = kwargs['csrname']
         else:
-            raise ValueError('tblname parameter is required')
+            raise ValueError('csrname parameter is required')
 
         csr = self.get_csr(tblname)
         return func(self, csr=csr, *args, **kwargs)
@@ -65,11 +66,12 @@ class PyCommence(_p.BaseModel):
         return self
 
     def set_csr(
-            self, csrname: str,
-            mode: CursorType = CursorType.CATEGORY,
+        self,
+        csrname: str,
+        mode: CursorType = CursorType.CATEGORY,
     ):
         if not csrname:
-            raise ValueError('tblname parameter is required')
+            raise ValueError('csrname parameter is required')
         cursor_wrapper = self.cmc_wrapper.get_new_cursor(csrname, mode=mode)
         cursor_api = CursorAPI(cursor_wrapper, db_name=self.cmc_wrapper.name, mode=mode, name=csrname)
         self.csrs[csrname] = cursor_api
@@ -92,8 +94,8 @@ class PyCommence(_p.BaseModel):
             logger.debug(f'Using cursorname {csrname}')
         return csrname
 
-    def filter_cursor(self, filter_array: FilterArray, tblname: str | None = None) -> _t.Self:
-        csr = self.get_csr(tblname)
+    def filter_cursor(self, filter_array: FilterArray, csrname: str | None = None) -> _t.Self:
+        csr = self.get_csr(csrname)
         csr.filter_by_array(filter_array)
         return self
 
@@ -116,8 +118,10 @@ class PyCommence(_p.BaseModel):
 
     @classmethod
     def with_csr(
-            cls, csrname: str, filter_array: FilterArray | None = None,
-            mode: CursorType = CursorType.CATEGORY,
+        cls,
+        csrname: str,
+        filter_array: FilterArray | None = None,
+        mode: CursorType = CursorType.CATEGORY,
     ):
         logger.debug(f'Creating PyCommence with cursor {csrname}')
         pyc = cls(cmc_wrapper=CommenceWrapper()).set_csr(csrname, mode=mode)
@@ -126,18 +130,21 @@ class PyCommence(_p.BaseModel):
         logger.debug(f'Created PyCommence with cursor {csrname}{f" and filter {filter_array}" if filter_array else ""}')
         return pyc
 
-    def generate_records(self, csrname: str | None = None, count: int | None = None) -> _t.Generator[dict[str, str], None, None]:
+    def generate_records(
+        self, csrname: str | None = None, count: int | None = None
+    ) -> _t.Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         csr = self.get_csr(csrname)
         row_set = csr.get_query_rowset(count)
         yield from row_set.gen_row_dicts()
 
-    def generate_records_ids(self, csrname: str | None = None, count: int | None = None) -> _t.Generator[dict[str, str], None, None]:
+    def generate_records_ids(
+        self, csrname: str | None = None, count: int | None = None
+    ) -> _t.Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         csr = self.get_csr(csrname)
         row_set = csr.get_query_rowset(count)
         yield from row_set.gen_rows_with_id()
-
 
     def records(self, csrname: str | None = None, count: int or None = None) -> list[dict[str, str]]:
         """Return all or first `count` records from the cursor."""
@@ -147,9 +154,9 @@ class PyCommence(_p.BaseModel):
         return records
 
     def one_record(
-            self,
-            pk_val: str,
-            csrname: str | None = None,
+        self,
+        pk_val: str,
+        csrname: str | None = None,
     ) -> dict[str, str] | None:
         """Return a single record from the cursor by primary key."""
         csr = self.get_csr(csrname)
@@ -162,22 +169,22 @@ class PyCommence(_p.BaseModel):
             return self.records(csr.name)[0]
 
     def records_by_array(
-            self,
-            filter_array: FilterArray,
-            count: int | None = None,
-            tblname: str | None = None,
+        self,
+        filter_array: FilterArray,
+        count: int | None = None,
+        tblname: str | None = None,
     ) -> list[dict[str, str]]:
         csr = self.get_csr(tblname)
         with csr.temporary_filter_by_array(filter_array):
             return self.records(tblname, count)
 
     def edit_record(
-            self,
-            pk_val: str,
-            row_dict: dict,
-            tblname: str | None = None,
+        self,
+        pk_val: str,
+        row_dict: dict,
+        tblname: str | None = None,
     ) -> _t.Self:
-        """ Edit a record in the cursor, fetch new cursor when done"""
+        """Edit a record in the cursor, fetch new cursor when done"""
         csr = self.get_csr(tblname)
 
         csr.filter_by_pk(pk_val, none_found=NoneFoundHandler.error)
@@ -190,11 +197,11 @@ class PyCommence(_p.BaseModel):
         return self
 
     def delete_record(
-            self,
-            *,
-            pk_val: str,
-            none_found: NoneFoundHandler = 'raise',
-            csrname: str | None = None,
+        self,
+        *,
+        pk_val: str,
+        none_found: NoneFoundHandler = 'raise',
+        csrname: str | None = None,
     ) -> _t.Self:
         csr = self.get_csr(csrname)
 
@@ -208,12 +215,12 @@ class PyCommence(_p.BaseModel):
         return self
 
     def delete_multiple(
-            self,
-            *,
-            pk_vals: list[str],
-            max_delete: int | None = 1,
-            empty: NoneFoundHandler = 'raise',
-            tblname: str | None = None,
+        self,
+        *,
+        pk_vals: list[str],
+        max_delete: int | None = 1,
+        empty: NoneFoundHandler = 'raise',
+        tblname: str | None = None,
     ) -> _t.Self:
         if max_delete and len(pk_vals) > max_delete:
             raise PyCommenceMaxExceededError(
@@ -224,10 +231,10 @@ class PyCommence(_p.BaseModel):
         return self
 
     def add_record(
-            self,
-            pk_val: str,
-            row_dict: dict[str, str],
-            tblname: str | None = None,
+        self,
+        pk_val: str,
+        row_dict: dict[str, str],
+        tblname: str | None = None,
     ) -> _t.Self:
         csr = self.get_csr(tblname)
 
@@ -254,7 +261,7 @@ class PyCommence(_p.BaseModel):
         #         elif existing == 'update':
         #             row_set = csr.get_edit_rowset()
         #         elif existing == 'replace':
-        #             self.delete_record(tblname=tblname, pk_val=pk_val)
+        #             self.delete_record(csrname=csrname, pk_val=pk_val)
         #             row_set = csr.get_named_addset(pk_val)
 
     def handle_existing(self, csr, existing, pk_val, tblname):

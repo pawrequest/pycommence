@@ -13,7 +13,9 @@ from pycommence.wrapper.enums_cmc import FLAGS_UNUSED, OptionFlagInt
 if typing.TYPE_CHECKING:
     from .cmc_csr import CursorWrapper
 from pycommence.wrapper._icommence import (
-    ICommenceAddRowSet, ICommenceDeleteRowSet, ICommenceEditRowSet,
+    ICommenceAddRowSet,
+    ICommenceDeleteRowSet,
+    ICommenceEditRowSet,
     ICommenceQueryRowSet,
 )
 
@@ -44,12 +46,7 @@ class RowSetBase(ABC):
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_value(
-            self,
-            row_index: int,
-            column_index: int,
-            flags: int = OptionFlagInt.CANONICAL.value
-    ) -> str:
+    def get_value(self, row_index: int, column_index: int, flags: int = OptionFlagInt.CANONICAL.value) -> str:
         """Retrieves the value at the specified row and column.
 
         Args:
@@ -93,10 +90,10 @@ class RowSetBase(ABC):
         return self._rs.GetColumnIndex(label, flags)
 
     def get_row(
-            self,
-            row_index: int,
-            delim: str = ';',
-            cannonical: bool = True,
+        self,
+        row_index: int,
+        delim: str = ';',
+        cannonical: bool = True,
     ) -> str:
         """
         Retrieves the values of the specified row.
@@ -152,8 +149,8 @@ class RowSetBase(ABC):
         for i in range(count):
             row = self.get_row(i, delim=delim)
             row_id = self.get_row_id(i)
+            logger.debug(f'Yielding row {row_id}: {row}')
             yield dict(zip(self.headers, row.split(delim))) | {'row_id': row_id}
-
 
     def get_shared(self, row_index: int) -> bool:
         """
@@ -173,9 +170,7 @@ class RowSetQuery(RowSetBase):
     def __init__(self, cmc_rs: ICommenceQueryRowSet):
         super().__init__(cmc_rs)
 
-    def get_field_to_file(
-            self, row_index: int, column_index: int, file_path: str, canonical: bool = True
-    ) -> bool:
+    def get_field_to_file(self, row_index: int, column_index: int, file_path: str, canonical: bool = True) -> bool:
         """
         Saves the field value at the given (row, column) to a file.
 
@@ -194,7 +189,7 @@ class RowSetQuery(RowSetBase):
 
 
 class RowSetModifies(RowSetBase):
-    """ adds functionality to modify rows """''
+    """ adds functionality to modify rows """ ''
 
     def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
         """
@@ -317,5 +312,5 @@ class RowSetDelete(RowSetModifies):
 
 class RowSetEdit(RowSetModifies):
     def __init__(self, edit_rowset: ICommenceEditRowSet) -> None:
-        """ cmc_rs: A Commence EditRowSet COM object. """
+        """cmc_rs: A Commence EditRowSet COM object."""
         super().__init__(edit_rowset)
