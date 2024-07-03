@@ -51,6 +51,9 @@ class CursorAPI:
         pk_label = qs.get_column_label(0)
         return pk_label
 
+    def pk_filter(self, pk):
+        return FilterArray.from_filters(CmcFilter(cmc_col=self.pk_label, value=pk))
+
     def pk_exists(self, pk: str) -> bool:
         """Check if primary key exists in the Cursor."""
         # with self.temporary_filter_pk(pk):
@@ -106,12 +109,6 @@ class CursorAPI:
             yield
         finally:
             self.clear_all_filters()
-
-    def filter_by_pk(self, pk: str):
-        return self.filter_by_array(self.pk_filter(pk))
-
-    def pk_filter(self, pk):
-        return FilterArray.from_filters(CmcFilter(cmc_col=self.pk_label, value=pk))
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
