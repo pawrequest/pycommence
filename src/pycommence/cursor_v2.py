@@ -4,7 +4,7 @@ import contextlib
 from typing import Self
 
 from pycommence.wrapper import rowset
-from .pycmc_types import CmcFilter, FilterArray, NoneFoundHandler
+from .pycmc_types import CmcFilter, FilterArray
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.enums_cmc import CursorType
 
@@ -22,56 +22,11 @@ class CursorAPI:
         self.csrname = csrname
         self.filter_array = filter_array
 
+    # proxied from wrapper
     @property
     def category(self):
         """Commence Category name."""
         return self.cursor_wrapper.category
-
-    def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
-        """Enable the filter array."""
-        filter_array = filter_array or self.filter_array
-        filter_wrapper_by_array(self.cursor_wrapper, filter_array)
-        return self
-
-    def get_row_by_id(self, row_id: str) -> rowset.RowSetQuery:
-        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-        return rs.get_row(0)
-
-    def delete_row_by_id(self, row_id: str) -> None:
-        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
-        rs.delete_row(0)
-        assert rs.commit()
-
-    def edit_row_by_id(self, row_id, update_pkg: dict):
-        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
-        rs.modify_row(0, **update_pkg)
-        assert rs.commit()
-
-    @contextlib.contextmanager
-    def temporary_filter_pk(self, pk: str, *, slot: int = 4, none_found: NoneFoundHandler = NoneFoundHandler.error):
-        """Temporarily filter by primary key.
-
-        Args:
-            pk: Primary key value
-            slot: Filter slot
-            none_found: What to do if no record is found
-
-        """
-        filtered = False
-        try:
-            self.filter_by_pk(pk)
-            filtered = True
-            yield
-        finally:
-            if filtered:
-                self.clear_filter(slot)
-
-    def pk_exists(self, pk: str) -> bool:
-        """Check if primary key exists in the Cursor."""
-        with self.temporary_filter_pk(pk):
-            if self.row_count > 1:
-                raise ValueError(f'Multiple records found for primary key {pk}')
-            return self.row_count == 1
 
     @property
     def column_count(self):
@@ -88,6 +43,7 @@ class CursorAPI:
         """True if the database is enrolled in a workgroup."""
         return self.cursor_wrapper.shared
 
+    # pk operations
     @property
     def pk_label(self):
         """Primary key label."""
@@ -95,9 +51,17 @@ class CursorAPI:
         pk_label = qs.get_column_label(0)
         return pk_label
 
+    def pk_exists(self, pk: str) -> bool:
+        """Check if primary key exists in the Cursor."""
+        # with self.temporary_filter_pk(pk):
+        with self.temporary_filter_by_array(self.pk_filter(pk)):
+            if self.row_count > 1:
+                raise ValueError(f'Multiple records found for primary key {pk}')
+            return self.row_count == 1
+
     def pk_to_row_id(self, pk: str) -> str:
         """Convert primary key to row ID."""
-        with self.temporary_filter_pk(pk):
+        with self.temporary_filter_by_array(self.pk_filter(pk)):
             assert self.row_count == 1
             rs = self.cursor_wrapper.get_query_row_set(1)
             return rs.get_row_id(0)
@@ -107,8 +71,27 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.get_value(0, 0)
 
-    def filter_by_pk(self, pk: str):
-        return self.filter_by_array(FilterArray.from_filters(CmcFilter(cmc_col=self.pk_label, value=pk)))
+    # row operations
+    def get_row_by_id(self, row_id: str) -> rowset.RowSetQuery:
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+        return rs.get_row(0)
+
+    def delete_row_by_id(self, row_id: str) -> None:
+        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
+        rs.delete_row(0)
+        assert rs.commit()
+
+    def edit_row_by_id(self, row_id, update_pkg: dict):
+        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
+        rs.modify_row(0, **update_pkg)
+        assert rs.commit()
+
+    # filter operations
+    def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
+        """Enable the filter array."""
+        filter_array = filter_array or self.filter_array
+        filter_wrapper_by_array(self.cursor_wrapper, filter_array)
+        return self
 
     @contextlib.contextmanager
     def temporary_filter_by_array(self, fil_array: FilterArray):
@@ -123,6 +106,12 @@ class CursorAPI:
             yield
         finally:
             self.clear_all_filters()
+
+    def filter_by_pk(self, pk: str):
+        return self.filter_by_array(self.pk_filter(pk))
+
+    def pk_filter(self, pk):
+        return FilterArray.from_filters(CmcFilter(cmc_col=self.pk_label, value=pk))
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
