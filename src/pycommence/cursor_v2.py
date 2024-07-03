@@ -4,23 +4,18 @@ import contextlib
 from typing import Self
 
 from pycommence.wrapper import rowset
-from .pycmc_types import FilterArray, NoneFoundHandler
+from .pycmc_types import CmcFilter, FilterArray, NoneFoundHandler
 from .wrapper.cmc_csr import CursorWrapper
 from .wrapper.enums_cmc import CursorType
 
 
 class CursorAPI:
-    """Commence Cursor object.
-
-    Provides access to rowsets and filter methods
-    """
-
     def __init__(
-            self,
-            cursor_wrapper: CursorWrapper,
-            mode: CursorType = CursorType.CATEGORY,
-            csrname: str = '',
-            filter_array: FilterArray | None = None,
+        self,
+        cursor_wrapper: CursorWrapper,
+        mode: CursorType = CursorType.CATEGORY,
+        csrname: str = '',
+        filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -35,11 +30,7 @@ class CursorAPI:
     def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
         """Enable the filter array."""
         filter_array = filter_array or self.filter_array
-        [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
-        if filter_array.sortby:
-            self.cursor_wrapper.set_sort(filter_array.sortby)
-        if filter_array.logic:
-            self.cursor_wrapper.set_filter_logic(filter_array.logic)
+        filter_wrapper_by_array(self.cursor_wrapper, filter_array)
         return self
 
     def get_row_by_id(self, row_id: str) -> rowset.RowSetQuery:
@@ -68,7 +59,7 @@ class CursorAPI:
         """
         filtered = False
         try:
-            self.filter_by_pk(pk, fslot=slot, none_found=none_found)
+            self.filter_by_pk(pk)
             filtered = True
             yield
         finally:
@@ -77,8 +68,10 @@ class CursorAPI:
 
     def pk_exists(self, pk: str) -> bool:
         """Check if primary key exists in the Cursor."""
-        with self.temporary_filter_pk(pk, none_found=NoneFoundHandler.ignore):
-            return self.row_count > 0
+        with self.temporary_filter_pk(pk):
+            if self.row_count > 1:
+                raise ValueError(f'Multiple records found for primary key {pk}')
+            return self.row_count == 1
 
     @property
     def column_count(self):
@@ -104,7 +97,7 @@ class CursorAPI:
 
     def pk_to_row_id(self, pk: str) -> str:
         """Convert primary key to row ID."""
-        with self.temporary_filter_pk(pk, none_found=NoneFoundHandler.error):
+        with self.temporary_filter_pk(pk):
             assert self.row_count == 1
             rs = self.cursor_wrapper.get_query_row_set(1)
             return rs.get_row_id(0)
@@ -113,6 +106,9 @@ class CursorAPI:
         """Convert row ID to primary key."""
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.get_value(0, 0)
+
+    def filter_by_pk(self, pk: str):
+        return self.filter_by_array(FilterArray.from_filters(CmcFilter(cmc_col=self.pk_label, value=pk)))
 
     @contextlib.contextmanager
     def temporary_filter_by_array(self, fil_array: FilterArray):
@@ -134,3 +130,12 @@ class CursorAPI:
     def clear_all_filters(self) -> None:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
+
+
+def filter_wrapper_by_array(csr_wrapper: CursorWrapper, filter_array: FilterArray) -> None:
+    """Enable the filter array."""
+    [csr_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
+    if filter_array.sortby:
+        csr_wrapper.set_sort(filter_array.sortby)
+    if filter_array.logic:
+        csr_wrapper.set_filter_logic(filter_array.logic)
