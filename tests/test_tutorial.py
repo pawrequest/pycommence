@@ -5,12 +5,11 @@ from loguru import logger
 
 from .conftest import NEW_DICT, NEW_KEY, UpdateDict
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
-from pycommence.pycommence_v1 import PyCommence
+from pycommence.pycommence_v2 import PyCommence
 
 
 def test_pycmc(pyc_contact_prm):
     assert pyc_contact_prm
-    print(len(pyc_contact_prm.rows()), 'records')
 
 
 @contextlib.contextmanager

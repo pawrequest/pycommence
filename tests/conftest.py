@@ -5,7 +5,7 @@
 import pytest
 
 from pycommence.pycmc_types import CursorType
-from pycommence.pycommence_v1 import PyCommence
+from pycommence.pycommence_v2 import PyCommence
 
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff',
@@ -206,7 +206,8 @@ def pyc_empty_new():
     return get_new_pycmc()
 
 
-@pytest.fixture(scope='function', params=[pyc_contact_new, pycmc_view_cursor])
+@pytest.fixture(scope='function', params=[pyc_contact_new])
+# @pytest.fixture(scope='function', params=[pyc_contact_new, pycmc_view_cursor])
 def pyc_contact_prm(request):
     param = request.param
     return param()

@@ -39,6 +39,13 @@ class Connection:
     to_table: str
 
 
+@dataclass
+class Connection2:
+    name: str
+    category: str
+    column: str
+
+
 CmcDateFormat = '%Y%m%d'
 CmcTimeFormat = '%H:%M'
 

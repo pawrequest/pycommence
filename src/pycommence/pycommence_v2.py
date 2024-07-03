@@ -7,7 +7,7 @@ from pydantic import Field
 
 from pycommence.cursor_v2 import CursorAPI
 # from pycommence import cursor
-from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
+from pycommence.exceptions import PyCommenceNotFoundError
 from pycommence.pycmc_types import CursorType
 from pycommence.filters import CmcFilter, FilterArray
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
@@ -48,17 +48,22 @@ class PyCommence(_p.BaseModel):
         csrname = self.get_csrname(csrname)
         return self.csrs[csrname]
 
+    def reset_csr(self, csr) -> _t.Self:
+        self.set_csr(csr.csrname, csr.mode, csr.filter_array)
+        return self
+
     def set_csr(
             self,
             csrname: str,
             mode: CursorType = CursorType.CATEGORY,
             filter_array: FilterArray | None = None,
     ) -> _t.Self:
+        """ Replace the cursor"""
         self.csrs[csrname] = self.get_new_cursor(csrname, mode, filter_array)
         logger.debug(f'Set cursor on {csrname}')
         return self
 
-    def get_csrname(self, csrname):
+    def get_csrname(self, csrname: str | None = None):
         if not csrname:
             if not self.csrs:
                 raise PyCommenceNotFoundError('No cursor available')
@@ -89,17 +94,3 @@ class PyCommence(_p.BaseModel):
         return cls(cmc_wrapper=CommenceWrapper()).set_conversation(topic)
 
 
-def handle_existing(self, csr, existing, pk_val, tblname):
-    match existing:
-        case 'raise':
-            raise PyCommenceExistsError()
-        case 'update':
-            row_set = csr.get_edit_rowset()
-            logger.debug(f'Updating record with primary key {pk_val}')
-        case 'replace':
-            self.delete_record(pk_val=pk_val, csrname=tblname)
-            row_set = csr.get_named_addset(pk_val)
-            logger.debug(f'Replacing record with primary key {pk_val}')
-        case _:
-            raise ValueError(f'Invalid value for existing: {existing}')
-    return row_set

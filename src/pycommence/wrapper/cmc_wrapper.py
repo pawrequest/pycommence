@@ -9,8 +9,7 @@ from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from pycommence.exceptions import PyCommenceServerError
-from . import conversation_wrapper
-from .conversation_wrapper import ConversationTopic
+from .conversation_wrapper import ConversationAPI, ConversationTopic
 from .cursor_wrapper import CursorWrapper
 from ..pycmc_types import CursorType, OptionFlagInt
 
@@ -69,11 +68,11 @@ class CommenceWrapper(CmcConnector):
             CoUninitialize()
 
     def get_new_cursor(
-        self,
-        name: str | None = None,
-        mode: CursorType = CursorType.CATEGORY,
-        pilot: bool = False,
-        internet: bool = False,
+            self,
+            name: str | None = None,
+            mode: CursorType = CursorType.CATEGORY,
+            pilot: bool = False,
+            internet: bool = False,
     ) -> CursorWrapper:
         """Create a cursor object for accessing Commence data.
 
@@ -112,8 +111,8 @@ class CommenceWrapper(CmcConnector):
         # todo non-standard modes
 
     def get_conversation_api(
-        self, topic: ConversationTopic, application_name: _t.Literal['Commence'] = 'Commence'
-    ) -> conversation.ConversationAPI:
+            self, topic: ConversationTopic, application_name: _t.Literal['Commence'] = 'Commence'
+    ) -> ConversationAPI:
         """
         Create a conversation object.
 
@@ -132,7 +131,7 @@ class CommenceWrapper(CmcConnector):
         conversation_obj = self.commence_dispatch.GetConversation(application_name, topic)
         if conversation_obj is None:
             raise ValueError(f'Could not create conversation object for {application_name}!{topic}')
-        return conversation.ConversationAPI(conversation_obj)
+        return ConversationAPI(conversation_obj)
 
     @property
     def name(self) -> str:

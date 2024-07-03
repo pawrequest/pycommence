@@ -1,7 +1,7 @@
 import pytest
 
 from pycommence.filters import CmcFilter, FilterArray
-from pycommence.pycommence_v1 import PyCommence
+from pycommence.pycommence_v2 import PyCommence
 
 
 @pytest.fixture
@@ -38,7 +38,11 @@ def test_fiters(pycmc_radios_hire, fil_array):
 
 def test_records(fil_array, pycmc_radios_hire):
     print('Filter:', fil_array)
-    records = pycmc_radios_hire.records_by_array(fil_array)
-    print(len(records), 'records found.')
-    [print(record['Name'], 'Status:', record['Status'], 'Send Date:', record['Send Out Date']) for record in records]
+    records = list(pycmc_radios_hire.csr().rows_by_filter(fil_array))
     assert records
+
+
+def test_cols(pycmc_radios_hire):
+    cols = pycmc_radios_hire.csr().headers
+    assert cols
+    print(cols)

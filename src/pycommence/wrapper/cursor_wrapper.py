@@ -3,7 +3,7 @@ from loguru import logger
 import pycommence.pycmc_types
 from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
-from pycommence.exceptions import PyCommenceMaxExceededError, PyCommenceNotFoundError
+from pycommence.exceptions import PyCommenceNotFoundError, raise_for_one
 from pycommence.pycmc_types import FLAGS_UNUSED
 
 
@@ -203,7 +203,7 @@ class CursorWrapper:
 
         """
         res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
-        raise_for_one(res, row_id)
+        raise_for_one(res)
         return res
 
     def get_add_row_set(
@@ -267,7 +267,7 @@ class CursorWrapper:
 
         """
         res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id, FLAGS_UNUSED))
-        raise_for_one(res, row_id)
+        raise_for_one(res)
         return res
 
     def get_delete_row_set(self, count: int = 1) -> rs.RowSetDelete:
@@ -304,7 +304,7 @@ class CursorWrapper:
 
         """
         res = rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id, flags.value))
-        raise_for_one(res, row_id)
+        raise_for_one(res)
         return res
 
     def set_active_item(self, category: str, row_id: str):
@@ -377,8 +377,4 @@ class CursorWrapper:
         return self._csr_cmc.SetRelatedColumn(col, con_name, connected_cat, col_name, flags.value)
 
 
-def raise_for_one(res, row_id):
-    if res.row_count == 0:
-        raise PyCommenceNotFoundError(f'Row ID not found - {row_id}.')
-    if res.row_count > 1:
-        raise PyCommenceMaxExceededError(f'Multiple rows found for ID - {row_id}')
+

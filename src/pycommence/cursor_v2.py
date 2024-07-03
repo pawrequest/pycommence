@@ -7,9 +7,10 @@ from collections.abc import Generator
 
 from loguru import logger
 
-from .pycmc_types import CursorType
+from .pycmc_types import Connection2, CursorType
 from .filters import CmcFilter, FilterArray
 from .wrapper.cursor_wrapper import CursorWrapper
+from .exceptions import PyCommenceExistsError, raise_for_one
 
 
 class CursorAPI:
@@ -28,6 +29,11 @@ class CursorAPI:
             self.filter_by_array()
 
     # proxied from wrapper
+    @cached_property
+    def headers(self):
+        """Column labels."""
+        return self.cursor_wrapper.get_query_row_set(1).headers
+
     @property
     def category(self):
         """Commence Category name."""
@@ -66,9 +72,14 @@ class CursorAPI:
     def pk_to_row_id(self, pk: str) -> str:
         """Convert primary key to row ID."""
         with self.temporary_filter_by_array(self.pk_filter(pk)):
-            assert self.row_count == 1
-            rs = self.cursor_wrapper.get_query_row_set(1)
+            rs = self.cursor_wrapper.get_query_row_set(2)
+            raise_for_one(rs)
             return rs.get_row_id(0)
+
+    def pk_to_row_ids(self, pk: str) -> list[str]:
+        with self.temporary_filter_by_array(self.pk_filter(pk)):
+            rs = self.cursor_wrapper.get_query_row_set()
+            return [rs.get_row_id(i) for i in range(rs.row_count)]
 
     def row_id_to_pk(self, row_id: str) -> str:
         """Convert row ID to primary key."""
@@ -82,7 +93,7 @@ class CursorAPI:
 
     def update_row_by_id(self, row_id, update_pkg: dict):
         rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
-        rs.modify_row(0, **update_pkg)
+        rs.modify_row(0, update_pkg)
         assert rs.commit()
 
     def delete_row_by_id(self, row_id: str) -> None:
@@ -91,15 +102,20 @@ class CursorAPI:
         assert rs.commit()
 
     # row operations by pk
-    def create_row_by_pkg(self, create_pkg: dict[str, str] | None = None) -> None:
-        create_pkg = create_pkg or {}
+    def create_row_by_pkg(self, create_pkg: dict[str, str]) -> None:
+        pkg_pk = create_pkg.get(self.pk_label)
+        if not pkg_pk:
+            raise ValueError(f'Primary key {self.pk_label} not provided in create_pkg.')
+        if self.pk_exists(pkg_pk):
+            raise PyCommenceExistsError(f'Primary key {pkg_pk} already exists.')
         rs = self.cursor_wrapper.get_add_row_set(count=1)
-        rs.modify_row(0, **create_pkg)
+        rs.modify_row(0, create_pkg)
         rs.commit()
 
     def read_row_by_pk(self, pk: str) -> dict[str, str]:
         with self.temporary_filter_by_array(self.pk_filter(pk)):
             rs = self.cursor_wrapper.get_query_row_set(1)
+            raise_for_one(rs)
             return rs.row_dicts_list()[0]
 
     def update_row_by_pk(self, pk, update_pkg: dict):
@@ -117,8 +133,15 @@ class CursorAPI:
         for row in row_set.row_dicts_gen(with_id=with_id):
             if with_category:
                 row.update({'category': self.category})
-            logger.debug(f'yielding {self.category} row {row['Name']}')
+            logger.debug(f'yielding {self.category} row {row.get(self.pk_label), ''}')
             yield row
+
+    # row operations by filter
+    def rows_by_filter(self, filter_array: FilterArray, count: int | None = None, with_id: bool = False) -> Generator[
+        dict[str, str], None, None]:
+        """Return all or first `count` records from the cursor."""
+        with self.temporary_filter_by_array(filter_array):
+            yield from self.rows(count, with_id)
 
     # filter operations
     def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
@@ -153,4 +176,14 @@ class CursorAPI:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
 
-
+    def add_related_column(self, connection: Connection2) -> Self:
+        """Add a related column to the cursor."""
+        res = self.cursor_wrapper.set_related_column(
+            col=self.column_count + 1,
+            con_name=connection.name,
+            connected_cat=connection.category,
+            col_name=connection.column
+        )
+        if not res:
+            raise ValueError('Failed to add related column.')
+        return self
