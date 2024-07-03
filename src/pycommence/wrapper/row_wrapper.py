@@ -8,10 +8,10 @@ from typing import TypeAlias
 
 from loguru import logger
 
-from pycommence.wrapper.enums_cmc import FLAGS_UNUSED, OptionFlagInt
+from ..pycmc_types import FLAGS_UNUSED, OptionFlagInt
 
 if typing.TYPE_CHECKING:
-    from .cmc_csr import CursorWrapper
+    from .cursor_wrapper import CursorWrapper
 from pycommence.wrapper._icommence import (
     ICommenceAddRowSet,
     ICommenceDeleteRowSet,
@@ -124,7 +124,7 @@ class RowSetBase(ABC):
         flags: int = FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
 
-    def get_row_dicts(self, num: int or None = None) -> list[dict[str, str]]:
+    def row_dicts_list(self, num: int or None = None) -> list[dict[str, str]]:
         """Returns a dictionary of the first num rows."""
         if num is None:
             num = self.row_count
@@ -132,25 +132,17 @@ class RowSetBase(ABC):
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
-    def gen_row_dicts(self, count: int or None = None) -> Generator[dict[str, str], None, None]:
+    def row_dicts_gen(self, count: int or None = None, with_id: bool = False) -> Generator[dict[str, str], None, None]:
         """Generates dicts of the first count rows."""
         if count is None:
             count = self.row_count
         delim = '%^&*'
         for i in range(count):
             row = self.get_row(i, delim=delim)
-            yield dict(zip(self.headers, row.split(delim)))
-
-    def gen_rows_with_id(self, count: int or None = None) -> Generator[dict[str, str], None, None]:
-        """Generates dicts with row_id as key and data_dict as val."""
-        if count is None:
-            count = self.row_count
-        delim = '%^&*'
-        for i in range(count):
-            row = self.get_row(i, delim=delim)
-            row_id = self.get_row_id(i)
-            logger.debug(f'Yielding row {row_id}: {row}')
-            yield dict(zip(self.headers, row.split(delim))) | {'row_id': row_id}
+            row_dict = dict(zip(self.headers, row.split(delim)))
+            if with_id:
+                row_dict.update({'row_id': self.get_row_id(i)})
+            yield row_dict
 
     def get_shared(self, row_index: int) -> bool:
         """
@@ -191,7 +183,7 @@ class RowSetQuery(RowSetBase):
 class RowSetModifies(RowSetBase):
     """ adds functionality to modify rows """ ''
 
-    def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
+    def modify_value(self, row_index: int, column_index: int, value: str) -> bool:
         """
         Modifies a field value in the rowset.
 
@@ -206,7 +198,7 @@ class RowSetModifies(RowSetBase):
         """
         return self._rs.ModifyRow(row_index, column_index, value, FLAGS_UNUSED)
 
-    def modify_row_dict(self, row_index: int, row_dict: dict) -> None:
+    def modify_row(self, row_index: int, row_dict: dict) -> None:
         """
         Modifies a row in the rowset.
         Args:
@@ -221,7 +213,7 @@ class RowSetModifies(RowSetBase):
             if col_idx == -1:
                 raise ValueError(f'Invalid column name: {key}')
             logger.debug(f'Modifying row {row_index}, column {col_idx}({key}) with value {value}')
-            self.modify_row(row_index, col_idx, value)
+            self.modify_value(row_index, col_idx, value)
 
     def commit(self) -> bool:
         """
@@ -306,7 +298,7 @@ class RowSetDelete(RowSetModifies):
     def commit_get_cursor(self):
         raise NotImplementedError('Can not get a cursor for deleted rows.')
 
-    def modify_row(self, row_index: int, column_index: int, value: str) -> bool:
+    def modify_value(self, row_index: int, column_index: int, value: str) -> bool:
         raise NotImplementedError('Can not modify a row for deletion.')
 
 

@@ -4,8 +4,8 @@
 #     time.sleep(1)
 import pytest
 
-from pycommence.wrapper.enums_cmc import CursorType
-from pycommence.pycommence_v2 import PyCommence
+from pycommence.pycmc_types import CursorType
+from pycommence.pycommence_v1 import PyCommence
 
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff',
@@ -32,20 +32,67 @@ JEFF_DICT = {
 }
 
 JEFF_EDITED_DICT = {
-    'contactKey': 'Bezos.Geoff', 'homeAddress': 'GEOFF', 'businessNumber': '1800 3000 9009', 'homeNumber': '',
-    'faxNumber': '', 'Notes': 'GEOFF', 'Nickname': '', 'Extension': '', 'Title': 'CEO of Amazon', 'mobileNumber': '',
-    'pagerNumber': '', 'Birthday': '', 'emailHome': '', 'firstName': 'Geoff', 'MI': '', 'Salutation': 'None',
-    'City': '', 'stateProvince': '', 'zipPostal': '', 'properName': 'Mr. Jeff Bezos', 'spouseName': '',
-    'lastName': 'Bezos', 'emailBusiness': '', 'doNotSolicit': 'FALSE', 'busCity': 'Seattle', 'busCountry': 'USA',
-    'busState': 'WA', 'busStreet': '410 Terry Ave N', 'busZip': '98109', 'Account': 'Amazon', 'otherTelephone': '',
-    'mainTelephone': '', 'addModifyUser': 'Simpson.Barry.T', 'addModifyDate': '20190815', 'mailCode': '',
-    'nextContact': '', 'lastContact': '20190807', 'DOB': '', 'Relates to Activity': '', 'Relates to Account': '',
-    'Relates to Opportunity': '', 'LinkedInLink': '', 'Relates to mailingType': '', 'Relates to Attachment': '',
-    'twitterLink': 'https://twitter.com/jeffbezos', 'Relates to Address': '', 'Relates to History': '',
-    'Relates to Expense': '', 'FacebookLink': '', 'Relates to contactType': '', 'Relates to contactInterest': '',
-    'Relates to Employee': '', 'Handheld Device Employee': '', 'ID': '', 'cityStateZip': 'Seattle, WA 98109',
-    'Influence': 'Low', 'Relates to detailNote': '', 'Manager of Contact': '', 'Managed by Contact': '',
-    'isPrimary': 'FALSE', 'Relates to Salutation': ''
+    'contactKey': 'Bezos.Geoff',
+    'homeAddress': 'GEOFF',
+    'businessNumber': '1800 3000 9009',
+    'homeNumber': '',
+    'faxNumber': '',
+    'Notes': 'GEOFF',
+    'Nickname': '',
+    'Extension': '',
+    'Title': 'CEO of Amazon',
+    'mobileNumber': '',
+    'pagerNumber': '',
+    'Birthday': '',
+    'emailHome': '',
+    'firstName': 'Geoff',
+    'MI': '',
+    'Salutation': 'None',
+    'City': '',
+    'stateProvince': '',
+    'zipPostal': '',
+    'properName': 'Mr. Jeff Bezos',
+    'spouseName': '',
+    'lastName': 'Bezos',
+    'emailBusiness': '',
+    'doNotSolicit': 'FALSE',
+    'busCity': 'Seattle',
+    'busCountry': 'USA',
+    'busState': 'WA',
+    'busStreet': '410 Terry Ave N',
+    'busZip': '98109',
+    'Account': 'Amazon',
+    'otherTelephone': '',
+    'mainTelephone': '',
+    'addModifyUser': 'Simpson.Barry.T',
+    'addModifyDate': '20190815',
+    'mailCode': '',
+    'nextContact': '',
+    'lastContact': '20190807',
+    'DOB': '',
+    'Relates to Activity': '',
+    'Relates to Account': '',
+    'Relates to Opportunity': '',
+    'LinkedInLink': '',
+    'Relates to mailingType': '',
+    'Relates to Attachment': '',
+    'twitterLink': 'https://twitter.com/jeffbezos',
+    'Relates to Address': '',
+    'Relates to History': '',
+    'Relates to Expense': '',
+    'FacebookLink': '',
+    'Relates to contactType': '',
+    'Relates to contactInterest': '',
+    'Relates to Employee': '',
+    'Handheld Device Employee': '',
+    'ID': '',
+    'cityStateZip': 'Seattle, WA 98109',
+    'Influence': 'Low',
+    'Relates to detailNote': '',
+    'Manager of Contact': '',
+    'Managed by Contact': '',
+    'isPrimary': 'FALSE',
+    'Relates to Salutation': '',
 }
 
 NEW_DICT = {
@@ -117,7 +164,7 @@ NEW_DICT_RESPONSE = {
     'spouseName': '',
     'stateProvince': '',
     'twitterLink': '',
-    'zipPostal': ''
+    'zipPostal': '',
 }
 
 UpdateDict = {
@@ -165,4 +212,14 @@ def pyc_contact_prm(request):
     return param()
 
 
-__all__ = ['JEFF_DICT', 'JEFF_EDITED_DICT', 'JEFF_EDITED_KEY', 'JEFF_KEY', 'NEW_DICT', 'PK_VAL', 'RICHARD_KEY', 'UpdateDict', 'NEW_KEY']
+__all__ = [
+    'JEFF_DICT',
+    'JEFF_EDITED_DICT',
+    'JEFF_EDITED_KEY',
+    'JEFF_KEY',
+    'NEW_DICT',
+    'PK_VAL',
+    'RICHARD_KEY',
+    'UpdateDict',
+    'NEW_KEY',
+]

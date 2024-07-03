@@ -1,9 +1,10 @@
 from loguru import logger
 
-from pycommence.wrapper import enums_cmc as cenum, rowset as rs
+import pycommence.pycmc_types
+from pycommence.wrapper import enums_cmc as cenum, row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
 from pycommence.exceptions import PyCommenceNotFoundError
-from pycommence.wrapper.enums_cmc import FLAGS_UNUSED
+from pycommence.pycmc_types import FLAGS_UNUSED
 
 
 class CursorWrapper:
@@ -92,8 +93,10 @@ class CursorWrapper:
             raise ValueError('Unable to sort')
 
     def set_column(
-            self, column_index: int, field_name: str,
-            flags: cenum.OptionFlagInt | None = cenum.OptionFlagInt.NONE
+        self,
+        column_index: int,
+        field_name: str,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -163,9 +166,7 @@ class CursorWrapper:
         """
         res = self._csr_cmc.SeekRowApprox(numerator, denominator)
         if res == -1:
-            raise ValueError(
-                f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows'
-            )
+            raise ValueError(f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows')
         return res
 
     def get_query_row_set(self, count: int or None = None) -> rs.RowSetQuery:
@@ -207,8 +208,9 @@ class CursorWrapper:
         return res
 
     def get_add_row_set(
-            self, count: int = 1,
-            flags: cenum.OptionFlagInt | None = cenum.OptionFlagInt.SHARED
+        self,
+        count: int = 1,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.SHARED,
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
@@ -247,7 +249,10 @@ class CursorWrapper:
         count = count or self.row_count
         return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, FLAGS_UNUSED))
 
-    def get_edit_row_set_by_id(self, row_id: str, ) -> rs.RowSetEdit:
+    def get_edit_row_set_by_id(
+        self,
+        row_id: str,
+    ) -> rs.RowSetEdit:
         """
         Creates a rowset for editing a particular row.
 
@@ -261,12 +266,7 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        res = rs.RowSetEdit(
-            self._csr_cmc.GetEditRowSetByID(
-                row_id,
-                FLAGS_UNUSED
-            )
-        )
+        res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id, FLAGS_UNUSED))
         if res.row_count == 0:
             raise ValueError()
         return res
@@ -288,8 +288,7 @@ class CursorWrapper:
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
-            self, row_id: str,
-            flags: cenum.OptionFlagInt = cenum.OptionFlagInt.NONE
+        self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -349,12 +348,12 @@ class CursorWrapper:
         return self._csr_cmc.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
-            self,
-            col: int,
-            con_name: str,
-            connected_cat: str,
-            col_name: str,
-            flags: cenum.OptionFlagInt | None = cenum.OptionFlagInt.NONE
+        self,
+        col: int,
+        con_name: str,
+        connected_cat: str,
+        col_name: str,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.

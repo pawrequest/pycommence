@@ -1,6 +1,6 @@
 import pytest
 
-from pycommence.wrapper.cmc_db import CommenceWrapper
+from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.pyc2 import PyCommence
 
 

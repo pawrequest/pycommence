@@ -1,7 +1,7 @@
 import pytest
 
 from pycommence.pyc2 import PyCommence
-from pycommence.wrapper.enums_cmc import CursorType
+from pycommence.pycmc_types import CursorType
 
 
 @pytest.fixture
@@ -13,4 +13,4 @@ def pycmc():
 
 
 def test_view(pycmc):
-    print(len(pycmc.records()), 'records')
+    print(len(pycmc.rows()), 'records')

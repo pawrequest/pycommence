@@ -3,7 +3,7 @@ from __future__ import annotations
 from enum import StrEnum
 
 from pycommence.wrapper._icommence import ICommenceConversation
-from pycommence.wrapper.cmc_types import CmcFieldDefinition
+from pycommence.pycmc_types import CmcFieldDefinition
 
 
 class ConversationTopic(StrEnum):
@@ -11,7 +11,7 @@ class ConversationTopic(StrEnum):
 
 
 class ConversationAPI:
-    """ Thin Wrapper on Commence's Conversation object using DDE."""
+    """Thin Wrapper on Commence's Conversation object using DDE."""
 
     def __init__(self, cmc_conversation: ICommenceConversation):
         self._conv_wrapper = cmc_conversation

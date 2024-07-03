@@ -5,12 +5,12 @@ from loguru import logger
 
 from .conftest import NEW_DICT, NEW_KEY, UpdateDict
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
-from pycommence.pycommence_v2 import PyCommence
+from pycommence.pycommence_v1 import PyCommence
 
 
 def test_pycmc(pyc_contact_prm):
     assert pyc_contact_prm
-    print(len(pyc_contact_prm.records()), 'records')
+    print(len(pyc_contact_prm.rows()), 'records')
 
 
 @contextlib.contextmanager
@@ -36,7 +36,7 @@ def test_temp_contact(pyc_contact_prm):
 
 
 def test_get_records(pyc_contact_prm):
-    res = pyc_contact_prm.records()
+    res = pyc_contact_prm.rows()
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
 
