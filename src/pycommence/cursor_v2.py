@@ -20,6 +20,8 @@ class CursorAPI:
         self.mode = mode
         self.csrname = csrname
         self.filter_array = filter_array
+        if self.filter_array:
+            self.filter_by_array()
 
     # proxied from wrapper
     @property
@@ -97,10 +99,13 @@ class CursorAPI:
         row_id = self.pk_to_row_id(pk)
         self.update_row_by_id(row_id, update_pkg)
 
-    def rows(self, count: int | None = None, with_id: bool = False) -> Generator[dict[str, str], None, None]:
+    def rows(self, count: int | None = None, with_id: bool = False, with_category:bool = False) -> Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         row_set = self.cursor_wrapper.get_query_row_set(count)
-        yield from row_set.row_dicts_gen(with_id=with_id)
+        for row in row_set.row_dicts_gen(with_id=with_id):
+            if with_category:
+                row.update({'category': self.category})
+            yield row
 
     # filter operations
     def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:

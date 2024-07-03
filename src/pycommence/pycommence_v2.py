@@ -6,7 +6,6 @@ from loguru import logger
 from pydantic import Field
 
 from pycommence.cursor_v2 import CursorAPI
-
 # from pycommence import cursor
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.pycmc_types import CmcFilter, CursorType, FilterArray, NoneFoundHandler
@@ -43,17 +42,18 @@ class PyCommence(_p.BaseModel):
         return self.csrs[csrname]
 
     def set_csr(
-        self,
-        csrname: str,
-        mode: CursorType = CursorType.CATEGORY,
+            self,
+            csrname: str,
+            mode: CursorType = CursorType.CATEGORY,
+            filter_array: FilterArray | None = None,
     ) -> _t.Self:
-        self.csrs[csrname] = self.new_cursor(csrname, mode)
+        self.csrs[csrname] = self.new_cursor(csrname, mode, filter_array)
         logger.debug(f'Set cursor on {csrname}')
         return self
 
-    def new_cursor(self, csrname, mode) -> CursorAPI:
+    def new_cursor(self, csrname, mode, filter_array=None) -> CursorAPI:
         cursor_wrapper: CursorWrapper = self.cmc_wrapper.get_new_cursor(csrname, mode=mode)
-        return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname)
+        return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname, filter_array=filter_array)
 
     def get_csrname(self, csrname):
         if not csrname:
@@ -71,10 +71,10 @@ class PyCommence(_p.BaseModel):
 
     @classmethod
     def with_csr(
-        cls,
-        csrname: str,
-        filter_array: FilterArray | None = None,
-        mode: CursorType = CursorType.CATEGORY,
+            cls,
+            csrname: str,
+            filter_array: FilterArray | None = None,
+            mode: CursorType = CursorType.CATEGORY,
     ):
         logger.debug(f'Creating PyCommence with cursor {csrname}')
         pyc = cls(cmc_wrapper=CommenceWrapper()).set_csr(csrname, mode=mode)

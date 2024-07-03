@@ -1,7 +1,7 @@
 from loguru import logger
 
 import pycommence.pycmc_types
-from pycommence.wrapper import enums_cmc as cenum, row_wrapper as rs
+from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
 from pycommence.exceptions import PyCommenceNotFoundError
 from pycommence.pycmc_types import FLAGS_UNUSED
