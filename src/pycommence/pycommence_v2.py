@@ -9,7 +9,7 @@ from pycommence.cursor_v2 import CursorAPI
 # from pycommence import cursor
 from pycommence.exceptions import PyCommenceNotFoundError
 from pycommence.pycmc_types import CursorType
-from pycommence.filters import CmcFilter, FilterArray
+from pycommence.filters import FieldFilter, FilterArray
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
 from pycommence.wrapper.cursor_wrapper import CursorWrapper
@@ -26,7 +26,7 @@ def csr_f_tblname(func):
 
 
 def filter_array_pk(pk_label, pk_val):
-    return FilterArray.from_filters(CmcFilter(cmc_col=pk_label, value=pk_val))
+    return FilterArray.from_filters(FieldFilter(column=pk_label, value=pk_val))
 
 
 class PyCommence(_p.BaseModel):
@@ -49,6 +49,7 @@ class PyCommence(_p.BaseModel):
         return self.csrs[csrname]
 
     def reset_csr(self, csr) -> _t.Self:
+        """ Reset an existing cursor with same name, mode and filter_array"""
         self.set_csr(csr.csrname, csr.mode, csr.filter_array)
         return self
 
@@ -58,7 +59,7 @@ class PyCommence(_p.BaseModel):
             mode: CursorType = CursorType.CATEGORY,
             filter_array: FilterArray | None = None,
     ) -> _t.Self:
-        """ Replace the cursor"""
+        """ Re/Set the cursor by name and values"""
         self.csrs[csrname] = self.get_new_cursor(csrname, mode, filter_array)
         logger.debug(f'Set cursor on {csrname}')
         return self
@@ -92,5 +93,3 @@ class PyCommence(_p.BaseModel):
     @classmethod
     def with_conversation(cls, topic: ConversationTopic = 'ViewData'):
         return cls(cmc_wrapper=CommenceWrapper()).set_conversation(topic)
-
-

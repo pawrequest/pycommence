@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC
 from enum import StrEnum
 from typing import Literal
 
@@ -18,28 +19,73 @@ class ConditionType(StrEnum):
     NOT_EQUAL = 'Not Equal To'
     NOT_CONTAIN = 'Not Contains'
     ON = 'On'
+    NOT = 'Not'
 
 
-class CmcFilter(BaseModel):
-    """Cursor Filter."""
-
-    cmc_col: str
-    f_type: FilterType = 'F'
-    value: str = ''
-    condition: ConditionType = 'Equal To'
+class CmcFilter(BaseModel, ABC):
+    f_type: FilterType
     not_flag: NotFlagType = ''
+    value: str = ''
+
+    def view_filter_str(self, slot=1):
+        return f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self._filter_str})]'
 
     def __str__(self):
-        return self.filter_str(0)
+        return self._filter_str
 
-    def filter_str(self, slot: int) -> str:
-        filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{f', {self.value}' if self.value else ''})]'
+    @property
+    def _filter_str(self):
+        raise NotImplementedError()
+
+
+class FieldFilter(CmcFilter):
+    """Cursor Filter."""
+    f_type: Literal['F'] = 'F'
+    column: str
+    condition: ConditionType = 'Equal To'
+
+    @property
+    def _filter_str(self) -> str:
+        filter_str = f'{self.column}, {self.condition}{f', {self.value}' if self.value else ''}'
         return filter_str
+
+
+class ConnectedItemFilter(FieldFilter):
+    f_type: Literal['CTI'] = 'CTI'
+    connection_category: str
+
+    # column is relationship name eg 'Relates To'
+
+    @property
+    def _filter_str(self) -> str:
+        return f'{self.column}, {self.connection_category}, {self.value}'
+
+
+class ConnectedFieldFilter(ConnectedItemFilter):
+    f_type: Literal['CTCF'] = 'CTCF'
+    connected_column: str
+
+    @property
+    def _filter_str(self):
+        return f'{self.column}, {self.connection_category}, {self.connected_column}, {self.condition}, {self.value}'
+
+
+class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
+    f_type: Literal['CTCTI'] = 'CTCTI'
+    connection_column_2: str
+    connection_category_2: str
+
+    @property
+    def _filter_str(self) -> str:
+        return f'{self.column}, {self.connection_category}, {self.connection_column_2}, {self.connection_category_2}, {self.value}'
 
 
 class SortOrder(StrEnum):
     ASC = 'Ascending'
     DESC = 'Descending'
+
+
+Logic = Literal['Or', 'And']
 
 
 class FilterArray(BaseModel):
@@ -55,25 +101,33 @@ class FilterArray(BaseModel):
         return ', '.join([f'{col}, {order.value}' for col, order in self.sorts])
 
     @property
+    def view_sort_text(self):
+        return f'[ViewSort({self.sorts_txt})]'
+
+    @property
+    def sort_logic_text(self):
+        return f'[ViewConjunction({self.logic})]'
+
+    @property
     def filter_strs(self):
-        return [fil.filter_str(slot) for slot, fil in self.filters.items()]
+        return [fil.view_filter_str(slot) for slot, fil in self.filters.items()]
 
     def update(self, pkg: dict):
         self.filters.update(pkg)
 
-    def add_filter(self, cmc_filter: CmcFilter):
+    def add_filter(self, cmc_filter: FieldFilter):
         next_empty = next((i for i in range(1, 9) if i not in self.filters), None)
         if next_empty:
             self.filters[next_empty] = cmc_filter
         else:
             raise ValueError('No empty slots available')
 
-    def add_filters(self, *filters: CmcFilter):
+    def add_filters(self, *filters: FieldFilter):
         for cmcfilter in filters:
             self.add_filter(cmcfilter)
 
     @classmethod
-    def from_filters(cls, *filters: CmcFilter, sorts=None, logic: str | None = None):
+    def from_filters(cls, *filters: FieldFilter, sorts=None, logic: str | None = None):
         filters_ = {i: fil for i, fil in enumerate(list(filters), 1)}
         filaray = cls(filters=filters_)
         if sorts:

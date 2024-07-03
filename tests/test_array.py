@@ -1,13 +1,13 @@
 import pytest
 
-from pycommence.filters import CmcFilter, FilterArray
+from pycommence.filters import FieldFilter, FilterArray
 from pycommence.pycommence_v2 import PyCommence
 
 
 @pytest.fixture
 def fil1():
-    return CmcFilter(
-        cmc_col='Status',
+    return FieldFilter(
+        column='Status',
         condition='Equal To',
         value='Booked In',
     )
@@ -30,7 +30,7 @@ def fil_array(fil1):
 
 def test_fiters(pycmc_radios_hire, fil_array):
     count = pycmc_radios_hire.csrs['Hire'].row_count
-    with pycmc_radios_hire.csrs['Hire'].temporary_filter_by_array(fil_array):
+    with pycmc_radios_hire.csrs['Hire'].temporary_filter(fil_array):
         c2 = pycmc_radios_hire.csrs['Hire'].row_count
         assert c2 < count
         ...

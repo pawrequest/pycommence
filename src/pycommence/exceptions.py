@@ -39,21 +39,21 @@ class HandleExisting(StrEnum):
     REPLACE = 'replace'
 
 
-def handle_existing(self, rs: HasRowCount, existing: HandleExisting, pk_val, tblname):
-    if rs.row_count > 0:
-        match existing:
-            case 'raise':
-                raise PyCommenceExistsError()
-            case 'update':
-                row_set = csr.get_edit_rowset()
-                logger.debug(f'Updating record with primary key {pk_val}')
-            case 'replace':
-                self.delete_record(pk_val=pk_val, csrname=tblname)
-                row_set = csr.get_named_addset(pk_val)
-                logger.debug(f'Replacing record with primary key {pk_val}')
-            case _:
-                raise ValueError(f'Invalid value for existing: {existing}')
-        return row_set
+# def handle_existing(self, rs: HasRowCount, existing: HandleExisting, pk_val, tblname):
+#     if rs.row_count > 0:
+#         match existing:
+#             case 'raise':
+#                 raise PyCommenceExistsError()
+#             case 'update':
+#                 row_set = csr.get_edit_rowset()
+#                 logger.debug(f'Updating record with primary key {pk_val}')
+#             case 'replace':
+#                 self.delete_record(pk_val=pk_val, csrname=tblname)
+#                 row_set = csr.get_named_addset(pk_val)
+#                 logger.debug(f'Replacing record with primary key {pk_val}')
+#             case _:
+#                 raise ValueError(f'Invalid value for existing: {existing}')
+#         return row_set
 
 
 class HasRowCount(Protocol):
