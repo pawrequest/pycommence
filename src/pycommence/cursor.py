@@ -27,9 +27,9 @@ def csr_context(table_name, cmc_name: str = 'Commence.DB', filter_array: FilterA
 
 
 def get_csr(
-    table_name,
-    cmc_name: str = 'Commence.DB',
-    mode: CursorType = CursorType.CATEGORY,
+        table_name,
+        cmc_name: str = 'Commence.DB',
+        mode: CursorType = CursorType.CATEGORY,
 ) -> CursorAPI:
     """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
     cmc = CommenceWrapper(cmc_name)
@@ -44,12 +44,12 @@ class CursorAPI:
     """
 
     def __init__(
-        self,
-        cursor_wrapper: CursorWrapper,
-        db_name: str,
-        mode: CursorType = CursorType.CATEGORY,
-        name: str = '',
-        filter_array: FilterArray | None = None,
+            self,
+            cursor_wrapper: CursorWrapper,
+            db_name: str,
+            mode: CursorType = CursorType.CATEGORY,
+            name: str = '',
+            filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.db_name = db_name
@@ -85,6 +85,20 @@ class CursorAPI:
         """See :meth:`~pycommence.wrapper.cmc_csr.CsrCmc.get_query_row_set`."""
 
         return self.cursor_wrapper.get_query_row_set(count=count)
+
+    def get_row_by_id(self, row_id: str) -> rowset.RowSetQuery:
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+        return rs.get_row(0)
+
+    def delete_row_by_id(self, row_id: str) -> None:
+        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
+        rs.delete_row(0)
+        assert rs.commit()
+
+    def edit_row_by_id(self, row_id, update_pkg: dict):
+        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
+        rs.modify_row(0, **update_pkg)
+        assert rs.commit()
 
     def get_named_addset(self, pk_val: str) -> rowset.RowSetAdd:
         """Get an add rowset and set the primary key value."""
@@ -177,7 +191,7 @@ class CursorAPI:
             slot: Filter slot
 
         """
-        self.filter_by_str(cmc_filter.filter_str2(slot))
+        self.filter_by_str(cmc_filter.filter_str(slot))
 
     def filter_by_array(self, fil_array: FilterArray) -> Self:
         """Filter by FilterArray object
@@ -202,12 +216,12 @@ class CursorAPI:
         [self.clear_filter(i) for i in range(1, 9)]
 
     def filter_by_pk(
-        self,
-        pk: str,
-        *,
-        fslot=1,
-        none_found: NoneFoundHandler = NoneFoundHandler.error,
-        max_return: int = 1,
+            self,
+            pk: str,
+            *,
+            fslot=1,
+            none_found: NoneFoundHandler = NoneFoundHandler.error,
+            max_return: int = 1,
     ):
         """Filter by primary key.
 

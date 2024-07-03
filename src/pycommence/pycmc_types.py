@@ -49,9 +49,9 @@ class CmcFilter(BaseModel):
     not_flag: NotFlagType = ''
 
     def __str__(self):
-        return self.filter_str2(0)
+        return self.filter_str(0)
 
-    def filter_str2(self, slot: int) -> str:
+    def filter_str(self, slot: int) -> str:
         filter_str = f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self.cmc_col}, {self.condition}{f', {self.value}' if self.value else ''})]'
         return filter_str
 
@@ -60,6 +60,12 @@ class FilterArray(BaseModel):
     """Array of Cursor Filters."""
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
+    sortby: str | None = None
+    logic: str | None = None
+
+    @property
+    def filter_strs(self):
+        return [fil.filter_str(slot) for slot, fil in self.filters.items()]
 
     def update(self, pkg: dict):
         self.filters.update(pkg)
