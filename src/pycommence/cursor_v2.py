@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import contextlib
 from functools import cached_property
-from typing import Generator, Self
+from typing import Self
+from collections.abc import Generator
+
+from loguru import logger
 
 from .pycmc_types import CmcFilter, CursorType, FilterArray
 from .wrapper.cursor_wrapper import CursorWrapper
@@ -10,11 +13,11 @@ from .wrapper.cursor_wrapper import CursorWrapper
 
 class CursorAPI:
     def __init__(
-        self,
-        cursor_wrapper: CursorWrapper,
-        mode: CursorType = CursorType.CATEGORY,
-        csrname: str = '',
-        filter_array: FilterArray | None = None,
+            self,
+            cursor_wrapper: CursorWrapper,
+            mode: CursorType = CursorType.CATEGORY,
+            csrname: str = '',
+            filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -71,40 +74,49 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.get_value(0, 0)
 
-    # row operations
-    def read_row_by_pk(self, pk: str) -> dict[str, str]:
-        with self.temporary_filter_by_array(self.pk_filter(pk)):
-            rs = self.cursor_wrapper.get_query_row_set(1)
-            return rs.row_dicts_list()[0]
-
+    # row operations by id
     def read_row_by_id(self, row_id: str) -> dict[str, str]:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.row_dicts_list()[0]
-
-    def delete_row_by_id(self, row_id: str) -> None:
-        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
-        rs.delete_row(0)
-        assert rs.commit()
-
-    def delete_row_by_pk(self, pk: str) -> None:
-        row_id = self.pk_to_row_id(pk)
-        self.delete_row_by_id(row_id)
 
     def update_row_by_id(self, row_id, update_pkg: dict):
         rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
         rs.modify_row(0, **update_pkg)
         assert rs.commit()
 
+    def delete_row_by_id(self, row_id: str) -> None:
+        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
+        rs.delete_row(0)
+        assert rs.commit()
+
+    # row operations by pk
+    def create_row_by_pkg(self, create_pkg: dict[str, str] | None = None) -> None:
+        create_pkg = create_pkg or {}
+        rs = self.cursor_wrapper.get_add_row_set(count=1)
+        rs.modify_row(0, **create_pkg)
+        rs.commit()
+
+    def read_row_by_pk(self, pk: str) -> dict[str, str]:
+        with self.temporary_filter_by_array(self.pk_filter(pk)):
+            rs = self.cursor_wrapper.get_query_row_set(1)
+            return rs.row_dicts_list()[0]
+
     def update_row_by_pk(self, pk, update_pkg: dict):
         row_id = self.pk_to_row_id(pk)
         self.update_row_by_id(row_id, update_pkg)
 
-    def rows(self, count: int | None = None, with_id: bool = False, with_category:bool = False) -> Generator[dict[str, str], None, None]:
+    def delete_row_by_pk(self, pk: str) -> None:
+        row_id = self.pk_to_row_id(pk)
+        self.delete_row_by_id(row_id)
+
+    def rows(self, count: int | None = None, with_id: bool = False, with_category: bool = False) -> Generator[
+        dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         row_set = self.cursor_wrapper.get_query_row_set(count)
         for row in row_set.row_dicts_gen(with_id=with_id):
             if with_category:
                 row.update({'category': self.category})
+            logger.debug(f'yielding {self.category} row {row['Name']}')
             yield row
 
     # filter operations
@@ -115,7 +127,7 @@ class CursorAPI:
         return self
 
     @contextlib.contextmanager
-    def temporary_filter_by_array(self, fil_array: FilterArray):
+    def temporary_filter_by_array(self, fil_array: FilterArray | None = None):
         """Temporarily filter by FilterArray object.
 
         Args:
@@ -139,7 +151,8 @@ class CursorAPI:
 def filter_wrapper_by_array(csr_wrapper: CursorWrapper, filter_array: FilterArray) -> None:
     """Enable the filter array."""
     [csr_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
-    if filter_array.sortby:
-        csr_wrapper.set_sort(filter_array.sortby)
+    if filter_array.sorts:
+        sort_text = f'[ViewSort({filter_array.sorts_txt})]'
+        csr_wrapper.set_sort(sort_text)
     if filter_array.logic:
         csr_wrapper.set_filter_logic(filter_array.logic)

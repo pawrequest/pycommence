@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from enum import Enum, IntEnum, StrEnum, auto
 from typing import Literal
-
 from _decimal import Decimal
 
 import pydantic as _p
@@ -64,12 +63,22 @@ class CmcFilter(BaseModel):
         return filter_str
 
 
+class SortOrder(StrEnum):
+    ASC = 'Ascending'
+    DESC = 'Descending'
+
+
 class FilterArray(BaseModel):
     """Array of Cursor Filters."""
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
+    sorts: tuple[tuple[str, SortOrder], ...] = Field(default_factory=tuple)
     sortby: str | None = None
     logic: str | None = None
+
+    @property
+    def sorts_txt(self):
+        return ', '.join([f'{col}, {order.value}' for col, order in self.sorts])
 
     @property
     def filter_strs(self):
@@ -88,8 +97,14 @@ class FilterArray(BaseModel):
             self.add_filter(cmcfilter)
 
     @classmethod
-    def from_filters(cls, *filters: CmcFilter):
-        return cls(filters={i: fil for i, fil in enumerate(list(filters), 1)})
+    def from_filters(cls, *filters: CmcFilter, sorts=None, logic: str | None = None):
+        filters_ = {i: fil for i, fil in enumerate(list(filters), 1)}
+        filaray = cls(filters=filters_)
+        if sorts:
+            filaray.sorts = sorts
+        if logic:
+            filaray.logic = logic
+        return filaray
 
     def __str__(self):
         return ', '.join([str(fil) for fil in self.filters.values()])

@@ -3,7 +3,7 @@ from loguru import logger
 import pycommence.pycmc_types
 from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
-from pycommence.exceptions import PyCommenceNotFoundError
+from pycommence.exceptions import PyCommenceMaxExceededError, PyCommenceNotFoundError
 from pycommence.pycmc_types import FLAGS_UNUSED
 
 
@@ -93,10 +93,10 @@ class CursorWrapper:
             raise ValueError('Unable to sort')
 
     def set_column(
-        self,
-        column_index: int,
-        field_name: str,
-        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
+            self,
+            column_index: int,
+            field_name: str,
+            flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -203,21 +203,20 @@ class CursorWrapper:
 
         """
         res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
-        if res.row_count != 1:
-            raise ValueError(f'{res.row_count} results for id= {row_id}')
+        raise_for_one(res, row_id)
         return res
 
     def get_add_row_set(
-        self,
-        count: int = 1,
-        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.SHARED,
+            self,
+            count: int = 1,
+            shared: bool = True,
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
         Args:
             count (int): The number of rows to create.
-            flags (int): Option flags. Use CMC_FLAG_SHARED to default all rows to shared.
+            shared (bool): True if the row/s are to be shared.
 
         Returns:
             RowSetAdd: A rowset object for adding new items.
@@ -226,6 +225,7 @@ class CursorWrapper:
         When first created, each row is initialized to field default values.
 
         """
+        flags = pycommence.pycmc_types.OptionFlagInt.SHARED if shared else pycommence.pycmc_types.OptionFlagInt.NONE
         if count is None:
             count = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
@@ -250,8 +250,8 @@ class CursorWrapper:
         return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, FLAGS_UNUSED))
 
     def get_edit_row_set_by_id(
-        self,
-        row_id: str,
+            self,
+            row_id: str,
     ) -> rs.RowSetEdit:
         """
         Creates a rowset for editing a particular row.
@@ -267,8 +267,7 @@ class CursorWrapper:
 
         """
         res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id, FLAGS_UNUSED))
-        if res.row_count == 0:
-            raise ValueError()
+        raise_for_one(res, row_id)
         return res
 
     def get_delete_row_set(self, count: int = 1) -> rs.RowSetDelete:
@@ -288,7 +287,7 @@ class CursorWrapper:
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
-        self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
+            self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -304,7 +303,9 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        return rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id, flags.value))
+        res = rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id, flags.value))
+        raise_for_one(res, row_id)
+        return res
 
     def set_active_item(self, category: str, row_id: str):
         """
@@ -348,12 +349,12 @@ class CursorWrapper:
         return self._csr_cmc.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
-        self,
-        col: int,
-        con_name: str,
-        connected_cat: str,
-        col_name: str,
-        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
+            self,
+            col: int,
+            con_name: str,
+            connected_cat: str,
+            col_name: str,
+            flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.
@@ -374,3 +375,10 @@ class CursorWrapper:
 
         """
         return self._csr_cmc.SetRelatedColumn(col, con_name, connected_cat, col_name, flags.value)
+
+
+def raise_for_one(res, row_id):
+    if res.row_count == 0:
+        raise PyCommenceNotFoundError(f'Row ID not found - {row_id}.')
+    if res.row_count > 1:
+        raise PyCommenceMaxExceededError(f'Multiple rows found for ID - {row_id}')
