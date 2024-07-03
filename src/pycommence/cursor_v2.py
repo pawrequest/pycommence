@@ -7,7 +7,8 @@ from collections.abc import Generator
 
 from loguru import logger
 
-from .pycmc_types import CmcFilter, CursorType, FilterArray
+from .pycmc_types import CursorType
+from .filters import CmcFilter, FilterArray
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -123,7 +124,12 @@ class CursorAPI:
     def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
         """Enable the filter array."""
         filter_array = filter_array or self.filter_array
-        filter_wrapper_by_array(self.cursor_wrapper, filter_array)
+        [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
+        if filter_array.sorts:
+            sort_text = f'[ViewSort({filter_array.sorts_txt})]'
+            self.cursor_wrapper.set_sort(sort_text)
+        if filter_array.logic:
+            self.cursor_wrapper.set_filter_logic(filter_array.logic)
         return self
 
     @contextlib.contextmanager
@@ -148,11 +154,3 @@ class CursorAPI:
         [self.clear_filter(i) for i in range(1, 9)]
 
 
-def filter_wrapper_by_array(csr_wrapper: CursorWrapper, filter_array: FilterArray) -> None:
-    """Enable the filter array."""
-    [csr_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
-    if filter_array.sorts:
-        sort_text = f'[ViewSort({filter_array.sorts_txt})]'
-        csr_wrapper.set_sort(sort_text)
-    if filter_array.logic:
-        csr_wrapper.set_filter_logic(filter_array.logic)

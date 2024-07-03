@@ -1,6 +1,6 @@
 import pytest
 
-from pycommence.pycmc_types import CmcFilter, FilterArray
+from pycommence.filters import CmcFilter, FilterArray
 from pycommence.pycommence_v1 import PyCommence
 
 

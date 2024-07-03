@@ -8,7 +8,8 @@ from pydantic import Field
 from pycommence.cursor_v2 import CursorAPI
 # from pycommence import cursor
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
-from pycommence.pycmc_types import CmcFilter, CursorType, FilterArray
+from pycommence.pycmc_types import CursorType
+from pycommence.filters import CmcFilter, FilterArray
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
 from pycommence.wrapper.cursor_wrapper import CursorWrapper
