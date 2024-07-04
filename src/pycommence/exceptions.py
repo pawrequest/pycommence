@@ -32,11 +32,12 @@ class PyCommenceServerError(PyCommenceError):
     pass
 
 
-class HandleExisting(StrEnum):
+class Handle(StrEnum):
     IGNORE = 'ignore'
     RAISE = 'raise'
     UPDATE = 'update'
     REPLACE = 'replace'
+    ALL = 'all'
 
 
 # def handle_existing(self, rs: HasRowCount, existing: HandleExisting, pk_val, tblname):

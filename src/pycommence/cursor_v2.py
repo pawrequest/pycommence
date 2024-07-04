@@ -8,9 +8,9 @@ from collections.abc import Generator
 from loguru import logger
 
 from .pycmc_types import Connection2, CursorType
-from .filters import FieldFilter, FilterArray
+from .filters import ConditionType, FieldFilter, FilterArray
 from .wrapper.cursor_wrapper import CursorWrapper
-from .exceptions import PyCommenceExistsError, raise_for_one
+from .exceptions import PyCommenceExistsError, PyCommenceMaxExceededError, PyCommenceNotFoundError, raise_for_one
 
 
 class CursorAPI:
@@ -64,6 +64,9 @@ class CursorAPI:
     def pk_filter(self, pk):
         return FilterArray.from_filters(FieldFilter(column=self.pk_label, value=pk))
 
+    def pk_contains_filter(self, pk):
+        return FilterArray.from_filters(FieldFilter(column=self.pk_label, condition=ConditionType.CONTAIN, value=pk))
+
     def pk_exists(self, pk: str) -> bool:
         """Check if primary key exists in the Cursor."""
         with self.temporary_filter(self.pk_filter(pk)):
@@ -101,35 +104,57 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.row_dicts_list()[0]
 
-    def update_row_by_id(self, row_id, update_pkg: dict):
-        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
-        rs.modify_row(0, update_pkg)
-        assert rs.commit()
-
-    def read_row_by_pk(self, pk: str, with_category: bool = False, with_id: bool = False, count=1) -> dict[str, str]:
-        return next(
+    def read_one_row_pk(self, pk: str, with_category: bool = False, with_id: bool = False) -> \
+            dict[
+                str, str]:
+        res = list(
             self.rows_by_filter(
-                count=count,
                 filter_array=(self.pk_filter(pk)),
                 with_id=with_id,
                 with_category=with_category
             )
         )
+        if not res:
+            raise PyCommenceNotFoundError(f'No rows found for primary key {pk}')
+        if len(res) > 1:
+            raise PyCommenceMaxExceededError(f'Multiple rows found for primary key {pk}')
+        return res[0]
 
-    def delete_row_by_id(self, row_id: str) -> None:
-        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
-        rs.delete_row(0)
+    def read_rows_pk_contains(
+            self,
+            pk: str,
+            with_category: bool = True,
+            with_id: bool = True,
+    ) -> list[dict[str, str]]:
+        res = list(
+            self.rows_by_filter(
+                filter_array=self.pk_contains_filter(pk),
+                with_id=with_id,
+                with_category=with_category
+            )
+        )
+        if res:
+            return res
+
+    def update_row_by_id(self, row_id, update_pkg: dict):
+        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
+        rs.modify_row(0, update_pkg)
         assert rs.commit()
 
     def update_row_by_pk(self, pk, update_pkg: dict):
         row_id = self.pk_to_row_id(pk)
         self.update_row_by_id(row_id, update_pkg)
 
+    def delete_row_by_id(self, row_id: str) -> None:
+        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
+        rs.delete_row(0)
+        assert rs.commit()
+
     def delete_row_by_pk(self, pk: str) -> None:
         row_id = self.pk_to_row_id(pk)
         self.delete_row_by_id(row_id)
 
-    def add_category(self, row):
+    def add_category_to_dict(self, row):
         row.update({'category': self.category})
 
     def rows_by_filter(
@@ -184,7 +209,7 @@ class CursorAPI:
         row_set = self.cursor_wrapper.get_query_row_set(count)
         for row in row_set.rows(with_id=with_id):
             if with_category:
-                self.add_category(row)
+                self.add_category_to_dict(row)
             logger.debug(f'yielding {self.category} row {row.get(self.pk_label), ''}')
             yield row
 

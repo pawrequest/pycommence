@@ -30,12 +30,12 @@ def temp_contact(pycmc: PyCommence):
 def test_temp_contact(pyc_contact_prm):
     """Test add_record and delete_record."""
     with pytest.raises(PyCommenceNotFoundError):
-        pyc_contact_prm.csr().read_row_by_pk(NEW_KEY)
+        pyc_contact_prm.csr().read_one_row_pk(NEW_KEY)
     with temp_contact(pyc_contact_prm):
-        res = pyc_contact_prm.csr().read_row_by_pk(NEW_KEY)
+        res = pyc_contact_prm.csr().read_one_row_pk(NEW_KEY)
         assert res
     with pytest.raises(PyCommenceNotFoundError):
-        pyc_contact_prm.csr().read_row_by_pk(NEW_KEY)
+        pyc_contact_prm.csr().read_one_row_pk(NEW_KEY)
 
 
 def test_get_records(pyc_contact_prm):
@@ -46,7 +46,7 @@ def test_get_records(pyc_contact_prm):
 
 def test_get_one_record(pyc_contact_prm: PyCommence):
     with temp_contact(pyc_contact_prm):
-        res = pyc_contact_prm.csr().read_row_by_pk(NEW_KEY)
+        res = pyc_contact_prm.csr().read_one_row_pk(NEW_KEY)
         assert isinstance(res, dict)
         assert res['Notes'] == 'Some Notes'
 
@@ -54,15 +54,15 @@ def test_get_one_record(pyc_contact_prm: PyCommence):
 def test_edit_record(pyc_contact_prm: PyCommence):
     with temp_contact(pyc_contact_prm):
         csr = pyc_contact_prm.csr()
-        original = csr.read_row_by_pk(NEW_KEY)
+        original = csr.read_one_row_pk(NEW_KEY)
 
         csr.update_row_by_pk(pk=NEW_KEY, update_pkg=UpdateDict)
-        edited = csr.read_row_by_pk(NEW_KEY)
+        edited = csr.read_one_row_pk(NEW_KEY)
         for k, v in UpdateDict.items():
             assert edited[k] == v
 
         csr.update_row_by_pk(pk=NEW_KEY, update_pkg=original)
-        reverted = csr.read_row_by_pk(NEW_KEY)
+        reverted = csr.read_one_row_pk(NEW_KEY)
         assert reverted == original
 
 
@@ -74,7 +74,7 @@ def test_add_record(pyc_contact_prm: PyCommence):
         row_count2 = pyc_contact_prm.csr().row_count
         assert row_count2 == row_count1 + 1
 
-        res = pyc_contact_prm.csr().read_row_by_pk(NEW_KEY)
+        res = pyc_contact_prm.csr().read_one_row_pk(NEW_KEY)
         for k, v in NEW_DICT.items():
             assert res[k] == v
 
