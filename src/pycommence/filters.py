@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from pycommence.pycmc_types import Connection2
+
 FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
 
@@ -40,6 +42,7 @@ class CmcFilter(BaseModel, ABC):
 
 class FieldFilter(CmcFilter):
     """Cursor Filter."""
+
     f_type: Literal['F'] = 'F'
     column: str
     condition: ConditionType = 'Equal To'
@@ -140,4 +143,12 @@ class FilterArray(BaseModel):
         return ', '.join([str(fil) for fil in self.filters.values()])
 
 
-DELIM = r';*;%'
+def field_fil_to_confil(field_fil: FieldFilter, connection: Connection2):
+    hireconfil = ConnectedFieldFilter(
+        column=connection.name,
+        connection_category=connection.category,
+        connected_column=field_fil.column,
+        condition=field_fil.condition,
+        value=field_fil.value,
+    )
+    return hireconfil.model_validate(hireconfil, from_attributes=True)

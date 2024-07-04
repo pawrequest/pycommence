@@ -12,8 +12,6 @@ from _decimal import Decimal
 import pydantic as _p
 import pythoncom
 
-from pycommence.filters import DELIM
-
 
 # from pycommence.api import csr_api
 
@@ -211,3 +209,6 @@ class CmcFieldDefinition(_p.BaseModel):
             max_chars=int(max_chars),
             default_string=default_string,
         )
+
+
+DELIM = r';*;%'
