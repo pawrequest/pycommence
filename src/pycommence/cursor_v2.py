@@ -153,7 +153,7 @@ class CursorAPI:
             self.cursor_wrapper.set_sort(filter_array.view_sort_text)
         if filter_array.logic:
             self.cursor_wrapper.set_filter_logic(filter_array.sort_logic_text)
-        logger.info(f'Filtered {self.row_count} rows')
+        logger.info(f'Filtered {self.row_count} {self.category} rows from {filter_array}')
         return self
 
     # filter operations

@@ -38,7 +38,7 @@ class PyCommence(_p.BaseModel):
     )
 
     # cursor ops:
-    def get_new_cursor(self, csrname, mode, filter_array=None) -> CursorAPI:
+    def get_new_cursor(self, csrname, mode=CursorType.CATEGORY, filter_array=None) -> CursorAPI:
         """Create a new cursor with the specified name and mode."""
         cursor_wrapper: CursorWrapper = self.cmc_wrapper.get_new_cursor(csrname, mode=mode)
         return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname, filter_array=filter_array)
@@ -48,7 +48,7 @@ class PyCommence(_p.BaseModel):
         csrname = self.get_csrname(csrname)
         return self.csrs[csrname]
 
-    def reset_csr(self, csr) -> _t.Self:
+    def refresh_csr(self, csr) -> _t.Self:
         """ Reset an existing cursor with same name, mode and filter_array"""
         self.set_csr(csr.csrname, csr.mode, csr.filter_array)
         return self

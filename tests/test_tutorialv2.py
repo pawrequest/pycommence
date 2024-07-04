@@ -70,7 +70,7 @@ def test_add_record(pyc_contact_prm: PyCommence):
     csr = pyc_contact_prm.csr()
     row_count1 = csr.row_count
     with temp_contact(pyc_contact_prm):
-        pyc_contact_prm.reset_csr(csr)
+        pyc_contact_prm.refresh_csr(csr)
         row_count2 = pyc_contact_prm.csr().row_count
         assert row_count2 == row_count1 + 1
 
@@ -78,7 +78,7 @@ def test_add_record(pyc_contact_prm: PyCommence):
         for k, v in NEW_DICT.items():
             assert res[k] == v
 
-    pyc_contact_prm.reset_csr(csr)
+    pyc_contact_prm.refresh_csr(csr)
     row_count3 = pyc_contact_prm.csr().row_count
     assert row_count3 == row_count1
 

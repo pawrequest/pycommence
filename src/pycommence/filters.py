@@ -46,7 +46,7 @@ class FieldFilter(CmcFilter):
 
     @property
     def _filter_str(self) -> str:
-        filter_str = f'{self.column}, {self.condition}{f', {self.value}' if self.value else ''}'
+        filter_str = f'{self.column}, {self.condition}{f', "{self.value}"' if self.value else ''}'
         return filter_str
 
 
@@ -58,7 +58,7 @@ class ConnectedItemFilter(FieldFilter):
 
     @property
     def _filter_str(self) -> str:
-        return f'{self.column}, {self.connection_category}, {self.value}'
+        return f'{self.column}, {self.connection_category}, "{self.value}"'
 
 
 class ConnectedFieldFilter(ConnectedItemFilter):
@@ -67,7 +67,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
 
     @property
     def _filter_str(self):
-        return f'{self.column}, {self.connection_category}, {self.connected_column}, {self.condition}, {self.value}'
+        return f'{self.column}, {self.connection_category}, {self.connected_column}, {self.condition}, "{self.value}"'
 
 
 class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
@@ -77,7 +77,7 @@ class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
 
     @property
     def _filter_str(self) -> str:
-        return f'{self.column}, {self.connection_category}, {self.connection_column_2}, {self.connection_category_2}, {self.value}'
+        return f'{self.column}, {self.connection_category}, {self.connection_column_2}, {self.connection_category_2}, "{self.value}"'
 
 
 class SortOrder(StrEnum):
