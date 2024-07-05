@@ -140,7 +140,8 @@ class FilterArray(BaseModel):
         return filaray
 
     def __str__(self):
-        return ', '.join([str(fil) for fil in self.filters.values()])
+        filstrs = [str(fil) for fil in self.filters.values()]
+        return ', '.join(filstrs)
 
 
 def field_fil_to_confil(field_fil: FieldFilter, connection: Connection2):

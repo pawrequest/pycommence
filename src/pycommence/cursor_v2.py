@@ -125,16 +125,12 @@ class CursorAPI:
             pk: str,
             with_category: bool = True,
             with_id: bool = True,
-    ) -> list[dict[str, str]]:
-        res = list(
-            self.rows_by_filter(
-                filter_array=self.pk_contains_filter(pk),
-                with_id=with_id,
-                with_category=with_category
-            )
+    ) -> Generator[dict[str, str], None, None]:
+        return self.rows_by_filter(
+            filter_array=self.pk_contains_filter(pk),
+            with_id=with_id,
+            with_category=with_category
         )
-        if res:
-            return res
 
     def update_row_by_id(self, row_id, update_pkg: dict):
         rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
