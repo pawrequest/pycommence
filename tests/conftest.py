@@ -173,13 +173,8 @@ UPDATE_DICT = {
     'Notes': 'Updated Notes',
 }
 
-NEW_KEY = NEW_DICT.get('contactKey')
-
-RICHARD_KEY = 'Branson.Richard'
-JEFF_EDITED_KEY = JEFF_EDITED_DICT.get('contactKey')
 JEFF_KEY = JEFF_DICT.get('contactKey')
-
-PK_VAL = 'Col0 Val'
+NEW_KEY = NEW_DICT.get('contactKey')
 
 
 def get_new_pycmc(tblname: str | None = None):
@@ -212,11 +207,8 @@ def pycmc(request):
 __all__ = [
     'JEFF_DICT',
     'JEFF_EDITED_DICT',
-    'JEFF_EDITED_KEY',
     'JEFF_KEY',
     'NEW_DICT',
-    'PK_VAL',
-    'RICHARD_KEY',
     'UPDATE_DICT',
     'NEW_KEY',
 ]

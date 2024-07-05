@@ -38,7 +38,7 @@ def test_fiters(pycmc_radios_hire, fil_array):
 
 def test_records(fil_array, pycmc_radios_hire):
     print('Filter:', fil_array)
-    records = list(pycmc_radios_hire.csr().rows_by_filter(fil_array))
+    records = list(pycmc_radios_hire.csr().read_rows_filtered(fil_array))
     assert records
 
 

@@ -5,7 +5,7 @@ import pydantic as _p
 from loguru import logger
 from pydantic import Field
 
-from pycommence.cursor_v2 import CursorAPI
+from pycommence.cursor_v2 import CursorAPI, raise_for_id_or_pk
 
 # from pycommence import cursor
 from pycommence.exceptions import PyCommenceNotFoundError
@@ -29,6 +29,7 @@ def filter_array_pk(pk_label, pk_val):
     return FilterArray.from_filters(FieldFilter(column=pk_label, value=pk_val))
 
 
+# noinspection PyProtectedMember
 class PyCommence(_p.BaseModel):
     cmc_wrapper: CommenceWrapper = Field(default_factory=CommenceWrapper)
     csrs: dict[str, CursorAPI] = Field(default_factory=dict)
@@ -87,3 +88,35 @@ class PyCommence(_p.BaseModel):
     @classmethod
     def with_conversation(cls, topic: ConversationTopic = 'ViewData'):
         return cls(cmc_wrapper=CommenceWrapper()).set_conversation(topic)
+
+    def create_row(self, create_pkg: dict[str, str], csrname: str | None = None):
+        csr = self.csr(csrname)
+        csr._create_row(create_pkg)
+        self.refresh_csr(csr)
+
+    def read_row(
+        self, *, csrname: str | None = None, id: str | None = None, pk: str | None = None, with_category: bool = False
+    ) -> dict[str, str]:
+        csr = self.csr(csrname)
+        return csr._read_row(id=id, pk=pk, with_category=with_category)
+
+    def read_rows(
+        self, count: int | None = None, csrname: str | None = None, with_category: bool = True
+    ) -> _t.Generator[dict[str, str], None, None]:
+        csr = self.csr(csrname)
+        return csr._read_rows(count, with_category)
+
+    def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
+        raise_for_id_or_pk(id, pk)
+        csr = self.csr(csrname)
+        id = id or csr.pk_to_id(pk)
+        csr._update_row(update_pkg, id=id)
+        self.refresh_csr(csr)
+
+    def delete_row(self, id: str | None = None, pk: str | None = None, csrname: str | None = None):
+        raise_for_id_or_pk(id, pk)
+        csr = self.csr(csrname)
+        id = id or csr.pk_to_id(pk)
+        csr._delete_row(id=id)
+        self.refresh_csr(csr)
+        return self

@@ -13,4 +13,4 @@ def pycmc():
 
 
 def test_view(pycmc):
-    print(len(pycmc.rows()), 'records')
+    print(len(pycmc._read_rows()), 'records')

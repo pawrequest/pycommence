@@ -7,10 +7,15 @@ from typing import Self
 
 from loguru import logger
 
-from .exceptions import PyCommenceExistsError, PyCommenceMaxExceededError, PyCommenceNotFoundError, raise_for_one
+from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
 from .pycmc_types import Connection2, CursorType
 from .wrapper.cursor_wrapper import CursorWrapper
+
+
+def raise_for_id_or_pk(id, pk):
+    if not any([id, pk]):
+        raise ValueError('Must provide id or pk')
 
 
 class CursorAPI:
@@ -73,7 +78,7 @@ class CursorAPI:
         with self.temporary_filter(self.pk_filter(pk)):
             return self.row_count > 0
 
-    def pk_to_row_id(self, pk: str) -> str:
+    def pk_to_id(self, pk: str) -> str:
         """Convert primary key to row ID."""
         with self.temporary_filter(self.pk_filter(pk)):
             rs = self.cursor_wrapper.get_query_row_set(2)
@@ -90,8 +95,8 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.get_value(0, 0)
 
-    # row operations
-    def create_row_by_pkg(self, create_pkg: dict[str, str]) -> None:
+    # CREATE
+    def _create_row(self, create_pkg: dict[str, str]) -> None:
         pkg_pk = create_pkg.get(self.pk_label)
         if not pkg_pk:
             raise ValueError(f'Primary key {self.pk_label} not provided in create_pkg.')
@@ -101,62 +106,61 @@ class CursorAPI:
         rs.modify_row(0, create_pkg)
         rs.commit()
 
-    def read_row_by_id(self, row_id: str) -> dict[str, str]:
-        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-        return rs.row_dicts_list()[0]
+    # READ
+    def _read_row(self, *, id: str | None = None, pk: str | None = None, with_category: bool = False) -> dict[str, str]:
+        raise_for_id_or_pk(id, pk)
+        id = id or self.pk_to_id(pk)
+        rs = self.cursor_wrapper.get_query_row_set_by_id(id)
+        raise_for_one(rs)
+        row = rs.row_dicts_list()[0]
+        if with_category:
+            self.add_category_to_dict(row)
+        return row
 
-    def read_one_row_pk(self, pk: str, with_category: bool = True, with_id: bool = True) -> dict[str, str]:
-        res = list(
-            self.rows_by_filter(
-                count=2, filter_array=(self.pk_filter(pk)), with_id=with_id, with_category=with_category
-            )
-        )
-        if not res:
-            raise PyCommenceNotFoundError(f'No rows found for primary key {pk}')
-        if len(res) > 1:
-            raise PyCommenceMaxExceededError(f'Multiple rows found for primary key {pk}')
-        return res[0]
+    def _read_rows(self, count: int | None = None, with_category: bool = True) -> Generator[dict[str, str], None, None]:
+        """Yield all or first `count` records from the cursor."""
+        row_set = self.cursor_wrapper.get_query_row_set(count)
+        for row in row_set.rows():
+            if with_category:
+                self.add_category_to_dict(row)
+            logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
+            yield row
+
+    def read_rows_filtered(
+        self, filter_array: FilterArray, count: int | None = None
+    ) -> Generator[dict[str, str], None, None]:
+        """Return all or first `count` records from the cursor."""
+        with self.temporary_filter(filter_array):
+            yield from self._read_rows(count)
 
     def read_rows_pk_contains(
         self,
         pk: str,
-        with_category: bool = True,
-        with_id: bool = True,
     ) -> Generator[dict[str, str], None, None]:
-        return self.rows_by_filter(
+        return self.read_rows_filtered(
             filter_array=self.pk_filter(pk, condition=ConditionType.CONTAIN),
-            with_id=with_id,
-            with_category=with_category,
         )
 
-    def update_row_by_id(self, row_id, update_pkg: dict):
-        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
+    # UPDATE
+    def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
+        raise_for_id_or_pk(id, pk)
+        id = id or self.pk_to_id(pk)
+        rs = self.cursor_wrapper.get_edit_row_set_by_id(id)
         rs.modify_row(0, update_pkg)
         assert rs.commit()
 
-    def update_row_by_pk(self, pk, update_pkg: dict):
-        row_id = self.pk_to_row_id(pk)
-        self.update_row_by_id(row_id, update_pkg)
-
-    def delete_row_by_id(self, row_id: str) -> None:
-        rs = self.cursor_wrapper.get_delete_row_set_by_id(row_id)
+    # DELETE
+    def _delete_row(self, id: str | None = None, pk: str | None = None) -> None:
+        raise_for_id_or_pk(id, pk)
+        id = id or self.pk_to_id(pk)
+        rs = self.cursor_wrapper.get_delete_row_set_by_id(id)
         rs.delete_row(0)
         assert rs.commit()
-
-    def delete_row_by_pk(self, pk: str) -> None:
-        row_id = self.pk_to_row_id(pk)
-        self.delete_row_by_id(row_id)
 
     def add_category_to_dict(self, row):
         row.update({'category': self.category})
 
-    def rows_by_filter(
-        self, filter_array: FilterArray, count: int | None = None, with_id: bool = True, with_category: bool = True
-    ) -> Generator[dict[str, str], None, None]:
-        """Return all or first `count` records from the cursor."""
-        with self.temporary_filter(filter_array):
-            yield from self.rows(count, with_id, with_category)
-
+    # FILTER
     def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
         """Enable the filter array."""
         filter_array = filter_array or self.filter_array
@@ -168,7 +172,6 @@ class CursorAPI:
         logger.info(f'Filtered {self.row_count} {self.category} pycommence rows from {filter_array}')
         return self
 
-    # filter operations
     @contextlib.contextmanager
     def temporary_filter(self, fil_array: FilterArray | None = None):
         """Temporarily filter by FilterArray object.
@@ -187,22 +190,13 @@ class CursorAPI:
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
         self.filter_array.filters.pop(slot, None)
+        logger.debug(f'Cleared filter {slot}')
 
     def clear_all_filters(self) -> None:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
         self.filter_array = None
-
-    def rows(
-        self, count: int | None = None, with_id: bool = False, with_category: bool = False
-    ) -> Generator[dict[str, str], None, None]:
-        """Yield all or first `count` records from the cursor."""
-        row_set = self.cursor_wrapper.get_query_row_set(count)
-        for row in row_set.rows(with_id=with_id):
-            if with_category:
-                self.add_category_to_dict(row)
-            logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
-            yield row
+        logger.debug('Cleared all filters')
 
     def add_related_column(self, connection: Connection2) -> Self:
         """Add a related column to the cursor."""

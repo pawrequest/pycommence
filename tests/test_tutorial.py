@@ -35,7 +35,7 @@ def test_temp_contact(pycmc):
 
 
 def test_get_records(pycmc):
-    res = pycmc.rows()
+    res = pycmc._read_rows()
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
 
