@@ -174,7 +174,7 @@ class CursorAPI:
             self.cursor_wrapper.set_sort(filter_array.view_sort_text)
         if filter_array.logic:
             self.cursor_wrapper.set_filter_logic(filter_array.sort_logic_text)
-        logger.info(f'Filtered {self.row_count} {self.category} rows from {filter_array}')
+        logger.info(f'Filtered {self.row_count} {self.category} pycommence rows from {filter_array}')
         return self
 
     # filter operations
@@ -206,7 +206,7 @@ class CursorAPI:
         for row in row_set.rows(with_id=with_id):
             if with_category:
                 self.add_category_to_dict(row)
-            logger.debug(f'yielding {self.category} row {row.get(self.pk_label), ''}')
+            logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
             yield row
 
     def add_related_column(self, connection: Connection2) -> Self:
