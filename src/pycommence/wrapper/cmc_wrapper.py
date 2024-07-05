@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import contextlib
 import typing as _t
 
-from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
@@ -11,6 +9,7 @@ from win32com.universal import com_error
 from pycommence.exceptions import PyCommenceServerError
 from .conversation_wrapper import ConversationAPI, ConversationTopic
 from .cursor_wrapper import CursorWrapper
+from ..cursor_v2 import CursorAPI
 from ..pycmc_types import CursorType, OptionFlagInt
 
 
@@ -58,23 +57,19 @@ class CommenceWrapper(CmcConnector):
 
     """
 
-    @contextlib.contextmanager
-    def cursor_context_manager(self, table_name: str) -> CursorWrapper:
-        CoInitialize()
-        try:
-            csr_api = self.get_new_cursor(table_name)
-            yield csr_api
-        finally:
-            CoUninitialize()
+    def get_new_cursor(self, csrname, mode=CursorType.CATEGORY, filter_array=None) -> CursorAPI:
+        """Create a new cursor with the specified name and mode."""
+        cursor_wrapper: CursorWrapper = self._get_new_cursor_wrapper(csrname, mode=mode)
+        return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname, filter_array=filter_array)
 
-    def get_new_cursor(
-            self,
-            name: str | None = None,
-            mode: CursorType = CursorType.CATEGORY,
-            pilot: bool = False,
-            internet: bool = False,
+    def _get_new_cursor_wrapper(
+        self,
+        name: str | None = None,
+        mode: CursorType = CursorType.CATEGORY,
+        pilot: bool = False,
+        internet: bool = False,
     ) -> CursorWrapper:
-        """Create a cursor object for accessing Commence data.
+        """Create a cursor wrapper.
 
         CursorTypes CATEGORY and VIEW require name to be set.
 
@@ -111,7 +106,7 @@ class CommenceWrapper(CmcConnector):
         # todo non-standard modes
 
     def get_conversation_api(
-            self, topic: ConversationTopic, application_name: _t.Literal['Commence'] = 'Commence'
+        self, topic: ConversationTopic, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> ConversationAPI:
         """
         Create a conversation object.

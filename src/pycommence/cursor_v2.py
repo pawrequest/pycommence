@@ -1,25 +1,25 @@
 from __future__ import annotations
 
 import contextlib
+from collections.abc import Generator
 from functools import cached_property
 from typing import Self
-from collections.abc import Generator
 
 from loguru import logger
 
-from .pycmc_types import Connection2, CursorType
-from .filters import ConditionType, FieldFilter, FilterArray
-from .wrapper.cursor_wrapper import CursorWrapper
 from .exceptions import PyCommenceExistsError, PyCommenceMaxExceededError, PyCommenceNotFoundError, raise_for_one
+from .filters import ConditionType, FieldFilter, FilterArray
+from .pycmc_types import Connection2, CursorType
+from .wrapper.cursor_wrapper import CursorWrapper
 
 
 class CursorAPI:
     def __init__(
-            self,
-            cursor_wrapper: CursorWrapper,
-            mode: CursorType = CursorType.CATEGORY,
-            csrname: str = '',
-            filter_array: FilterArray | None = None,
+        self,
+        cursor_wrapper: CursorWrapper,
+        mode: CursorType = CursorType.CATEGORY,
+        csrname: str = '',
+        filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -61,8 +61,9 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set(1)
         return rs.get_column_label(0)
 
-    def pk_filter(self, pk):
-        return FilterArray.from_filters(FieldFilter(column=self.pk_label, value=pk))
+    def pk_filter(self, pk, condition=ConditionType.EQUAL):
+        field_filter = FieldFilter(column=self.pk_label, condition=condition, value=pk)
+        return FilterArray.from_filters(field_filter)
 
     def pk_contains_filter(self, pk):
         return FilterArray.from_filters(FieldFilter(column=self.pk_label, condition=ConditionType.CONTAIN, value=pk))
@@ -104,14 +105,10 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         return rs.row_dicts_list()[0]
 
-    def read_one_row_pk(self, pk: str, with_category: bool = False, with_id: bool = False) -> \
-            dict[
-                str, str]:
+    def read_one_row_pk(self, pk: str, with_category: bool = True, with_id: bool = True) -> dict[str, str]:
         res = list(
             self.rows_by_filter(
-                filter_array=(self.pk_filter(pk)),
-                with_id=with_id,
-                with_category=with_category
+                count=2, filter_array=(self.pk_filter(pk)), with_id=with_id, with_category=with_category
             )
         )
         if not res:
@@ -121,15 +118,15 @@ class CursorAPI:
         return res[0]
 
     def read_rows_pk_contains(
-            self,
-            pk: str,
-            with_category: bool = True,
-            with_id: bool = True,
+        self,
+        pk: str,
+        with_category: bool = True,
+        with_id: bool = True,
     ) -> Generator[dict[str, str], None, None]:
         return self.rows_by_filter(
-            filter_array=self.pk_contains_filter(pk),
+            filter_array=self.pk_filter(pk, condition=ConditionType.CONTAIN),
             with_id=with_id,
-            with_category=with_category
+            with_category=with_category,
         )
 
     def update_row_by_id(self, row_id, update_pkg: dict):
@@ -154,18 +151,12 @@ class CursorAPI:
         row.update({'category': self.category})
 
     def rows_by_filter(
-            self,
-            filter_array: FilterArray,
-            count: int | None = None,
-            with_id: bool = False,
-            with_category: bool = False
-    ) -> Generator[
-        dict[str, str], None, None]:
+        self, filter_array: FilterArray, count: int | None = None, with_id: bool = True, with_category: bool = True
+    ) -> Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         with self.temporary_filter(filter_array):
             yield from self.rows(count, with_id, with_category)
 
-    # row operations by filter
     def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
         """Enable the filter array."""
         filter_array = filter_array or self.filter_array
@@ -190,17 +181,21 @@ class CursorAPI:
             self.filter_by_array(fil_array)
             yield
         finally:
-            self.clear_all_filters()
+            if self.filter_array:
+                self.clear_all_filters()
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
+        self.filter_array.filters.pop(slot, None)
 
     def clear_all_filters(self) -> None:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
+        self.filter_array = None
 
-    def rows(self, count: int | None = None, with_id: bool = False, with_category: bool = False) -> Generator[
-        dict[str, str], None, None]:
+    def rows(
+        self, count: int | None = None, with_id: bool = False, with_category: bool = False
+    ) -> Generator[dict[str, str], None, None]:
         """Yield all or first `count` records from the cursor."""
         row_set = self.cursor_wrapper.get_query_row_set(count)
         for row in row_set.rows(with_id=with_id):
@@ -215,7 +210,7 @@ class CursorAPI:
             col=self.column_count + 1,
             con_name=connection.name,
             connected_cat=connection.category,
-            col_name=connection.column
+            col_name=connection.column,
         )
         if not res:
             raise ValueError('Failed to add related column.')

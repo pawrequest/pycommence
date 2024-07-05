@@ -8,6 +8,7 @@ from typing import TypeAlias
 
 from loguru import logger
 
+from ..exceptions import PyCommenceMaxExceededError, PyCommenceNotFoundError
 from ..pycmc_types import FLAGS_UNUSED, OptionFlagInt
 
 if typing.TYPE_CHECKING:
@@ -108,7 +109,10 @@ class RowSetBase(ABC):
 
         """
         flags = OptionFlagInt.CANONICAL if cannonical else 0
-        return self._rs.GetRow(row_index, delim, flags)
+        try:
+            return self._rs.GetRow(row_index, delim, flags)
+        except Exception as e:
+            raise PyCommenceNotFoundError(f'Error getting row {row_index}: {e}')
 
     def get_row_id(self, row_index: int) -> str:
         """

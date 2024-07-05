@@ -167,7 +167,7 @@ NEW_DICT_RESPONSE = {
     'zipPostal': '',
 }
 
-UpdateDict = {
+UPDATE_DICT = {
     'businessNumber': '1800 3000 3333',
     'Title': 'CEO of AnotherBix',
     'Notes': 'Updated Notes',
@@ -202,13 +202,9 @@ def pyc_contact_new():
     return get_new_pycmc('Contact')
 
 
-def pyc_empty_new():
-    return get_new_pycmc()
-
-
 @pytest.fixture(scope='function', params=[pyc_contact_new])
 # @pytest.fixture(scope='function', params=[pyc_contact_new, pycmc_view_cursor])
-def pyc_contact_prm(request):
+def pycmc(request):
     param = request.param
     return param()
 
@@ -221,6 +217,6 @@ __all__ = [
     'NEW_DICT',
     'PK_VAL',
     'RICHARD_KEY',
-    'UpdateDict',
+    'UPDATE_DICT',
     'NEW_KEY',
 ]
