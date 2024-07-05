@@ -68,6 +68,18 @@ class ConnectedFieldFilter(ConnectedItemFilter):
     f_type: Literal['CTCF'] = 'CTCF'
     connected_column: str
 
+    @classmethod
+    def from_field_fil(cls, field_fil: FieldFilter, connection: Connection2):
+        return cls.model_validate(
+            cls(
+                column=connection.name,
+                connection_category=connection.category,
+                connected_column=field_fil.column,
+                condition=field_fil.condition,
+                value=field_fil.value,
+            )
+        )
+
     @property
     def _filter_str(self):
         return f'{self.column}, {self.connection_category}, {self.connected_column}, {self.condition}, "{self.value}"'
