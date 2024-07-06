@@ -6,7 +6,7 @@ from loguru import logger
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.pycommence_v2 import PyCommence
-from .conftest import NEW_DICT, NEW_KEY, UPDATE_DICT
+from .conftest import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
 
 
 def test_pycmc(pycmc):
@@ -17,26 +17,25 @@ def test_pycmc(pycmc):
 
 @contextlib.contextmanager
 def temp_contact(pycmc: PyCommence):
+    logger.info('Adding temp record')
     try:
         pycmc.create_row(create_pkg=NEW_DICT)
-        pycmc.refresh_csr(pycmc.csr())
         logger.info('Added temp record')
         yield
     finally:
-        for row_id in pycmc.csr().pk_to_row_ids(NEW_KEY):
-            logger.info('Deleted temp record')
-            pycmc.delete_row(row_id)
+        pycmc.delete_row(pk=NEW_KEY)
+        logger.info('Deleted temp record')
 
 
 def test_temp_contact(pycmc):
     """Test add_record and delete_record."""
     with pytest.raises(PyCommenceNotFoundError):
-        pycmc.csr().read_row_pk(NEW_KEY)
+        pycmc.read_row(pk=NEW_KEY)
     with temp_contact(pycmc):
-        res = pycmc.csr().read_row_pk(NEW_KEY)
+        res = pycmc.read_row(pk=NEW_KEY)
         assert res
     with pytest.raises(PyCommenceNotFoundError):
-        pycmc.csr().read_row_pk(NEW_KEY)
+        pycmc.read_row(pk=NEW_KEY)
 
 
 def test_get_records(pycmc):
@@ -47,23 +46,22 @@ def test_get_records(pycmc):
 
 def test_get_one_record(pycmc: PyCommence):
     with temp_contact(pycmc):
-        res = pycmc.csr()._read_row(pk=NEW_KEY)
+        res = pycmc.read_row(pk=NEW_KEY)
         assert isinstance(res, dict)
         assert res['Notes'] == 'Some Notes'
 
 
 def test_edit_record(pycmc: PyCommence):
     with temp_contact(pycmc):
-        csr = pycmc.csr()
-        original = csr._read_row(pk=NEW_KEY)
+        original = pycmc.read_row(pk=NEW_KEY)
 
-        csr._update_row(pk=NEW_KEY, update_pkg=UPDATE_DICT)
-        edited = csr._read_row(pk=NEW_KEY, with_category=False)
+        pycmc.update_row(pk=NEW_KEY, update_pkg=UPDATE_DICT)
+        edited = pycmc.read_row(pk=NEW_KEY)
         for k, v in UPDATE_DICT.items():
             assert edited[k] == v
 
-        csr._update_row(pk=NEW_KEY, update_pkg=original)
-        reverted = csr._read_row(pk=NEW_KEY, with_category=False)
+        pycmc.update_row(pk=NEW_KEY, update_pkg=original)
+        reverted = pycmc.read_row(pk=NEW_KEY)
         assert reverted == original
 
 
@@ -75,7 +73,7 @@ def test_add_record(pycmc: PyCommence):
         row_count2 = pycmc.csr().row_count
         assert row_count2 == row_count1 + 1
 
-        res = pycmc.csr()._read_row(pk=NEW_KEY)
+        res = pycmc.read_row(pk=NEW_KEY)
         for k, v in NEW_DICT.items():
             assert res[k] == v
 
@@ -87,7 +85,7 @@ def test_add_record(pycmc: PyCommence):
 def test_add_duplicate_raises(pycmc: PyCommence):
     with pytest.raises(PyCommenceExistsError):
         with temp_contact(pycmc):
-            pycmc.csr()._create_row(create_pkg=NEW_DICT)
+            pycmc.create_row(create_pkg=NEW_DICT)
 
 
 def test_multiple_csrs(pycmc: PyCommence):
@@ -97,26 +95,14 @@ def test_multiple_csrs(pycmc: PyCommence):
     [print(pycmc.csr(key).row_count, f'{key} records') for key in pycmc.csrs.keys()]
 
 
-# def test_add_related(pycmc: PyCommence):
-#     connection = Connection2(
-#         name='Relates To',
-#         category='Account',
-#         column='customerNumber',
-#     )
-#     allcols = pycmc.csr().headers
-#     col_count = pycmc.csr().column_count
-#     pycmc.csr().add_related_column(connection)
-#     assert pycmc.csr().column_count == col_count + 1
-
-
 ### gpt
 def test_pk_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         pk = 'Some.Guy'
-        filter_array = cursor.pk_filter(pk)
-        cursor.filter_by_array(filter_array)
-        rows = list(cursor._read_rows())
+        cursor.filter_array = cursor.pk_filter(pk)
+        cursor.filter_by_array()
+        rows = list(pycmc.read_rows())
         assert len(rows) == 1
         assert rows[0]['contactKey'] == pk
 
@@ -125,35 +111,35 @@ def test_pk_contains_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         partial_pk = 'Some'
-        filter_array = cursor.pk_contains_filter(partial_pk)
-        cursor.filter_by_array(filter_array)
-        rows = list(cursor._read_rows())
+        cursor.filter_array = cursor.pk_contains_filter(partial_pk)
+        cursor.filter_by_array()
+        rows = list(pycmc.read_rows())
         assert len(rows) > 0
         for row in rows:
             assert partial_pk in row['contactKey']
 
 
 def test_temporary_filter(pycmc):
-    with temp_contact(pycmc):
-        cursor = pycmc.csr()
-        pk = 'Some.Guy'
-        filter_array = cursor.pk_filter(pk)
-        with cursor.temporary_filter(filter_array):
-            rows = list(cursor._read_rows())
-            assert len(rows) == 1
-            assert rows[0]['contactKey'] == pk
-        assert not cursor.filter_array  # Ensures filters are cleared
+    cursor = pycmc.csr()
+    og_filter = cursor.filter_array
+    filter_array = cursor.pk_filter(JEFF_KEY)
+    with cursor.temporary_filter(filter_array):
+        rows = list(pycmc.read_rows())
+        assert len(rows) == 1
+        assert rows[0]['contactKey'] == JEFF_KEY
+        assert not og_filter == cursor.filter_array
+    assert og_filter == cursor.filter_array
 
 
 def test_multiple_conditions(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
-        filter_array = FilterArray.from_filters(
+        cursor.filter_array = FilterArray.from_filters(
             FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Some.Guy'),
             FieldFilter(column='Title', condition=ConditionType.EQUAL, value='CEO of SOMmeBix'),
         )
-        cursor.filter_by_array(filter_array)
-        rows = list(cursor._read_rows())
+        cursor.filter_by_array()
+        rows = list(pycmc.read_rows())
         assert len(rows) == 1
         assert rows[0]['contactKey'] == 'Some.Guy'
         assert rows[0]['Title'] == 'CEO of SOMmeBix'
@@ -163,9 +149,9 @@ def test_clear_all_filters(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         pk = 'Some.Guy'
-        filter_array = cursor.pk_filter(pk)
-        cursor.filter_by_array(filter_array)
-        rows = list(cursor._read_rows())
+        cursor.filter_array = cursor.pk_filter(pk)
+        cursor.filter_by_array()
+        rows = list(pycmc.read_rows())
         assert len(rows) == 1
         cursor.clear_all_filters()
         assert not cursor.filter_array
@@ -173,12 +159,23 @@ def test_clear_all_filters(pycmc):
 
 def test_filter_combination(pycmc):
     cursor = pycmc.csr()
-    filter_array = FilterArray.from_filters(
+    cursor.filter_array = FilterArray.from_filters(
         FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Some.Guy'),
         FieldFilter(column='Notes', condition=ConditionType.CONTAIN, value='Notes'),
     )
-    cursor.filter_by_array(filter_array)
-    rows = list(cursor._read_rows())
+    cursor.filter_by_array()
+    rows = list(pycmc.read_rows())
     assert len(rows) == 1
     assert rows[0]['contactKey'] == 'Some.Guy'
     assert 'Notes' in rows[0]['Notes']
+
+
+def test_offset(pycmc):
+    with temp_contact(pycmc):
+        csr = pycmc.csr()
+        rows = tuple(csr._read_rows(count=5))
+        with csr.with_offset(2):
+            row3 = next(csr._read_rows(count=1))
+            assert row3['contactKey'] == rows[2]['contactKey']
+        row1 = next(csr._read_rows(count=1))
+        assert row1['contactKey'] == rows[0]['contactKey']

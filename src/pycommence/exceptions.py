@@ -65,6 +65,6 @@ class HasRowCount(Protocol):
 
 def raise_for_one(res: HasRowCount):
     if res.row_count == 0:
-        raise PyCommenceNotFoundError('Row ID not found.')
+        raise PyCommenceNotFoundError('Row not found.')
     if res.row_count > 1:
         raise PyCommenceMaxExceededError('Multiple rows found')

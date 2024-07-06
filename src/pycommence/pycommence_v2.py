@@ -6,10 +6,9 @@ from loguru import logger
 from pydantic import Field
 
 from pycommence.cursor_v2 import CursorAPI, raise_for_id_or_pk
-
 # from pycommence import cursor
 from pycommence.exceptions import PyCommenceNotFoundError
-from pycommence.filters import FieldFilter, FilterArray
+from pycommence.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.pycmc_types import CursorType
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
@@ -39,10 +38,10 @@ class PyCommence(_p.BaseModel):
     )
 
     def set_csr(
-        self,
-        csrname: str,
-        mode: CursorType = CursorType.CATEGORY,
-        filter_array: FilterArray | None = None,
+            self,
+            csrname: str,
+            mode: CursorType = CursorType.CATEGORY,
+            filter_array: FilterArray | None = None,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
         self.csrs[csrname] = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
@@ -71,10 +70,10 @@ class PyCommence(_p.BaseModel):
 
     @classmethod
     def with_csr(
-        cls,
-        csrname: str,
-        filter_array: FilterArray | None = None,
-        mode: CursorType = CursorType.CATEGORY,
+            cls,
+            csrname: str,
+            filter_array: FilterArray | None = None,
+            mode: CursorType = CursorType.CATEGORY,
     ):
         pyc = cls()
         pyc.set_csr(csrname, mode=mode, filter_array=filter_array)
@@ -95,16 +94,37 @@ class PyCommence(_p.BaseModel):
         self.refresh_csr(csr)
 
     def read_row(
-        self, *, csrname: str | None = None, id: str | None = None, pk: str | None = None, with_category: bool = False
+            self,
+            *,
+            csrname: str | None = None,
+            id: str | None = None,
+            pk: str | None = None,
+            with_category: bool = False
     ) -> dict[str, str]:
         csr = self.csr(csrname)
         return csr._read_row(id=id, pk=pk, with_category=with_category)
 
     def read_rows(
-        self, count: int | None = None, csrname: str | None = None, with_category: bool = True
+            self,
+            count: int | None = None,
+            csrname: str | None = None,
+            with_category: bool = True,
     ) -> _t.Generator[dict[str, str], None, None]:
         csr = self.csr(csrname)
         return csr._read_rows(count, with_category)
+
+    def read_rows_pk_contains(
+            self,
+            pk: str,
+            csrname: str | None = None,
+            count: int | None = None,
+
+    ) -> _t.Generator[dict[str, str], None, None]:
+        csr = self.csr(csrname)
+        yield from csr._read_rows_filtered(
+            filter_array=csr.pk_filter(pk, condition=ConditionType.CONTAIN),
+            count=count
+        )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
         raise_for_id_or_pk(id, pk)
@@ -119,4 +139,3 @@ class PyCommence(_p.BaseModel):
         id = id or csr.pk_to_id(pk)
         csr._delete_row(id=id)
         self.refresh_csr(csr)
-        return self

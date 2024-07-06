@@ -1,7 +1,5 @@
-# from __future__ import annotations
 from __future__ import annotations
 
-import datetime
 import enum
 import pathlib
 from dataclasses import dataclass
@@ -11,9 +9,6 @@ from _decimal import Decimal
 
 import pydantic as _p
 import pythoncom
-
-
-# from pycommence.api import csr_api
 
 
 class NoneFoundHandler(StrEnum):
@@ -28,6 +23,13 @@ class RadioType(StrEnum):
     TES_289 = 'Tesunho SIM TH289'
     TES_288 = 'Tesunho SIM TH288'
     TES_389 = 'Tesunho SIM TH388'
+
+
+class SeekBookmark(Enum):
+    """Starting point for cursor seek operations."""
+    BEGINNING = 0
+    CURRENT = 1
+    END = 2
 
 
 @dataclass

@@ -3,8 +3,8 @@ from loguru import logger
 import pycommence.pycmc_types
 from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
-from pycommence.exceptions import PyCommenceNotFoundError, raise_for_one
-from pycommence.pycmc_types import FLAGS_UNUSED
+from pycommence.exceptions import PyCommenceNotFoundError, PyCommenceServerError, raise_for_one
+from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
 
 
 class CursorWrapper:
@@ -123,7 +123,7 @@ class CursorWrapper:
             raise ValueError('Unable to set column')
         return res
 
-    def seek_row(self, start: int, rows: int) -> int:
+    def seek_row(self, start: int | SeekBookmark, rows: int) -> int:
         """
         Seek to a particular row in the cursor.
 
@@ -147,9 +147,12 @@ class CursorWrapper:
         GetQueryRowSet, GetEditRowSet, and GetDeleteRowSet will also advance the current row pointer.
 
         """
+        # rows -= 1  # no zero based for offset thanks commence
+        if isinstance(start, SeekBookmark):
+            start = start.value
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
-            raise ValueError(f'Unable to seek {rows} rows')
+            raise PyCommenceServerError(f'Unable to seek {rows} rows')
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:
@@ -375,6 +378,3 @@ class CursorWrapper:
 
         """
         return self._csr_cmc.SetRelatedColumn(col, con_name, connected_cat, col_name, flags.value)
-
-
-

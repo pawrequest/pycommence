@@ -9,7 +9,7 @@ from loguru import logger
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection2, CursorType
+from .pycmc_types import Connection2, CursorType, SeekBookmark
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -20,11 +20,11 @@ def raise_for_id_or_pk(id, pk):
 
 class CursorAPI:
     def __init__(
-        self,
-        cursor_wrapper: CursorWrapper,
-        mode: CursorType = CursorType.CATEGORY,
-        csrname: str = '',
-        filter_array: FilterArray | None = None,
+            self,
+            cursor_wrapper: CursorWrapper,
+            mode: CursorType = CursorType.CATEGORY,
+            csrname: str = '',
+            filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -126,20 +126,12 @@ class CursorAPI:
             logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
             yield row
 
-    def read_rows_filtered(
-        self, filter_array: FilterArray, count: int | None = None
+    def _read_rows_filtered(
+            self, filter_array: FilterArray, count: int | None = None
     ) -> Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         with self.temporary_filter(filter_array):
             yield from self._read_rows(count)
-
-    def read_rows_pk_contains(
-        self,
-        pk: str,
-    ) -> Generator[dict[str, str], None, None]:
-        return self.read_rows_filtered(
-            filter_array=self.pk_filter(pk, condition=ConditionType.CONTAIN),
-        )
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -161,9 +153,9 @@ class CursorAPI:
         row.update({'category': self.category})
 
     # FILTER
-    def filter_by_array(self, filter_array: FilterArray | None = None) -> Self:
+    def filter_by_array(self) -> Self:
         """Enable the filter array."""
-        filter_array = filter_array or self.filter_array
+        filter_array = self.filter_array
         [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
         if filter_array.sorts:
             self.cursor_wrapper.set_sort(filter_array.view_sort_text)
@@ -180,12 +172,21 @@ class CursorAPI:
             fil_array: FilterArray object
 
         """
+        og_filter = self.filter_array
+        self.filter_array = fil_array
         try:
-            self.filter_by_array(fil_array)
+            self.filter_by_array()
             yield
         finally:
-            if self.filter_array:
-                self.clear_all_filters()
+            self.filter_array = og_filter
+
+    @contextlib.contextmanager
+    def with_offset(self, offset: int):
+        try:
+            self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, offset)
+            yield
+        finally:
+            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, -(offset + 1))
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
