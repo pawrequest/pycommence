@@ -44,8 +44,9 @@ class PyCommence(_p.BaseModel):
             filter_array: FilterArray | None = None,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
-        self.csrs[csrname] = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
-        logger.debug(f'Set cursor on {csrname}')
+        cursor = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
+        self.csrs[csrname] = cursor
+        logger.debug(f'Set cursor on {csrname} with {cursor.row_count} rows')
         return self
 
     def get_csrname(self, csrname: str | None = None):
@@ -77,7 +78,6 @@ class PyCommence(_p.BaseModel):
     ):
         pyc = cls()
         pyc.set_csr(csrname, mode=mode, filter_array=filter_array)
-        logger.debug(f'Created PyCommence with cursor {csrname}{f" and filter {filter_array}" if filter_array else ""}')
         return pyc
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
@@ -109,21 +109,24 @@ class PyCommence(_p.BaseModel):
             count: int | None = None,
             csrname: str | None = None,
             with_category: bool = True,
+            offset: int = 0,
     ) -> _t.Generator[dict[str, str], None, None]:
         csr = self.csr(csrname)
-        return csr._read_rows(count, with_category)
+        return csr._read_rows(count=count, with_category=with_category, offset=offset)
 
     def read_rows_pk_contains(
             self,
             pk: str,
             csrname: str | None = None,
             count: int | None = None,
+            offset: int = 0,
+            with_category: bool = False,
 
     ) -> _t.Generator[dict[str, str], None, None]:
         csr = self.csr(csrname)
         yield from csr._read_rows_filtered(
             filter_array=csr.pk_filter(pk, condition=ConditionType.CONTAIN),
-            count=count
+            count=count, offset=offset, with_category=with_category
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):

@@ -117,21 +117,24 @@ class CursorAPI:
             self.add_category_to_dict(row)
         return row
 
-    def _read_rows(self, count: int | None = None, with_category: bool = True) -> Generator[dict[str, str], None, None]:
+    def _read_rows(self, count: int | None = None, offset: int = 0, with_category: bool = False) -> Generator[
+        dict[str, str], None, None]:
         """Yield all or first `count` records from the cursor."""
-        row_set = self.cursor_wrapper.get_query_row_set(count)
-        for row in row_set.rows():
-            if with_category:
-                self.add_category_to_dict(row)
-            logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
-            yield row
+        context_manager = self.with_offset(offset) if offset else contextlib.nullcontext()
+        with context_manager:
+            row_set = self.cursor_wrapper.get_query_row_set(count)
+            for row in row_set.rows():
+                if with_category:
+                    self.add_category_to_dict(row)
+                logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
+                yield row
 
     def _read_rows_filtered(
-            self, filter_array: FilterArray, count: int | None = None
+            self, filter_array: FilterArray, count: int | None = None, offset: int = 0, with_category: bool = False
     ) -> Generator[dict[str, str], None, None]:
         """Return all or first `count` records from the cursor."""
         with self.temporary_filter(filter_array):
-            yield from self._read_rows(count)
+            yield from self._read_rows(count=count, offset=offset, with_category=with_category)
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):

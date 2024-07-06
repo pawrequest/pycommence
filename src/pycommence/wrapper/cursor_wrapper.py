@@ -8,19 +8,13 @@ from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
 
 
 class CursorWrapper:
-    """Thin wrapper on the Commence Cursor object using pywin32.
-
-    Create with :meth:`.cmc_db.Cmc.get_cursor`."""
+    """Thin wrapper on the Commence Cursor object using pywin32. """
 
     def __init__(self, cmc_cursor: ICommenceCursor):
-        """Internal use only. Use :meth:`.cmc_db.Cmc.get_cursor` to create a cursor."""
         self._csr_cmc = cmc_cursor
 
-    def __repr__(self):
-        return f'CmcCursor: "{self.category}"'
-
     def __str__(self):
-        return f'CmcCursor: "{self.category}"'
+        return f'CursorWrapper: "{self.category}"'
 
     @property
     def category(self):

@@ -170,7 +170,7 @@ def test_filter_combination(pycmc):
     assert 'Notes' in rows[0]['Notes']
 
 
-def test_offset(pycmc):
+def test_offset_cm(pycmc):
     with temp_contact(pycmc):
         csr = pycmc.csr()
         rows = tuple(csr._read_rows(count=5))
@@ -178,4 +178,13 @@ def test_offset(pycmc):
             row3 = next(csr._read_rows(count=1))
             assert row3['contactKey'] == rows[2]['contactKey']
         row1 = next(csr._read_rows(count=1))
+        assert row1['contactKey'] == rows[0]['contactKey']
+
+
+def test_offset_params(pycmc):
+    with temp_contact(pycmc):
+        rows = tuple(pycmc.read_rows(count=5))
+        row3 = next(pycmc.read_rows(count=1, offset=2))
+        assert row3['contactKey'] == rows[2]['contactKey']
+        row1 = next(pycmc.read_rows(count=1))
         assert row1['contactKey'] == rows[0]['contactKey']
