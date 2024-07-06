@@ -28,12 +28,14 @@ class CmcFilter(BaseModel, ABC):
     f_type: FilterType
     not_flag: NotFlagType = ''
     value: str = ''
+    condition: ConditionType = 'Equal To'
+
 
     def view_filter_str(self, slot=1):
         return f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self._filter_str})]'
 
     def __str__(self):
-        return self._filter_str
+        return self.view_filter_str(0)
 
     @property
     def _filter_str(self):
@@ -45,7 +47,6 @@ class FieldFilter(CmcFilter):
 
     f_type: Literal['F'] = 'F'
     column: str
-    condition: ConditionType = 'Equal To'
 
     @property
     def _filter_str(self) -> str:
@@ -111,6 +112,9 @@ class FilterArray(BaseModel):
     sortby: str | None = None
     logic: str | None = None
 
+    def __str__(self):
+        return ', '.join(self.filter_strs)
+
     @property
     def sorts_txt(self):
         return ', '.join([f'{col}, {order.value}' for col, order in self.sorts])
@@ -151,9 +155,6 @@ class FilterArray(BaseModel):
             filaray.logic = logic
         return filaray
 
-    def __str__(self):
-        filstrs = [str(fil) for fil in self.filters.values()]
-        return ', '.join(filstrs)
 
 
 def field_fil_to_confil(field_fil: FieldFilter, connection: Connection2):

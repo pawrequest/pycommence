@@ -114,6 +114,22 @@ class PyCommence(_p.BaseModel):
         csr = self.csr(csrname)
         return csr._read_rows(limit=count, with_category=with_category, offset=offset)
 
+    def read_rows2(
+            self,
+            count: int | None = None,
+            csrname: str | None = None,
+            with_category: bool = True,
+            offset: int = 0,
+            filter_array: FilterArray | None = None,
+    ) -> _t.Generator[dict[str, str], None, None]:
+        csr = self.csr(csrname)
+        args = {'limit': count, 'with_category': with_category, 'offset': offset}
+        rtfunc = csr._read_rows
+        if filter_array:
+            rtfunc = csr._read_rows_filtered
+            args.update(filter_array=filter_array)
+        return rtfunc(**args)
+
     def read_rows_pk_contains(
             self,
             pk: str,
