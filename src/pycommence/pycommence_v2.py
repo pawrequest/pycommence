@@ -112,7 +112,7 @@ class PyCommence(_p.BaseModel):
             offset: int = 0,
     ) -> _t.Generator[dict[str, str], None, None]:
         csr = self.csr(csrname)
-        return csr._read_rows(count=count, with_category=with_category, offset=offset)
+        return csr._read_rows(limit=count, with_category=with_category, offset=offset)
 
     def read_rows_pk_contains(
             self,
@@ -126,7 +126,7 @@ class PyCommence(_p.BaseModel):
         csr = self.csr(csrname)
         yield from csr._read_rows_filtered(
             filter_array=csr.pk_filter(pk, condition=ConditionType.CONTAIN),
-            count=count, offset=offset, with_category=with_category
+            limit=count, offset=offset, with_category=with_category
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):

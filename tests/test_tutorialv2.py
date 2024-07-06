@@ -173,11 +173,11 @@ def test_filter_combination(pycmc):
 def test_offset_cm(pycmc):
     with temp_contact(pycmc):
         csr = pycmc.csr()
-        rows = tuple(csr._read_rows(count=5))
+        rows = tuple(csr._read_rows(limit=5))
         with csr.with_offset(2):
-            row3 = next(csr._read_rows(count=1))
+            row3 = next(csr._read_rows(limit=1))
             assert row3['contactKey'] == rows[2]['contactKey']
-        row1 = next(csr._read_rows(count=1))
+        row1 = next(csr._read_rows(limit=1))
         assert row1['contactKey'] == rows[0]['contactKey']
 
 

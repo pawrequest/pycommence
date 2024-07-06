@@ -102,7 +102,7 @@ class CursorAPI:
             raise ValueError(f'Primary key {self.pk_label} not provided in create_pkg.')
         if self.pk_exists(pkg_pk):
             raise PyCommenceExistsError(f'Primary key {pkg_pk} already exists.')
-        rs = self.cursor_wrapper.get_add_row_set(count=1)
+        rs = self.cursor_wrapper.get_add_row_set(limit=1)
         rs.modify_row(0, create_pkg)
         rs.commit()
 
@@ -117,12 +117,12 @@ class CursorAPI:
             self.add_category_to_dict(row)
         return row
 
-    def _read_rows(self, count: int | None = None, offset: int = 0, with_category: bool = False) -> Generator[
+    def _read_rows(self, limit: int | None = None, offset: int = 0, with_category: bool = False) -> Generator[
         dict[str, str], None, None]:
-        """Yield all or first `count` records from the cursor."""
+        """Yield all or first `limit` records from the cursor."""
         context_manager = self.with_offset(offset) if offset else contextlib.nullcontext()
         with context_manager:
-            row_set = self.cursor_wrapper.get_query_row_set(count)
+            row_set = self.cursor_wrapper.get_query_row_set(limit)
             for row in row_set.rows():
                 if with_category:
                     self.add_category_to_dict(row)
@@ -130,11 +130,11 @@ class CursorAPI:
                 yield row
 
     def _read_rows_filtered(
-            self, filter_array: FilterArray, count: int | None = None, offset: int = 0, with_category: bool = False
+            self, filter_array: FilterArray, limit: int | None = None, offset: int = 0, with_category: bool = False
     ) -> Generator[dict[str, str], None, None]:
-        """Return all or first `count` records from the cursor."""
+        """Return all or first `limit` records from the cursor."""
         with self.temporary_filter(filter_array):
-            yield from self._read_rows(count=count, offset=offset, with_category=with_category)
+            yield from self._read_rows(limit=limit, offset=offset, with_category=with_category)
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):

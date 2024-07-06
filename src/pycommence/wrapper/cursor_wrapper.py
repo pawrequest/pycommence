@@ -166,25 +166,25 @@ class CursorWrapper:
             raise ValueError(f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows')
         return res
 
-    def get_query_row_set(self, count: int or None = None) -> rs.RowSetQuery:
+    def get_query_row_set(self, limit: int or None = None) -> rs.RowSetQuery:
         """
         Create a rowset object with the results of a query.
 
         Args:
-            count (int): Maximum number of rows to retrieve.
+            limit (int): Maximum number of rows to retrieve.
 
         Returns:
             RowSetQuery: Pointer to rowset object on success, None on error.
 
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' determines the first row to be included in the rowset.
-        The returned rowset can have fewer than count rows (e.g. if the current row pointer is near the end).
+        The returned rowset can have fewer than limit rows (e.g. if the current row pointer is near the end).
         Use CommenceXRowSet.row_count to determine the actual row count.
         GetQueryRowSet will advance the 'current row pointer' by the number of rows in the rowset.
 
         """
-        count = count or self.row_count
-        result = self._csr_cmc.GetQueryRowSet(count, FLAGS_UNUSED)
+        limit = limit or self.row_count
+        result = self._csr_cmc.GetQueryRowSet(limit, FLAGS_UNUSED)
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -205,14 +205,14 @@ class CursorWrapper:
 
     def get_add_row_set(
             self,
-            count: int = 1,
+            limit: int = 1,
             shared: bool = True,
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
         Args:
-            count (int): The number of rows to create.
+            limit (int): The number of rows to create.
             shared (bool): True if the row/s are to be shared.
 
         Returns:
@@ -223,19 +223,19 @@ class CursorWrapper:
 
         """
         flags = pycommence.pycmc_types.OptionFlagInt.SHARED if shared else pycommence.pycmc_types.OptionFlagInt.NONE
-        if count is None:
-            count = self.row_count
-        res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
+        if limit is None:
+            limit = self.row_count
+        res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(limit, flags.value))
         if res.row_count == 0:
             raise PyCommenceNotFoundError()
         return res
 
-    def get_edit_row_set(self, count: int or None = None) -> rs.RowSetEdit:
+    def get_edit_row_set(self, limit: int or None = None) -> rs.RowSetEdit:
         """
         Creates a rowset of existing items for editing.
 
         Args:
-            count (int): The number of rows to retrieve, defaults to all rows in csr.
+            limit (int): The number of rows to retrieve, defaults to all rows in csr.
 
         Returns:
             RowSetEdit: A rowset object for editing existing items, or None on error.
@@ -243,8 +243,8 @@ class CursorWrapper:
         The rowset inherits the column set from the cursor.
 
         """
-        count = count or self.row_count
-        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, FLAGS_UNUSED))
+        limit = limit or self.row_count
+        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(limit, FLAGS_UNUSED))
 
     def get_edit_row_set_by_id(
             self,
@@ -267,12 +267,12 @@ class CursorWrapper:
         raise_for_one(res)
         return res
 
-    def get_delete_row_set(self, count: int = 1) -> rs.RowSetDelete:
+    def get_delete_row_set(self, limit: int = 1) -> rs.RowSetDelete:
         """
         Creates a rowset of existing items for deletion.
 
         Args:
-            count (int): The number of rows to retrieve.
+            limit (int): The number of rows to retrieve.
 
         Returns:
             RowSetDelete: A rowset object for deleting existing items, or None on error.
@@ -280,7 +280,7 @@ class CursorWrapper:
         The rowset inherits the column set from the cursor.
 
         """
-        delset = self._csr_cmc.GetDeleteRowSet(count, 0)
+        delset = self._csr_cmc.GetDeleteRowSet(limit, 0)
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
