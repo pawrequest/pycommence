@@ -97,7 +97,7 @@ class PyCommence(_p.BaseModel):
             self,
             *,
             csrname: str | None = None,
-            id: str | None = None,
+            id: str | None = None,  # id or pk must be provided
             pk: str | None = None,
             with_category: bool = False
     ) -> dict[str, str]:
