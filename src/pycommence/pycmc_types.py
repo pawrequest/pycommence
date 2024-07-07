@@ -9,6 +9,7 @@ from _decimal import Decimal
 
 import pydantic as _p
 import pythoncom
+from pydantic import field_validator
 
 
 class NoneFoundHandler(StrEnum):
@@ -216,10 +217,35 @@ class CmcFieldDefinition(_p.BaseModel):
 DELIM = r';*;%'
 
 
+@dataclass
 class MoreAvailable:
-    ...
+    n_more: int
+    link: str = None
+
+
+PAGE_SIZE = 30
 
 
 class Pagination(_p.BaseModel):
     offset: int = 0
-    limit: int | None = None
+    limit: int | bool = PAGE_SIZE
+
+    @field_validator('limit', mode='after')
+    def check_limit(cls, value):
+        if value is True:
+            raise ValueError('limit must be an integer or False')
+        return value
+
+    @property
+    def start(self):
+        return self.offset
+
+    @property
+    def end(self):
+        return self.offset + self.limit
+
+    def next_page(self):
+        return self.model_copy(update={'offset': self.offset + self.limit})
+
+    def prev_page(self):
+        return self.model_copy(update={'offset': self.offset - self.limit})

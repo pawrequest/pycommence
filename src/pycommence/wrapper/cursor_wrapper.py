@@ -141,12 +141,12 @@ class CursorWrapper:
         GetQueryRowSet, GetEditRowSet, and GetDeleteRowSet will also advance the current row pointer.
 
         """
-        # rows -= 1  # no zero based for offset thanks commence
         if isinstance(start, SeekBookmark):
             start = start.value
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
             raise PyCommenceServerError(f'Unable to seek {rows} rows')
+        logger.debug(f'Seeked {res} rows')
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:

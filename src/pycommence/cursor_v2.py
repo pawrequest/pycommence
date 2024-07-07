@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import contextlib
 from collections.abc import Generator
-from copy import copy
 from functools import cached_property
 from typing import Self
 
@@ -125,23 +124,23 @@ class CursorAPI:
             filter_array: FilterArray | None = None,
     ) -> Generator[
         dict[str, str] | MoreAvailable, None, None]:
-        rownum = copy(pagination.offset)
-
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
-        offset_manager = self.with_offset(pagination.offset) if pagination.offset else contextlib.nullcontext()
+        if pagination.offset:
+            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
 
         with filter_manager:
-            with offset_manager:
-                for row in self.cursor_wrapper.get_query_row_set(pagination.limit+1).rows():
-                    rownum += 1
-                    if with_category:
-                        self.add_category_to_dict(row)
-                    if pagination.limit is not None and rownum > pagination.limit:
-                        logger.debug(f'More records available in {self.category}')
-                        yield MoreAvailable()
-                        break
-                    logger.debug(f'Yielding {self.category} #{rownum} {row.get(self.pk_label), ''}')
-                    yield row
+            rows_left = self.row_count - pagination.end
+            rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
+
+            for rownum, row in enumerate(rowset.rows(), start=pagination.offset + 1):
+                if with_category:
+                    self.add_category_to_dict(row)
+                logger.debug(f'Yielding {self.category} #{rownum} "{row.get(self.pk_label)}"')
+                yield row
+
+            if rows_left > 0:
+                logger.debug(f'{rows_left} More {self.category} rows available')
+                yield MoreAvailable(n_more=rows_left)
 
     def _read_rows_filtered(
             self,
@@ -199,13 +198,16 @@ class CursorAPI:
         finally:
             self.filter_array = og_filter
 
-    @contextlib.contextmanager
-    def with_offset(self, offset: int):
-        try:
-            self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, offset)
-            yield
-        finally:
-            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, -(offset + 1))
+    # @contextlib.contextmanager
+    # def with_offset(self, offset: int):
+    #     logger.warning(f'Offsetting {offset} rows')
+    #     try:
+    #         self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, offset)
+    #         yield
+    #     finally:
+    #         logger.warning('Resetting offset')
+    #         self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
+    #         logger.warning('Offset reset')
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')

@@ -109,7 +109,6 @@ class FilterArray(BaseModel):
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
     sorts: tuple[tuple[str, SortOrder], ...] = Field(default_factory=tuple)
-    sortby: str | None = None
     logic: str | None = None
 
     def __str__(self):
