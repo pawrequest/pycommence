@@ -30,7 +30,6 @@ class CmcFilter(BaseModel, ABC):
     value: str = ''
     condition: ConditionType = 'Equal To'
 
-
     def view_filter_str(self, slot=1):
         return f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self._filter_str})]'
 
@@ -109,10 +108,20 @@ class FilterArray(BaseModel):
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
     sorts: tuple[tuple[str, SortOrder], ...] = Field(default_factory=tuple)
-    logic: str | None = None
+    logics: list[Logic] = Field(default_factory=list)
+
+    def __add__(self, other: FilterArray):
+        if not all([self, other]):
+            return self if self else other
+        return FilterArray.from_filters(
+            *self.filters.values(),
+            *other.filters.values(),
+            sorts=(self.sorts + other.sorts),
+            logics=(self.logics + other.logics)
+        )
 
     def __str__(self):
-        return ', '.join(self.filter_strs)
+        return f'{'\n'.join(self.filter_strs)}\nSorted by {self.view_sort_text} Logic={self.sort_logics_text}'
 
     @property
     def sorts_txt(self):
@@ -123,8 +132,8 @@ class FilterArray(BaseModel):
         return f'[ViewSort({self.sorts_txt})]'
 
     @property
-    def sort_logic_text(self):
-        return f'[ViewConjunction({self.logic})]'
+    def sort_logics_text(self):
+        return f'[ViewConjunction({' ,'.join(self.logics)})]'
 
     @property
     def filter_strs(self):
@@ -145,15 +154,11 @@ class FilterArray(BaseModel):
             self.add_filter(cmcfilter)
 
     @classmethod
-    def from_filters(cls, *filters: FieldFilter, sorts=None, logic: str | None = None):
+    def from_filters(cls, *filters: FieldFilter, sorts=None, logics: list[Logic] = None):
+        logics = logics or []
+        sorts = sorts or ()
         filters_ = {i: fil for i, fil in enumerate(list(filters), 1)}
-        filaray = cls(filters=filters_)
-        if sorts:
-            filaray.sorts = sorts
-        if logic:
-            filaray.logic = logic
-        return filaray
-
+        return cls(filters=filters_, logics=logics, sorts=sorts)
 
 
 def field_fil_to_confil(field_fil: FieldFilter, connection: Connection2):

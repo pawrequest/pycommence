@@ -220,7 +220,8 @@ DELIM = r';*;%'
 @dataclass
 class MoreAvailable:
     n_more: int
-    link: str = None
+    json_link: str = None
+    html_link: str = None
 
 
 PAGE_SIZE = 30

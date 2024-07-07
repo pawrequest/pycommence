@@ -31,7 +31,7 @@ class CursorAPI:
         self.csrname = csrname
         self.filter_array = filter_array
         if self.filter_array:
-            self.filter_by_array()
+            self.set_clean_fil(self.filter_array)
 
     # proxied from wrapper
     @cached_property
@@ -67,6 +67,9 @@ class CursorAPI:
         return rs.get_column_label(0)
 
     def pk_filter(self, pk, condition=ConditionType.EQUAL):
+        return FieldFilter(column=self.pk_label, condition=condition, value=pk)
+
+    def pk_filter_array(self, pk, condition=ConditionType.EQUAL):
         field_filter = FieldFilter(column=self.pk_label, condition=condition, value=pk)
         return FilterArray.from_filters(field_filter)
 
@@ -75,18 +78,18 @@ class CursorAPI:
 
     def pk_exists(self, pk: str) -> bool:
         """Check if primary key exists in the Cursor."""
-        with self.temporary_filter(self.pk_filter(pk)):
+        with self.temporary_filter(self.pk_filter_array(pk)):
             return self.row_count > 0
 
     def pk_to_id(self, pk: str) -> str:
         """Convert primary key to row ID."""
-        with self.temporary_filter(self.pk_filter(pk)):
+        with self.temporary_filter(self.pk_filter_array(pk)):
             rs = self.cursor_wrapper.get_query_row_set(2)
             raise_for_one(rs)
             return rs.get_row_id(0)
 
     def pk_to_row_ids(self, pk: str) -> list[str]:
-        with self.temporary_filter(self.pk_filter(pk)):
+        with self.temporary_filter(self.pk_filter_array(pk)):
             rs = self.cursor_wrapper.get_query_row_set()
             return [rs.get_row_id(i) for i in range(rs.row_count)]
 
@@ -170,6 +173,17 @@ class CursorAPI:
     def add_category_to_dict(self, row):
         row.update({'category': self.category})
 
+    def set_clean_fil(self, filter_array: FilterArray):
+        if self.filter_array:
+            self.clear_all_filters()
+        [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
+        if filter_array.sorts:
+            self.cursor_wrapper.set_sort(filter_array.view_sort_text)
+        if filter_array.logics:
+            self.cursor_wrapper.set_filter_logic(filter_array.sort_logics_text)
+        logger.info(f'Set {filter_array}')
+        return self
+
     # FILTER
     def filter_by_array(self) -> Self:
         """Enable the filter array."""
@@ -177,9 +191,9 @@ class CursorAPI:
         [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
         if filter_array.sorts:
             self.cursor_wrapper.set_sort(filter_array.view_sort_text)
-        if filter_array.logic:
-            self.cursor_wrapper.set_filter_logic(filter_array.sort_logic_text)
-        logger.info(f'Filtered {self.row_count} {self.category} pycommence rows from {filter_array}')
+        if filter_array.logics:
+            self.cursor_wrapper.set_filter_logic(filter_array.sort_logics_text)
+        logger.info(f'Filtered {self.row_count} {self.category} rows from:\n{filter_array}')
         return self
 
     @contextlib.contextmanager
@@ -190,24 +204,28 @@ class CursorAPI:
             fil_array: FilterArray object
 
         """
-        og_filter = self.filter_array.copy() if self.filter_array else None
-        self.filter_array = fil_array
+        og_filter = self.filter_array.model_copy() if self.filter_array else None
         try:
-            self.filter_by_array()
+            self.set_clean_fil(fil_array)
             yield
         finally:
             self.filter_array = og_filter
 
     # @contextlib.contextmanager
-    # def with_offset(self, offset: int):
-    #     logger.warning(f'Offsetting {offset} rows')
+    # def additional_filter(self, fil_array: FilterArray):
+    #     """Temporarily filter by FilterArray object.
+    #
+    #     Args:
+    #         fil_array: FilterArray object
+    #
+    #     """
+    #     og_filter = self.filter_array.copy() if self.filter_array else None
+    #     filter_array = og_filter + fil_array
     #     try:
-    #         self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, offset)
+    #         self.filter_by_array(filter_array)
     #         yield
     #     finally:
-    #         logger.warning('Resetting offset')
-    #         self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
-    #         logger.warning('Offset reset')
+    #         self.filter_array = og_filter
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')

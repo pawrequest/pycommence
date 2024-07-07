@@ -100,8 +100,8 @@ def test_pk_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         pk = 'Some.Guy'
-        cursor.filter_array = cursor.pk_filter(pk)
-        cursor.filter_by_array()
+        filter_array = cursor.pk_filter_array(pk)
+        cursor.set_clean_fil(filter_array)
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
         assert rows[0]['contactKey'] == pk
@@ -111,8 +111,8 @@ def test_pk_contains_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         partial_pk = 'Some'
-        cursor.filter_array = cursor.pk_contains_filter(partial_pk)
-        cursor.filter_by_array()
+        filter_array = cursor.pk_contains_filter(partial_pk)
+        cursor.set_clean_fil(filter_array)
         rows = list(pycmc.read_rows())
         assert len(rows) > 0
         for row in rows:
@@ -122,7 +122,7 @@ def test_pk_contains_filter(pycmc):
 def test_temporary_filter(pycmc):
     cursor = pycmc.csr()
     og_filter = cursor.filter_array
-    filter_array = cursor.pk_filter(JEFF_KEY)
+    filter_array = cursor.pk_filter_array(JEFF_KEY)
     with cursor.temporary_filter(filter_array):
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
@@ -134,11 +134,11 @@ def test_temporary_filter(pycmc):
 def test_multiple_conditions(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
-        cursor.filter_array = FilterArray.from_filters(
+        filter_array = FilterArray.from_filters(
             FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Some.Guy'),
             FieldFilter(column='Title', condition=ConditionType.EQUAL, value='CEO of SOMmeBix'),
         )
-        cursor.filter_by_array()
+        cursor.set_clean_fil(filter_array)
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
         assert rows[0]['contactKey'] == 'Some.Guy'
@@ -149,7 +149,7 @@ def test_clear_all_filters(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         pk = 'Some.Guy'
-        cursor.filter_array = cursor.pk_filter(pk)
+        cursor.filter_array = cursor.pk_filter_array(pk)
         cursor.filter_by_array()
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
