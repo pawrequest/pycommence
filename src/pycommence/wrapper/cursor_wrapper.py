@@ -195,6 +195,11 @@ class CursorWrapper:
         Returns:
             Pointer to rowset object on success, NULL on error.
 
+        Raises:
+            PyCommenceNotFoundError: Row not found.
+            PyCommenceServerError: Error getting row.
+            PyCommenceMaxExceededError: Multiple rows found.
+
         The rowset inherits column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
 

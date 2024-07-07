@@ -6,10 +6,9 @@ from loguru import logger
 from pydantic import Field
 
 from pycommence.cursor_v2 import CursorAPI, raise_for_id_or_pk
-# from pycommence import cursor
 from pycommence.exceptions import PyCommenceNotFoundError
-from pycommence.filters import ConditionType, FieldFilter, FilterArray
-from pycommence.pycmc_types import CursorType
+from pycommence.filters import FieldFilter, FilterArray
+from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
 
@@ -106,43 +105,15 @@ class PyCommence(_p.BaseModel):
 
     def read_rows(
             self,
-            count: int | None = None,
             csrname: str | None = None,
             with_category: bool = True,
-            offset: int = 0,
-    ) -> _t.Generator[dict[str, str], None, None]:
-        csr = self.csr(csrname)
-        return csr._read_rows(limit=count, with_category=with_category, offset=offset)
-
-    def read_rows2(
-            self,
-            count: int | None = None,
-            csrname: str | None = None,
-            with_category: bool = True,
-            offset: int = 0,
+            pagination: Pagination | None = None,
             filter_array: FilterArray | None = None,
-    ) -> _t.Generator[dict[str, str], None, None]:
-        csr = self.csr(csrname)
-        args = {'limit': count, 'with_category': with_category, 'offset': offset}
-        rtfunc = csr._read_rows
-        if filter_array:
-            rtfunc = csr._read_rows_filtered
-            args.update(filter_array=filter_array)
-        return rtfunc(**args)
-
-    def read_rows_pk_contains(
-            self,
-            pk: str,
-            csrname: str | None = None,
-            count: int | None = None,
-            offset: int = 0,
-            with_category: bool = False,
-
-    ) -> _t.Generator[dict[str, str], None, None]:
-        csr = self.csr(csrname)
-        yield from csr._read_rows_filtered(
-            filter_array=csr.pk_filter(pk, condition=ConditionType.CONTAIN),
-            limit=count, offset=offset, with_category=with_category
+    ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
+        yield from self.csr(csrname)._read_rows(
+            with_category=with_category,
+            pagination=pagination,
+            filter_array=filter_array
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):

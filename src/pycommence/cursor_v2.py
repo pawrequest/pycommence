@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 from collections.abc import Generator
+from copy import copy
 from functools import cached_property
 from typing import Self
 
@@ -9,7 +10,7 @@ from loguru import logger
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection2, CursorType, SeekBookmark
+from .pycmc_types import Connection2, CursorType, MoreAvailable, Pagination, SeekBookmark
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -117,24 +118,39 @@ class CursorAPI:
             self.add_category_to_dict(row)
         return row
 
-    def _read_rows(self, limit: int | None = None, offset: int = 0, with_category: bool = False) -> Generator[
-        dict[str, str], None, None]:
-        """Yield all or first `limit` records from the cursor."""
-        context_manager = self.with_offset(offset) if offset else contextlib.nullcontext()
-        with context_manager:
-            row_set = self.cursor_wrapper.get_query_row_set(limit)
-            for row in row_set.rows():
-                if with_category:
-                    self.add_category_to_dict(row)
-                logger.debug(f'Csr API yielding {self.category} row {row.get(self.pk_label), ''}')
-                yield row
+    def _read_rows(
+            self,
+            with_category: bool = False,
+            pagination: Pagination = Pagination(),
+            filter_array: FilterArray | None = None,
+    ) -> Generator[
+        dict[str, str] | MoreAvailable, None, None]:
+        rownum = copy(pagination.offset)
+
+        filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
+        offset_manager = self.with_offset(pagination.offset) if pagination.offset else contextlib.nullcontext()
+
+        with filter_manager:
+            with offset_manager:
+                for row in self.cursor_wrapper.get_query_row_set(pagination.limit+1).rows():
+                    rownum += 1
+                    if with_category:
+                        self.add_category_to_dict(row)
+                    if pagination.limit is not None and rownum > pagination.limit:
+                        logger.debug(f'More records available in {self.category}')
+                        yield MoreAvailable()
+                        break
+                    logger.debug(f'Yielding {self.category} #{rownum} {row.get(self.pk_label), ''}')
+                    yield row
 
     def _read_rows_filtered(
-            self, filter_array: FilterArray, limit: int | None = None, offset: int = 0, with_category: bool = False
+            self,
+            filter_array: FilterArray,
+            with_category: bool = False,
+            pagination: Pagination | None = None,
     ) -> Generator[dict[str, str], None, None]:
-        """Return all or first `limit` records from the cursor."""
         with self.temporary_filter(filter_array):
-            yield from self._read_rows(limit=limit, offset=offset, with_category=with_category)
+            yield from self._read_rows(pagination=pagination, with_category=with_category)
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -175,7 +191,7 @@ class CursorAPI:
             fil_array: FilterArray object
 
         """
-        og_filter = self.filter_array
+        og_filter = self.filter_array.copy() if self.filter_array else None
         self.filter_array = fil_array
         try:
             self.filter_by_array()
