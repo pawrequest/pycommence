@@ -96,11 +96,13 @@ JEFF_EDITED_DICT = {
 }
 
 NEW_DICT = {
-    'contactKey': 'Some.Guy',
+    'contactKey': 'Guy.Some',
     'businessNumber': '1800 3000 9009',
     'Title': 'CEO of SOMmeBix',
     'Notes': 'Some Notes',
     'Nickname': 'somnivkbname',
+    'lastName': 'Guy',
+    'firstName': 'Some',
 }
 
 NEW_DICT_RESPONSE = {
@@ -174,6 +176,8 @@ UPDATE_DICT = {
 }
 
 JEFF_KEY = JEFF_DICT.get('contactKey')
+FNAME = NEW_DICT.get('firstName')
+LNAME = NEW_DICT.get('lastName')
 NEW_KEY = NEW_DICT.get('contactKey')
 
 

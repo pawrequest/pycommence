@@ -37,10 +37,10 @@ class PyCommence(_p.BaseModel):
     )
 
     def set_csr(
-            self,
-            csrname: str,
-            mode: CursorType = CursorType.CATEGORY,
-            filter_array: FilterArray | None = None,
+        self,
+        csrname: str,
+        mode: CursorType = CursorType.CATEGORY,
+        filter_array: FilterArray | None = None,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
         cursor = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
@@ -66,14 +66,15 @@ class PyCommence(_p.BaseModel):
     def refresh_csr(self, csr) -> _t.Self:
         """Reset an existing cursor with same name, mode and filter_array"""
         self.set_csr(csr.csrname, csr.mode, csr.filter_array)
+        logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
         return self
 
     @classmethod
     def with_csr(
-            cls,
-            csrname: str,
-            filter_array: FilterArray | None = None,
-            mode: CursorType = CursorType.CATEGORY,
+        cls,
+        csrname: str,
+        filter_array: FilterArray | None = None,
+        mode: CursorType = CursorType.CATEGORY,
     ):
         pyc = cls()
         pyc.set_csr(csrname, mode=mode, filter_array=filter_array)
@@ -93,27 +94,25 @@ class PyCommence(_p.BaseModel):
         self.refresh_csr(csr)
 
     def read_row(
-            self,
-            *,
-            csrname: str | None = None,
-            id: str | None = None,  # id or pk must be provided
-            pk: str | None = None,
-            with_category: bool = False
+        self,
+        *,
+        csrname: str | None = None,
+        id: str | None = None,  # id or pk must be provided
+        pk: str | None = None,
+        with_category: bool = False,
     ) -> dict[str, str]:
         csr = self.csr(csrname)
         return csr._read_row(id=id, pk=pk, with_category=with_category)
 
     def read_rows(
-            self,
-            csrname: str | None = None,
-            with_category: bool = True,
-            pagination: Pagination | None = None,
-            filter_array: FilterArray | None = None,
+        self,
+        csrname: str | None = None,
+        with_category: bool = True,
+        pagination: Pagination = Pagination(),
+        filter_array: FilterArray | None = None,
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
         yield from self.csr(csrname)._read_rows(
-            with_category=with_category,
-            pagination=pagination,
-            filter_array=filter_array
+            with_category=with_category, pagination=pagination, filter_array=filter_array
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
@@ -127,5 +126,6 @@ class PyCommence(_p.BaseModel):
         raise_for_id_or_pk(id, pk)
         csr = self.csr(csrname)
         id = id or csr.pk_to_id(pk)
+        row = self.read_row(csrname=csr.category, id=id)
         csr._delete_row(id=id)
         self.refresh_csr(csr)

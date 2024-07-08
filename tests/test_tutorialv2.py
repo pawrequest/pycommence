@@ -5,13 +5,16 @@ from loguru import logger
 
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
+from pycommence.pycmc_types import Pagination
 from pycommence.pycommence_v2 import PyCommence
 from .conftest import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
+
+PAGINATED = Pagination(offset=0, limit=5)
 
 
 def test_pycmc(pycmc):
     assert pycmc
-    for rec in pycmc.read_rows(3):
+    for rec in pycmc.read_rows(pagination=PAGINATED):
         print(rec)
 
 
@@ -39,7 +42,7 @@ def test_temp_contact(pycmc):
 
 
 def test_get_records(pycmc):
-    res = list(pycmc.read_rows(2))
+    res = list(pycmc.read_rows(pagination=PAGINATED))
     assert isinstance(res, list)
     assert isinstance(res[0], dict)
 
@@ -89,17 +92,16 @@ def test_add_duplicate_raises(pycmc: PyCommence):
 
 
 def test_multiple_csrs(pycmc: PyCommence):
-    assert pycmc
     pycmc.set_csr(csrname='Account')
     assert pycmc.csr(csrname='Account').category == 'Account'
-    [print(pycmc.csr(key).row_count, f'{key} records') for key in pycmc.csrs.keys()]
+    assert pycmc.csr(csrname='Contact').category == 'Contact'
 
 
 ### gpt
 def test_pk_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
-        pk = 'Some.Guy'
+        pk = NEW_KEY
         filter_array = cursor.pk_filter_array(pk)
         cursor.set_clean_fil(filter_array)
         rows = list(pycmc.read_rows())

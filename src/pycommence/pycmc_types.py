@@ -28,6 +28,7 @@ class RadioType(StrEnum):
 
 class SeekBookmark(Enum):
     """Starting point for cursor seek operations."""
+
     BEGINNING = 0
     CURRENT = 1
     END = 2
@@ -229,7 +230,7 @@ PAGE_SIZE = 30
 
 class Pagination(_p.BaseModel):
     offset: int = 0
-    limit: int | bool = PAGE_SIZE
+    limit: int | bool = False
 
     @field_validator('limit', mode='after')
     def check_limit(cls, value):
@@ -241,9 +242,10 @@ class Pagination(_p.BaseModel):
     def start(self):
         return self.offset
 
-    @property
-    def end(self):
-        return self.offset + self.limit
+    # @property
+    # def end(self):
+    #     # todo plus 1?
+    #     return self.offset + self.limit +1
 
     def next_page(self):
         return self.model_copy(update={'offset': self.offset + self.limit})

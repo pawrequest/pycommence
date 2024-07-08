@@ -20,11 +20,11 @@ def raise_for_id_or_pk(id, pk):
 
 class CursorAPI:
     def __init__(
-            self,
-            cursor_wrapper: CursorWrapper,
-            mode: CursorType = CursorType.CATEGORY,
-            csrname: str = '',
-            filter_array: FilterArray | None = None,
+        self,
+        cursor_wrapper: CursorWrapper,
+        mode: CursorType = CursorType.CATEGORY,
+        csrname: str = '',
+        filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -121,18 +121,22 @@ class CursorAPI:
         return row
 
     def _read_rows(
-            self,
-            with_category: bool = False,
-            pagination: Pagination = Pagination(),
-            filter_array: FilterArray | None = None,
-    ) -> Generator[
-        dict[str, str] | MoreAvailable, None, None]:
+        self,
+        with_category: bool = False,
+        pagination: Pagination = Pagination(),
+        filter_array: FilterArray | None = None,
+    ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
+
         if pagination.offset:
             self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
 
         with filter_manager:
-            rows_left = self.row_count - pagination.end
+            rows_left = (
+                self.row_count - (pagination.offset + pagination.limit)
+                if pagination.limit
+                else self.row_count - (pagination.offset + 1)
+            )
             rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
 
             for rownum, row in enumerate(rowset.rows(), start=pagination.offset + 1):
@@ -146,10 +150,10 @@ class CursorAPI:
                 yield MoreAvailable(n_more=rows_left)
 
     def _read_rows_filtered(
-            self,
-            filter_array: FilterArray,
-            with_category: bool = False,
-            pagination: Pagination | None = None,
+        self,
+        filter_array: FilterArray,
+        with_category: bool = False,
+        pagination: Pagination | None = None,
     ) -> Generator[dict[str, str], None, None]:
         with self.temporary_filter(filter_array):
             yield from self._read_rows(pagination=pagination, with_category=with_category)
