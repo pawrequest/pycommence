@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import contextlib
 from collections.abc import Generator
+from copy import copy
 from functools import cached_property
 from typing import Self
 
@@ -31,7 +32,7 @@ class CursorAPI:
         self.csrname = csrname
         self.filter_array = filter_array
         if self.filter_array:
-            self.set_clean_fil(self.filter_array)
+            self.set_clean_fil(copy(self.filter_array))
 
     # proxied from wrapper
     @cached_property
@@ -177,15 +178,16 @@ class CursorAPI:
     def add_category_to_dict(self, row):
         row.update({'category': self.category})
 
-    def set_clean_fil(self, filter_array: FilterArray):
+    def set_clean_fil(self, new_filter: FilterArray):
+        logger.debug(f'Setting clean filter {new_filter}')
         if self.filter_array:
             self.clear_all_filters()
-        [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
-        if filter_array.sorts:
-            self.cursor_wrapper.set_sort(filter_array.view_sort_text)
-        if filter_array.logics:
-            self.cursor_wrapper.set_filter_logic(filter_array.sort_logics_text)
-        logger.info(f'Set {filter_array}')
+        [self.cursor_wrapper.set_filter(filstr) for filstr in new_filter.filter_strs]
+        if new_filter.sorts:
+            self.cursor_wrapper.set_sort(new_filter.view_sort_text)
+        if new_filter.logics:
+            self.cursor_wrapper.set_filter_logic(new_filter.sort_logics_text)
+        logger.info(f'Set {new_filter}')
         return self
 
     # FILTER
@@ -238,8 +240,9 @@ class CursorAPI:
 
     def clear_all_filters(self) -> None:
         """Clear all filters."""
+        logger.warning('Clearing all filters this is broken it deletes all filters not just in class')
         [self.clear_filter(i) for i in range(1, 9)]
-        self.filter_array = None
+        # self.filter_array = FilterArray()
         logger.debug('Cleared all filters')
 
     def add_related_column(self, connection: Connection2) -> Self:

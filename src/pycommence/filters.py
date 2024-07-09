@@ -26,8 +26,9 @@ class ConditionType(StrEnum):
 
 class CmcFilter(BaseModel, ABC):
     f_type: FilterType
-    not_flag: NotFlagType = ''
+    column: str
     value: str = ''
+    not_flag: NotFlagType = ''
     condition: ConditionType = 'Equal To'
 
     def view_filter_str(self, slot=1):
@@ -45,7 +46,6 @@ class FieldFilter(CmcFilter):
     """Cursor Filter."""
 
     f_type: Literal['F'] = 'F'
-    column: str
 
     @property
     def _filter_str(self) -> str:
@@ -121,7 +121,7 @@ class FilterArray(BaseModel):
         )
 
     def __str__(self):
-        return f'{'\n'.join(self.filter_strs)}\nSorted by {self.view_sort_text} Logic={self.sort_logics_text}'
+        return f'{len(self.filters)} Filters:{'\n'.join(self.filter_strs)}\nSorted by {self.view_sort_text} Logic={self.sort_logics_text}'
 
     @property
     def sorts_txt(self):
