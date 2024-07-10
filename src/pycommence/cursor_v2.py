@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import contextlib
 from collections.abc import Generator
-from copy import copy
 from functools import cached_property
 from typing import Self
 
@@ -32,7 +31,7 @@ class CursorAPI:
         self.csrname = csrname
         self.filter_array = filter_array
         if self.filter_array:
-            self.filter_by_array()
+            self.filter_by_array(self.filter_array)
             # self.set_clean_fil(copy(self.filter_array))
 
     # proxied from wrapper
@@ -151,6 +150,8 @@ class CursorAPI:
             if rows_left > 0:
                 logger.debug(f'{rows_left} More {self.category} rows available')
                 yield MoreAvailable(n_more=rows_left)
+        if pagination.offset:
+            self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
 
     def _read_rows_filtered(
         self,
@@ -180,22 +181,20 @@ class CursorAPI:
     def add_category_to_dict(self, row):
         row.update({'category': self.category})
 
-    def set_clean_fil(self, new_filter: FilterArray):
-        logger.debug(f'Setting clean filter {new_filter}')
-        if self.filter_array:
-            self.clear_all_filters()
-        [self.cursor_wrapper.set_filter(filstr) for filstr in new_filter.filter_strs]
-        if new_filter.sorts:
-            self.cursor_wrapper.set_sort(new_filter.view_sort_text)
-        if new_filter.logics:
-            self.cursor_wrapper.set_filter_logic(new_filter.sort_logics_text)
-        logger.info(f'Set {new_filter}')
-        return self
+    # def set_clean_fil(self, new_filter: FilterArray):
+    #     logger.debug(f'Setting clean filter {new_filter}')
+    #     if self.filter_array:
+    #         self.clear_all_filters()
+    #     [self.cursor_wrapper.set_filter(filstr) for filstr in new_filter.filter_strs]
+    #     if new_filter.sorts:
+    #         self.cursor_wrapper.set_sort(new_filter.view_sort_text)
+    #     if new_filter.logics:
+    #         self.cursor_wrapper.set_filter_logic(new_filter.sort_logics_text)
+    #     logger.info(f'Set {new_filter}')
+    #     return self
 
     # FILTER
-    def filter_by_array(self) -> Self:
-        """Enable the filter array."""
-        filter_array = self.filter_array
+    def filter_by_array(self, filter_array: FilterArray) -> Self:
         [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
         if filter_array.sorts:
             self.cursor_wrapper.set_sort(filter_array.view_sort_text)
@@ -214,10 +213,12 @@ class CursorAPI:
         """
         og_filter = self.filter_array.model_copy() if self.filter_array else None
         try:
-            # self.set_clean_fil(fil_array)
-            self.filter_by_array()
+            self.clear_all_filters()
+            self.filter_by_array(fil_array)
             yield
         finally:
+            if og_filter:
+                self.filter_by_array(og_filter)
             self.filter_array = og_filter
 
     # @contextlib.contextmanager
@@ -238,12 +239,12 @@ class CursorAPI:
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
-        self.filter_array.filters.pop(slot, None)
+        if self.filter_array and slot in self.filter_array.filters:
+            self.filter_array.filters.pop(slot, None)
         logger.debug(f'Cleared filter {slot}')
 
     def clear_all_filters(self) -> None:
         """Clear all filters."""
-        logger.warning('Clearing all filters this is broken it deletes all filters not just in class')
         [self.clear_filter(i) for i in range(1, 9)]
         # self.filter_array = FilterArray()
         logger.debug('Cleared all filters')
