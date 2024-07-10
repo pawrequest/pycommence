@@ -214,7 +214,8 @@ class CursorAPI:
         """
         og_filter = self.filter_array.model_copy() if self.filter_array else None
         try:
-            self.set_clean_fil(fil_array)
+            # self.set_clean_fil(fil_array)
+            self.filter_by_array()
             yield
         finally:
             self.filter_array = og_filter
