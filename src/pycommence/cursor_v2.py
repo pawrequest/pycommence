@@ -32,7 +32,8 @@ class CursorAPI:
         self.csrname = csrname
         self.filter_array = filter_array
         if self.filter_array:
-            self.set_clean_fil(copy(self.filter_array))
+            self.filter_by_array()
+            # self.set_clean_fil(copy(self.filter_array))
 
     # proxied from wrapper
     @cached_property
@@ -127,6 +128,7 @@ class CursorAPI:
         pagination: Pagination = Pagination(),
         filter_array: FilterArray | None = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
+        logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
 
         if pagination.offset:
