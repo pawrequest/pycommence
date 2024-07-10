@@ -4,7 +4,7 @@ from abc import ABC
 from enum import StrEnum
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from pycommence.pycmc_types import Connection2
 
@@ -110,6 +110,12 @@ class FilterArray(BaseModel):
     sorts: tuple[tuple[str, SortOrder], ...] = Field(default_factory=tuple)
     logics: list[Logic] = Field(default_factory=list)
 
+    # noinspection PyTypeChecker
+    @model_validator(mode='after')
+    def val_logics(self):
+        if not self.logics:
+            self.logics = ['And'] * (len(self.filters) - 1)
+
     def __add__(self, other: FilterArray):
         if not all([self, other]):
             return self if self else other
@@ -117,7 +123,7 @@ class FilterArray(BaseModel):
             *self.filters.values(),
             *other.filters.values(),
             sorts=(self.sorts + other.sorts),
-            logics=(self.logics + other.logics)
+            logics=(self.logics + other.logics),
         )
 
     def __str__(self):
