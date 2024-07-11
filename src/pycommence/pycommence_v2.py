@@ -110,9 +110,13 @@ class PyCommence(_p.BaseModel):
         with_category: bool = True,
         pagination: Pagination = Pagination(),
         filter_array: FilterArray | None = None,
+        get_id: bool = False,
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
         yield from self.csr(csrname)._read_rows(
-            with_category=with_category, pagination=pagination, filter_array=filter_array
+            with_category=with_category,
+            pagination=pagination,
+            filter_array=filter_array,
+            get_id=get_id,
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):

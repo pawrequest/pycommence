@@ -126,6 +126,7 @@ class CursorAPI:
         with_category: bool = False,
         pagination: Pagination = Pagination(),
         filter_array: FilterArray | None = None,
+        get_id: bool = False,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
         logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
@@ -141,7 +142,7 @@ class CursorAPI:
             )
             rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
 
-            for rownum, row in enumerate(rowset.rows(), start=pagination.offset + 1):
+            for rownum, row in enumerate(rowset.rows(get_id=get_id), start=pagination.offset + 1):
                 if with_category:
                     self.add_category_to_dict(row)
                 logger.debug(f'Yielding {self.category} #{rownum} "{row.get(self.pk_label)}"')
