@@ -111,12 +111,13 @@ class CursorAPI:
         rs.commit()
 
     # READ
-    def _read_row(self, *, id: str | None = None, pk: str | None = None, with_category: bool = False) -> dict[str, str]:
-        raise_for_id_or_pk(id, pk)
-        id = id or self.pk_to_id(pk)
-        rs = self.cursor_wrapper.get_query_row_set_by_id(id)
+    def _read_row(self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False) -> dict[str, str]:
+        raise_for_id_or_pk(row_id, pk)
+        row_id = row_id or self.pk_to_id(pk)
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         raise_for_one(rs)
         row = rs.row_dicts_list()[0]
+        row['row_id'] = row_id
         if with_category:
             self.add_category_to_dict(row)
         return row
@@ -203,6 +204,16 @@ class CursorAPI:
             self.cursor_wrapper.set_filter_logic(filter_array.sort_logics_text)
         logger.info(f'Filtered {self.row_count} {self.category} rows from:\n{filter_array}')
         return self
+
+
+    @contextlib.contextmanager
+    def temporary_offset(self, offset: int):
+        """Temporarily offset the cursor."""
+        try:
+            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, offset)
+            yield
+        finally:
+            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, -offset)
 
     @contextlib.contextmanager
     def temporary_filter(self, fil_array: FilterArray | None = None):

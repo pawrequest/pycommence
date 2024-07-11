@@ -146,7 +146,7 @@ class RowSetBase(ABC):
             # yield dict(zip(self.headers, row.split(delim)), id=(self.get_row_id(i)))
             rowdict = dict(zip(self.headers, row.split(delim)))
             if get_id:
-                rowdict['id'] = self.get_row_id(i)
+                rowdict['row_id'] = self.get_row_id(i)
             yield rowdict
 
     def get_shared(self, row_index: int) -> bool:

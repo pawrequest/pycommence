@@ -37,10 +37,10 @@ class PyCommence(_p.BaseModel):
     )
 
     def set_csr(
-        self,
-        csrname: str,
-        mode: CursorType = CursorType.CATEGORY,
-        filter_array: FilterArray | None = None,
+            self,
+            csrname: str,
+            mode: CursorType = CursorType.CATEGORY,
+            filter_array: FilterArray | None = None,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
         cursor = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
@@ -71,10 +71,10 @@ class PyCommence(_p.BaseModel):
 
     @classmethod
     def with_csr(
-        cls,
-        csrname: str,
-        filter_array: FilterArray | None = None,
-        mode: CursorType = CursorType.CATEGORY,
+            cls,
+            csrname: str,
+            filter_array: FilterArray | None = None,
+            mode: CursorType = CursorType.CATEGORY,
     ):
         pyc = cls()
         pyc.set_csr(csrname, mode=mode, filter_array=filter_array)
@@ -94,24 +94,36 @@ class PyCommence(_p.BaseModel):
         self.refresh_csr(csr)
 
     def read_row(
-        self,
-        *,
-        csrname: str | None = None,
-        id: str | None = None,  # id or pk must be provided
-        pk: str | None = None,
-        with_category: bool = False,
+            self,
+            *,
+            csrname: str | None = None,
+            id: str | None = None,  # id or pk must be provided
+            pk: str | None = None,
+            with_category: bool = False,
     ) -> dict[str, str]:
         csr = self.csr(csrname)
-        return csr._read_row(id=id, pk=pk, with_category=with_category)
+        return csr._read_row(row_id=id, pk=pk, with_category=with_category)
 
     def read_rows(
-        self,
-        csrname: str | None = None,
-        with_category: bool = True,
-        pagination: Pagination = Pagination(),
-        filter_array: FilterArray | None = None,
-        get_id: bool = False,
+            self,
+            csrname: str | None = None,
+            with_category: bool = True,
+            pagination: Pagination = Pagination(),
+            filter_array: FilterArray | None = None,
+            get_id: bool = False,
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
+        """
+        Generate rows from a cursor
+        Args:
+            csrname: Name of cursor
+            with_category: Include category in row
+            pagination: Pagination object
+            filter_array: FilterArray object (override cursor filter)
+            get_id: Include id in row
+
+        Yields:
+            dict: Row data or MoreAvailable object
+        """
         yield from self.csr(csrname)._read_rows(
             with_category=with_category,
             pagination=pagination,

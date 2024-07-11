@@ -4,6 +4,7 @@ from abc import ABC
 from enum import StrEnum
 from typing import Literal
 
+from loguru import logger
 from pydantic import BaseModel, Field, model_validator
 
 from pycommence.pycmc_types import Connection2
@@ -69,7 +70,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
     connected_column: str
 
     @classmethod
-    def from_field_fil(cls, field_fil: FieldFilter, connection: Connection2):
+    def from_fil(cls, field_fil: CmcFilter, connection: Connection2):
         return cls.model_validate(
             cls(
                 column=connection.name,
@@ -110,21 +111,23 @@ class FilterArray(BaseModel):
     sorts: tuple[tuple[str, SortOrder], ...] = Field(default_factory=tuple)
     logics: list[Logic] = Field(default_factory=list)
 
+    def __bool__(self):
+        return bool(self.filters)
+
     # noinspection PyTypeChecker
     @model_validator(mode='after')
     def val_logics(self):
         if not self.logics:
             self.logics = ['And'] * (len(self.filters) - 1)
+        if not len(self.logics) == len(self.filters) - 1:
+            logger.warning(f'{self.logics=}, {self.filters=}')
+            # raise ValueError('Logics must be one less than filters')
+        return self
 
     def __add__(self, other: FilterArray):
         if not all([self, other]):
             return self if self else other
-        return FilterArray.from_filters(
-            *self.filters.values(),
-            *other.filters.values(),
-            sorts=(self.sorts + other.sorts),
-            logics=(self.logics + other.logics),
-        )
+        return self.add_filters(*other.filters.values())
 
     def __str__(self):
         return f'{len(self.filters)} Filters:{'\n'.join(self.filter_strs)}\nSorted by {self.view_sort_text} Logic={self.sort_logics_text}'
@@ -148,16 +151,19 @@ class FilterArray(BaseModel):
     def update(self, pkg: dict):
         self.filters.update(pkg)
 
-    def add_filter(self, cmc_filter: FieldFilter):
-        next_empty = next((i for i in range(1, 9) if i not in self.filters), None)
-        if next_empty:
-            self.filters[next_empty] = cmc_filter
-        else:
+    def add_filter(self, cmc_filter: FieldFilter, logic: Logic = 'And'):
+        lenn = len(self.filters)
+        if lenn > 8:
             raise ValueError('No empty slots available')
+        logger.debug(f'Adding filter {cmc_filter} to slot {lenn + 1}')
+        self.filters[lenn + 1] = cmc_filter
+        if lenn > 0:
+            logger.debug(f'Adding logic {logic} between slots {lenn} and {lenn + 1}')
+            self.logics.append(logic)
 
-    def add_filters(self, *filters: FieldFilter):
+    def add_filters(self, *filters: tuple[FieldFilter, Logic]):
         for cmcfilter in filters:
-            self.add_filter(cmcfilter)
+            self.add_filter(*cmcfilter)
 
     @classmethod
     def from_filters(cls, *filters: FieldFilter, sorts=None, logics: list[Logic] = None):

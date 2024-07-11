@@ -152,8 +152,8 @@ def test_clear_all_filters(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         pk = 'Some.Guy'
-        cursor.filter_array = cursor.pk_filter_array(pk)
-        cursor.filter_by_array()
+        filter_array = cursor.pk_filter_array(pk)
+        cursor.filter_by_array(filter_array)
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
         cursor.clear_all_filters()
@@ -162,11 +162,11 @@ def test_clear_all_filters(pycmc):
 
 def test_filter_combination(pycmc):
     cursor = pycmc.csr()
-    cursor.filter_array = FilterArray.from_filters(
+    filter_array = FilterArray.from_filters(
         FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Some.Guy'),
         FieldFilter(column='Notes', condition=ConditionType.CONTAIN, value='Notes'),
     )
-    cursor.filter_by_array()
+    cursor.filter_by_array(filter_array)
     rows = list(pycmc.read_rows())
     assert len(rows) == 1
     assert rows[0]['contactKey'] == 'Some.Guy'
