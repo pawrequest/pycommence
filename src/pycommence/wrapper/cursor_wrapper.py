@@ -8,7 +8,7 @@ from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
 
 
 class CursorWrapper:
-    """Thin wrapper on the Commence Cursor object using pywin32. """
+    """Thin wrapper on the Commence Cursor object using pywin32."""
 
     def __init__(self, cmc_cursor: ICommenceCursor):
         self._csr_cmc = cmc_cursor
@@ -62,7 +62,6 @@ class CursorWrapper:
         Unless otherwise specified, the default logic is AND, AND, AND.
 
         """
-        logger.info(f'Setting filter logic to {logic_text}')
         res = self._csr_cmc.SetLogic(logic_text, FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
@@ -80,17 +79,16 @@ class CursorWrapper:
         All other cursor modes default to ascending sort by the Name field.
 
         """
-        logger.info(f'Setting sort to {sort_text}')
         res = self._csr_cmc.SetSort(sort_text, FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
             raise ValueError('Unable to sort')
 
     def set_column(
-            self,
-            column_index: int,
-            field_name: str,
-            flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
+        self,
+        column_index: int,
+        field_name: str,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -209,9 +207,9 @@ class CursorWrapper:
         return res
 
     def get_add_row_set(
-            self,
-            limit: int = 1,
-            shared: bool = True,
+        self,
+        limit: int = 1,
+        shared: bool = True,
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
@@ -252,8 +250,8 @@ class CursorWrapper:
         return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(limit, FLAGS_UNUSED))
 
     def get_edit_row_set_by_id(
-            self,
-            row_id: str,
+        self,
+        row_id: str,
     ) -> rs.RowSetEdit:
         """
         Creates a rowset for editing a particular row.
@@ -289,7 +287,7 @@ class CursorWrapper:
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
-            self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
+        self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -351,12 +349,12 @@ class CursorWrapper:
         return self._csr_cmc.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
-            self,
-            col: int,
-            con_name: str,
-            connected_cat: str,
-            col_name: str,
-            flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
+        self,
+        col: int,
+        con_name: str,
+        connected_cat: str,
+        col_name: str,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.

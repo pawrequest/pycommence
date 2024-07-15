@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from pycommence.pycmc_types import Connection2
 
-FilterType = Literal['F', 'CTI', 'CTCF', 'CTCTI']
+FilterKind = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
 
 
@@ -26,14 +26,14 @@ class ConditionType(StrEnum):
 
 
 class CmcFilter(BaseModel, ABC):
-    f_type: FilterType
+    kind: FilterKind
     column: str
     value: str = ''
     not_flag: NotFlagType = ''
     condition: ConditionType = 'Equal To'
 
     def view_filter_str(self, slot=1):
-        return f'[ViewFilter({slot}, {self.f_type}, {self.not_flag}, {self._filter_str})]'
+        return f'[ViewFilter({slot}, {self.kind}, {self.not_flag}, {self._filter_str})]'
 
     def __str__(self):
         return self.view_filter_str(0)
@@ -46,7 +46,7 @@ class CmcFilter(BaseModel, ABC):
 class FieldFilter(CmcFilter):
     """Cursor Filter."""
 
-    f_type: Literal['F'] = 'F'
+    kind: Literal['F'] = 'F'
 
     @property
     def _filter_str(self) -> str:
@@ -55,7 +55,7 @@ class FieldFilter(CmcFilter):
 
 
 class ConnectedItemFilter(FieldFilter):
-    f_type: Literal['CTI'] = 'CTI'
+    kind: Literal['CTI'] = 'CTI'
     connection_category: str
 
     # column is relationship name eg 'Relates To'
@@ -66,7 +66,7 @@ class ConnectedItemFilter(FieldFilter):
 
 
 class ConnectedFieldFilter(ConnectedItemFilter):
-    f_type: Literal['CTCF'] = 'CTCF'
+    kind: Literal['CTCF'] = 'CTCF'
     connected_column: str
 
     @classmethod
@@ -87,7 +87,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
 
 
 class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
-    f_type: Literal['CTCTI'] = 'CTCTI'
+    kind: Literal['CTCTI'] = 'CTCTI'
     connection_column_2: str
     connection_category_2: str
 
