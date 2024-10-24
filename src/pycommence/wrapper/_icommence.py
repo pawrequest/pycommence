@@ -5,6 +5,7 @@ MakePy generated api for Commence Rm COM object, mostly as generated
 """
 from __future__ import annotations
 
+from win32com.universal import com_error
 
 # ruff: noqa
 # -*- coding: mbcs -*-
@@ -461,14 +462,24 @@ class ICommenceDB(DispatchBaseClass):
             self,
             nMode=defaultNamedNotOptArg,
             pName=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+            nFlags=defaultNamedNotOptArg,
     ) -> 'ICommenceCursor':
-        ret = self._oleobj_.InvokeTypes(
-            20, LCID, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, flags
-        )
-        if ret is not None:
-            ret = Dispatch(ret, 'GetCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}')
-        return ret
+        # ret = self._oleobj_.InvokeTypes(
+        #     20, LCID, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, nFlags
+        # )
+        # if ret is not None:
+        #     ret = Dispatch(ret, 'GetCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}')
+        # return ret
+
+        try:
+            ret = self._oleobj_.InvokeTypes(
+                20, 0, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, nFlags
+            )
+            if ret is not None:
+                ret = Dispatch(ret, 'ICommenceCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}')
+            return ret
+        except com_error as e:
+            raise RuntimeError(f"Failed to get cursor: {e}")
 
     def MLValidate(self, pszRequiredVersion=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(

@@ -1,24 +1,20 @@
 from loguru import logger
 
-from . import enums_cmc as cenum
-from . import rowset as rs
-from ._icommence import ICommenceCursor
+import pycommence.pycmc_types
+from pycommence.wrapper import row_wrapper as rs
+from pycommence.wrapper._icommence import ICommenceCursor
+from pycommence.exceptions import PyCommenceNotFoundError, PyCommenceServerError, raise_for_one
+from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
 
 
 class CursorWrapper:
-    """Thin wrapper on the Commence Cursor object using pywin32.
-
-    Create with :meth:`.cmc_db.Cmc.get_cursor`."""
+    """Thin wrapper on the Commence Cursor object using pywin32."""
 
     def __init__(self, cmc_cursor: ICommenceCursor):
-        """Internal use only. Use :meth:`.cmc_db.Cmc.get_cursor` to create a cursor."""
         self._csr_cmc = cmc_cursor
 
-    def __repr__(self):
-        return f'CmcCursor: "{self.category}"'
-
     def __str__(self):
-        return f'CmcCursor: "{self.category}"'
+        return f'CursorWrapper: "{self.category}"'
 
     @property
     def category(self):
@@ -43,8 +39,6 @@ class CursorWrapper:
         Args:
             filter_text (str): Text defining the new filter clause. Syntax is identical to the one used by the DDE ViewFilter request.
 
-        Raises:
-            CmcError on fail
 
         Returns:
             bool: True on success.
@@ -55,7 +49,7 @@ class CursorWrapper:
         The rowset only contains items that satisfy both filters.
 
         """
-        return self._csr_cmc.SetFilter(filter_text, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetFilter(filter_text, FLAGS_UNUSED)
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -68,8 +62,7 @@ class CursorWrapper:
         Unless otherwise specified, the default logic is AND, AND, AND.
 
         """
-        logger.info(f'Setting filter logic to {logic_text}')
-        res = self._csr_cmc.SetLogic(logic_text, cenum.FLAGS_UNUSED)
+        res = self._csr_cmc.SetLogic(logic_text, FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
             raise ValueError('Unable to set filter logic')
@@ -86,15 +79,16 @@ class CursorWrapper:
         All other cursor modes default to ascending sort by the Name field.
 
         """
-        logger.info(f'Setting sort to {sort_text}')
-        res = self._csr_cmc.SetSort(sort_text, cenum.FLAGS_UNUSED)
+        res = self._csr_cmc.SetSort(sort_text, FLAGS_UNUSED)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
             raise ValueError('Unable to sort')
 
     def set_column(
-            self, column_index: int, field_name: str,
-            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
+        self,
+        column_index: int,
+        field_name: str,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -121,7 +115,7 @@ class CursorWrapper:
             raise ValueError('Unable to set column')
         return res
 
-    def seek_row(self, start: int, rows: int) -> int:
+    def seek_row(self, start: int | SeekBookmark, rows: int) -> int:
         """
         Seek to a particular row in the cursor.
 
@@ -145,9 +139,12 @@ class CursorWrapper:
         GetQueryRowSet, GetEditRowSet, and GetDeleteRowSet will also advance the current row pointer.
 
         """
+        if isinstance(start, SeekBookmark):
+            start = start.value
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
-            raise ValueError(f'Unable to seek {rows} rows')
+            raise PyCommenceServerError(f'Unable to seek {rows} rows')
+        logger.debug(f'Seeked {res} rows')
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:
@@ -164,33 +161,28 @@ class CursorWrapper:
         """
         res = self._csr_cmc.SeekRowApprox(numerator, denominator)
         if res == -1:
-            raise ValueError(
-                f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows'
-            )
+            raise ValueError(f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows')
         return res
 
-    def get_query_row_set(self, count: int or None = None) -> rs.RowSetQuery:
+    def get_query_row_set(self, limit: int or None = None) -> rs.RowSetQuery:
         """
         Create a rowset object with the results of a query.
 
         Args:
-            count (int): Maximum number of rows to retrieve.
+            limit (int): Maximum number of rows to retrieve.
 
         Returns:
             RowSetQuery: Pointer to rowset object on success, None on error.
 
         The rowset inherits the column set from the cursor.
         The cursor's 'current row pointer' determines the first row to be included in the rowset.
-        The returned rowset can have fewer than count rows (e.g. if the current row pointer is near the end).
+        The returned rowset can have fewer than limit rows (e.g. if the current row pointer is near the end).
         Use CommenceXRowSet.row_count to determine the actual row count.
         GetQueryRowSet will advance the 'current row pointer' by the number of rows in the rowset.
 
         """
-        if count is None:
-            count = self.row_count
-        result = self._csr_cmc.GetQueryRowSet(count, cenum.FLAGS_UNUSED)
-        if result.rowcount == 0:
-            raise ValueError('No rows found.')
+        limit = limit or self.row_count
+        result = self._csr_cmc.GetQueryRowSet(limit, FLAGS_UNUSED)
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str):
@@ -201,25 +193,30 @@ class CursorWrapper:
         Returns:
             Pointer to rowset object on success, NULL on error.
 
+        Raises:
+            PyCommenceNotFoundError: Row not found.
+            PyCommenceServerError: Error getting row.
+            PyCommenceMaxExceededError: Multiple rows found.
+
         The rowset inherits column set from the cursor.
         The cursor's 'current row pointer' is not advanced.
 
         """
-        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, cenum.FLAGS_UNUSED))
-        if res.row_count == 0:
-            raise ValueError()
+        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
+        raise_for_one(res)
         return res
 
     def get_add_row_set(
-            self, count: int = 1,
-            flags: cenum.OptionFlag | None = cenum.OptionFlag.SHARED
+        self,
+        limit: int = 1,
+        shared: bool = True,
     ) -> rs.RowSetAdd:
         """
         Creates a rowset of new items to add to the database.
 
         Args:
-            count (int): The number of rows to create.
-            flags (int): Option flags. Use CMC_FLAG_SHARED to default all rows to shared.
+            limit (int): The number of rows to create.
+            shared (bool): True if the row/s are to be shared.
 
         Returns:
             RowSetAdd: A rowset object for adding new items.
@@ -228,19 +225,20 @@ class CursorWrapper:
         When first created, each row is initialized to field default values.
 
         """
-        if count is None:
-            count = self.row_count
-        res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(count, flags.value))
+        flags = pycommence.pycmc_types.OptionFlagInt.SHARED if shared else pycommence.pycmc_types.OptionFlagInt.NONE
+        if limit is None:
+            limit = self.row_count
+        res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(limit, flags.value))
         if res.row_count == 0:
-            raise ValueError()
+            raise PyCommenceNotFoundError()
         return res
 
-    def get_edit_row_set(self, count: int or None = None) -> rs.RowSetEdit:
+    def get_edit_row_set(self, limit: int or None = None) -> rs.RowSetEdit:
         """
         Creates a rowset of existing items for editing.
 
         Args:
-            count (int): The number of rows to retrieve, defaults to all rows in csr.
+            limit (int): The number of rows to retrieve, defaults to all rows in csr.
 
         Returns:
             RowSetEdit: A rowset object for editing existing items, or None on error.
@@ -248,10 +246,13 @@ class CursorWrapper:
         The rowset inherits the column set from the cursor.
 
         """
-        count = count or self.row_count
-        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(count, cenum.FLAGS_UNUSED))
+        limit = limit or self.row_count
+        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(limit, FLAGS_UNUSED))
 
-    def get_edit_row_set_by_id(self, row_id: str, ) -> rs.RowSetEdit:
+    def get_edit_row_set_by_id(
+        self,
+        row_id: str,
+    ) -> rs.RowSetEdit:
         """
         Creates a rowset for editing a particular row.
 
@@ -265,22 +266,16 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        res = rs.RowSetEdit(
-            self._csr_cmc.GetEditRowSetByID(
-                row_id,
-                cenum.FLAGS_UNUSED
-            )
-        )
-        if res.row_count == 0:
-            raise ValueError()
+        res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id, FLAGS_UNUSED))
+        raise_for_one(res)
         return res
 
-    def get_delete_row_set(self, count: int = 1) -> rs.RowSetDelete:
+    def get_delete_row_set(self, limit: int = 1) -> rs.RowSetDelete:
         """
         Creates a rowset of existing items for deletion.
 
         Args:
-            count (int): The number of rows to retrieve.
+            limit (int): The number of rows to retrieve.
 
         Returns:
             RowSetDelete: A rowset object for deleting existing items, or None on error.
@@ -288,12 +283,11 @@ class CursorWrapper:
         The rowset inherits the column set from the cursor.
 
         """
-        delset = self._csr_cmc.GetDeleteRowSet(count, 0)
+        delset = self._csr_cmc.GetDeleteRowSet(limit, 0)
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
-            self, row_id: str,
-            flags: cenum.OptionFlag = cenum.OptionFlag.NONE
+        self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -309,7 +303,9 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        return rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id, flags.value))
+        res = rs.RowSetDelete(self._csr_cmc.GetDeleteRowSetByID(row_id, flags.value))
+        raise_for_one(res)
+        return res
 
     def set_active_item(self, category: str, row_id: str):
         """
@@ -323,7 +319,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveItem(category, row_id, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveItem(category, row_id, FLAGS_UNUSED)
 
     def set_active_date(self, active_date: str):
         """
@@ -336,7 +332,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDate(active_date, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveDate(active_date, FLAGS_UNUSED)
 
     def set_active_date_range(self, start: str, end: str):
         """
@@ -350,15 +346,15 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDateRange(start, end, cenum.FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveDateRange(start, end, FLAGS_UNUSED)
 
     def set_related_column(
-            self,
-            col: int,
-            con_name: str,
-            connected_cat: str,
-            col_name: str,
-            flags: cenum.OptionFlag | None = cenum.OptionFlag.NONE
+        self,
+        col: int,
+        con_name: str,
+        connected_cat: str,
+        col_name: str,
+        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.
