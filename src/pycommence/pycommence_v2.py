@@ -108,9 +108,9 @@ class PyCommence(_p.BaseModel):
             self,
             csrname: str | None = None,
             with_category: bool = True,
+            with_id: bool = False,
             pagination: Pagination = Pagination(),
             filter_array: FilterArray | None = None,
-            get_id: bool = False,
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
         """
         Generate rows from a cursor
@@ -119,7 +119,7 @@ class PyCommence(_p.BaseModel):
             with_category: Include category in row
             pagination: Pagination object
             filter_array: FilterArray object (override cursor filter)
-            get_id: Include id in row
+            with_id: Include id in row
 
         Yields:
             dict: Row data or MoreAvailable object
@@ -128,7 +128,7 @@ class PyCommence(_p.BaseModel):
             with_category=with_category,
             pagination=pagination,
             filter_array=filter_array,
-            get_id=get_id,
+            get_id=with_id,
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
