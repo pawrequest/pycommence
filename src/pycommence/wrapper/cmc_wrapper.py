@@ -41,7 +41,9 @@ class CmcConnector:
         except com_error as e:
             error_msg = f'Error connecting to {self.commence_instance_name}: {str(e)}'
             logger.error(error_msg)
-            raise
+            raise PyCommenceServerError(error_msg) from e
+            # e.args = (error_msg,)
+            # raise
 
 
 class CommenceWrapper(CmcConnector):
