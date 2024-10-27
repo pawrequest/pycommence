@@ -124,9 +124,9 @@ class FilterArray(BaseModel):
             # raise ValueError('Logics must be one less than filters')
         return self
 
-    def __add__(self, other: FilterArray):
+    def __add__(self, other: FilterArray) -> FilterArray | None:
         if not all([self, other]):
-            return self if self else other
+            return self if self else other if other else None
         return self.add_filters(*other.filters.values())
 
     def __str__(self):
@@ -161,9 +161,13 @@ class FilterArray(BaseModel):
             logger.debug(f'Adding logic {logic} between slots {lenn} and {lenn + 1}')
             self.logics.append(logic)
 
-    def add_filters(self, *filters: tuple[FieldFilter, Logic]):
+    def add_filters(self, *filters: FieldFilter):
         for cmcfilter in filters:
             self.add_filter(*cmcfilter)
+
+    def add_filters_w_logic(self, *filters_w_logic: tuple[FieldFilter, Logic]):
+        for fil_w_logic in filters_w_logic:
+            self.add_filter(*fil_w_logic)
 
     @classmethod
     def from_filters(cls, *filters: FieldFilter, sorts=None, logics: list[Logic] = None):
