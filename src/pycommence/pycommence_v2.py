@@ -37,10 +37,10 @@ class PyCommence(_p.BaseModel):
     )
 
     def set_csr(
-            self,
-            csrname: str,
-            mode: CursorType = CursorType.CATEGORY,
-            filter_array: FilterArray | None = None,
+        self,
+        csrname: str,
+        mode: CursorType = CursorType.CATEGORY,
+        filter_array: FilterArray | None = None,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
         cursor = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
@@ -71,10 +71,10 @@ class PyCommence(_p.BaseModel):
 
     @classmethod
     def with_csr(
-            cls,
-            csrname: str,
-            filter_array: FilterArray | None = None,
-            mode: CursorType = CursorType.CATEGORY,
+        cls,
+        csrname: str,
+        filter_array: FilterArray | None = None,
+        mode: CursorType = CursorType.CATEGORY,
     ):
         pyc = cls()
         pyc.set_csr(csrname, mode=mode, filter_array=filter_array)
@@ -94,23 +94,23 @@ class PyCommence(_p.BaseModel):
         self.refresh_csr(csr)
 
     def read_row(
-            self,
-            *,
-            csrname: str | None = None,
-            id: str | None = None,  # id or pk must be provided
-            pk: str | None = None,
-            with_category: bool = False,
+        self,
+        *,
+        csrname: str | None = None,
+        id: str | None = None,  # id or pk must be provided
+        pk: str | None = None,
+        with_category: bool = False,
     ) -> dict[str, str]:
         csr = self.csr(csrname)
         return csr._read_row(row_id=id, pk=pk, with_category=with_category)
 
     def read_rows(
-            self,
-            csrname: str | None = None,
-            with_category: bool = True,
-            with_id: bool = False,
-            pagination: Pagination = Pagination(),
-            filter_array: FilterArray | None = None,
+        self,
+        csrname: str | None = None,
+        with_category: bool = True,
+        with_id: bool = False,
+        pagination: Pagination = Pagination(),
+        filter_array: FilterArray | None = None,
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
         """
         Generate rows from a cursor
@@ -132,6 +132,15 @@ class PyCommence(_p.BaseModel):
         )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
+        """Update a row by id or pk
+
+        Args:
+            update_pkg: dict of field names and values to update
+            id: row id (id or pk must be provided)
+            pk: row pk (id or pk must be provided)
+            csrname: cursor name (default = Self.get_csrname())
+
+        """
         raise_for_id_or_pk(id, pk)
         csr = self.csr(csrname)
         id = id or csr.pk_to_id(pk)
