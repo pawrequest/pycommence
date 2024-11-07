@@ -117,6 +117,8 @@ class FilterArray(BaseModel):
     # noinspection PyTypeChecker
     @model_validator(mode='after')
     def val_logics(self):
+        if not self.filters:
+            return self
         if not self.logics:
             self.logics = ['And'] * (len(self.filters) - 1)
         if not len(self.logics) == len(self.filters) - 1:
