@@ -29,8 +29,8 @@ class CursorAPI:
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
         self.csrname = csrname
+        self.filter_array = filter_array
         if filter_array is not None:
-            self.filter_array = filter_array
             self.filter_by_array(filter_array)
 
     # proxied from wrapper
@@ -123,28 +123,20 @@ class CursorAPI:
         filter_array: FilterArray | None = None,
         get_id: bool = False,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
-        logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
+        # logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
 
-        if pagination.offset:
-            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
-
         with filter_manager:
-            rows_left = (
-                self.row_count - (pagination.offset + pagination.limit)
-                if pagination.limit
-                else self.row_count - (pagination.offset + 1)
-            )
+            if pagination.offset:
+                self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
             rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
-
-            for rownum, row in enumerate(rowset.rows(get_id=get_id), start=pagination.offset + 1):
+            for row in rowset.rows(get_id=get_id):
                 if with_category:
                     self.add_category_to_dict(row)
-                logger.debug(f'Yielding {self.category} #{rownum} "{row.get(self.pk_label)}"')
                 yield row
 
-            if rows_left > 0:
-                logger.debug(f'{rows_left} More {self.category} rows available')
+            if pagination.end and self.row_count > pagination.end:
+                rows_left = self.row_count - pagination.end
                 yield MoreAvailable(n_more=rows_left)
         if pagination.offset:
             self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
@@ -221,9 +213,10 @@ class CursorAPI:
             self.filter_by_array(fil_array)
             yield
         finally:
+            self.clear_all_filters()
             if og_filter:
+                self.filter_array = og_filter
                 self.filter_by_array(og_filter)
-            self.filter_array = og_filter
 
     # @contextlib.contextmanager
     # def additional_filter(self, fil_array: FilterArray):
@@ -245,13 +238,11 @@ class CursorAPI:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
         if self.filter_array and slot in self.filter_array.filters:
             self.filter_array.filters.pop(slot, None)
-        logger.debug(f'Cleared filter {slot}')
 
     def clear_all_filters(self) -> None:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
         # self.filter_array = FilterArray()
-        logger.debug('Cleared all filters')
 
     def add_related_column(self, connection: Connection) -> Self:
         """Add a related column to the cursor."""
