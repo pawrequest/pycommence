@@ -76,9 +76,8 @@ class PyCommence(_p.BaseModel):
         filter_array: FilterArray | None = None,
         mode: CursorType = CursorType.CATEGORY,
     ):
-        pyc = cls()
-        pyc.set_csr(csrname, mode=mode, filter_array=filter_array)
-        return pyc
+        return cls().set_csr(csrname, mode=mode, filter_array=filter_array)
+        # return pyc
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
         self.conversations[topic] = self.cmc_wrapper.get_conversation_api(topic)

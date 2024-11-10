@@ -35,14 +35,14 @@ class SeekBookmark(Enum):
 
 
 @dataclass
-class Connection:
+class Connection1:
     name: str
     from_table: str
     to_table: str
 
 
 @dataclass
-class Connection2:
+class Connection:
     name: str
     category: str
     column: str

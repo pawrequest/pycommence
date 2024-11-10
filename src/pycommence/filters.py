@@ -7,7 +7,7 @@ from typing import Literal
 from loguru import logger
 from pydantic import BaseModel, Field, model_validator
 
-from pycommence.pycmc_types import Connection2
+from pycommence.pycmc_types import Connection
 
 FilterKind = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
@@ -70,7 +70,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
     connected_column: str
 
     @classmethod
-    def from_fil(cls, field_fil: CmcFilter, connection: Connection2):
+    def from_fil(cls, field_fil: CmcFilter, connection: Connection):
         return cls.model_validate(
             cls(
                 column=connection.name,
@@ -108,7 +108,7 @@ class FilterArray(BaseModel):
     """Array of Cursor Filters."""
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
-    sorts: tuple[tuple[str, SortOrder], ...] = Field(default_factory=tuple)
+    sorts: list[tuple[str, SortOrder]] = Field(default_factory=list)
     logics: list[Logic] = Field(default_factory=list)
 
     def __bool__(self):
@@ -134,9 +134,16 @@ class FilterArray(BaseModel):
     def __str__(self):
         return f'{len(self.filters)} Filters:{'\n'.join(self.filter_strs)}\nSorted by {self.view_sort_text} Logic={self.sort_logics_text}'
 
+    @classmethod
+    def from_filters(cls, *filters: FieldFilter, sorts=None, logics: list[Logic] = None):
+        logics = logics or []
+        sorts = sorts or ()
+        filters_ = {i: fil for i, fil in enumerate(list(filters), 1)}
+        return cls(filters=filters_, logics=logics, sorts=sorts)
+
     @property
     def sorts_txt(self):
-        return ', '.join([f'{col}, {order.value}' for col, order in self.sorts])
+        return ', '.join([f'{col}, {order}' for col, order in self.sorts])
 
     @property
     def view_sort_text(self):
@@ -159,32 +166,25 @@ class FilterArray(BaseModel):
             raise ValueError('No empty slots available')
         logger.debug(f'Adding filter {cmc_filter} to slot {lenn + 1}')
         self.filters[lenn + 1] = cmc_filter
-        if lenn > 0:
+        if lenn > 1:
             logger.debug(f'Adding logic {logic} between slots {lenn} and {lenn + 1}')
             self.logics.append(logic)
 
     def add_filters(self, *filters: FieldFilter):
         for cmcfilter in filters:
-            self.add_filter(*cmcfilter)
+            self.add_filter(cmcfilter)
 
     def add_filters_w_logic(self, *filters_w_logic: tuple[FieldFilter, Logic]):
         for fil_w_logic in filters_w_logic:
             self.add_filter(*fil_w_logic)
 
-    @classmethod
-    def from_filters(cls, *filters: FieldFilter, sorts=None, logics: list[Logic] = None):
-        logics = logics or []
-        sorts = sorts or ()
-        filters_ = {i: fil for i, fil in enumerate(list(filters), 1)}
-        return cls(filters=filters_, logics=logics, sorts=sorts)
 
-
-def field_fil_to_confil(field_fil: FieldFilter, connection: Connection2):
-    hireconfil = ConnectedFieldFilter(
+def field_fil_to_confil(field_fil: FieldFilter, connection: Connection):
+    connection_filter = ConnectedFieldFilter(
         column=connection.name,
         connection_category=connection.category,
         connected_column=field_fil.column,
         condition=field_fil.condition,
         value=field_fil.value,
     )
-    return hireconfil.model_validate(hireconfil, from_attributes=True)
+    return connection_filter.model_validate(connection_filter, from_attributes=True)
