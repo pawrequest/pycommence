@@ -144,7 +144,7 @@ class CursorWrapper:
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
             raise PyCommenceServerError(f'Unable to seek {rows} rows')
-        logger.debug(f'Seeked {res} rows')
+        # logger.debug(f'Seeked {res} rows')
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:
