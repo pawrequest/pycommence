@@ -9,7 +9,6 @@ from _decimal import Decimal
 
 import pydantic as _p
 import pythoncom
-from pydantic import field_validator
 
 
 class NoneFoundHandler(StrEnum):
@@ -230,17 +229,24 @@ PAGE_SIZE = 30
 
 class Pagination(_p.BaseModel):
     offset: int = 0
-    limit: int | bool = False
+    limit: int | None = None
+    # limit: int | bool = False
 
-    @field_validator('limit', mode='after')
-    def check_limit(cls, value):
-        if value is True:
-            raise ValueError('limit must be an integer or False')
-        return value
+    def __bool__(self):
+        return any([bool(self.limit), bool(self.offset)])
+
+    def __str__(self):
+        return f'Pagination: offset={self.offset}, limit={self.limit}'
 
     @property
-    def start(self):
-        return self.offset
+    def end(self):
+        return self.offset + self.limit_int
+
+    @property
+    def limit_int(self) -> int:
+        if isinstance(self.limit, int):
+            return self.limit
+        return 0
 
     # @property
     # def end(self):
