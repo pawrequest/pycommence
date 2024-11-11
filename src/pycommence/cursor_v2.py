@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import contextlib
-from collections.abc import Callable, Generator
+from collections.abc import Generator
 from functools import cached_property
 from typing import Self
 
@@ -22,14 +22,10 @@ class CursorAPI:
         cursor_wrapper: CursorWrapper,
         mode: CursorType = CursorType.CATEGORY,
         csrname: str = '',
-        filter_array: FilterArray | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
         self.csrname = csrname
-        self.filter_array = filter_array
-        if filter_array is not None:
-            self.filter_by_array(filter_array)
 
     # proxied from wrapper
     # @cached_property
@@ -131,7 +127,6 @@ class CursorAPI:
         with filter_manager:
             with offset_manager:
                 rows_read = 0
-                csr_rowcount = self.row_count
                 rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
 
                 rowgen = rowset.rows()
@@ -144,32 +139,6 @@ class CursorAPI:
                         break
                     self.add_category_to_dict(row)
                     yield row
-
-            # if pagination.end and self.row_count > pagination.end:
-            #     rows_left = self.row_count - pagination.end
-            #     yield MoreAvailable(n_more=rows_left)
-        # if pagination.offset:
-        #     self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
-
-    # def _read_rowsnomore(
-    #     self,
-    #     pagination: Pagination | None = None,
-    #     filter_array: FilterArray | None = None,
-    #     filter_fn: Callable[[dict[str, str]], bool] = None,
-    # ) -> Generator[dict[str, str], None, None]:
-    #     filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
-    #     offset_manager = (
-    #         self.temporary_offset(pagination.offset) if pagination and pagination.offset else contextlib.nullcontext()
-    #     )
-    #
-    #     with filter_manager:
-    #         with offset_manager:
-    #             rowset = self.cursor_wrapper.get_query_row_set(limit=pagination.limit if pagination else None)
-    #             for row in rowset.rows():
-    #                 if filter_fn and not filter_fn(row):
-    #                     continue
-    #                 self.add_category_to_dict(row)
-    #                 yield row
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -190,18 +159,6 @@ class CursorAPI:
     def add_category_to_dict(self, row):
         row.update({'category': self.category})
 
-    # def set_clean_fil(self, new_filter: FilterArray):
-    #     logger.debug(f'Setting clean filter {new_filter}')
-    #     if self.filter_array:
-    #         self.clear_all_filters()
-    #     [self.cursor_wrapper.set_filter(filstr) for filstr in new_filter.filter_strs]
-    #     if new_filter.sorts:
-    #         self.cursor_wrapper.set_sort(new_filter.view_sort_text)
-    #     if new_filter.logics:
-    #         self.cursor_wrapper.set_filter_logic(new_filter.sort_logics_text)
-    #     logger.info(f'Set {new_filter}')
-    #     return self
-
     # FILTER
     def filter_by_array(self, filter_array: FilterArray) -> Self:
         [self.cursor_wrapper.set_filter(filstr) for filstr in filter_array.filter_strs]
@@ -215,57 +172,32 @@ class CursorAPI:
     def temporary_offset(self, offset: int):
         """Temporarily offset the cursor."""
         try:
-            #     self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
             self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, offset)
             yield
         finally:
             self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
-            # self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, -offset)
 
     @contextlib.contextmanager
-    def temporary_filter(self, fil_array: FilterArray | None = None):
+    def temporary_filter(self, fil_array: FilterArray):
         """Temporarily filter by FilterArray object.
 
         Args:
             fil_array: FilterArray object
 
         """
-        og_filter = self.filter_array.model_copy() if self.filter_array else None
         try:
             self.clear_all_filters()
             self.filter_by_array(fil_array)
             yield
         finally:
             self.clear_all_filters()
-            if og_filter:
-                self.filter_array = og_filter
-                self.filter_by_array(og_filter)
-
-    # @contextlib.contextmanager
-    # def additional_filter(self, fil_array: FilterArray):
-    #     """Temporarily filter by FilterArray object.
-    #
-    #     Args:
-    #         fil_array: FilterArray object
-    #
-    #     """
-    #     og_filter = self.filter_array.copy() if self.filter_array else None
-    #     filter_array = og_filter + fil_array
-    #     try:
-    #         self.filter_by_array(filter_array)
-    #         yield
-    #     finally:
-    #         self.filter_array = og_filter
 
     def clear_filter(self, slot=1) -> None:
         self.cursor_wrapper.set_filter(f'[ViewFilter({slot},Clear)]')
-        if self.filter_array and slot in self.filter_array.filters:
-            self.filter_array.filters.pop(slot, None)
 
     def clear_all_filters(self) -> None:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
-        # self.filter_array = FilterArray()
 
     def add_related_column(self, connection: Connection) -> Self:
         """Add a related column to the cursor."""

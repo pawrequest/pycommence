@@ -59,10 +59,10 @@ class CommenceWrapper(CmcConnector):
 
     """
 
-    def get_new_cursor(self, csrname, mode=CursorType.CATEGORY, filter_array=None) -> CursorAPI:
+    def get_new_cursor(self, csrname, mode=CursorType.CATEGORY) -> CursorAPI:
         """Create a new cursor with the specified name and mode."""
         cursor_wrapper: CursorWrapper = self._get_new_cursor_wrapper(csrname, mode=mode)
-        return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname, filter_array=filter_array)
+        return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname)
 
     def _get_new_cursor_wrapper(
         self,

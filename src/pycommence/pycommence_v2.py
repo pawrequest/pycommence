@@ -1,6 +1,4 @@
 import typing as _t
-from collections.abc import Callable
-from functools import wraps
 
 import pydantic as _p
 from loguru import logger
@@ -8,24 +6,10 @@ from pydantic import Field
 
 from pycommence.cursor_v2 import CursorAPI, raise_for_id_or_pk
 from pycommence.exceptions import PyCommenceNotFoundError
-from pycommence.filters import FieldFilter, FilterArray
+from pycommence.filters import FilterArray
 from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination, RowFilter
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
-
-
-def csr_f_tblname(func):
-    @wraps(func)
-    def wrapper(self, tblname: str, *args, **kwargs):
-        tblname = kwargs.get('csrname')
-        csr = self.csr(tblname)
-        return func(self, csr=csr, *args, **kwargs)
-
-    return wrapper
-
-
-def filter_array_pk(pk_label, pk_val):
-    return FilterArray.from_filters(FieldFilter(column=pk_label, value=pk_val))
 
 
 # noinspection PyProtectedMember
@@ -41,14 +25,11 @@ class PyCommence(_p.BaseModel):
         self,
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
-        filter_array: FilterArray | None = None,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
-        cursor = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
+        cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
         self.csrs[csrname] = cursor
-        logger.debug(
-            f'Set cursor on {csrname} with {len(filter_array.filters) if filter_array else 0} filters = {cursor.row_count} rows'
-        )
+        logger.debug(f'Set cursor on {csrname} with {cursor.row_count} rows')
         return self
 
     def get_csrname(self, csrname: str | None = None):
@@ -68,7 +49,7 @@ class PyCommence(_p.BaseModel):
 
     def refresh_csr(self, csr) -> _t.Self:
         """Reset an existing cursor with same name, mode and filter_array"""
-        self.set_csr(csr.csrname, csr.mode, csr.filter_array)
+        self.set_csr(csr.csrname, csr.mode)
         logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
         return self
 
@@ -76,11 +57,9 @@ class PyCommence(_p.BaseModel):
     def with_csr(
         cls,
         csrname: str,
-        filter_array: FilterArray | None = None,
         mode: CursorType = CursorType.CATEGORY,
     ):
-        return cls().set_csr(csrname, mode=mode, filter_array=filter_array)
-        # return pyc
+        return cls().set_csr(csrname, mode=mode)
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
         self.conversations[topic] = self.cmc_wrapper.get_conversation_api(topic)
@@ -129,20 +108,6 @@ class PyCommence(_p.BaseModel):
             filter_array=filter_array,
             row_filter=row_filter,
         )
-
-    # def read_rowsnomore(
-    #     self,
-    #     csrname: str | None = None,
-    #     pagination: Pagination | None = None,
-    #     filter_array: FilterArray | None = None,
-    #     filter_fn: _t.Callable[[dict[str, str]], bool] | None = None,
-    #     filter_gen: _t.Generator[dict[str, str], None, None] | None = None,
-    # ) -> _t.Generator[dict[str, str], None, None]:
-    #     yield from self.csr(csrname)._read_rowsnomore(
-    #         pagination=pagination,
-    #         filter_array=filter_array,
-    #         filter_fn=filter_fn,
-    #     )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
         """Update a row by id or pk
