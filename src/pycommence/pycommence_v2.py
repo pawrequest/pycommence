@@ -45,7 +45,9 @@ class PyCommence(_p.BaseModel):
         """Re/Set the cursor by name and values"""
         cursor = self.cmc_wrapper.get_new_cursor(csrname, mode, filter_array)
         self.csrs[csrname] = cursor
-        logger.debug(f'Set cursor on {csrname} with {len(filter_array.filters) if filter_array else 0} filters = {cursor.row_count} rows')
+        logger.debug(
+            f'Set cursor on {csrname} with {len(filter_array.filters) if filter_array else 0} filters = {cursor.row_count} rows'
+        )
         return self
 
     def get_csrname(self, csrname: str | None = None):

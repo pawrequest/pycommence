@@ -5,8 +5,6 @@ from collections.abc import Generator
 from functools import cached_property
 from typing import Self
 
-from loguru import logger
-
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
 from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, SeekBookmark
@@ -110,7 +108,7 @@ class CursorAPI:
         row_id = row_id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         raise_for_one(rs)
-        row = rs.row_dicts_list()[0]
+        row = next(rs.rows())
         row['row_id'] = row_id
         if with_category:
             self.add_category_to_dict(row)
@@ -119,10 +117,11 @@ class CursorAPI:
     def _read_rows(
         self,
         with_category: bool = False,
-        pagination: Pagination = Pagination(),
+        pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
         get_id: bool = False,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
+        pagination = pagination or Pagination()
         # logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
 

@@ -20,9 +20,9 @@ class ConditionType(StrEnum):
     BETWEEN = 'Is Between'
     BEFORE = 'Before'
     NOT_EQUAL = 'Not Equal To'
-    NOT_CONTAIN = 'Not Contains'
+    NOT_CONTAIN = "Doesn't Contain"
     ON = 'On'
-    NOT = 'Not'
+    NOT = 'No'
 
 
 class CmcFilter(BaseModel, ABC):
@@ -33,10 +33,10 @@ class CmcFilter(BaseModel, ABC):
     condition: ConditionType = 'Equal To'
 
     def view_filter_str(self, slot=1):
-        return f'[ViewFilter({slot}, {self.kind}, {self.not_flag}, {self._filter_str})]'
+        return f'[ViewFilter("{slot}", "{self.kind}", {self.not_flag}, {self._filter_str})]'
 
     def __str__(self):
-        return self.view_filter_str(0)
+        return f'{self.__class__.__name__} col:{self.column} condition:{self.condition} value:{self.value}'
 
     @property
     def _filter_str(self):
@@ -50,7 +50,7 @@ class FieldFilter(CmcFilter):
 
     @property
     def _filter_str(self) -> str:
-        filter_str = f'{self.column}, {self.condition}{f', "{self.value}"' if self.value else ''}'
+        filter_str = f'"{self.column}", "{self.condition}"{f', "{self.value}"' if self.value else ''}'
         return filter_str
 
 
@@ -62,7 +62,7 @@ class ConnectedItemFilter(FieldFilter):
 
     @property
     def _filter_str(self) -> str:
-        return f'{self.column}, {self.connection_category}, "{self.value}"'
+        return f'"{self.column}", "{self.connection_category}", "{self.value}"'
 
 
 class ConnectedFieldFilter(ConnectedItemFilter):
@@ -83,7 +83,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
 
     @property
     def _filter_str(self):
-        return f'{self.column}, {self.connection_category}, {self.connected_column}, {self.condition}, "{self.value}"'
+        return f'"{self.column}", "{self.connection_category}", "{self.connected_column}", "{self.condition}", "{self.value}"'
 
 
 class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
@@ -93,7 +93,7 @@ class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
 
     @property
     def _filter_str(self) -> str:
-        return f'{self.column}, {self.connection_category}, {self.connection_column_2}, {self.connection_category_2}, "{self.value}"'
+        return f'"{self.column}", "{self.connection_category}", "{self.connection_column_2}", "{self.connection_category_2}", "{self.value}"'
 
 
 class SortOrder(StrEnum):
@@ -164,7 +164,7 @@ class FilterArray(BaseModel):
         lenn = len(self.filters)
         if lenn > 8:
             raise ValueError('No empty slots available')
-        logger.debug(f'Adding filter {cmc_filter} to slot {lenn + 1}')
+        logger.debug(f'Adding {cmc_filter} to slot {lenn + 1}')
         self.filters[lenn + 1] = cmc_filter
         if lenn > 1:
             logger.debug(f'Adding logic {logic} between slots {lenn} and {lenn + 1}')
@@ -173,10 +173,6 @@ class FilterArray(BaseModel):
     def add_filters(self, *filters: FieldFilter):
         for cmcfilter in filters:
             self.add_filter(cmcfilter)
-
-    def add_filters_w_logic(self, *filters_w_logic: tuple[FieldFilter, Logic]):
-        for fil_w_logic in filters_w_logic:
-            self.add_filter(*fil_w_logic)
 
 
 def field_fil_to_confil(field_fil: FieldFilter, connection: Connection):
