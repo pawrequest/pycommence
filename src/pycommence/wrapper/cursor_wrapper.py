@@ -3,7 +3,7 @@ from loguru import logger
 import pycommence.pycmc_types
 from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
-from pycommence.exceptions import PyCommenceNotFoundError, raise_for_one
+from pycommence.exceptions import PyCommenceNotFoundError, raise_for_one, PyCommenceServerError
 from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
 
 
@@ -142,10 +142,8 @@ class CursorWrapper:
         if isinstance(start, SeekBookmark):
             start = start.value
         res = self._csr_cmc.SeekRow(start, rows)
-        if res == -1:
-            logger.warning(f'Unable to seek {rows} rows')
-            # raise PyCommenceServerError(f'Unable to seek {rows} rows')
-        # logger.debug(f'Seeked {res} rows')
+        if rows != 0 and res == -1:
+            raise PyCommenceServerError(f'Unable to seek {rows} rows from {start}')
         return res
 
     def seek_row_fractional(self, numerator: int, denominator: int) -> int:

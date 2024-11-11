@@ -5,6 +5,8 @@ from collections.abc import Generator
 from functools import cached_property
 from typing import Self
 
+from loguru import logger
+
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
 from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark

@@ -103,8 +103,6 @@ class CommenceWrapper(CmcConnector):
             csr = CursorWrapper(self.commence_dispatch.GetCursor(mode.value, name, flags.value))
         except com_error as e:
             raise PyCommenceServerError(f'Error creating cursor for {name} in {self.name}: {e}')
-
-        logger.debug(f'Created {csr.category} CsrWrapper with {csr.row_count} rows')
         return csr
         # todo non-standard modes
 
