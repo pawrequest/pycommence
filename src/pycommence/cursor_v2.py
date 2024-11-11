@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import contextlib
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from functools import cached_property
 from typing import Self
 
@@ -120,7 +120,9 @@ class CursorAPI:
         pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
         get_id: bool = False,
+        filter_fn: Callable[[dict[str, str]], bool] = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
+
         pagination = pagination or Pagination()
         # logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
@@ -130,6 +132,8 @@ class CursorAPI:
                 self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
             rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
             for row in rowset.rows(get_id=get_id):
+                if filter_fn and not filter_fn(row):
+                    continue
                 if with_category:
                     self.add_category_to_dict(row)
                 yield row
@@ -140,14 +144,15 @@ class CursorAPI:
         if pagination.offset:
             self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
 
-    def _read_rows_filtered(
+    def _read_rows_temp_fil_array(
         self,
         filter_array: FilterArray,
         with_category: bool = False,
         pagination: Pagination | None = None,
+        filter_fn: Callable[[dict[str, str]], bool] = None,
     ) -> Generator[dict[str, str], None, None]:
         with self.temporary_filter(filter_array):
-            yield from self._read_rows(pagination=pagination, with_category=with_category)
+            yield from self._read_rows(pagination=pagination, with_category=with_category, filter_fn=filter_fn)
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
