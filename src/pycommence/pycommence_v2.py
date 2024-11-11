@@ -1,4 +1,5 @@
 import typing as _t
+from collections.abc import Callable
 from functools import wraps
 
 import pydantic as _p
@@ -8,7 +9,7 @@ from pydantic import Field
 from pycommence.cursor_v2 import CursorAPI, raise_for_id_or_pk
 from pycommence.exceptions import PyCommenceNotFoundError
 from pycommence.filters import FieldFilter, FilterArray
-from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination
+from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination, RowFilter
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
 
@@ -108,32 +109,40 @@ class PyCommence(_p.BaseModel):
     def read_rows(
         self,
         csrname: str | None = None,
-        with_category: bool = True,
-        with_id: bool = False,
-        pagination: Pagination = Pagination(),
+        pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
-        filter_fn: _t.Callable[[dict[str, str]], bool] | None = None,
+        row_filter: RowFilter | None = None,
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
         """
         Generate rows from a cursor
         Args:
             csrname: Name of cursor
-            with_category: Include category in row
             pagination: Pagination object
             filter_array: FilterArray object (override cursor filter)
-            filter_fn: Filter function
-            with_id: Include id in row
+            row_filter: Filter generator
 
         Yields:
             dict: Row data or MoreAvailable object
         """
         yield from self.csr(csrname)._read_rows(
-            with_category=with_category,
             pagination=pagination,
             filter_array=filter_array,
-            get_id=with_id,
-            filter_fn=filter_fn,
+            row_filter=row_filter,
         )
+
+    # def read_rowsnomore(
+    #     self,
+    #     csrname: str | None = None,
+    #     pagination: Pagination | None = None,
+    #     filter_array: FilterArray | None = None,
+    #     filter_fn: _t.Callable[[dict[str, str]], bool] | None = None,
+    #     filter_gen: _t.Generator[dict[str, str], None, None] | None = None,
+    # ) -> _t.Generator[dict[str, str], None, None]:
+    #     yield from self.csr(csrname)._read_rowsnomore(
+    #         pagination=pagination,
+    #         filter_array=filter_array,
+    #         filter_fn=filter_fn,
+    #     )
 
     def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
         """Update a row by id or pk

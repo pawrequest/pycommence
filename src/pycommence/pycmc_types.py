@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import enum
 import pathlib
+from collections.abc import Callable, Generator
 from dataclasses import dataclass
 from datetime import date, datetime
 from enum import Enum, IntEnum, StrEnum, auto
@@ -9,6 +10,8 @@ from _decimal import Decimal
 
 import pydantic as _p
 import pythoncom
+
+RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
 
 
 class NoneFoundHandler(StrEnum):
@@ -229,7 +232,7 @@ PAGE_SIZE = 30
 
 class Pagination(_p.BaseModel):
     offset: int = 0
-    limit: int | None = None
+    limit: int | None = 100
     # limit: int | bool = False
 
     def __bool__(self):

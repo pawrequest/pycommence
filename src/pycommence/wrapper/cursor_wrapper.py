@@ -3,7 +3,7 @@ from loguru import logger
 import pycommence.pycmc_types
 from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
-from pycommence.exceptions import PyCommenceNotFoundError, PyCommenceServerError, raise_for_one
+from pycommence.exceptions import PyCommenceNotFoundError, raise_for_one
 from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
 
 
@@ -143,7 +143,8 @@ class CursorWrapper:
             start = start.value
         res = self._csr_cmc.SeekRow(start, rows)
         if res == -1:
-            raise PyCommenceServerError(f'Unable to seek {rows} rows')
+            logger.warning(f'Unable to seek {rows} rows')
+            # raise PyCommenceServerError(f'Unable to seek {rows} rows')
         # logger.debug(f'Seeked {res} rows')
         return res
 
@@ -181,7 +182,10 @@ class CursorWrapper:
         GetQueryRowSet will advance the 'current row pointer' by the number of rows in the rowset.
 
         """
-        limit = limit or self.row_count
+        limit: int = limit if limit is not None else self._csr_cmc.RowCount
+        if limit > 5025:
+            logger.warning(f'Limit of {limit} exceeds maximum of 5025 rows')
+            limit = 5025
         result = self._csr_cmc.GetQueryRowSet(limit, FLAGS_UNUSED)
         return rs.RowSetQuery(result)
 

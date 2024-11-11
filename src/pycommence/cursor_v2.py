@@ -7,7 +7,7 @@ from typing import Self
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, SeekBookmark
+from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -32,10 +32,10 @@ class CursorAPI:
             self.filter_by_array(filter_array)
 
     # proxied from wrapper
-    @cached_property
-    def headers(self):
-        """Column labels."""
-        return self.cursor_wrapper.get_query_row_set(1).headers
+    # @cached_property
+    # def headers(self):
+    #     """Column labels."""
+    #     return self.cursor_wrapper.get_query_row_set(1).headers
 
     @property
     def category(self):
@@ -61,7 +61,7 @@ class CursorAPI:
     @cached_property
     def pk_label(self) -> str:
         """Column 0 label."""
-        rs = self.cursor_wrapper.get_query_row_set(1)
+        rs = self.cursor_wrapper.get_query_row_set(0)
         return rs.get_column_label(0)
 
     def pk_filter(self, pk, condition=ConditionType.EQUAL):
@@ -75,19 +75,22 @@ class CursorAPI:
     def pk_to_id(self, pk: str) -> str:
         """Convert primary key to row ID."""
         with self.temporary_filter(FilterArray.from_filters(self.pk_filter(pk))):
-            rs = self.cursor_wrapper.get_query_row_set(2)
-            raise_for_one(rs)
-            return rs.get_row_id(0)
+            with self.temporary_offset(0):
+                rs = self.cursor_wrapper.get_query_row_set(2)
+                raise_for_one(rs)
+                return rs.get_row_id(0)
 
     def pk_to_row_ids(self, pk: str) -> list[str]:
         with self.temporary_filter(FilterArray.from_filters(self.pk_filter(pk))):
-            rs = self.cursor_wrapper.get_query_row_set()
-            return [rs.get_row_id(i) for i in range(rs.row_count)]
+            with self.temporary_offset(0):
+                rs = self.cursor_wrapper.get_query_row_set()
+                return [rs.get_row_id(i) for i in range(rs.row_count)]
 
     def row_id_to_pk(self, row_id: str) -> str:
         """Convert row ID to primary key."""
-        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-        return rs.get_value(0, 0)
+        with self.temporary_offset(0):
+            rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+            return rs.get_value(0, 0)
 
     # CREATE
     def _create_row(self, create_pkg: dict[str, str]) -> None:
@@ -105,54 +108,68 @@ class CursorAPI:
         self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
     ) -> dict[str, str]:
         raise_for_id_or_pk(row_id, pk)
-        row_id = row_id or self.pk_to_id(pk)
-        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-        raise_for_one(rs)
-        row = next(rs.rows())
-        row['row_id'] = row_id
-        if with_category:
-            self.add_category_to_dict(row)
-        return row
+        with self.temporary_offset(0):
+            row_id = row_id or self.pk_to_id(pk)
+            rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+            raise_for_one(rs)
+            row = next(rs.rows())
+            row['row_id'] = row_id
+            if with_category:
+                self.add_category_to_dict(row)
+            return row
 
     def _read_rows(
         self,
-        with_category: bool = False,
         pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
-        get_id: bool = False,
-        filter_fn: Callable[[dict[str, str]], bool] = None,
+        row_filter: RowFilter | None = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
-
         pagination = pagination or Pagination()
         # logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
-
+        offset_manager = self.temporary_offset(pagination.offset) if pagination.offset else self.temporary_offset(0)
         with filter_manager:
-            if pagination.offset:
-                self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
-            rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
-            for row in rowset.rows(get_id=get_id):
-                if filter_fn and not filter_fn(row):
-                    continue
-                if with_category:
+            with offset_manager:
+                rows_read = 0
+                csr_rowcount = self.row_count
+                rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
+
+                rowgen = rowset.rows()
+                if row_filter:
+                    rowgen = row_filter(rowgen)
+
+                for i, row in enumerate(rowgen):
+                    rows_read += 1
+                    if rows_read > pagination.limit:
+                        break
                     self.add_category_to_dict(row)
-                yield row
+                    yield row
 
-            if pagination.end and self.row_count > pagination.end:
-                rows_left = self.row_count - pagination.end
-                yield MoreAvailable(n_more=rows_left)
-        if pagination.offset:
-            self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
+            # if pagination.end and self.row_count > pagination.end:
+            #     rows_left = self.row_count - pagination.end
+            #     yield MoreAvailable(n_more=rows_left)
+        # if pagination.offset:
+        #     self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
 
-    def _read_rows_temp_fil_array(
-        self,
-        filter_array: FilterArray,
-        with_category: bool = False,
-        pagination: Pagination | None = None,
-        filter_fn: Callable[[dict[str, str]], bool] = None,
-    ) -> Generator[dict[str, str], None, None]:
-        with self.temporary_filter(filter_array):
-            yield from self._read_rows(pagination=pagination, with_category=with_category, filter_fn=filter_fn)
+    # def _read_rowsnomore(
+    #     self,
+    #     pagination: Pagination | None = None,
+    #     filter_array: FilterArray | None = None,
+    #     filter_fn: Callable[[dict[str, str]], bool] = None,
+    # ) -> Generator[dict[str, str], None, None]:
+    #     filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
+    #     offset_manager = (
+    #         self.temporary_offset(pagination.offset) if pagination and pagination.offset else contextlib.nullcontext()
+    #     )
+    #
+    #     with filter_manager:
+    #         with offset_manager:
+    #             rowset = self.cursor_wrapper.get_query_row_set(limit=pagination.limit if pagination else None)
+    #             for row in rowset.rows():
+    #                 if filter_fn and not filter_fn(row):
+    #                     continue
+    #                 self.add_category_to_dict(row)
+    #                 yield row
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -198,10 +215,12 @@ class CursorAPI:
     def temporary_offset(self, offset: int):
         """Temporarily offset the cursor."""
         try:
+            #     self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, pagination.offset)
             self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, offset)
             yield
         finally:
-            self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, -offset)
+            self.cursor_wrapper.seek_row(SeekBookmark.BEGINNING, 0)
+            # self.cursor_wrapper.seek_row(SeekBookmark.CURRENT, -offset)
 
     @contextlib.contextmanager
     def temporary_filter(self, fil_array: FilterArray | None = None):
