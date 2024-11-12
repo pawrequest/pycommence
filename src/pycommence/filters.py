@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 from abc import ABC
-from enum import StrEnum
-from typing import Literal
+from enum import StrEnum, Enum
+from typing import Literal, NamedTuple
 
 from loguru import logger
 from pydantic import BaseModel, Field, model_validator
@@ -36,7 +36,7 @@ class CmcFilter(BaseModel, ABC):
         return f'[ViewFilter("{slot}", "{self.kind}", {self.not_flag}, {self._filter_str})]'
 
     def __str__(self):
-        return f'{self.__class__.__name__} col:{self.column} condition:{self.condition} value:{self.value}'
+        return f'{self.__class__.__name__}: col="{self.column}" condition="{self.condition}" value="{self.value}"'
 
     @property
     def _filter_str(self):
@@ -100,6 +100,27 @@ class SortOrder(StrEnum):
     ASC = 'Ascending'
     DESC = 'Descending'
 
+    def __str__(self):
+        return self.value
+
+
+class Sort(NamedTuple):
+    column: str
+    order: SortOrder
+
+    def __str__(self):
+        return f'{self.column}, {self.order.value}'
+
+
+class Sorts(list):
+    def __str__(self):
+        return ', '.join([str(_) for _ in self])
+
+
+class SortOrder2(str, Enum):
+    ASC = 'Ascending'
+    DESC = 'Descending'
+
 
 Logic = Literal['Or', 'And']
 
@@ -108,13 +129,19 @@ class FilterArray(BaseModel):
     """Array of Cursor Filters."""
 
     filters: dict[int, CmcFilter] = Field(default_factory=dict)
-    sorts: list[tuple[str, SortOrder]] = Field(default_factory=list)
+    # sorts: Sorts = Field(default_factory=list)
+    sorts: list[Sort] = Field(default_factory=list)
     logics: list[Logic] = Field(default_factory=list)
 
     def __bool__(self):
         return bool(self.filters)
 
-    # noinspection PyTypeChecker
+    def __str__(self):
+        return (f'[{f''.join(str(_) for i, _ in enumerate(self.filters.values()))}]'
+                f'{' | Sorted By:'+ ','.join(str(_) for _ in self.sorts) if self.sorts else ''}'
+                f'{' | '+ ','.join(self.logics) if self.logics else ''}')
+        # return f'{'; '.join(str(_) for _ in self.filters.values())} | {''.join([str(_) for _ in self.sorts])} | {f'Logic={self.logics}' if self.logics else ""}'
+
     @model_validator(mode='after')
     def val_logics(self):
         if not self.filters:
@@ -130,9 +157,6 @@ class FilterArray(BaseModel):
         if not all([self, other]):
             return self if self else other if other else None
         return self.add_filters(*other.filters.values())
-
-    def __str__(self):
-        return f'{len(self.filters)} Filters:{'\n'.join(self.filter_strs)}\nSorted by {self.view_sort_text} Logic={self.sort_logics_text}'
 
     @classmethod
     def from_filters(cls, *filters: FieldFilter, sorts=None, logics: list[Logic] = None):
@@ -164,7 +188,7 @@ class FilterArray(BaseModel):
         lenn = len(self.filters)
         if lenn > 8:
             raise ValueError('No empty slots available')
-        logger.debug(f'Adding {cmc_filter} to slot {lenn + 1}')
+        # logger.debug(f'Adding {cmc_filter} to slot {lenn + 1}')
         self.filters[lenn + 1] = cmc_filter
         if lenn > 1:
             logger.debug(f'Adding logic {logic} between slots {lenn} and {lenn + 1}')

@@ -29,7 +29,7 @@ class PyCommence(_p.BaseModel):
         """Re/Set the cursor by name and values"""
         cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
         self.csrs[csrname] = cursor
-        logger.debug(f'Set cursor on {csrname} with {cursor.row_count} rows')
+        # logger.debug(f'Set "{csrname}" ({mode.name.title()}) cursor with {cursor.row_count} rows')
         return self
 
     def get_csrname(self, csrname: str | None = None):
@@ -103,6 +103,7 @@ class PyCommence(_p.BaseModel):
         Yields:
             dict: Row data or MoreAvailable object
         """
+        logger.debug(f'Reading rows from {csrname}: {filter_array} | {pagination}')
         yield from self.csr(csrname)._read_rows(
             pagination=pagination,
             filter_array=filter_array,
