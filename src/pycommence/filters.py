@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC
-from enum import StrEnum, Enum
+from enum import StrEnum
 from typing import Literal, NamedTuple
 
 from loguru import logger
@@ -117,11 +117,6 @@ class Sorts(list):
         return ', '.join([str(_) for _ in self])
 
 
-class SortOrder2(str, Enum):
-    ASC = 'Ascending'
-    DESC = 'Descending'
-
-
 Logic = Literal['Or', 'And']
 
 
@@ -137,9 +132,11 @@ class FilterArray(BaseModel):
         return bool(self.filters)
 
     def __str__(self):
-        return (f'[{f''.join(str(_) for i, _ in enumerate(self.filters.values()))}]'
-                f'{' | Sorted By:'+ ','.join(str(_) for _ in self.sorts) if self.sorts else ''}'
-                f'{' | '+ ','.join(self.logics) if self.logics else ''}')
+        return (
+            f'[{''.join(str(_) for i, _ in enumerate(self.filters.values()))}]'
+            f'{' | Sorted By:' + ','.join(str(_) for _ in self.sorts) if self.sorts else ''}'
+            f'{' | ' + ','.join(self.logics) if self.logics else ''}'
+        )
         # return f'{'; '.join(str(_) for _ in self.filters.values())} | {''.join([str(_) for _ in self.sorts])} | {f'Logic={self.logics}' if self.logics else ""}'
 
     @model_validator(mode='after')
