@@ -7,29 +7,24 @@ Direct access to the Commence Com object is provided by the wrapper layer.
 DB Wrapper
 -------------------------
 
-.. automodule:: pycommence.wrapper.cmc_db
+.. automodule:: pycommence.wrapper.cmc_wrapper
     :private-members:
 
 Cursor Wrapper
 -------------------------
 
-.. automodule:: pycommence.wrapper.cmc_csr
+.. automodule:: pycommence.wrapper.cmc_cursor_wrapper
+    :private-members:
 
 RowSet Wrappers
 -------------------------
 
-.. automodule:: pycommence.wrapper.rowset
-
-
-Commence Enums
------------------------------
-
-.. automodule:: pycommence.wrapper.enums_cmc
+.. automodule:: pycommence.wrapper.row_wrapper
 
 Commence Conversation Wrapper
 -------------------------------
 
-.. automodule:: pycommence.wrapper.conversation
+.. automodule:: pycommence.wrapper.conversation_wrapper
 
 ICommence Interface Wrapper
 -------------------------------
