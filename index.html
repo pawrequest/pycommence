@@ -1,12 +1,14 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyCommence - Python vs Commence RM &mdash; PyCommence 0.1.1 documentation</title>
+  <title>PyCommence - Python vs Commence RM &mdash; PyCommence 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e6a37869" />
       <link rel="stylesheet" type="text/css" href="_static/dark_mode_css/general.css?v=c0a7eb24" />
@@ -14,17 +16,13 @@
 
   
     <link rel="canonical" href="https://pawrequest.github.io/pycommence/index.html" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=a58bc63e"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
-        <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+      <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -85,13 +83,13 @@
 <p><a class="reference external" href="https://commence.com/information-for-customers-81/">Commence RM</a> is a powerful and flexible database application for customer relationship management, but it is decidedly dated, and its API is not very user-friendly.</p>
 <p>Commence Designer Edition is a particuarly cranky beast that demands super-brittle VBS and DDE approaches to integration and offers little support for modern tooling.</p>
 <p>This package wraps the Commence API in a python interface for convenience; a complete installation of Commence is required.</p>
-<p>PyCommence is built atop <code class="xref py py-mod docutils literal notranslate"><span class="pre">pycommence.wrapper._icommence</span></code> - a makepy generated Com-Object wrapper - via the <cite>win32com</cite> package.</p>
+<p>PyCommence is built atop <a class="reference internal" href="pycommence_wrapper.html#module-pycommence.wrapper._icommence" title="pycommence.wrapper._icommence"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pycommence.wrapper._icommence</span></code></a> - a makepy generated Com-Object wrapper - via the <cite>win32com</cite> package.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="pycommence_api.html">PyCommence Api</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pycommence_api.html#pycommence-object">PyCommence Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycommence_api.html#module-pycommence.__init__">PyCommence Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pycommence_api.html#cursor">Cursor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pycommence_api.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycommence_api.html#module-pycommence.pycmc_types">Types</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pycommence_wrapper.html">Commence Wrapper</a><ul>
@@ -100,7 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pycommence_wrapper.html#rowset-wrappers">RowSet Wrappers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pycommence_wrapper.html#commence-enums">Commence Enums</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pycommence_wrapper.html#commence-conversation-wrapper">Commence Conversation Wrapper</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pycommence_wrapper.html#icommence-interface-wrapper">ICommence Interface Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycommence_wrapper.html#module-pycommence.wrapper._icommence">ICommence Interface Wrapper</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="cmc_api.html">Commence RM API</a></li>

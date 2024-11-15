@@ -1,12 +1,14 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PyCommence Api &mdash; PyCommence 0.1.1 documentation</title>
+  <title>PyCommence Api &mdash; PyCommence 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e6a37869" />
       <link rel="stylesheet" type="text/css" href="_static/dark_mode_css/general.css?v=c0a7eb24" />
@@ -14,17 +16,13 @@
 
   
     <link rel="canonical" href="https://pawrequest.github.io/pycommence/pycommence_api.html" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=a58bc63e"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
-        <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=938c9ccc"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+      <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -53,9 +51,148 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">PyCommence Api</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pycommence-object">PyCommence Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycommence.__init__">PyCommence Object</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cursor">Cursor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycommence.pycmc_types">Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.NoneFoundHandler"><code class="docutils literal notranslate"><span class="pre">NoneFoundHandler</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.NoneFoundHandler.ignore"><code class="docutils literal notranslate"><span class="pre">NoneFoundHandler.ignore</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.NoneFoundHandler.error"><code class="docutils literal notranslate"><span class="pre">NoneFoundHandler.error</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.RadioType"><code class="docutils literal notranslate"><span class="pre">RadioType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.RadioType.HYT"><code class="docutils literal notranslate"><span class="pre">RadioType.HYT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.RadioType.K_UHF"><code class="docutils literal notranslate"><span class="pre">RadioType.K_UHF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.RadioType.K_VHF"><code class="docutils literal notranslate"><span class="pre">RadioType.K_VHF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.RadioType.TES_289"><code class="docutils literal notranslate"><span class="pre">RadioType.TES_289</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.RadioType.TES_288"><code class="docutils literal notranslate"><span class="pre">RadioType.TES_288</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.RadioType.TES_389"><code class="docutils literal notranslate"><span class="pre">RadioType.TES_389</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.SeekBookmark"><code class="docutils literal notranslate"><span class="pre">SeekBookmark</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.SeekBookmark.BEGINNING"><code class="docutils literal notranslate"><span class="pre">SeekBookmark.BEGINNING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.SeekBookmark.CURRENT"><code class="docutils literal notranslate"><span class="pre">SeekBookmark.CURRENT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.SeekBookmark.END"><code class="docutils literal notranslate"><span class="pre">SeekBookmark.END</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.Connection1"><code class="docutils literal notranslate"><span class="pre">Connection1</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Connection1.name"><code class="docutils literal notranslate"><span class="pre">Connection1.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Connection1.from_table"><code class="docutils literal notranslate"><span class="pre">Connection1.from_table</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Connection1.to_table"><code class="docutils literal notranslate"><span class="pre">Connection1.to_table</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.Connection"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Connection.name"><code class="docutils literal notranslate"><span class="pre">Connection.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Connection.category"><code class="docutils literal notranslate"><span class="pre">Connection.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Connection.column"><code class="docutils literal notranslate"><span class="pre">Connection.column</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.to_cmc_date"><code class="docutils literal notranslate"><span class="pre">to_cmc_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.get_cmc_date"><code class="docutils literal notranslate"><span class="pre">get_cmc_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.get_cmc_time"><code class="docutils literal notranslate"><span class="pre">get_cmc_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.CursorType"><code class="docutils literal notranslate"><span class="pre">CursorType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.CATEGORY"><code class="docutils literal notranslate"><span class="pre">CursorType.CATEGORY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.VIEW"><code class="docutils literal notranslate"><span class="pre">CursorType.VIEW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.PILOT_ADDRESS"><code class="docutils literal notranslate"><span class="pre">CursorType.PILOT_ADDRESS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.PILOT_MEMO"><code class="docutils literal notranslate"><span class="pre">CursorType.PILOT_MEMO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.PILOT_TODO"><code class="docutils literal notranslate"><span class="pre">CursorType.PILOT_TODO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.PILOT_APPOINT"><code class="docutils literal notranslate"><span class="pre">CursorType.PILOT_APPOINT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.OUTLOOK_ADDRESS"><code class="docutils literal notranslate"><span class="pre">CursorType.OUTLOOK_ADDRESS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.OUTLOOK_APPOINT"><code class="docutils literal notranslate"><span class="pre">CursorType.OUTLOOK_APPOINT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.OUTLOOK_EMAIL_LOG"><code class="docutils literal notranslate"><span class="pre">CursorType.OUTLOOK_EMAIL_LOG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.OUTLOOK_TASK"><code class="docutils literal notranslate"><span class="pre">CursorType.OUTLOOK_TASK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CursorType.LETTER_MERGE"><code class="docutils literal notranslate"><span class="pre">CursorType.LETTER_MERGE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.Bookmark"><code class="docutils literal notranslate"><span class="pre">Bookmark</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Bookmark.BEGINNING"><code class="docutils literal notranslate"><span class="pre">Bookmark.BEGINNING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Bookmark.CURRENT"><code class="docutils literal notranslate"><span class="pre">Bookmark.CURRENT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Bookmark.END"><code class="docutils literal notranslate"><span class="pre">Bookmark.END</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag"><code class="docutils literal notranslate"><span class="pre">OptionFlag</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.NONE"><code class="docutils literal notranslate"><span class="pre">OptionFlag.NONE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.FIELD_NAME"><code class="docutils literal notranslate"><span class="pre">OptionFlag.FIELD_NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.ALL"><code class="docutils literal notranslate"><span class="pre">OptionFlag.ALL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.SHARED"><code class="docutils literal notranslate"><span class="pre">OptionFlag.SHARED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.PILOT"><code class="docutils literal notranslate"><span class="pre">OptionFlag.PILOT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.CANONICAL"><code class="docutils literal notranslate"><span class="pre">OptionFlag.CANONICAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlag.INTERNET"><code class="docutils literal notranslate"><span class="pre">OptionFlag.INTERNET</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.NONE"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.NONE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.FIELD_NAME"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.FIELD_NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.ALL"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.ALL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.SHARED"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.SHARED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.PILOT"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.PILOT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.CANONICAL"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.CANONICAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.OptionFlagInt.INTERNET"><code class="docutils literal notranslate"><span class="pre">OptionFlagInt.INTERNET</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType"><code class="docutils literal notranslate"><span class="pre">CmcFieldType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.TEXT"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.TEXT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.NUMBER"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.NUMBER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.DATE"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.DATE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.TELEPHONE"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.TELEPHONE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.CHECKBOX"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.CHECKBOX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.NAME"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.DATAFILE"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.DATAFILE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.IMAGE"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.IMAGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.TIME"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.TIME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.EXCEL_CELL"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.EXCEL_CELL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.CALCULATION"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.CALCULATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.SEQUENCE"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.SEQUENCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.SELECTION"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.SELECTION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.EMAIL"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.EMAIL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldType.URL"><code class="docutils literal notranslate"><span class="pre">CmcFieldType.URL</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.TEXT"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.TEXT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.NUMBER"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.NUMBER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.DATE"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.DATE()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.TELEPHONE"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.TELEPHONE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.CHECKBOX"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.CHECKBOX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.NAME"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.DATAFILE"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.DATAFILE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.IMAGE"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.IMAGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.TIME"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.TIME()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.EXCEL_CELL"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.EXCEL_CELL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.CALCULATION"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.CALCULATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.SEQUENCE"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.SEQUENCE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.SELECTION"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.SELECTION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.EMAIL"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.EMAIL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDataType.URL"><code class="docutils literal notranslate"><span class="pre">CmcFieldDataType.URL</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.type"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.combobox"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.combobox</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.shared"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.shared</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.mandatory"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.mandatory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.recurring"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.recurring</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.max_chars"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.max_chars</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.default_string"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.default_string</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.from_field_info"><code class="docutils literal notranslate"><span class="pre">CmcFieldDefinition.from_field_info()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.MoreAvailable"><code class="docutils literal notranslate"><span class="pre">MoreAvailable</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.MoreAvailable.n_more"><code class="docutils literal notranslate"><span class="pre">MoreAvailable.n_more</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.MoreAvailable.json_link"><code class="docutils literal notranslate"><span class="pre">MoreAvailable.json_link</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.MoreAvailable.html_link"><code class="docutils literal notranslate"><span class="pre">MoreAvailable.html_link</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.pycmc_types.Pagination"><code class="docutils literal notranslate"><span class="pre">Pagination</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Pagination.offset"><code class="docutils literal notranslate"><span class="pre">Pagination.offset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Pagination.limit"><code class="docutils literal notranslate"><span class="pre">Pagination.limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Pagination.end"><code class="docutils literal notranslate"><span class="pre">Pagination.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Pagination.limit_int"><code class="docutils literal notranslate"><span class="pre">Pagination.limit_int</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Pagination.next_page"><code class="docutils literal notranslate"><span class="pre">Pagination.next_page()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.pycmc_types.Pagination.prev_page"><code class="docutils literal notranslate"><span class="pre">Pagination.prev_page()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pycommence_wrapper.html">Commence Wrapper</a></li>
@@ -88,14 +225,595 @@
              
   <section id="pycommence-api">
 <h1>PyCommence Api<a class="headerlink" href="#pycommence-api" title="Link to this heading"></a></h1>
-<section id="pycommence-object">
-<h2>PyCommence Object<a class="headerlink" href="#pycommence-object" title="Link to this heading"></a></h2>
+<section id="module-pycommence.__init__">
+<span id="pycommence-object"></span><h2>PyCommence Object<a class="headerlink" href="#module-pycommence.__init__" title="Link to this heading"></a></h2>
 </section>
 <section id="cursor">
 <h2>Cursor<a class="headerlink" href="#cursor" title="Link to this heading"></a></h2>
 </section>
-<section id="types">
-<h2>Types<a class="headerlink" href="#types" title="Link to this heading"></a></h2>
+<section id="module-pycommence.pycmc_types">
+<span id="types"></span><h2>Types<a class="headerlink" href="#module-pycommence.pycmc_types" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.NoneFoundHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NoneFoundHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L17-L19"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.NoneFoundHandler" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.NoneFoundHandler.ignore">
+<span class="sig-name descname"><span class="pre">ignore</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ignore'</span></em><a class="headerlink" href="#pycommence.pycmc_types.NoneFoundHandler.ignore" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.NoneFoundHandler.error">
+<span class="sig-name descname"><span class="pre">error</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'error'</span></em><a class="headerlink" href="#pycommence.pycmc_types.NoneFoundHandler.error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RadioType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L22-L28"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.RadioType" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType.HYT">
+<span class="sig-name descname"><span class="pre">HYT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Hytera</span> <span class="pre">Digital'</span></em><a class="headerlink" href="#pycommence.pycmc_types.RadioType.HYT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType.K_UHF">
+<span class="sig-name descname"><span class="pre">K_UHF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Kirisun</span> <span class="pre">UHF'</span></em><a class="headerlink" href="#pycommence.pycmc_types.RadioType.K_UHF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType.K_VHF">
+<span class="sig-name descname"><span class="pre">K_VHF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Kirisun</span> <span class="pre">VHF'</span></em><a class="headerlink" href="#pycommence.pycmc_types.RadioType.K_VHF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType.TES_289">
+<span class="sig-name descname"><span class="pre">TES_289</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tesunho</span> <span class="pre">SIM</span> <span class="pre">TH289'</span></em><a class="headerlink" href="#pycommence.pycmc_types.RadioType.TES_289" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType.TES_288">
+<span class="sig-name descname"><span class="pre">TES_288</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tesunho</span> <span class="pre">SIM</span> <span class="pre">TH288'</span></em><a class="headerlink" href="#pycommence.pycmc_types.RadioType.TES_288" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.RadioType.TES_389">
+<span class="sig-name descname"><span class="pre">TES_389</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tesunho</span> <span class="pre">SIM</span> <span class="pre">TH388'</span></em><a class="headerlink" href="#pycommence.pycmc_types.RadioType.TES_389" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.SeekBookmark">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SeekBookmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L31-L36"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.SeekBookmark" title="Link to this definition"></a></dt>
+<dd><p>Starting point for cursor seek operations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.SeekBookmark.BEGINNING">
+<span class="sig-name descname"><span class="pre">BEGINNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.SeekBookmark.BEGINNING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.SeekBookmark.CURRENT">
+<span class="sig-name descname"><span class="pre">CURRENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pycommence.pycmc_types.SeekBookmark.CURRENT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.SeekBookmark.END">
+<span class="sig-name descname"><span class="pre">END</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pycommence.pycmc_types.SeekBookmark.END" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Connection1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_table</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L39-L43"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Connection1" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection1.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection1.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection1.from_table">
+<span class="sig-name descname"><span class="pre">from_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection1.from_table" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection1.to_table">
+<span class="sig-name descname"><span class="pre">to_table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection1.to_table" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L46-L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Connection" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection.category">
+<span class="sig-name descname"><span class="pre">category</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection.category" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Connection.column">
+<span class="sig-name descname"><span class="pre">column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.Connection.column" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.to_cmc_date">
+<span class="sig-name descname"><span class="pre">to_cmc_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datecheck</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L57-L58"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.to_cmc_date" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.get_cmc_date">
+<span class="sig-name descname"><span class="pre">get_cmc_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L61-L72"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.get_cmc_date" title="Link to this definition"></a></dt>
+<dd><p>Use CMC Cannonical flag</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.get_cmc_time">
+<span class="sig-name descname"><span class="pre">get_cmc_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_str</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L75-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.get_cmc_time" title="Link to this definition"></a></dt>
+<dd><p>Use CMC Cannonical flag</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CursorType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L80-L119"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CursorType" title="Link to this definition"></a></dt>
+<dd><p>Commence Cursor Types to view based on category, view, or preferences.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.CATEGORY">
+<span class="sig-name descname"><span class="pre">CATEGORY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.CATEGORY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.VIEW">
+<span class="sig-name descname"><span class="pre">VIEW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.VIEW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.PILOT_ADDRESS">
+<span class="sig-name descname"><span class="pre">PILOT_ADDRESS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.PILOT_ADDRESS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.PILOT_MEMO">
+<span class="sig-name descname"><span class="pre">PILOT_MEMO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.PILOT_MEMO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.PILOT_TODO">
+<span class="sig-name descname"><span class="pre">PILOT_TODO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.PILOT_TODO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.PILOT_APPOINT">
+<span class="sig-name descname"><span class="pre">PILOT_APPOINT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.PILOT_APPOINT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.OUTLOOK_ADDRESS">
+<span class="sig-name descname"><span class="pre">OUTLOOK_ADDRESS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.OUTLOOK_ADDRESS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.OUTLOOK_APPOINT">
+<span class="sig-name descname"><span class="pre">OUTLOOK_APPOINT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.OUTLOOK_APPOINT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.OUTLOOK_EMAIL_LOG">
+<span class="sig-name descname"><span class="pre">OUTLOOK_EMAIL_LOG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.OUTLOOK_EMAIL_LOG" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.OUTLOOK_TASK">
+<span class="sig-name descname"><span class="pre">OUTLOOK_TASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.OUTLOOK_TASK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CursorType.LETTER_MERGE">
+<span class="sig-name descname"><span class="pre">LETTER_MERGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#pycommence.pycmc_types.CursorType.LETTER_MERGE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Bookmark">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Bookmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L122-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Bookmark" title="Link to this definition"></a></dt>
+<dd><p>Starting point for cursor seek operations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Bookmark.BEGINNING">
+<span class="sig-name descname"><span class="pre">BEGINNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.Bookmark.BEGINNING" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Bookmark.CURRENT">
+<span class="sig-name descname"><span class="pre">CURRENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pycommence.pycmc_types.Bookmark.CURRENT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Bookmark.END">
+<span class="sig-name descname"><span class="pre">END</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pycommence.pycmc_types.Bookmark.END" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OptionFlag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L130-L139"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag" title="Link to this definition"></a></dt>
+<dd><p>Flags for get_record and get_value methods.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.FIELD_NAME">
+<span class="sig-name descname"><span class="pre">FIELD_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.FIELD_NAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.ALL">
+<span class="sig-name descname"><span class="pre">ALL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.ALL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.SHARED">
+<span class="sig-name descname"><span class="pre">SHARED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.SHARED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.PILOT">
+<span class="sig-name descname"><span class="pre">PILOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.PILOT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.CANONICAL">
+<span class="sig-name descname"><span class="pre">CANONICAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.CANONICAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlag.INTERNET">
+<span class="sig-name descname"><span class="pre">INTERNET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlag.INTERNET" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OptionFlagInt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L142-L151"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt" title="Link to this definition"></a></dt>
+<dd><p>Flags for get_record and get_value methods.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.FIELD_NAME">
+<span class="sig-name descname"><span class="pre">FIELD_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.FIELD_NAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.ALL">
+<span class="sig-name descname"><span class="pre">ALL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.ALL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.SHARED">
+<span class="sig-name descname"><span class="pre">SHARED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.SHARED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.PILOT">
+<span class="sig-name descname"><span class="pre">PILOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.PILOT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.CANONICAL">
+<span class="sig-name descname"><span class="pre">CANONICAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.CANONICAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.OptionFlagInt.INTERNET">
+<span class="sig-name descname"><span class="pre">INTERNET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#pycommence.pycmc_types.OptionFlagInt.INTERNET" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcFieldType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L157-L172"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.TEXT">
+<span class="sig-name descname"><span class="pre">TEXT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.TEXT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.NUMBER">
+<span class="sig-name descname"><span class="pre">NUMBER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.NUMBER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.DATE">
+<span class="sig-name descname"><span class="pre">DATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.DATE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.TELEPHONE">
+<span class="sig-name descname"><span class="pre">TELEPHONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.TELEPHONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.CHECKBOX">
+<span class="sig-name descname"><span class="pre">CHECKBOX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.CHECKBOX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.NAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.DATAFILE">
+<span class="sig-name descname"><span class="pre">DATAFILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.DATAFILE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.IMAGE">
+<span class="sig-name descname"><span class="pre">IMAGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.IMAGE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.TIME">
+<span class="sig-name descname"><span class="pre">TIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.TIME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.EXCEL_CELL">
+<span class="sig-name descname"><span class="pre">EXCEL_CELL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.EXCEL_CELL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.CALCULATION">
+<span class="sig-name descname"><span class="pre">CALCULATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.CALCULATION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.SEQUENCE">
+<span class="sig-name descname"><span class="pre">SEQUENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.SEQUENCE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.SELECTION">
+<span class="sig-name descname"><span class="pre">SELECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.SELECTION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.EMAIL">
+<span class="sig-name descname"><span class="pre">EMAIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.EMAIL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldType.URL">
+<span class="sig-name descname"><span class="pre">URL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldType.URL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcFieldDataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L175-L190"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.TEXT">
+<span class="sig-name descname"><span class="pre">TEXT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.TEXT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.NUMBER">
+<span class="sig-name descname"><span class="pre">NUMBER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'decimal.Decimal'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.NUMBER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.DATE">
+<span class="sig-name descname"><span class="pre">DATE</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.DATE" title="Link to this definition"></a></dt>
+<dd><p>Return date object with same year, month and day.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.TELEPHONE">
+<span class="sig-name descname"><span class="pre">TELEPHONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.TELEPHONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.CHECKBOX">
+<span class="sig-name descname"><span class="pre">CHECKBOX</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'bool'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.CHECKBOX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.NAME">
+<span class="sig-name descname"><span class="pre">NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.NAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.DATAFILE">
+<span class="sig-name descname"><span class="pre">DATAFILE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'pathlib.Path'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.DATAFILE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.IMAGE">
+<span class="sig-name descname"><span class="pre">IMAGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'pathlib.Path'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.IMAGE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.TIME">
+<span class="sig-name descname"><span class="pre">TIME</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.TIME" title="Link to this definition"></a></dt>
+<dd><p>Return time object with same time but with tzinfo=None.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.EXCEL_CELL">
+<span class="sig-name descname"><span class="pre">EXCEL_CELL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.EXCEL_CELL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.CALCULATION">
+<span class="sig-name descname"><span class="pre">CALCULATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.CALCULATION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.SEQUENCE">
+<span class="sig-name descname"><span class="pre">SEQUENCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'int'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.SEQUENCE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.SELECTION">
+<span class="sig-name descname"><span class="pre">SELECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.SELECTION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.EMAIL">
+<span class="sig-name descname"><span class="pre">EMAIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'str'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.EMAIL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.URL">
+<span class="sig-name descname"><span class="pre">URL</span></span><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.URL" title="Link to this definition"></a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Url</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UrlConstraints</span></code>(max_length=2083, allowed_schemes=[‘http’, ‘https’], host_required=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, default_host=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, default_port=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, default_path=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>)]</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcFieldDefinition</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L193-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.combobox" title="pycommence.pycmc_types.CmcFieldDefinition.combobox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">combobox</span> <span class="pre">(bool)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.default_string" title="pycommence.pycmc_types.CmcFieldDefinition.default_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">default_string</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.mandatory" title="pycommence.pycmc_types.CmcFieldDefinition.mandatory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mandatory</span> <span class="pre">(bool)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.max_chars" title="pycommence.pycmc_types.CmcFieldDefinition.max_chars"><code class="xref py py-obj docutils literal notranslate"><span class="pre">max_chars</span> <span class="pre">(int)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.recurring" title="pycommence.pycmc_types.CmcFieldDefinition.recurring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">recurring</span> <span class="pre">(bool)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.shared" title="pycommence.pycmc_types.CmcFieldDefinition.shared"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shared</span> <span class="pre">(bool)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.CmcFieldDefinition.type" title="pycommence.pycmc_types.CmcFieldDefinition.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(pycommence.pycmc_types.CmcFieldType)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">CmcFieldType</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.combobox">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combobox</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.combobox" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.shared">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shared</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.shared" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.mandatory">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mandatory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.mandatory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.recurring">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">recurring</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.recurring" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.max_chars">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_chars</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.max_chars" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.default_string">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_string</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.default_string" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDefinition.from_field_info">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_field_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_info</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L202-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDefinition.from_field_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.MoreAvailable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MoreAvailable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_more</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_link</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">html_link</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L223-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.MoreAvailable" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.MoreAvailable.n_more">
+<span class="sig-name descname"><span class="pre">n_more</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#pycommence.pycmc_types.MoreAvailable.n_more" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.MoreAvailable.json_link">
+<span class="sig-name descname"><span class="pre">json_link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pycommence.pycmc_types.MoreAvailable.json_link" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.MoreAvailable.html_link">
+<span class="sig-name descname"><span class="pre">html_link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pycommence.pycmc_types.MoreAvailable.html_link" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pagination</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L233-L263"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Pagination" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.Pagination.limit" title="pycommence.pycmc_types.Pagination.limit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">limit</span> <span class="pre">(int</span> <span class="pre">|</span> <span class="pre">None)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#pycommence.pycmc_types.Pagination.offset" title="pycommence.pycmc_types.Pagination.offset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">offset</span> <span class="pre">(int)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination.offset">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pycommence.pycmc_types.Pagination.offset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination.limit">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#pycommence.pycmc_types.Pagination.limit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination.end">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#pycommence.pycmc_types.Pagination.end" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination.limit_int">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">limit_int</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pycommence.pycmc_types.Pagination.limit_int" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination.next_page">
+<span class="sig-name descname"><span class="pre">next_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L259-L260"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Pagination.next_page" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.pycmc_types.Pagination.prev_page">
+<span class="sig-name descname"><span class="pre">prev_page</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/pycmc_types.py#L262-L263"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.pycmc_types.Pagination.prev_page" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
