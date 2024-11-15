@@ -5,7 +5,6 @@ PyCommence Object
 -------------------------
 .. automodule:: pycommence.pycommence_v2
 
-
 Cursor
 -------------------------
 .. automodule:: pycommence.cursor_v2
