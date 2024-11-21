@@ -163,7 +163,7 @@ class CursorWrapper:
             raise ValueError(f'Unable to seek {numerator}/{denominator} rows of {self.row_count} rows')
         return res
 
-    def get_query_row_set(self, limit: int or None = None) -> rs.RowSetQuery:
+    def get_query_row_set(self, limit: int | None = None) -> rs.RowSetQuery:
         """
         Create a rowset object with the results of a query.
 
@@ -235,7 +235,7 @@ class CursorWrapper:
             raise PyCommenceNotFoundError()
         return res
 
-    def get_edit_row_set(self, limit: int or None = None) -> rs.RowSetEdit:
+    def get_edit_row_set(self, limit: int | None = None) -> rs.RowSetEdit:
         """
         Creates a rowset of existing items for editing.
 

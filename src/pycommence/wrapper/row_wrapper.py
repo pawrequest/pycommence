@@ -128,7 +128,7 @@ class RowSetBase(ABC):
         flags: int = FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
 
-    def row_dicts_list(self, num: int or None = None) -> list[dict[str, str]]:
+    def row_dicts_list(self, num: int | None = None) -> list[dict[str, str]]:
         """Returns a dictionary of the first num rows."""
         if num is None:
             num = self.row_count
@@ -136,7 +136,7 @@ class RowSetBase(ABC):
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
-    def rows(self, count: int or None = None, get_id: bool = True) -> Generator[dict[str, str], None, None]:
+    def rows(self, count: int | None = None, get_id: bool = True) -> Generator[dict[str, str], None, None]:
         """Generates dicts of the first count rows."""
         if count is None:
             count = self.row_count
