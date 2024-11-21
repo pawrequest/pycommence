@@ -5,7 +5,7 @@ import sys
 
 project = 'PyCommence'
 author = 'PawRequest'
-release = '0.1.1'
+release = '0.2.0'
 copyright = f'2024, {author}'
 extensions = [
     'sphinx.ext.autodoc',

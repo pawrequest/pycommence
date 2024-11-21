@@ -78,12 +78,12 @@ class PyCommence(_p.BaseModel):
         self,
         *,
         csrname: str | None = None,
-        id: str | None = None,  # id or pk must be provided
+        row_id: str | None = None,  # id or pk must be provided
         pk: str | None = None,
         with_category: bool = False,
     ) -> dict[str, str]:
         csr = self.csr(csrname)
-        return csr._read_row(row_id=id, pk=pk, with_category=with_category)
+        return csr._read_row(row_id=row_id, pk=pk, with_category=with_category)
 
     def read_rows(
         self,
@@ -110,26 +110,26 @@ class PyCommence(_p.BaseModel):
             row_filter=row_filter,
         )
 
-    def update_row(self, update_pkg: dict, id: str | None = None, pk: str | None = None, csrname: str | None = None):
+    def update_row(self, update_pkg: dict, row_id: str | None = None, pk: str | None = None, csrname: str | None = None):
         """Update a row by id or pk
 
         Args:
             update_pkg: dict of field names and values to update
-            id: row id (id or pk must be provided)
+            row_id: row id (id or pk must be provided)
             pk: row pk (id or pk must be provided)
             csrname: cursor name (default = Self.get_csrname())
 
         """
-        raise_for_id_or_pk(id, pk)
+        raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        id = id or csr.pk_to_id(pk)
-        csr._update_row(update_pkg, id=id)
+        row_id = row_id or csr.pk_to_id(pk)
+        csr._update_row(update_pkg, id=row_id)
         self.refresh_csr(csr)
 
-    def delete_row(self, id: str | None = None, pk: str | None = None, csrname: str | None = None):
-        raise_for_id_or_pk(id, pk)
+    def delete_row(self, row_id: str | None = None, pk: str | None = None, csrname: str | None = None):
+        raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        id = id or csr.pk_to_id(pk)
-        row = self.read_row(csrname=csr.category, id=id)
-        csr._delete_row(id=id)
+        row_id = row_id or csr.pk_to_id(pk)
+        row = self.read_row(csrname=csr.category, row_id=row_id)
+        csr._delete_row(id=row_id)
         self.refresh_csr(csr)
