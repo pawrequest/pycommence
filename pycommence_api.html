@@ -514,12 +514,12 @@
 <span id="cursor"></span><h2>Cursor<a class="headerlink" href="#module-pycommence.cursor_v2" title="Link to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.raise_for_id_or_pk">
-<span class="sig-name descname"><span class="pre">raise_for_id_or_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L16-L18"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.raise_for_id_or_pk" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">raise_for_id_or_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L14-L16"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.raise_for_id_or_pk" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CursorAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor_wrapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CursorType.CATEGORY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csrname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L21-L214"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CursorAPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor_wrapper</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CursorType.CATEGORY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csrname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L19-L204"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.category">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.category" title="Link to this definition"></a></dt>
@@ -552,12 +552,12 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.pk_filter">
-<span class="sig-name descname"><span class="pre">pk_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ConditionType.EQUAL</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L65-L66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_filter" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pk_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">ConditionType.EQUAL</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L63-L64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_filter" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.pk_exists">
-<span class="sig-name descname"><span class="pre">pk_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L68-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_exists" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pk_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L66-L69"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_exists" title="Link to this definition"></a></dt>
 <dd><p>Check if primary key exists in the Cursor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -568,7 +568,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.pk_to_id">
-<span class="sig-name descname"><span class="pre">pk_to_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L73-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_to_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pk_to_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L71-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_to_id" title="Link to this definition"></a></dt>
 <dd><p>Convert primary key to row ID.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -579,7 +579,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.pk_to_row_ids">
-<span class="sig-name descname"><span class="pre">pk_to_row_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L81-L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_to_row_ids" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">pk_to_row_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pk</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L79-L83"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.pk_to_row_ids" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
@@ -589,7 +589,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.row_id_to_pk">
-<span class="sig-name descname"><span class="pre">row_id_to_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_id</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L87-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.row_id_to_pk" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">row_id_to_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_id</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L85-L89"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.row_id_to_pk" title="Link to this definition"></a></dt>
 <dd><p>Convert row ID to primary key.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -600,12 +600,12 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.add_category_to_dict">
-<span class="sig-name descname"><span class="pre">add_category_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L161-L162"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.add_category_to_dict" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_category_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L151-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.add_category_to_dict" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.filter_by_array">
-<span class="sig-name descname"><span class="pre">filter_by_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_array</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L165-L171"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.filter_by_array" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">filter_by_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_array</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L155-L161"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.filter_by_array" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Self</span></code></span></p>
@@ -615,13 +615,13 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.temporary_offset">
-<span class="sig-name descname"><span class="pre">temporary_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L173-L180"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.temporary_offset" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">temporary_offset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">offset</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L163-L170"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.temporary_offset" title="Link to this definition"></a></dt>
 <dd><p>Temporarily offset the cursor.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.temporary_filter">
-<span class="sig-name descname"><span class="pre">temporary_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fil_array</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L182-L195"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.temporary_filter" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">temporary_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fil_array</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L172-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.temporary_filter" title="Link to this definition"></a></dt>
 <dd><p>Temporarily filter by FilterArray object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -632,7 +632,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.clear_filter">
-<span class="sig-name descname"><span class="pre">clear_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L197-L198"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.clear_filter" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clear_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L187-L188"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.clear_filter" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
@@ -642,7 +642,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.clear_all_filters">
-<span class="sig-name descname"><span class="pre">clear_all_filters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L200-L202"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.clear_all_filters" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">clear_all_filters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L190-L192"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.clear_all_filters" title="Link to this definition"></a></dt>
 <dd><p>Clear all filters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -653,7 +653,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.cursor_v2.CursorAPI.add_related_column">
-<span class="sig-name descname"><span class="pre">add_related_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L204-L214"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.add_related_column" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_related_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/cursor_v2.py#L194-L204"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.cursor_v2.CursorAPI.add_related_column" title="Link to this definition"></a></dt>
 <dd><p>Add a related column to the cursor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1121,9 +1121,8 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.pycmc_types.CmcFieldDataType.URL">
-<span class="sig-name descname"><span class="pre">URL</span></span><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.URL" title="Link to this definition"></a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">Annotated</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Url</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">UrlConstraints</span></code>(max_length=2083, allowed_schemes=[‘http’, ‘https’], host_required=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, default_host=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, default_port=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>, default_path=<code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code>)]</p>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">URL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;class</span> <span class="pre">'pydantic.networks.HttpUrl'&gt;</span></em><a class="headerlink" href="#pycommence.pycmc_types.CmcFieldDataType.URL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
