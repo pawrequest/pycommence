@@ -121,7 +121,7 @@ class CursorAPI:
         row_filter: RowFilter | None = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
-        offset_manager = self.temporary_offset(pagination.offset or 0)
+        offset_manager = self.temporary_offset(pagination.offset)
         with filter_manager and offset_manager:
             rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
             rowgen = rowset.rows()
