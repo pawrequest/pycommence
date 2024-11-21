@@ -9,6 +9,12 @@ Cursor
 -------------------------
 .. automodule:: pycommence.cursor_v2
 
+
+Filters
+----------------
+.. automodule:: pycommence.filters
+
+
 Types
 --------------
 .. automodule:: pycommence.pycmc_types
@@ -18,9 +24,6 @@ Exceptions
 ----------------
 .. automodule:: pycommence.exceptions
 
-Filters
-----------------
-.. automodule:: pycommence.filters
 
 
 
