@@ -13,7 +13,7 @@ DB Wrapper
 Cursor Wrapper
 -------------------------
 
-.. automodule:: pycommence.wrapper.cmc_cursor_wrapper
+.. automodule:: pycommence.wrapper.cursor_wrapper
     :private-members:
 
 RowSet Wrappers
