@@ -5,8 +5,6 @@ from collections.abc import Generator
 from functools import cached_property
 from typing import Self
 
-from loguru import logger
-
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
 from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark
@@ -118,29 +116,21 @@ class CursorAPI:
 
     def _read_rows(
         self,
-        pagination: Pagination | None = None,
+        pagination: Pagination = Pagination(),
         filter_array: FilterArray | None = None,
         row_filter: RowFilter | None = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
-        pagination = pagination or Pagination()
-        # logger.debug(f'Reading rows from {self.category} with {pagination=}, {filter_array=}')
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
-        offset_manager = self.temporary_offset(pagination.offset) if pagination.offset else self.temporary_offset(0)
-        with filter_manager:
-            with offset_manager:
-                rows_read = 0
-                rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
-
-                rowgen = rowset.rows()
-                if row_filter:
-                    rowgen = row_filter(rowgen)
-
-                for i, row in enumerate(rowgen):
-                    rows_read += 1
-                    if rows_read > pagination.limit:
-                        break
-                    self.add_category_to_dict(row)
-                    yield row
+        offset_manager = self.temporary_offset(pagination.offset or 0)
+        with filter_manager and offset_manager:
+            rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
+            rowgen = rowset.rows()
+            rowgen = row_filter(rowgen) if row_filter else rowgen
+            for i, row in enumerate(rowgen, start=1):
+                if i > pagination.limit:
+                    break
+                self.add_category_to_dict(row)
+                yield row
 
     # UPDATE
     def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
