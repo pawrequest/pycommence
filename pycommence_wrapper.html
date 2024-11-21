@@ -74,7 +74,33 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#cursor-wrapper">Cursor Wrapper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycommence.wrapper.cursor_wrapper">Cursor Wrapper</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper"><code class="docutils literal notranslate"><span class="pre">CursorWrapper</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.category"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.column_count"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.column_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.row_count"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.row_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.shared"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.shared</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_filter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter_logic"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_filter_logic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_sort"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_sort()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_column"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.seek_row"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.seek_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.seek_row_fractional"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.seek_row_fractional()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_query_row_set"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_query_row_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_query_row_set_by_id"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_query_row_set_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_add_row_set"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_add_row_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_edit_row_set"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_edit_row_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_edit_row_set_by_id"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_edit_row_set_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_delete_row_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set_by_id"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.get_delete_row_set_by_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_item"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_active_item()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_date"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_active_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_date_range"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_active_date_range()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_related_column"><code class="docutils literal notranslate"><span class="pre">CursorWrapper.set_related_column()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#module-pycommence.wrapper.row_wrapper">RowSet Wrappers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetBase"><code class="docutils literal notranslate"><span class="pre">RowSetBase</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetBase.headers"><code class="docutils literal notranslate"><span class="pre">RowSetBase.headers</span></code></a></li>
@@ -606,8 +632,383 @@
 </dd></dl>
 
 </section>
-<section id="cursor-wrapper">
-<h2>Cursor Wrapper<a class="headerlink" href="#cursor-wrapper" title="Link to this heading"></a></h2>
+<section id="module-pycommence.wrapper.cursor_wrapper">
+<span id="cursor-wrapper"></span><h2>Cursor Wrapper<a class="headerlink" href="#module-pycommence.wrapper.cursor_wrapper" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CursorWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_cursor</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L10-L379"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper" title="Link to this definition"></a></dt>
+<dd><p>Thin wrapper on the Commence Cursor object using pywin32.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.category">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.category" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.column_count">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">column_count</span></span><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.column_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.row_count">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">row_count</span></span><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.row_count" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.shared">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shared</span></span><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.shared" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter">
+<span class="sig-name descname"><span class="pre">set_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_text</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L35-L52"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter" title="Link to this definition"></a></dt>
+<dd><p>Defines a filter clause for the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter_text</strong> (<em>str</em>) – Text defining the new filter clause. Syntax is identical to the one used by the DDE ViewFilter request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True on success.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p>If the cursor is opened in CURSOR_VIEW mode, the set_filter only affects the cursor’s secondary filter.
+That is, when building the rowset, the view’s filter is first evaluated.
+Items that match are then passed through the cursor’s secondary filter.
+The rowset only contains items that satisfy both filters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter_logic">
+<span class="sig-name descname"><span class="pre">set_filter_logic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logic_text</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L54-L68"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter_logic" title="Link to this definition"></a></dt>
+<dd><p>Defines the filter logic for the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logic_text</strong> (<em>str</em>) – Text defining the new filter logic. Syntax is identical to the one used by the DDE ViewConjunction request.</p>
+</dd>
+</dl>
+<p>Unless otherwise specified, the default logic is AND, AND, AND.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_sort">
+<span class="sig-name descname"><span class="pre">set_sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sort_text</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L70-L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_sort" title="Link to this definition"></a></dt>
+<dd><p>Defines the sort criteria for the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sort_text</strong> (<em>str</em>) – Text defining the new sort criteria. Syntax is identical to the one used by the DDE ViewSort request.</p>
+</dd>
+</dl>
+<p>If the cursor is opened in CMC_CURSOR_VIEW mode, the sort defaults to the view’s sort.
+All other cursor modes default to ascending sort by the Name field.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_column">
+<span class="sig-name descname"><span class="pre">set_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">OptionFlagInt.NONE</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L87-L116"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_column" title="Link to this definition"></a></dt>
+<dd><p>Defines the column set for the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>column_index</strong> (<em>int</em>) – The (0-based) index of the column to set.</p></li>
+<li><p><strong>field_name</strong> (<em>str</em>) – Name of the field to use in this column.</p></li>
+<li><p><strong>flags</strong> (<em>int</em>) – Option flags (Logical OR of option flags like CMC_FLAG_ALL to create column set of all fields).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True on success, False on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p>When defining a column set, the columns must be defined in sequential order (0, 1, 2, etc.).
+This is to prevent problems with undefined columns (e.g. 0, 1, 3, …).
+Duplicate columns are not supported. Each column must map to a different field.
+Not all Commence field types can be included in the cursor definition.
+The set of supported field types exactly matches those fields that can be displayed in a Commence report
+(minus combined fields and indirect fields).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.seek_row">
+<span class="sig-name descname"><span class="pre">seek_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rows</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L118-L147"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.seek_row" title="Link to this definition"></a></dt>
+<dd><p>Seek to a particular row in the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>int</em>) – Position to move from. Can be one of the following:
+- 0 (BOOKMARK_BEGINNING) - from first row
+- 1 (BOOKMARK_CURRENT) - from current row
+- 2 (BOOKMARK_END) - from last row</p></li>
+<li><p><strong>rows</strong> (<em>int</em>) – Number of rows to move the current row pointer.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of rows moved.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>CmcError on fail</strong> – </p>
+</dd>
+</dl>
+<p>For any cursor, there is a ‘current row pointer’.
+When the cursor is created, this defaults to the first row.
+SeekRow will reposition the current row pointer.
+GetQueryRowSet, GetEditRowSet, and GetDeleteRowSet will also advance the current row pointer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.seek_row_fractional">
+<span class="sig-name descname"><span class="pre">seek_row_fractional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numerator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">denominator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L149-L164"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.seek_row_fractional" title="Link to this definition"></a></dt>
+<dd><p>Seek to a fractional position in the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numerator</strong> (<em>int</em>) – Numerator for fractional position in the cursor.</p></li>
+<li><p><strong>denominator</strong> (<em>int</em>) – Denominator for the fractional position in the cursor.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Actual number of rows moved, -1 on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_query_row_set">
+<span class="sig-name descname"><span class="pre">get_query_row_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L166-L188"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_query_row_set" title="Link to this definition"></a></dt>
+<dd><p>Create a rowset object with the results of a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> (<em>int</em>) – Maximum number of rows to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to rowset object on success, None on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetQuery" title="pycommence.wrapper.row_wrapper.RowSetQuery">RowSetQuery</a></p>
+</dd>
+</dl>
+<p>The rowset inherits the column set from the cursor.
+The cursor’s ‘current row pointer’ determines the first row to be included in the rowset.
+The returned rowset can have fewer than limit rows (e.g. if the current row pointer is near the end).
+Use CommenceXRowSet.row_count to determine the actual row count.
+GetQueryRowSet will advance the ‘current row pointer’ by the number of rows in the rowset.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_query_row_set_by_id">
+<span class="sig-name descname"><span class="pre">get_query_row_set_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_id</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L190-L209"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_query_row_set_by_id" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>row_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – str Unique ID string obtained from GetRowID().</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to rowset object on success, NULL on error.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="pycommence_api.html#pycommence.exceptions.PyCommenceNotFoundError" title="pycommence.exceptions.PyCommenceNotFoundError"><strong>PyCommenceNotFoundError</strong></a> – Row not found.</p></li>
+<li><p><a class="reference internal" href="pycommence_api.html#pycommence.exceptions.PyCommenceServerError" title="pycommence.exceptions.PyCommenceServerError"><strong>PyCommenceServerError</strong></a> – Error getting row.</p></li>
+<li><p><a class="reference internal" href="pycommence_api.html#pycommence.exceptions.PyCommenceMaxExceededError" title="pycommence.exceptions.PyCommenceMaxExceededError"><strong>PyCommenceMaxExceededError</strong></a> – Multiple rows found.</p></li>
+</ul>
+</dd>
+</dl>
+<p>The rowset inherits column set from the cursor.
+The cursor’s ‘current row pointer’ is not advanced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_add_row_set">
+<span class="sig-name descname"><span class="pre">get_add_row_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L211-L236"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_add_row_set" title="Link to this definition"></a></dt>
+<dd><p>Creates a rowset of new items to add to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>limit</strong> (<em>int</em>) – The number of rows to create.</p></li>
+<li><p><strong>shared</strong> (<em>bool</em>) – True if the row/s are to be shared.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A rowset object for adding new items.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetAdd" title="pycommence.wrapper.row_wrapper.RowSetAdd">RowSetAdd</a></p>
+</dd>
+</dl>
+<p>The rowset inherits the column set from the cursor.
+When first created, each row is initialized to field default values.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_edit_row_set">
+<span class="sig-name descname"><span class="pre">get_edit_row_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L238-L252"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_edit_row_set" title="Link to this definition"></a></dt>
+<dd><p>Creates a rowset of existing items for editing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> (<em>int</em>) – The number of rows to retrieve, defaults to all rows in csr.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A rowset object for editing existing items, or None on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetEdit" title="pycommence.wrapper.row_wrapper.RowSetEdit">RowSetEdit</a></p>
+</dd>
+</dl>
+<p>The rowset inherits the column set from the cursor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_edit_row_set_by_id">
+<span class="sig-name descname"><span class="pre">get_edit_row_set_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_id</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L254-L273"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_edit_row_set_by_id" title="Link to this definition"></a></dt>
+<dd><p>Creates a rowset for editing a particular row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>row_id</strong> (<em>str</em>) – Unique ID string obtained from GetRowID().</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A rowset object for editing a particular row, or None on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetEdit" title="pycommence.wrapper.row_wrapper.RowSetEdit">RowSetEdit</a></p>
+</dd>
+</dl>
+<p>The rowset inherits the column set from the cursor.
+The cursor’s ‘current row pointer’ is not advanced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set">
+<span class="sig-name descname"><span class="pre">get_delete_row_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L275-L289"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set" title="Link to this definition"></a></dt>
+<dd><p>Creates a rowset of existing items for deletion.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>limit</strong> (<em>int</em>) – The number of rows to retrieve.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A rowset object for deleting existing items, or None on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetDelete" title="pycommence.wrapper.row_wrapper.RowSetDelete">RowSetDelete</a></p>
+</dd>
+</dl>
+<p>The rowset inherits the column set from the cursor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set_by_id">
+<span class="sig-name descname"><span class="pre">get_delete_row_set_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">OptionFlagInt.NONE</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L291-L310"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set_by_id" title="Link to this definition"></a></dt>
+<dd><p>Creates a rowset for deleting a particular row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>row_id</strong> (<em>str</em>) – Unique ID string obtained from GetRowID().</p></li>
+<li><p><strong>flags</strong> (<em>int</em><em>, </em><em>optional</em>) – Unused at present, must be 0. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A rowset object for deleting a particular row</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pycommence.wrapper.row_wrapper.RowSetDelete" title="pycommence.wrapper.row_wrapper.RowSetDelete">RowSetDelete</a></p>
+</dd>
+</dl>
+<p>The rowset inherits the column set from the cursor.
+The cursor’s ‘current row pointer’ is not advanced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_item">
+<span class="sig-name descname"><span class="pre">set_active_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">category</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_id</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L312-L324"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_item" title="Link to this definition"></a></dt>
+<dd><p>Set active item used for view cursors using a view linking filter_str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>category</strong> (<em>str</em>) – Category name of the active item used with view linking filter_str.</p></li>
+<li><p><strong>row_id</strong> (<em>str</em>) – Unique ID string obtained from GetRowID()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True on success, else False on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_date">
+<span class="sig-name descname"><span class="pre">set_active_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active_date</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L326-L337"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_date" title="Link to this definition"></a></dt>
+<dd><p>Set active active_date used for view cursors using a view linking filter_str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>active_date</strong> (<em>str</em>) – Date value used with view linking filter_str supports active_date values such as ‘today’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True on success, else False on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_date_range">
+<span class="sig-name descname"><span class="pre">set_active_date_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L339-L351"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_active_date_range" title="Link to this definition"></a></dt>
+<dd><p>Set active active_date range used for view cursors using a view linking filter_str.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>str</em>) – Date value of start active_date used with view linking filter_str Supports natural language values such as ‘today’.</p></li>
+<li><p><strong>end</strong> (<em>str</em>) – Date value of end active_date used with view linking filter_str. Supports natural language values such as ‘next monday’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True on success, else False on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycommence.wrapper.cursor_wrapper.CursorWrapper.set_related_column">
+<span class="sig-name descname"><span class="pre">set_related_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">con_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connected_cat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">OptionFlagInt.NONE</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cursor_wrapper.py#L353-L379"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_related_column" title="Link to this definition"></a></dt>
+<dd><p>Adds a related (indirect/connected field) column to the cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>col</strong> (<em>int</em>) – The (0-based) index of the column to set.</p></li>
+<li><p><strong>con_name</strong> (<em>str</em>) – Name of the connection to use in this column.</p></li>
+<li><p><strong>connected_cat</strong> (<em>str</em>) – Name of the connected Category to use in this column.</p></li>
+<li><p><strong>col_name</strong> (<em>str</em>) – Name of the field in the connected Category to use in this column.</p></li>
+<li><p><strong>flags</strong> (<em>int</em>) – Option flags (Logical OR of option flags like CMC_FLAG_ALL to create column set of all fields).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True on success, False on error.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>set_related_column(0, “Relates To”, “History”, “Date”, 0)
+This call will add the Date field to the cursor via the ‘Relates to History’ connection.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-pycommence.wrapper.row_wrapper">
 <span id="rowset-wrappers"></span><h2>RowSet Wrappers<a class="headerlink" href="#module-pycommence.wrapper.row_wrapper" title="Link to this heading"></a></h2>
