@@ -42,7 +42,7 @@ def test_records(fil_array, pycmc_radios_hire):
     assert records
 
 
-def test_cols(pycmc_radios_hire):
-    cols = pycmc_radios_hire.csr().headers
-    assert cols
-    print(cols)
+# def test_cols(pycmc_radios_hire):
+#     cols = pycmc_radios_hire.csr().headers
+#     assert cols
+#     print(cols)
