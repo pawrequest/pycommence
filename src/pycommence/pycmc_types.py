@@ -11,7 +11,6 @@ from _decimal import Decimal
 import pydantic as _p
 import pythoncom
 
-from amherst.config import logger
 
 RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
 
@@ -72,7 +71,7 @@ def get_cmc_date(v: str) -> date | None:
                 return datetime.strptime(v, CmcDateFormat).date()
         if len(v) in [7, 10]:
             return datetime.fromisoformat(v).date()
-    logger.warning(f'No date found: {v}')
+    print(f'No date found: {v}')
     return None
 
 
