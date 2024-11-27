@@ -7,7 +7,7 @@ from pycommence.pycmc_types import CursorType
 @pytest.fixture
 def pycmc():
     pycmc = PyCommence.with_csr('paul hires', mode=CursorType.VIEW)
-    if not pycmc.cmc_wrapper.name == 'Radios':
+    if not pycmc.cmc_wrapper.delivery_contact_name == 'Radios':
         raise ValueError('Expected Radios DB')
     return pycmc
 

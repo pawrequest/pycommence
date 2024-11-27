@@ -192,7 +192,7 @@ def get_new_pycmc(tblname: str | None = None):
 
 def pycmc_view_cursor():
     pycmc = PyCommence.with_csr('All Contacts-By Company', mode=CursorType.VIEW)
-    if not pycmc.cmc_wrapper.name == 'Tutorial':
+    if not pycmc.cmc_wrapper.delivery_contact_name == 'Tutorial':
         raise ValueError('Expected Tutorial DB')
     return pycmc
 

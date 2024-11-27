@@ -33,7 +33,7 @@ def get_csr(
     """Get Csr via (cached)  :class:`~pycommence.wrapper.cmc_db.Cmc`. instance."""
     cmc = CommenceWrapper(cmc_name)
     csr_cmc = cmc.get_new_cursor(table_name, mode=mode)
-    return CursorAPI(csr_cmc, db_name=cmc.name)
+    return CursorAPI(csr_cmc, db_name=cmc.delivery_contact_name)
 
 
 class CursorAPI:
@@ -179,7 +179,7 @@ class CursorAPI:
             fslot: Filter slot
 
         """
-        filter_str = f'[ViewFilter({fslot}, CTI,, {connection.name}, ' f'{connection.to_table}, {item_name})]'
+        filter_str = f'[ViewFilter({fslot}, CTI,, {connection.delivery_contact_name}, ' f'{connection.to_table}, {item_name})]'
         self.cursor_wrapper.set_filter(filter_str)
 
     def set_filter(self, cmc_filter: CmcFilter, slot=1) -> None:

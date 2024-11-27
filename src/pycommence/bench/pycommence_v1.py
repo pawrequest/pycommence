@@ -54,10 +54,10 @@ class PyCommence(_p.BaseModel):
         return self
 
     def reset_csr(self, csr):
-        cursor_wrapper = self.cmc_wrapper.get_new_cursor(csr.name, mode=csr.mode)
-        cursor_api = CursorAPI(cursor_wrapper, db_name=self.cmc_wrapper.name, mode=csr.mode, name=csr.name)
-        self.csrs[cursor_api.name] = cursor_api
-        logger.debug(f'Reset cursor on {csr.name}')
+        cursor_wrapper = self.cmc_wrapper.get_new_cursor(csr.delivery_contact_name, mode=csr.mode)
+        cursor_api = CursorAPI(cursor_wrapper, db_name=self.cmc_wrapper.name, mode=csr.mode, name=csr.delivery_contact_name)
+        self.csrs[cursor_api.delivery_contact_name] = cursor_api
+        logger.debug(f'Reset cursor on {csr.delivery_contact_name}')
 
     def get_csrname(self, csrname):
         if not csrname:
@@ -145,7 +145,7 @@ class PyCommence(_p.BaseModel):
                 raise PyCommenceNotFoundError(f'No record found for primary key {pk_val}')
             elif csr.row_count > 1:
                 raise PyCommenceMaxExceededError(f'Multiple records found for primary key {pk_val}')
-            return self.records(csr.name)[0]
+            return self.records(csr.delivery_contact_name)[0]
 
     def records_by_array(
         self,

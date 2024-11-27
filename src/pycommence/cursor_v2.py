@@ -116,10 +116,11 @@ class CursorAPI:
 
     def _read_rows(
         self,
-        pagination: Pagination = Pagination(),
+        pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
         row_filter: RowFilter | None = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
+        pagination = pagination or Pagination()
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
         offset_manager = self.temporary_offset(pagination.offset)
         with offset_manager, filter_manager:

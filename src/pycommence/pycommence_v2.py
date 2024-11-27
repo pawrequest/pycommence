@@ -1,6 +1,8 @@
+import contextlib
 import typing as _t
 
 import pydantic as _p
+from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 from pydantic import Field
 
@@ -110,7 +112,9 @@ class PyCommence(_p.BaseModel):
             row_filter=row_filter,
         )
 
-    def update_row(self, update_pkg: dict, row_id: str | None = None, pk: str | None = None, csrname: str | None = None):
+    def update_row(
+        self, update_pkg: dict, row_id: str | None = None, pk: str | None = None, csrname: str | None = None
+    ):
         """Update a row by id or pk
 
         Args:
@@ -133,3 +137,21 @@ class PyCommence(_p.BaseModel):
         row = self.read_row(csrname=csr.category, row_id=row_id)
         csr._delete_row(id=row_id)
         self.refresh_csr(csr)
+
+
+@contextlib.contextmanager
+def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> PyCommence:
+    CoInitialize()
+    pyc = PyCommence.with_csr(csrname, mode=mode)
+    yield pyc
+    CoUninitialize()
+
+
+@contextlib.contextmanager
+def pycommences_context(csrnames: list[str]) -> PyCommence:
+    CoInitialize()
+    pyc = PyCommence()
+    for csrname in csrnames:
+        pyc.set_csr(csrname)
+    yield pyc
+    CoUninitialize()
