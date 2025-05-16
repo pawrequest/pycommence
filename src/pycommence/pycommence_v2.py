@@ -61,6 +61,8 @@ class PyCommence(_p.BaseModel):
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
     ):
+        """ Main Entrypoint - Create a new PyCommence instance with a cursor on the named category
+        """
         return cls().set_csr(csrname, mode=mode)
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
@@ -97,7 +99,7 @@ class PyCommence(_p.BaseModel):
         """
         Generate rows from a cursor
         Args:
-            csrname: Name of cursor
+            csrname: Name of cursor (optional if only one cursor is set)
             pagination: Pagination object
             filter_array: FilterArray object (override cursor filter)
             row_filter: Filter generator
@@ -141,6 +143,7 @@ class PyCommence(_p.BaseModel):
 
 @contextlib.contextmanager
 def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> PyCommence:
+    """Context manager for PyCommence with a single cursor"""
     CoInitialize()
     pyc = PyCommence.with_csr(csrname, mode=mode)
     yield pyc
@@ -149,6 +152,7 @@ def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> 
 
 @contextlib.contextmanager
 def pycommences_context(csrnames: list[str]) -> PyCommence:
+    """Context manager for PyCommence with multiple cursors"""
     CoInitialize()
     pyc = PyCommence()
     for csrname in csrnames:
