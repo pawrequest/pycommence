@@ -97,7 +97,6 @@ def test_multiple_csrs(pycmc: PyCommence):
     assert pycmc.csr(csrname='Contact').category == 'Contact'
 
 
-### gpt
 def test_pk_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
