@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index &mdash; PyCommence 0.2.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
       <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e6a37869" />
@@ -103,6 +103,7 @@
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -390,6 +391,8 @@
         <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence._IFullControlEvents.CLSID_Sink">(_IFullControlEvents attribute)</a>
 </li>
       </ul></li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.cmc_wrapper">cmc_wrapper (PyCommence attribute)</a>
+</li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cmc_wrapper.CmcConnector">CmcConnector (class in pycommence.wrapper.cmc_wrapper)</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.exceptions.CmcError">CmcError</a>
@@ -546,7 +549,15 @@
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.conversation_wrapper.ConversationAPI">ConversationAPI (class in pycommence.wrapper.conversation_wrapper)</a>
 </li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.conversations">conversations (PyCommence attribute)</a>
+</li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.conversation_wrapper.ConversationTopic">ConversationTopic (class in pycommence.wrapper.conversation_wrapper)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.create_row">create_row() (PyCommence method)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.csr">csr() (PyCommence method)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.csrs">csrs (PyCommence attribute)</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.pycmc_types.Bookmark.CURRENT">CURRENT (Bookmark attribute)</a>
 
@@ -602,8 +613,12 @@
       </ul></li>
       <li><a href="pycommence_api.html#pycommence.pycmc_types.CmcFieldDefinition.default_string">default_string (CmcFieldDefinition attribute)</a>
 </li>
-      <li><a href="pycommence_wrapper.html#pycommence.wrapper.row_wrapper.RowSetDelete.delete_row">delete_row() (RowSetDelete method)</a>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.delete_row">delete_row() (PyCommence method)</a>
+
+      <ul>
+        <li><a href="pycommence_wrapper.html#pycommence.wrapper.row_wrapper.RowSetDelete.delete_row">(RowSetDelete method)</a>
 </li>
+      </ul></li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.ICommenceDeleteRowSet.DeleteRow">DeleteRow() (ICommenceDeleteRowSet method)</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.filters.SortOrder.DESC">DESC (SortOrder attribute)</a>
@@ -697,6 +712,8 @@
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.row_wrapper.RowSetBase.get_column_label">get_column_label() (RowSetBase method)</a>
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_conversation_api">get_conversation_api() (CommenceWrapper method)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.get_csrname">get_csrname() (PyCommence method)</a>
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cursor_wrapper.CursorWrapper.get_delete_row_set">get_delete_row_set() (CursorWrapper method)</a>
 </li>
@@ -990,6 +1007,8 @@
 </li>
         <li><a href="pycommence_api.html#module-pycommence.pycmc_types">pycommence.pycmc_types</a>
 </li>
+        <li><a href="pycommence_api.html#module-pycommence.pycommence_v2">pycommence.pycommence_v2</a>
+</li>
         <li><a href="pycommence_wrapper.html#module-pycommence.wrapper._icommence">pycommence.wrapper._icommence</a>
 </li>
         <li><a href="pycommence_wrapper.html#module-pycommence.wrapper.cmc_wrapper">pycommence.wrapper.cmc_wrapper</a>
@@ -1144,13 +1163,20 @@
         <li><a href="pycommence_api.html#module-pycommence.filters">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     pycommence.pycmc_types
 
       <ul>
         <li><a href="pycommence_api.html#module-pycommence.pycmc_types">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    pycommence.pycommence_v2
+
+      <ul>
+        <li><a href="pycommence_api.html#module-pycommence.pycommence_v2">module</a>
 </li>
       </ul></li>
       <li>
@@ -1188,6 +1214,8 @@
         <li><a href="pycommence_wrapper.html#module-pycommence.wrapper.row_wrapper">module</a>
 </li>
       </ul></li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.pycommence_context">pycommence_context() (in module pycommence.pycommence_v2)</a>
+</li>
       <li><a href="pycommence_api.html#pycommence.exceptions.PyCommenceError">PyCommenceError</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.exceptions.PyCommenceExistsError">PyCommenceExistsError</a>
@@ -1195,6 +1223,8 @@
       <li><a href="pycommence_api.html#pycommence.exceptions.PyCommenceMaxExceededError">PyCommenceMaxExceededError</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.exceptions.PyCommenceNotFoundError">PyCommenceNotFoundError</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.pycommences_context">pycommences_context() (in module pycommence.pycommence_v2)</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.exceptions.PyCommenceServerError">PyCommenceServerError</a>
 </li>
@@ -1220,7 +1250,13 @@
 </li>
       <li><a href="pycommence_api.html#pycommence.exceptions.raise_for_one">raise_for_one() (in module pycommence.exceptions)</a>
 </li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.read_row">read_row() (PyCommence method)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.read_rows">read_rows() (PyCommence method)</a>
+</li>
       <li><a href="pycommence_api.html#pycommence.pycmc_types.CmcFieldDefinition.recurring">recurring (CmcFieldDefinition attribute)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.refresh_csr">refresh_csr() (PyCommence method)</a>
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cmc_wrapper.CommenceWrapper.registered_user">registered_user (CommenceWrapper property)</a>
 </li>
@@ -1232,6 +1268,8 @@
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.IConnOA.RestoreFilter">RestoreFilter() (IConnOA method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pycommence_api.html#pycommence.cursor_v2.CursorAPI.row_count">row_count (CursorAPI property)</a>
 
       <ul>
@@ -1242,8 +1280,6 @@
         <li><a href="pycommence_wrapper.html#pycommence.wrapper.row_wrapper.RowSetBase.row_count">(RowSetBase property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.row_wrapper.RowSetBase.row_dicts_list">row_dicts_list() (RowSetBase method)</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.cursor_v2.CursorAPI.row_id_to_pk">row_id_to_pk() (CursorAPI method)</a>
@@ -1302,6 +1338,10 @@
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_column">set_column() (CursorWrapper method)</a>
 </li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.set_conversation">set_conversation() (PyCommence method)</a>
+</li>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.set_csr">set_csr() (PyCommence method)</a>
+</li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter">set_filter() (CursorWrapper method)</a>
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.cursor_wrapper.CursorWrapper.set_filter_logic">set_filter_logic() (CursorWrapper method)</a>
@@ -1322,14 +1362,14 @@
         <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.IConnOA.SetActiveDateRange">(IConnOA method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.ICommenceCursor.SetActiveItem">SetActiveItem() (ICommenceCursor method)</a>
 
       <ul>
         <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.IConnOA.SetActiveItem">(IConnOA method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.ICommenceCursor.SetColumn">SetColumn() (ICommenceCursor method)</a>
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper._icommence.IConnOA.SetConnection">SetConnection() (IConnOA method)</a>
@@ -1440,9 +1480,11 @@
 </li>
       <li><a href="pycommence_api.html#pycommence.exceptions.Handle.UPDATE">UPDATE (Handle attribute)</a>
 </li>
+      <li><a href="pycommence_api.html#pycommence.filters.FilterArray.update">update() (FilterArray method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="pycommence_api.html#pycommence.filters.FilterArray.update">update() (FilterArray method)</a>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.update_row">update_row() (PyCommence method)</a>
 </li>
       <li><a href="pycommence_api.html#pycommence.pycmc_types.CmcFieldDataType.URL">URL (CmcFieldDataType attribute)</a>
 
@@ -1481,6 +1523,18 @@
       <li><a href="pycommence_api.html#pycommence.filters.FilterArray.view_sort_text">view_sort_text (FilterArray property)</a>
 </li>
       <li><a href="pycommence_wrapper.html#pycommence.wrapper.conversation_wrapper.ConversationAPI.view_view">view_view() (ConversationAPI method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.with_conversation">with_conversation() (PyCommence class method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="pycommence_api.html#pycommence.pycommence_v2.PyCommence.with_csr">with_csr() (PyCommence class method)</a>
 </li>
   </ul></td>
 </tr></table>
