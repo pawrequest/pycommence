@@ -25,7 +25,7 @@ class CursorAPI:
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
-        self.csrname = csrname
+        self.csrname = csrname or self.category
 
     # proxied from wrapper
     # @cached_property

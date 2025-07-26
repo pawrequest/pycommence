@@ -59,12 +59,12 @@ class CommenceWrapper(CmcConnector):
 
     """
 
-    def get_new_cursor(self, csrname, mode=CursorType.CATEGORY) -> CursorAPI:
-        """Create a new cursor with the specified name and mode."""
-        cursor_wrapper: CursorWrapper = self._get_new_cursor_wrapper(csrname, mode=mode)
-        return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname)
+    # def get_new_cursor(self, csrname, mode=CursorType.CATEGORY) -> CursorAPI:
+    #     """Create a new cursor with the specified name and mode."""
+    #     cursor_wrapper: CursorWrapper = self._get_new_cursor_wrapper(csrname, mode=mode)
+    #     return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname)
 
-    def _get_new_cursor_wrapper(
+    def get_new_cursor_wrapper(
         self,
         name: str | None = None,
         mode: CursorType = CursorType.CATEGORY,
@@ -90,7 +90,7 @@ class CommenceWrapper(CmcConnector):
         """
         if pilot and internet:
             raise ValueError('Only one of pilot or internet can be set')
-        if mode in [CursorType.CATEGORY, CursorType.VIEW] and name is None:
+        if mode in [CursorType.CATEGORY, CursorType.VIEW] and not name:
             raise ValueError(f'{mode.name} cursor mode requires name param to be set')
 
         flags = OptionFlagInt.NONE

@@ -18,6 +18,7 @@ Typical Usage:
     >>> pyc = PyCommence.with_csr("Contacts")
     >>> pyc.read_rows()
 """
+
 import contextlib
 import functools
 import typing as _t
@@ -50,18 +51,40 @@ def get_csrname(self: HasCursors, csrname: str | None = None):
 
 
 def resolve_csrname(func):
+    """if the only positional argument or kwargs['csrname'] is None then use the only cursor available's name, or else raise ValueError"""
+
     @functools.wraps(func)
     def wrapper(self: HasCursors, *args, **kwargs):
         if args:
-            if len(args)>1:
-                raise ValueError('Max one positional argument allowed for resolve csrname decorator')
-            args = (get_csrname(self, args[0]),)
+            csrname = get_csrname(self, args[0])
+            args = (csrname,) if len(args) == 1 else (csrname, *args[1:])
         elif 'csrname' in kwargs:
             if args:
                 raise ValueError('Cannot use both positional and keyword csrname arguments')
             kwargs['csrname'] = get_csrname(self, kwargs['csrname'])
         else:
             kwargs['csrname'] = get_csrname(self)
+        return func(self, *args, **kwargs)
+
+    return wrapper
+
+
+def resolve_row_id(func):
+    """Decorator to get row_id from kwargs, or else get pk and cursornames from kwargs, and use self.cursor's pk_to_id method."""
+
+    @functools.wraps(func)
+    def wrapper(self: HasCursors, *args, **kwargs):
+        row_id = kwargs.get('row_id')
+        if not row_id:
+            pk = kwargs.get('pk')
+            if not pk:
+                raise ValueError('Either row_id or pk must be provided')
+            csrname = kwargs.get('csrname') or next(iter(self.csrs.keys())) if self.csrs else None
+            if not csrname:
+                raise PyCommenceNotFoundError('No cursor available to convert pk to id')
+            row_id = self.csrs[csrname].pk_to_id(pk)
+            kwargs['row_id'] = row_id
+
         return func(self, *args, **kwargs)
 
     return wrapper
@@ -98,17 +121,19 @@ class PyCommence(_p.BaseModel):
         arbitrary_types_allowed=True,
     )
 
+    @resolve_csrname
     def set_csr(
         self,
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
     ) -> _t.Self:
         """Re/Set the cursor by name and values"""
-        cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
+        cursor_wrapper = self.cmc_wrapper.get_new_cursor_wrapper(csrname, mode)
+        cursor = CursorAPI(cursor_wrapper=cursor_wrapper, mode=mode)
+        # cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
         self.csrs[csrname] = cursor
         # logger.debug(f'Set "{csrname}" ({mode.name.title()}) cursor with {cursor.row_count} rows')
         return self
-
 
     @resolve_csrname
     def csr(self, csrname: str | None = None) -> CursorAPI:
@@ -128,8 +153,7 @@ class PyCommence(_p.BaseModel):
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
     ):
-        """ Main Entrypoint - Create a new PyCommence instance with a cursor on the named category
-        """
+        """Main Entrypoint - Create a new PyCommence instance with a cursor on the named category"""
         return cls().set_csr(csrname, mode=mode)
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
@@ -145,6 +169,7 @@ class PyCommence(_p.BaseModel):
         csr._create_row(create_pkg)
         self.refresh_csr(csr)
 
+    @resolve_row_id
     def read_row(
         self,
         *,
@@ -154,7 +179,6 @@ class PyCommence(_p.BaseModel):
     ) -> dict[str, str]:
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        row_id = row_id or csr.pk_to_id(pk)
         return csr._read_row(row_id=row_id).data
 
     def read_rows(
@@ -182,6 +206,7 @@ class PyCommence(_p.BaseModel):
             row_filter=row_filter,
         )
 
+    @resolve_row_id
     def update_row(
         self, update_pkg: dict, row_id: str | None = None, pk: str | None = None, csrname: str | None = None
     ):
@@ -196,14 +221,13 @@ class PyCommence(_p.BaseModel):
         """
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        row_id = row_id or csr.pk_to_id(pk)
         csr._update_row(update_pkg, id=row_id)
         self.refresh_csr(csr)
 
+    @resolve_row_id
     def delete_row(self, row_id: str | None = None, pk: str | None = None, csrname: str | None = None):
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        row_id = row_id or csr.pk_to_id(pk)
         row = self.read_row(csrname=csr.category, row_id=row_id)
         csr._delete_row(id=row_id)
         self.refresh_csr(csr)
