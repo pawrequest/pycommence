@@ -1,4 +1,25 @@
+"""
+pycommence.py
+=============
+
+High-level interface for interacting with Commence databases via Python.
+
+This module provides the `PyCommence` class, which acts as the main entry point for database operations.
+It manages connections, cursors, and conversations, abstracting the underlying COM API and providing
+a user-friendly, Pythonic interface for CRUD operations, filtering, and more.
+
+Key Classes:
+    - PyCommence: Main API object for database access.
+    - CursorAPI: Represents a database cursor for querying and modifying data.
+    - CommenceWrapper: Handles low-level COM connection and cursor creation.
+
+Typical Usage:
+    >>> from pycommence.pycommence import PyCommence
+    >>> pyc = PyCommence.with_csr("Contacts")
+    >>> pyc.read_rows()
+"""
 import contextlib
+import functools
 import typing as _t
 
 import pydantic as _p
@@ -14,8 +35,62 @@ from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
 
 
+class HasCursors(_t.Protocol):
+    csrs: dict[str, CursorAPI]
+
+
+def get_csrname(self: HasCursors, csrname: str | None = None):
+    if not csrname:
+        if not self.csrs:
+            raise PyCommenceNotFoundError('No cursor available')
+        if len(self.csrs) > 1:
+            raise ValueError('Multiple cursors available, specify csrname')
+        csrname = next(iter(self.csrs.keys()))
+    return csrname
+
+
+def resolve_csrname(func):
+    @functools.wraps(func)
+    def wrapper(self: HasCursors, *args, **kwargs):
+        if args:
+            if len(args)>1:
+                raise ValueError('Max one positional argument allowed for resolve csrname decorator')
+            args = (get_csrname(self, args[0]),)
+        elif 'csrname' in kwargs:
+            if args:
+                raise ValueError('Cannot use both positional and keyword csrname arguments')
+            kwargs['csrname'] = get_csrname(self, kwargs['csrname'])
+        else:
+            kwargs['csrname'] = get_csrname(self)
+        return func(self, *args, **kwargs)
+
+    return wrapper
+
+
 # noinspection PyProtectedMember
 class PyCommence(_p.BaseModel):
+    """
+    PyCommence
+    ==========
+
+    Main interface for interacting with a Commence database.
+
+    This class manages database connections, cursors (`CursorAPI`), and DDE conversations.
+    It provides high-level methods for creating, reading, updating, and deleting rows,
+    as well as for managing cursor state and filters.
+
+    Attributes:
+        cmc_wrapper (CommenceWrapper): Underlying database connection manager.
+        csrs (dict[str, CursorAPI]): Active cursors by name.
+        conversations (dict[ConversationTopic, ConversationAPI]): Active DDE conversations by topic.
+
+    Typical Usage:
+        >>> pyc = PyCommence.with_csr("Contacts", mode=CursorType.CATEGORY)
+        >>> pyc.create_row({"Name": "Alice"})
+        >>> for row in pyc.read_rows():
+        ...     print(row)
+    """
+
     cmc_wrapper: CommenceWrapper = Field(default_factory=CommenceWrapper)
     csrs: dict[str, CursorAPI] = Field(default_factory=dict)
     conversations: dict[ConversationTopic, ConversationAPI] = Field(default_factory=dict)
@@ -34,22 +109,14 @@ class PyCommence(_p.BaseModel):
         # logger.debug(f'Set "{csrname}" ({mode.name.title()}) cursor with {cursor.row_count} rows')
         return self
 
-    def get_csrname(self, csrname: str | None = None):
-        if not csrname:
-            if not self.csrs:
-                raise PyCommenceNotFoundError('No cursor available')
-            if len(self.csrs) > 1:
-                raise ValueError('Multiple cursors available, specify csrname')
-            csrname = next(iter(self.csrs.keys()))
-            # logger.debug(f'Using cursorname {csrname}')
-        return csrname
 
+    @resolve_csrname
     def csr(self, csrname: str | None = None) -> CursorAPI:
         """Return a cursor by name, or the only cursor if only one is available."""
-        csrname = self.get_csrname(csrname)
+        # csrname = self.get_csrname(csrname)
         return self.csrs[csrname]
 
-    def refresh_csr(self, csr) -> _t.Self:
+    def refresh_csr(self, csr: CursorAPI) -> _t.Self:
         """Reset an existing cursor with same name, mode and filter_array"""
         self.set_csr(csr.csrname, csr.mode)
         logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
