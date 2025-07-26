@@ -1,7 +1,7 @@
 import pytest
 
+from pycommence.pycommence_v2 import PyCommence
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
-from pycommence.pyc2 import PyCommence
 
 
 def test_it():
