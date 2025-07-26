@@ -134,7 +134,7 @@ class CursorAPI:
             rowgen = rowset.rows()
             rowgen = row_filter(rowgen) if row_filter else rowgen
             for i, row in enumerate(rowgen, start=1):
-                if i > pagination.limit:
+                if pagination.limit and i > pagination.limit:
                     break
                 self.add_category_to_dict(row)
                 yield row
