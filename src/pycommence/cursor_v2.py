@@ -7,7 +7,7 @@ from typing import Self
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark
+from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark, RowTup
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -100,7 +100,13 @@ class CursorAPI:
         rs.commit()
 
     # READ
-    def _read_row(
+    def _read_row(self, *, row_id: str) -> RowTup:
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+        row = next(rs.rows())
+        row_tup = RowTup(self.category, row_id, row)
+        return row_tup
+
+    def _read_row1(
         self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
     ) -> dict[str, str]:
         raise_for_id_or_pk(row_id, pk)
