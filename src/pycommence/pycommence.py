@@ -70,7 +70,8 @@ def resolve_row_id(func):
 
 
 # noinspection PyProtectedMember
-class PyCommence(_p.BaseModel):
+@dataclass
+class PyCommence:
     """
     Main interface for interacting with a Commence database.
 
@@ -88,12 +89,9 @@ class PyCommence(_p.BaseModel):
         ...     print(row)
     """
 
-    cmc_wrapper: CommenceWrapper = Field(default_factory=CommenceWrapper)
-    csrs: dict[str, CursorAPI] = Field(default_factory=dict)
-    conversations: dict[ConversationTopic, ConversationAPI] = Field(default_factory=dict)
-    model_config = _p.ConfigDict(
-        arbitrary_types_allowed=True,
-    )
+    cmc_wrapper: CommenceWrapper = field(default_factory=CommenceWrapper)
+    csrs: dict[str, CursorAPI] = field(default_factory=dict)
+    conversations: dict[ConversationTopic, ConversationAPI] = field(default_factory=dict)
 
     @resolve_csrname
     def set_csr(

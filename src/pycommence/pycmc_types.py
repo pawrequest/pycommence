@@ -9,7 +9,7 @@ from enum import Enum, IntEnum, StrEnum
 from _decimal import Decimal
 from typing import NamedTuple
 
-import pydantic as _p
+from pydantic import HttpUrl
 import pythoncom
 
 RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
@@ -187,10 +187,11 @@ class CmcFieldDataType(enum.Enum):
     SEQUENCE = int
     SELECTION = str
     EMAIL = str
-    URL = _p.HttpUrl
+    URL = HttpUrl
 
 
-class CmcFieldDefinition(_p.BaseModel):
+@dataclass
+class CmcFieldDefinition:
     type: CmcFieldType
     combobox: bool
     shared: bool
@@ -230,10 +231,10 @@ class MoreAvailable:
 PAGE_SIZE = 30
 
 
-class Pagination(_p.BaseModel):
+@dataclass
+class Pagination:
     offset: int = 0
     limit: int | None = None
-    # limit: int | bool = False
 
     def __bool__(self):
         return any([bool(self.limit), bool(self.offset)])
@@ -241,23 +242,16 @@ class Pagination(_p.BaseModel):
     def __str__(self):
         return f'Pagination: offset={self.offset}, limit={self.limit}'
 
-    @property
-    def end(self):
-        return self.offset + self.limit_int
-
-    @property
-    def limit_int(self) -> int:
-        if isinstance(self.limit, int):
-            return self.limit
-        return 0
-
     # @property
     # def end(self):
-    #     # todo plus 1?
-    #     return self.offset + self.limit +1
+    #     return self.offset + (self.limit if self.limit is not None else PAGE_SIZE)
+
 
     def next_page(self):
-        return self.model_copy(update={'offset': self.offset + self.limit})
+        return Pagination(offset=self.offset + self.limit, limit = self.limit)
+
+        # return self.model_copy(update={'offset': self.offset + self.limit})
 
     def prev_page(self):
-        return self.model_copy(update={'offset': self.offset - self.limit})
+        return Pagination(offset=max(0, self.offset - self.limit), limit=self.limit)
+        # return self.model_copy(update={'offset': self.offset - self.limit})
