@@ -5,7 +5,7 @@
 import pytest
 
 from pycommence.pycmc_types import CursorType
-from pycommence.pycommence_v2 import PyCommence
+from pycommence.pycommence import PyCommence
 
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff',

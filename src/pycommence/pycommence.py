@@ -6,7 +6,7 @@ from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 from pydantic import Field
 
-from pycommence.cursor_v2 import CursorAPI, raise_for_id_or_pk
+from pycommence.cursor import CursorAPI, raise_for_id_or_pk
 from pycommence.exceptions import PyCommenceNotFoundError
 from pycommence.filters import FilterArray
 from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination, RowFilter

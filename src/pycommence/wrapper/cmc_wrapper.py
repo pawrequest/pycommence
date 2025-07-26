@@ -9,7 +9,7 @@ from win32com.universal import com_error
 from pycommence.exceptions import PyCommenceServerError
 from .conversation_wrapper import ConversationAPI, ConversationTopic
 from .cursor_wrapper import CursorWrapper
-from ..cursor_v2 import CursorAPI
+from ..cursor import CursorAPI
 from ..pycmc_types import CursorType, OptionFlagInt
 
 

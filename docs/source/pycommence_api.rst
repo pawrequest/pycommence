@@ -4,11 +4,11 @@ Main Entrypoints for PyCommence are `Pycommence.with_csr()` classmethod and `pyc
 
 PyCommence Object
 -------------------------
-.. automodule:: pycommence.pycommence_v2
+.. automodule:: pycommence.pycommence
 
 Cursor
 -------------------------
-.. automodule:: pycommence.cursor_v2
+.. automodule:: pycommence.cursor
 
 
 Filters

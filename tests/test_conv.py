@@ -1,6 +1,6 @@
 import pytest
 
-from pycommence.pycommence_v2 import PyCommence
+from pycommence.pycommence import PyCommence
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationTopic
 

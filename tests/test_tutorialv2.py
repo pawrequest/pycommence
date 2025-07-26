@@ -3,11 +3,11 @@ import contextlib
 import pytest
 from loguru import logger
 
-from pycommence.cursor_v2 import CursorAPI
+from pycommence.cursor import CursorAPI
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.pycmc_types import Pagination
-from pycommence.pycommence_v2 import PyCommence
+from pycommence.pycommence import PyCommence
 from .conftest import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
 
 PAGINATED = Pagination(offset=0, limit=5)
