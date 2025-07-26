@@ -7,7 +7,7 @@ from typing import Self
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark
+from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark, RowTup
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -34,22 +34,22 @@ class CursorAPI:
     #     return self.cursor_wrapper.get_query_row_set(1).headers
 
     @property
-    def category(self):
+    def category(self) -> str:
         """Commence Category name."""
         return self.cursor_wrapper.category
 
     @property
-    def column_count(self):
+    def column_count(self) -> int:
         """Number of columns in the Cursor."""
         return self.cursor_wrapper.column_count
 
     @property
-    def row_count(self):
+    def row_count(self) -> int:
         """Number of rows in the Cursor."""
         return self.cursor_wrapper.row_count
 
     @property
-    def shared(self):
+    def shared(self) -> bool:
         """True if the database is enrolled in a workgroup."""
         return self.cursor_wrapper.shared
 
@@ -60,7 +60,7 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set(0)
         return rs.get_column_label(0)
 
-    def pk_filter(self, pk, condition=ConditionType.EQUAL):
+    def pk_filter(self, pk, condition=ConditionType.EQUAL) -> FieldFilter:
         return FieldFilter(column=self.pk_label, condition=condition, value=pk)
 
     def pk_exists(self, pk: str) -> bool:
@@ -100,19 +100,25 @@ class CursorAPI:
         rs.commit()
 
     # READ
-    def _read_row(
-        self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
-    ) -> dict[str, str]:
-        raise_for_id_or_pk(row_id, pk)
-        with self.temporary_offset(0):
-            row_id = row_id or self.pk_to_id(pk)
-            rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-            raise_for_one(rs)
-            row = next(rs.rows())
-            row['row_id'] = row_id
-            if with_category:
-                self.add_category_to_dict(row)
-            return row
+    def _read_row(self, row_id: str) -> RowTup:
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+        row = next(rs.rows())
+        row_tup = RowTup(self.category, row_id, row)
+        return row_tup
+
+    # def _read_row1(
+    #     self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
+    # ) -> dict[str, str]:
+    #     raise_for_id_or_pk(row_id, pk)
+    #     with self.temporary_offset(0):
+    #         row_id = row_id or self.pk_to_id(pk)
+    #         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+    #         raise_for_one(rs)
+    #         row = next(rs.rows())
+    #         row['row_id'] = row_id
+    #         if with_category:
+    #             self.add_category_to_dict(row)
+    #         return row
 
     def _read_rows(
         self,

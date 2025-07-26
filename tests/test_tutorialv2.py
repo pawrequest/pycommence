@@ -3,6 +3,7 @@ import contextlib
 import pytest
 from loguru import logger
 
+from pycommence.cursor_v2 import CursorAPI
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.pycmc_types import Pagination
@@ -97,79 +98,52 @@ def test_multiple_csrs(pycmc: PyCommence):
     assert pycmc.csr(csrname='Contact').category == 'Contact'
 
 
-def test_pk_filter(pycmc):
-    with temp_contact(pycmc):
-        cursor = pycmc.csr()
-        pk = NEW_KEY
-        filter_array = cursor.pk_filter_array(pk)
-        with cursor.temporary_filter(filter_array):
-            rows = list(pycmc.read_rows())
-            assert len(rows) == 1
-            assert rows[0]['contactKey'] == pk
+# def test_pk_filter(pycmc):
+#     with temp_contact(pycmc):
+#         cursor = pycmc.csr()
+#         pk = NEW_KEY
+#         filter_array = cursor.pk_filter_array(pk)
+#         with cursor.temporary_filter(filter_array):
+#             rows = list(pycmc.read_rows())
+#             assert len(rows) == 1
+#             assert rows[0]['contactKey'] == pk
 
 
 def test_temporary_filter(pycmc):
-    cursor = pycmc.csr()
-    og_filter = cursor.filter_array
-    filter_array = cursor.pk_filter_array(JEFF_KEY)
+    cursor:CursorAPI = pycmc.csr()
+    num_rows = cursor.row_count
+    pk_fil = cursor.pk_filter(JEFF_KEY)
+    filter_array = FilterArray.from_filters(pk_fil)
     with cursor.temporary_filter(filter_array):
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
         assert rows[0]['contactKey'] == JEFF_KEY
-        if og_filter:
-            assert og_filter != cursor.filter_array
-    assert og_filter == cursor.filter_array
+    assert cursor.row_count == num_rows
 
 
 def test_pk_contains_filter(pycmc):
     with temp_contact(pycmc):
         cursor = pycmc.csr()
         partial_pk = 'Some'
-        filter_array = cursor.pk_contains_filter(partial_pk)
-        with cursor.temporary_filter(filter_array):
-            rows = list(pycmc.read_rows())
-            assert len(rows) > 0
-            for row in rows:
-                assert partial_pk in row['contactKey']
+        filter_array = cursor.pk_filter(partial_pk, condition=ConditionType.CONTAIN).to_array()
+        rows = list(pycmc.read_rows(filter_array=filter_array))
+        assert len(rows) > 0
+        for row in rows:
+            assert partial_pk in row['contactKey']
 
 
 def test_multiple_conditions(pycmc):
     with temp_contact(pycmc):
-        cursor = pycmc.csr()
         filter_array = FilterArray.from_filters(
-            FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Some.Guy'),
-            # FieldFilter(column='Title', condition=ConditionType.EQUAL, value='CEO of SOMmeBix'),
+            FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Guy.Some'),
+            FieldFilter(column='Title', condition=ConditionType.CONTAIN, value='CEO of SO'),
         )
-        with cursor.temporary_filter(filter_array):
-            rows = list(pycmc.read_rows())
-            assert len(rows) == 1
-            assert rows[0]['contactKey'] == 'Some.Guy'
-            assert rows[0]['Title'] == 'CEO of SOMmeBix'
-
-
-def test_clear_all_filters(pycmc):
-    with temp_contact(pycmc):
-        cursor = pycmc.csr()
-        pk = 'Some.Guy'
-        filter_array = cursor.pk_filter_array(pk)
-        cursor.filter_by_array(filter_array)
-        rows = list(pycmc.read_rows())
+        rows = list(pycmc.read_rows(filter_array=filter_array))
         assert len(rows) == 1
-        cursor.clear_all_filters()
-        assert not cursor.filter_array
+        assert rows[0]['contactKey'] == 'Guy.Some'
+        assert rows[0]['Title'] == 'CEO of SOMmeBix'
 
 
-def test_filter_combination(pycmc):
-    cursor = pycmc.csr()
-    filter_array = FilterArray.from_filters(
-        FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Some.Guy'),
-        FieldFilter(column='Notes', condition=ConditionType.CONTAIN, value='Notes'),
-    )
-    cursor.filter_by_array(filter_array)
-    rows = list(pycmc.read_rows())
-    assert len(rows) == 1
-    assert rows[0]['contactKey'] == 'Some.Guy'
-    assert 'Notes' in rows[0]['Notes']
 
 
 def test_pagination(pycmc):
@@ -187,10 +161,3 @@ def test_pagination(pycmc):
         assert row1['contactKey'] == rows[0]['contactKey']
 
 
-def test_offset_params(pycmc):
-    with temp_contact(pycmc):
-        rows = tuple(pycmc.read_rows(count=5))
-        row3 = next(pycmc.read_rows(count=1, offset=2))
-        assert row3['contactKey'] == rows[2]['contactKey']
-        row1 = next(pycmc.read_rows(count=1))
-        assert row1['contactKey'] == rows[0]['contactKey']

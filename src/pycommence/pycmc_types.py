@@ -5,28 +5,25 @@ import pathlib
 from collections.abc import Callable, Generator
 from dataclasses import dataclass
 from datetime import date, datetime
-from enum import Enum, IntEnum, StrEnum, auto
+from enum import Enum, IntEnum, StrEnum
 from _decimal import Decimal
+from typing import NamedTuple
 
 import pydantic as _p
 import pythoncom
 
-
 RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
 
 
+class RowTup(NamedTuple):
+    category: str
+    id: str
+    data: dict[str, str]
+
+
 class NoneFoundHandler(StrEnum):
-    ignore = auto()
-    error = auto()
-
-
-class RadioType(StrEnum):
-    HYT = 'Hytera Digital'
-    K_UHF = 'Kirisun UHF'
-    K_VHF = 'Kirisun VHF'
-    TES_289 = 'Tesunho SIM TH289'
-    TES_288 = 'Tesunho SIM TH288'
-    TES_389 = 'Tesunho SIM TH388'
+    ignore = 'IGNORE'
+    error = 'ERROR'
 
 
 class SeekBookmark(Enum):

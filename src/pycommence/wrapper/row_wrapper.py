@@ -136,7 +136,7 @@ class RowSetBase(ABC):
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
-    def rows(self, count: int | None = None, get_id: bool = True) -> Generator[dict[str, str], None, None]:
+    def rows(self, count: int | None = None, get_id: bool = False) -> Generator[dict[str, str], None, None]:
         """Generates dicts of the first count rows."""
         if count is None:
             count = self.row_count
