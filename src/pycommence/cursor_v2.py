@@ -34,22 +34,22 @@ class CursorAPI:
     #     return self.cursor_wrapper.get_query_row_set(1).headers
 
     @property
-    def category(self):
+    def category(self) -> str:
         """Commence Category name."""
         return self.cursor_wrapper.category
 
     @property
-    def column_count(self):
+    def column_count(self) -> int:
         """Number of columns in the Cursor."""
         return self.cursor_wrapper.column_count
 
     @property
-    def row_count(self):
+    def row_count(self) -> int:
         """Number of rows in the Cursor."""
         return self.cursor_wrapper.row_count
 
     @property
-    def shared(self):
+    def shared(self) -> bool:
         """True if the database is enrolled in a workgroup."""
         return self.cursor_wrapper.shared
 
@@ -60,7 +60,7 @@ class CursorAPI:
         rs = self.cursor_wrapper.get_query_row_set(0)
         return rs.get_column_label(0)
 
-    def pk_filter(self, pk, condition=ConditionType.EQUAL):
+    def pk_filter(self, pk, condition=ConditionType.EQUAL) -> FieldFilter:
         return FieldFilter(column=self.pk_label, condition=condition, value=pk)
 
     def pk_exists(self, pk: str) -> bool:
