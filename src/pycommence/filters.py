@@ -48,6 +48,10 @@ class FieldFilter(CmcFilter):
 
     kind: Literal['F'] = 'F'
 
+    def to_array(self) -> FilterArray:
+        """Convert to FilterArray."""
+        return FilterArray.from_filters(self)
+
     @property
     def _filter_str(self) -> str:
         filter_str = f'"{self.column}", "{self.condition}"{f', "{self.value}"' if self.value else ''}'
