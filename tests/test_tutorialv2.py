@@ -6,7 +6,7 @@ from loguru import logger
 from pycommence.cursor import CursorAPI
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
-from pycommence.pycmc_types import Pagination
+from pycommence.pycmc_types import Pagination, MoreAvailable
 from pycommence.pycommence import PyCommence
 from .conftest import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
 
@@ -110,7 +110,7 @@ def test_multiple_csrs(pycmc: PyCommence):
 
 
 def test_temporary_filter(pycmc):
-    cursor:CursorAPI = pycmc.csr()
+    cursor: CursorAPI = pycmc.csr()
     num_rows = cursor.row_count
     pk_fil = cursor.pk_filter(JEFF_KEY)
     filter_array = FilterArray.from_filters(pk_fil)
@@ -144,8 +144,6 @@ def test_multiple_conditions(pycmc):
         assert rows[0]['Title'] == 'CEO of SOMmeBix'
 
 
-
-
 def test_pagination(pycmc):
     with temp_contact(pycmc):
         csr = pycmc.csr()
@@ -161,3 +159,15 @@ def test_pagination(pycmc):
         assert row1['contactKey'] == rows[0]['contactKey']
 
 
+def test_read_rows_more_available(pycmc):
+    csr = pycmc.csr()
+    total_rows = csr.row_count
+    limit = 2
+    pagination = Pagination(limit=limit, offset=0)
+    rows = list(pycmc.read_rows(pagination=pagination, append_more=True))
+    if total_rows > limit:
+        assert isinstance(rows[-1], MoreAvailable)
+        more = next(row for row in rows if isinstance(row, MoreAvailable))
+        assert more.n_more == total_rows - limit
+    else:
+        assert not any(isinstance(row, MoreAvailable) for row in rows)

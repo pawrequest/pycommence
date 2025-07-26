@@ -35,6 +35,24 @@ class PyCommence:
     csrs: dict[str, CursorAPI] = field(default_factory=dict)
     conversations: dict[ConversationTopic, ConversationAPI] = field(default_factory=dict)
 
+    @classmethod
+    def with_csr(
+        cls,
+        csrname: str,
+        mode: CursorType = CursorType.CATEGORY,
+    ):
+        """
+        Create a new PyCommence instance with a cursor.
+
+        Args:
+            csrname (str): Name of the category or view.
+            mode (CursorType): Cursor type (default: CATEGORY).
+
+        Returns:
+            PyCommence: Instance with cursor initialised.
+        """
+        return cls().set_csr(csrname, mode=mode)
+
     @resolve_csrname
     def set_csr(
         self,
@@ -69,24 +87,6 @@ class PyCommence:
         self.set_csr(csr.csrname, csr.mode)
         # logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
         return self
-
-    @classmethod
-    def with_csr(
-        cls,
-        csrname: str,
-        mode: CursorType = CursorType.CATEGORY,
-    ):
-        """
-        Create a new PyCommence instance with a cursor.
-
-        Args:
-            csrname (str): Name of the category or view.
-            mode (CursorType): Cursor type (default: CATEGORY).
-
-        Returns:
-            PyCommence: Instance with cursor set.
-        """
-        return cls().set_csr(csrname, mode=mode)
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
         """
@@ -164,6 +164,7 @@ class PyCommence:
             pagination=pagination,
             filter_array=filter_array,
             row_filter=row_filter,
+            append_more=True,
         )
 
     @resolve_row_id
@@ -189,7 +190,7 @@ class PyCommence:
         """Delete a row by ID or primary key."""
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        self.read_row(csrname=csr.category, row_id=row_id) # Ensure the row exists before deleting
+        self.read_row(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
         csr.delete_row(id=row_id)
         self.refresh_csr(csr)
 

@@ -1,3 +1,10 @@
+"""
+Cursor abstraction for Commence database.
+
+Provides the `CursorAPI` class for high-level CRUD operations, filtering, and row navigation.
+Wraps :class:`~pycommence.wrapper.cursor_wrapper.CursorWrapper` for direct COM access.
+"""
+
 from __future__ import annotations
 
 import contextlib
@@ -12,11 +19,26 @@ from .wrapper.cursor_wrapper import CursorWrapper
 
 
 def raise_for_id_or_pk(id, pk):
+    """Ensure at least one of id or pk is provided."""
     if not any([id, pk]):
         raise ValueError('Must provide id or pk')
 
 
 class CursorAPI:
+    """
+    High-level API for interacting with a Commence database cursor.
+
+    Wraps :class:`~pycommence.wrapper.cursor_wrapper.CursorWrapper` and provides
+    methods for CRUD operations, filtering, and row navigation.
+
+    Not to be created directly; use :class:`~pycommence.pycommence.PyCommence` to manage cursors.
+
+    Attributes:
+        cursor_wrapper (CursorWrapper): Underlying COM cursor wrapper.
+        mode (CursorType): Cursor type (e.g., CATEGORY, VIEW).
+        csrname (str): Name of the category or view.
+    """
+
     def __init__(
         self,
         cursor_wrapper: CursorWrapper,
@@ -61,15 +83,35 @@ class CursorAPI:
         return rs.get_column_label(0)
 
     def pk_filter(self, pk, condition=ConditionType.EQUAL) -> FieldFilter:
+        """Create a filter for the given primary key."""
         return FieldFilter(column=self.pk_label, condition=condition, value=pk)
 
     def pk_exists(self, pk: str) -> bool:
-        """Check if primary key exists in the Cursor."""
+        """Check if primary key exists in the Cursor.
+
+        Args:
+            pk (str): Primary key value to check.
+        Returns:
+            bool: True if the primary key exists, else False.
+        """
         with self.temporary_filter(FilterArray.from_filters(self.pk_filter(pk))):
             return self.row_count > 0
 
     def pk_to_id(self, pk: str) -> str:
-        """Convert primary key to row ID."""
+        """
+        Convert primary key to row ID.
+
+        Args:
+            pk (str): Primary key value.
+
+        Returns:
+            str: Row ID corresponding to the primary key.
+
+        Raises:
+            PyCommenceNotFoundError: If the primary key does not exist in the Cursor.
+            PyCommenceMaxExceededError: If more than one row matches the primary key.
+
+        """
         with self.temporary_filter(FilterArray.from_filters(self.pk_filter(pk))):
             with self.temporary_offset(0):
                 rs = self.cursor_wrapper.get_query_row_set(2)
@@ -77,19 +119,37 @@ class CursorAPI:
                 return rs.get_row_id(0)
 
     def pk_to_row_ids(self, pk: str) -> list[str]:
+        """
+        Get all row IDs matching a primary key.
+
+        Args:
+            pk (str): Primary key value.
+
+        Returns:
+            list[str]: List of row IDs.
+        """
+
         with self.temporary_filter(FilterArray.from_filters(self.pk_filter(pk))):
-            with self.temporary_offset(0):
-                rs = self.cursor_wrapper.get_query_row_set()
-                return [rs.get_row_id(i) for i in range(rs.row_count)]
+            rs = self.cursor_wrapper.get_query_row_set()
+            return [rs.get_row_id(i) for i in range(rs.row_count)]
 
     def row_id_to_pk(self, row_id: str) -> str:
         """Convert row ID to primary key."""
-        with self.temporary_offset(0):
-            rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-            return rs.get_value(0, 0)
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+        return rs.get_value(0, 0)
 
     # CREATE
     def create_row(self, create_pkg: dict[str, str]) -> None:
+        """
+        Add a new row to the database.
+
+        Args:
+            create_pkg (dict): Field names and values for the new row (must contain primary_key).
+
+        Raises:
+            ValueError: If primary key is not provided in create_pkg.
+            PyCommenceExistsError: If primary key already exists.
+        """
         pkg_pk = create_pkg.get(self.pk_label)
         if not pkg_pk:
             raise ValueError(f'Primary key {self.pk_label} not provided in create_pkg.')
@@ -101,6 +161,15 @@ class CursorAPI:
 
     # READ
     def read_row(self, row_id: str) -> RowTup:
+        """
+        Retrieve a single row by row ID.
+
+        Args:
+            row_id (str): Row ID.
+
+        Returns:
+            RowTup: Row tuple with data.
+        """
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
         row_tup = RowTup(self.category, row_id, row)
@@ -125,18 +194,20 @@ class CursorAPI:
         pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
         row_filter: RowFilter | None = None,
+        append_more: bool = False,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
         pagination = pagination or Pagination()
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
         offset_manager = self.temporary_offset(pagination.offset)
         with offset_manager, filter_manager:
-            rowset = self.cursor_wrapper.get_query_row_set(pagination.limit)
-            rowgen = rowset.rows()
-            rowgen = row_filter(rowgen) if row_filter else rowgen
-            for i, row in enumerate(rowgen, start=1):
+            rowset = self.cursor_wrapper.get_query_row_set()
+            rows = rowset.rows()
+            rows = row_filter(rows) if row_filter else rows
+            for i, row in enumerate(rows, start=1):
                 if pagination.limit and i > pagination.limit:
+                    if append_more:
+                        yield MoreAvailable(n_more=self.row_count - (pagination.offset + i - 1))
                     break
-                self.add_category_to_dict(row)
                 yield row
 
     # UPDATE
