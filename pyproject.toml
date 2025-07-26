@@ -1,6 +1,6 @@
 [project]
 name = "pycommence"
-version = "0.2.0"
+version = "0.2.1"
 description = "wrapper for Commence Rm via pywin32"
 authors = [
     { name = "PawRequest", email = "pycommence+pawrequest@users.noreply.github.com" }
@@ -12,7 +12,7 @@ dependencies = [
     "comtypes>=1.4.11",
 ]
 readme = "README.rst"
-requires-python = ">= 3.10"
+requires-python = ">= 3.13"
 
 [project.optional-dependencies]
 dev = [
