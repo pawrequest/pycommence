@@ -100,7 +100,7 @@ class CursorAPI:
         rs.commit()
 
     # READ
-    def _read_row(self, *, row_id: str) -> RowTup:
+    def _read_row(self, row_id: str) -> RowTup:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
         row_tup = RowTup(self.category, row_id, row)

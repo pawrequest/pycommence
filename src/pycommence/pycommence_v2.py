@@ -84,10 +84,11 @@ class PyCommence(_p.BaseModel):
         csrname: str | None = None,
         row_id: str | None = None,  # id or pk must be provided
         pk: str | None = None,
-        with_category: bool = False,
     ) -> dict[str, str]:
+        raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        return csr._read_row(row_id=row_id, pk=pk, with_category=with_category)
+        row_id = row_id or csr.pk_to_id(pk)
+        return csr._read_row(row_id=row_id).data
 
     def read_rows(
         self,
