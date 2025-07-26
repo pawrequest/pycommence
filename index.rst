@@ -1,21 +1,7 @@
-.. |get_csrname()| replace:: ``get_csrname()``
-.. _get_csrname(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.get_csrname
-.. |HasCursors| replace:: ``HasCursors``
-.. _HasCursors: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.HasCursors
 .. |.modindex| replace:: Module Index
 .. _.modindex: https://pawrequest.github.io/pycommence/py-modindex.html
-.. |PyCommence| replace:: ``PyCommence``
-.. _PyCommence: https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.PyCommence
 .. |.pycommence.wrapper._icommence| replace:: ``pycommence.wrapper._icommence``
 .. _.pycommence.wrapper._icommence: https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper.py
-.. |pycommence_context()| replace:: ``pycommence_context()``
-.. _pycommence_context(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.pycommence_context
-.. |pycommences_context()| replace:: ``pycommences_context()``
-.. _pycommences_context(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.pycommences_context
-.. |resolve_csrname()| replace:: ``resolve_csrname()``
-.. _resolve_csrname(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.resolve_csrname
-.. |resolve_row_id()| replace:: ``resolve_row_id()``
-.. _resolve_row_id(): https://pawrequest.github.io/pycommence/pycommence_api.html#pycommence.pycommence.resolve_row_id
 
 
 PyCommence - Python vs Commence RM
@@ -30,21 +16,28 @@ This package wraps the Commence API in a python interface for convenience; a com
 PyCommence is built atop |.pycommence.wrapper._icommence|_ - a makepy generated Com-Object wrapper - via the `win32com` package.
 
 
-* `PyCommence <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
+* `Api Layer <https://pawrequest.github.io/pycommence/pycommence_api.html>`_
 
-  * |HasCursors|_
-
-
-  * |get_csrname()|_
-  * |resolve_csrname()|_
-  * |resolve_row_id()|_
-  * |PyCommence|_
+  * `PyCommence Manager <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.pycommence>`_
 
 
-  * |pycommence_context()|_
-  * |pycommences_context()|_
+  * `Cursor <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.cursor>`_
 
-* `Commence Wrapper <https://pawrequest.github.io/pycommence/pycommence_wrapper.html>`_
+
+  * `Filters <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.filters>`_
+
+
+  * `Types <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.pycmc_types>`_
+
+
+  * `Exceptions <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.exceptions>`_
+
+
+  * `Resolvers <https://pawrequest.github.io/pycommence/pycommence_api.html#module-pycommence.resolvers>`_
+
+
+
+* `Wrapper Layer <https://pawrequest.github.io/pycommence/pycommence_wrapper.html>`_
 
   * `DB Wrapper <https://pawrequest.github.io/pycommence/pycommence_wrapper.html#module-pycommence.wrapper.cmc_wrapper>`_
 

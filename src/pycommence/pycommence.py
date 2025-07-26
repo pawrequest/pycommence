@@ -1,72 +1,16 @@
 import contextlib
-import functools
 import typing as _t
+from dataclasses import field, dataclass
 
-import pydantic as _p
 from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
-from pydantic import Field
 
 from pycommence.cursor import CursorAPI, raise_for_id_or_pk
-from pycommence.exceptions import PyCommenceNotFoundError
 from pycommence.filters import FilterArray
 from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination, RowFilter
+from pycommence.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
-
-
-class HasCursors(_t.Protocol):
-    csrs: dict[str, CursorAPI]
-
-
-def get_csrname(self: HasCursors, csrname: str | None = None):
-    if not csrname:
-        if not self.csrs:
-            raise PyCommenceNotFoundError('No cursor available')
-        if len(self.csrs) > 1:
-            raise ValueError('Multiple cursors available, specify csrname')
-        csrname = next(iter(self.csrs.keys()))
-    return csrname
-
-
-def resolve_csrname(func):
-    """if the only positional argument or kwargs['csrname'] is None then use the only cursor available's name, or else raise ValueError"""
-
-    @functools.wraps(func)
-    def wrapper(self: HasCursors, *args, **kwargs):
-        if args:
-            csrname = get_csrname(self, args[0])
-            args = (csrname,) if len(args) == 1 else (csrname, *args[1:])
-        elif 'csrname' in kwargs:
-            if args:
-                raise ValueError('Cannot use both positional and keyword csrname arguments')
-            kwargs['csrname'] = get_csrname(self, kwargs['csrname'])
-        else:
-            kwargs['csrname'] = get_csrname(self)
-        return func(self, *args, **kwargs)
-
-    return wrapper
-
-
-def resolve_row_id(func):
-    """Decorator to get row_id from kwargs, or else get pk and cursornames from kwargs, and use self.cursor's pk_to_id method."""
-
-    @functools.wraps(func)
-    def wrapper(self: HasCursors, *args, **kwargs):
-        row_id = kwargs.get('row_id')
-        if not row_id:
-            pk = kwargs.get('pk')
-            if not pk:
-                raise ValueError('Either row_id or pk must be provided')
-            csrname = kwargs.get('csrname') or next(iter(self.csrs.keys())) if self.csrs else None
-            if not csrname:
-                raise PyCommenceNotFoundError('No cursor available to convert pk to id')
-            row_id = self.csrs[csrname].pk_to_id(pk)
-            kwargs['row_id'] = row_id
-
-        return func(self, *args, **kwargs)
-
-    return wrapper
 
 
 # noinspection PyProtectedMember
@@ -77,16 +21,14 @@ class PyCommence:
 
     Manages database connections, cursors, and DDE conversations.
     Provides high-level methods for CRUD operations and cursor management.
+    Wraps an instance of :class:`~pycommence.wrapper.cmc_wrapper.CommenceWrapper`
 
-    Attributes:
-        cmc_wrapper (CommenceWrapper): Database connection manager.
-        csrs (dict[str, CursorAPI]): Active cursors by name.
-        conversations (dict[ConversationTopic, ConversationAPI]): Active DDE conversations.
     Typical Usage:
         >>> pyc = PyCommence.with_csr("Contacts", mode=CursorType.CATEGORY)
         >>> pyc.create_row({"Name": "Alice"})
         >>> for row in pyc.read_rows():
         ...     print(row)
+
     """
 
     cmc_wrapper: CommenceWrapper = field(default_factory=CommenceWrapper)
@@ -183,7 +125,7 @@ class PyCommence:
 
         """
         csr = self.csr(csrname)
-        csr._create_row(create_pkg)
+        csr.create_row(create_pkg)
         self.refresh_csr(csr)
 
     @resolve_row_id
@@ -196,7 +138,7 @@ class PyCommence:
     ) -> dict[str, str]:
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        return csr._read_row(row_id=row_id).data
+        return csr.read_row(row_id=row_id).data
 
     def read_rows(
         self,
@@ -218,7 +160,7 @@ class PyCommence:
             dict: Row data or MoreAvailable object
         """
         logger.debug(f'Reading rows from {csrname}: {filter_array} | {pagination}')
-        yield from self.csr(csrname)._read_rows(
+        yield from self.csr(csrname).read_rows(
             pagination=pagination,
             filter_array=filter_array,
             row_filter=row_filter,
@@ -239,7 +181,7 @@ class PyCommence:
         """
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        csr._update_row(update_pkg, id=row_id)
+        csr.update_row(update_pkg, id=row_id)
         self.refresh_csr(csr)
 
     @resolve_row_id
@@ -247,13 +189,13 @@ class PyCommence:
         """Delete a row by ID or primary key."""
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        row = self.read_row(csrname=csr.category, row_id=row_id)
-        csr._delete_row(id=row_id)
+        self.read_row(csrname=csr.category, row_id=row_id) # Ensure the row exists before deleting
+        csr.delete_row(id=row_id)
         self.refresh_csr(csr)
 
 
 @contextlib.contextmanager
-def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> PyCommence:
+def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> _t.Generator[PyCommence, None, None]:
     """Context manager for PyCommence with a single cursor"""
     CoInitialize()
     pyc = PyCommence.with_csr(csrname, mode=mode)
@@ -262,7 +204,7 @@ def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> 
 
 
 @contextlib.contextmanager
-def pycommences_context(csrnames: list[str]) -> PyCommence:
+def pycommences_context(csrnames: list[str]) -> _t.Generator[PyCommence, None, None]:
     """Context manager for PyCommence with multiple cursors"""
     CoInitialize()
     pyc = PyCommence()
@@ -270,3 +212,6 @@ def pycommences_context(csrnames: list[str]) -> PyCommence:
         pyc.set_csr(csrname)
     yield pyc
     CoUninitialize()
+
+
+

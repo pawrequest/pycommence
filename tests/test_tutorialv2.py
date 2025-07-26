@@ -152,12 +152,12 @@ def test_pagination(pycmc):
         pagination = Pagination(limit=5)
         offest_pag = Pagination(offset=2, limit=1)
 
-        rows = tuple(csr._read_rows(pagination=pagination))
+        rows = tuple(csr.read_rows(pagination=pagination))
 
-        row3 = next(csr._read_rows(pagination=offest_pag))
+        row3 = next(csr.read_rows(pagination=offest_pag))
         assert row3['contactKey'] == rows[2]['contactKey']
 
-        row1 = next(csr._read_rows(pagination=Pagination(limit=1)))
+        row1 = next(csr.read_rows(pagination=Pagination(limit=1)))
         assert row1['contactKey'] == rows[0]['contactKey']
 
 

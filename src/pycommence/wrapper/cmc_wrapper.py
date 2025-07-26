@@ -51,7 +51,7 @@ class CommenceWrapper(CmcConnector):
 
     Entry point for :class:`.cmc_csr.CsrCmc` and :class:`.conversation.CommenceConversation`.
 
-    Caching Inherited from :class:`.CmcConnector`.
+    ~~Caching Inherited from :class:`.CmcConnector`.~~ caching breaks in multithreaded environments
 
     Attributes:
        commence_instance_name (str): The name of the Commence instance.
