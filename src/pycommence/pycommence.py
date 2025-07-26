@@ -1,24 +1,3 @@
-"""
-pycommence.py
-=============
-
-High-level interface for interacting with Commence databases via Python.
-
-This module provides the `PyCommence` class, which acts as the main entry point for database operations.
-It manages connections, cursors, and conversations, abstracting the underlying COM API and providing
-a user-friendly, Pythonic interface for CRUD operations, filtering, and more.
-
-Key Classes:
-    - PyCommence: Main API object for database access.
-    - CursorAPI: Represents a database cursor for querying and modifying data.
-    - CommenceWrapper: Handles low-level COM connection and cursor creation.
-
-Typical Usage:
-    >>> from pycommence.pycommence import PyCommence
-    >>> pyc = PyCommence.with_csr("Contacts")
-    >>> pyc.read_rows()
-"""
-
 import contextlib
 import functools
 import typing as _t
@@ -93,20 +72,15 @@ def resolve_row_id(func):
 # noinspection PyProtectedMember
 class PyCommence(_p.BaseModel):
     """
-    PyCommence
-    ==========
-
     Main interface for interacting with a Commence database.
 
-    This class manages database connections, cursors (`CursorAPI`), and DDE conversations.
-    It provides high-level methods for creating, reading, updating, and deleting rows,
-    as well as for managing cursor state and filters.
+    Manages database connections, cursors, and DDE conversations.
+    Provides high-level methods for CRUD operations and cursor management.
 
     Attributes:
-        cmc_wrapper (CommenceWrapper): Underlying database connection manager.
+        cmc_wrapper (CommenceWrapper): Database connection manager.
         csrs (dict[str, CursorAPI]): Active cursors by name.
-        conversations (dict[ConversationTopic, ConversationAPI]): Active DDE conversations by topic.
-
+        conversations (dict[ConversationTopic, ConversationAPI]): Active DDE conversations.
     Typical Usage:
         >>> pyc = PyCommence.with_csr("Contacts", mode=CursorType.CATEGORY)
         >>> pyc.create_row({"Name": "Alice"})
@@ -127,12 +101,21 @@ class PyCommence(_p.BaseModel):
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
     ) -> _t.Self:
-        """Re/Set the cursor by name and values"""
+        """
+        Add or update a cursor by name and type.
+
+        Args:
+            csrname (str): Name of the category or view.
+            mode (CursorType): Cursor type (default: CATEGORY).
+
+        Returns:
+            PyCommence: Self for chaining.
+        """
         cursor_wrapper = self.cmc_wrapper.get_new_cursor_wrapper(csrname, mode)
         cursor = CursorAPI(cursor_wrapper=cursor_wrapper, mode=mode)
         # cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
         self.csrs[csrname] = cursor
-        # logger.debug(f'Set "{csrname}" ({mode.name.title()}) cursor with {cursor.row_count} rows')
+        logger.debug(f'Set "{csrname}" ({mode.name.title()}) cursor with {cursor.row_count} rows')
         return self
 
     @resolve_csrname
@@ -144,7 +127,7 @@ class PyCommence(_p.BaseModel):
     def refresh_csr(self, csr: CursorAPI) -> _t.Self:
         """Reset an existing cursor with same name, mode and filter_array"""
         self.set_csr(csr.csrname, csr.mode)
-        logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
+        # logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
         return self
 
     @classmethod
@@ -153,18 +136,54 @@ class PyCommence(_p.BaseModel):
         csrname: str,
         mode: CursorType = CursorType.CATEGORY,
     ):
-        """Main Entrypoint - Create a new PyCommence instance with a cursor on the named category"""
+        """
+        Create a new PyCommence instance with a cursor.
+
+        Args:
+            csrname (str): Name of the category or view.
+            mode (CursorType): Cursor type (default: CATEGORY).
+
+        Returns:
+            PyCommence: Instance with cursor set.
+        """
         return cls().set_csr(csrname, mode=mode)
 
     def set_conversation(self, topic: ConversationTopic = 'ViewData'):
+        """
+        Add a DDE conversation by topic.
+
+        Args:
+            topic (ConversationTopic): DDE topic name.
+
+        Returns:
+            PyCommence: Self for chaining.
+        """
+
         self.conversations[topic] = self.cmc_wrapper.get_conversation_api(topic)
         return self
 
     @classmethod
     def with_conversation(cls, topic: ConversationTopic = 'ViewData'):
+        """
+        Create a PyCommence instance with a DDE conversation.
+
+        Args:
+            topic (ConversationTopic): DDE topic name.
+
+        Returns:
+            PyCommence: Instance with conversation set.
+        """
         return cls(cmc_wrapper=CommenceWrapper()).set_conversation(topic)
 
     def create_row(self, create_pkg: dict[str, str], csrname: str | None = None):
+        """
+        Add a new row to the database.
+
+        Args:
+            create_pkg (dict): Field names and values for the new row.
+            csrname (str, optional): Cursor name (or only available).
+
+        """
         csr = self.csr(csrname)
         csr._create_row(create_pkg)
         self.refresh_csr(csr)
@@ -190,6 +209,7 @@ class PyCommence(_p.BaseModel):
     ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
         """
         Generate rows from a cursor
+
         Args:
             csrname: Name of cursor (optional if only one cursor is set)
             pagination: Pagination object
@@ -226,6 +246,7 @@ class PyCommence(_p.BaseModel):
 
     @resolve_row_id
     def delete_row(self, row_id: str | None = None, pk: str | None = None, csrname: str | None = None):
+        """Delete a row by ID or primary key."""
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
         row = self.read_row(csrname=csr.category, row_id=row_id)
