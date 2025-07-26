@@ -232,7 +232,7 @@ PAGE_SIZE = 30
 
 class Pagination(_p.BaseModel):
     offset: int = 0
-    limit: int | None = 100
+    limit: int | None = None
     # limit: int | bool = False
 
     def __bool__(self):
