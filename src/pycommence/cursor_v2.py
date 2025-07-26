@@ -106,19 +106,19 @@ class CursorAPI:
         row_tup = RowTup(self.category, row_id, row)
         return row_tup
 
-    def _read_row1(
-        self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
-    ) -> dict[str, str]:
-        raise_for_id_or_pk(row_id, pk)
-        with self.temporary_offset(0):
-            row_id = row_id or self.pk_to_id(pk)
-            rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-            raise_for_one(rs)
-            row = next(rs.rows())
-            row['row_id'] = row_id
-            if with_category:
-                self.add_category_to_dict(row)
-            return row
+    # def _read_row1(
+    #     self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
+    # ) -> dict[str, str]:
+    #     raise_for_id_or_pk(row_id, pk)
+    #     with self.temporary_offset(0):
+    #         row_id = row_id or self.pk_to_id(pk)
+    #         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+    #         raise_for_one(rs)
+    #         row = next(rs.rows())
+    #         row['row_id'] = row_id
+    #         if with_category:
+    #             self.add_category_to_dict(row)
+    #         return row
 
     def _read_rows(
         self,
