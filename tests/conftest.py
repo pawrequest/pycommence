@@ -203,7 +203,7 @@ def pyc_contact_new():
 
 @pytest.fixture(scope='function', params=[pyc_contact_new])
 # @pytest.fixture(scope='function', params=[pyc_contact_new, pycmc_view_cursor])
-def pycmc(request):
+def pycmc(request) -> PyCommence:
     param = request.param
     return param()
 
