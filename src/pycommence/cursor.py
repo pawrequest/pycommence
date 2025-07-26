@@ -89,7 +89,7 @@ class CursorAPI:
             return rs.get_value(0, 0)
 
     # CREATE
-    def _create_row(self, create_pkg: dict[str, str]) -> None:
+    def create_row(self, create_pkg: dict[str, str]) -> None:
         pkg_pk = create_pkg.get(self.pk_label)
         if not pkg_pk:
             raise ValueError(f'Primary key {self.pk_label} not provided in create_pkg.')
@@ -100,7 +100,7 @@ class CursorAPI:
         rs.commit()
 
     # READ
-    def _read_row(self, row_id: str) -> RowTup:
+    def read_row(self, row_id: str) -> RowTup:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
         row_tup = RowTup(self.category, row_id, row)
@@ -120,7 +120,7 @@ class CursorAPI:
     #             self.add_category_to_dict(row)
     #         return row
 
-    def _read_rows(
+    def read_rows(
         self,
         pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
@@ -140,7 +140,7 @@ class CursorAPI:
                 yield row
 
     # UPDATE
-    def _update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
+    def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
         raise_for_id_or_pk(id, pk)
         id = id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_edit_row_set_by_id(id)
@@ -148,7 +148,7 @@ class CursorAPI:
         assert rs.commit()
 
     # DELETE
-    def _delete_row(self, id: str | None = None, pk: str | None = None) -> None:
+    def delete_row(self, id: str | None = None, pk: str | None = None) -> None:
         raise_for_id_or_pk(id, pk)
         id = id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_delete_row_set_by_id(id)
