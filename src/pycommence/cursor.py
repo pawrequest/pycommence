@@ -8,13 +8,14 @@ Wraps :class:`~pycommence.wrapper.cursor_wrapper.CursorWrapper` for direct COM a
 from __future__ import annotations
 
 import contextlib
+import typing as _t
 from collections.abc import Generator
 from functools import cached_property
 from typing import Self
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowFilter, SeekBookmark, RowTup
+from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowData, RowFilter, RowInfo, SeekBookmark
 from .wrapper.cursor_wrapper import CursorWrapper
 
 
@@ -160,7 +161,7 @@ class CursorAPI:
         rs.commit()
 
     # READ
-    def read_row(self, row_id: str) -> RowTup:
+    def read_row(self, row_id: str) -> RowData:
         """
         Retrieve a single row by row ID.
 
@@ -168,33 +169,17 @@ class CursorAPI:
             row_id (str): Row ID.
 
         Returns:
-            RowTup: Row tuple with data.
+            RowData: Object containing row information and data.
         """
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
-        row_tup = RowTup(self.category, row_id, row)
-        return row_tup
-
-    # def _read_row1(
-    #     self, *, row_id: str | None = None, pk: str | None = None, with_category: bool = False
-    # ) -> dict[str, str]:
-    #     raise_for_id_or_pk(row_id, pk)
-    #     with self.temporary_offset(0):
-    #         row_id = row_id or self.pk_to_id(pk)
-    #         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-    #         raise_for_one(rs)
-    #         row = next(rs.rows())
-    #         row['row_id'] = row_id
-    #         if with_category:
-    #             self.add_category_to_dict(row)
-    #         return row
+        return RowData.from_data(category=self.category, row_id=row_id, data=row)
 
     def read_rows(
         self,
         pagination: Pagination | None = None,
         filter_array: FilterArray | None = None,
         row_filter: RowFilter | None = None,
-        append_more: bool = False,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
         pagination = pagination or Pagination()
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
@@ -205,10 +190,36 @@ class CursorAPI:
             rows = row_filter(rows) if row_filter else rows
             for i, row in enumerate(rows, start=1):
                 if pagination.limit and i > pagination.limit:
-                    if append_more:
-                        yield MoreAvailable(n_more=self.row_count - (pagination.offset + i - 1))
+                    yield MoreAvailable(n_more=self.row_count - (pagination.offset + i - 1))
                     break
                 yield row
+
+    def read_rows2(
+        self,
+        pagination: Pagination | None = None,
+        filter_array: FilterArray | None = None,
+        row_filter: RowFilter | None = None,
+        fetch_ids: bool = False,
+    ) -> RESULTS_GENERATOR:
+        pagination = pagination or Pagination()
+        row_info_ = RowInfo(category=self.category, id='unknown')
+
+        cmc_filter = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
+        offset = self.temporary_offset(pagination.offset)
+        with offset, cmc_filter:
+            rowset = self.cursor_wrapper.get_query_row_set()
+            rows = rowset.rows()
+            rows = row_filter(rows) if row_filter else rows
+            for i, row in enumerate(rows):
+                if fetch_ids:
+                    row_info = RowInfo(category=self.category, id=rowset.get_row_id(i))
+                else:
+                    row_info = row_info_
+
+                if pagination.limit and i >= pagination.limit:
+                    yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
+                    break
+                yield RowData(row_info=row_info, data=row)
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -280,3 +291,6 @@ class CursorAPI:
         if not res:
             raise ValueError('Failed to add related column.')
         return self
+
+
+RESULTS_GENERATOR = _t.Generator[RowData | MoreAvailable, None, None]

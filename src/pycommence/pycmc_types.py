@@ -15,10 +15,19 @@ import pythoncom
 RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
 
 
-class RowTup(NamedTuple):
+class RowInfo(NamedTuple):
     category: str
     id: str
+
+
+class RowData(NamedTuple):
+    row_info: RowInfo
     data: dict[str, str]
+
+    @classmethod
+    def from_data(cls, category: str, row_id: str, data: dict[str, str]) -> RowData:
+        """Create a RowData instance from category, row_id, and data."""
+        return cls(row_info=RowInfo(category=category, id=row_id), data=data)
 
 
 class NoneFoundHandler(StrEnum):
@@ -224,34 +233,27 @@ DELIM = r';*;%'
 @dataclass
 class MoreAvailable:
     n_more: int
-    json_link: str = None
-    html_link: str = None
 
-
-PAGE_SIZE = 30
+    def __bool__(self):
+        return self.n_more > 0
 
 
 @dataclass
 class Pagination:
     offset: int = 0
-    limit: int | None = None
+    limit: int = 0
 
     def __bool__(self):
-        return any([bool(self.limit), bool(self.offset)])
+        return any([self.limit, self.offset])
 
     def __str__(self):
-        return f'Pagination: offset={self.offset}, limit={self.limit}'
-
-    # @property
-    # def end(self):
-    #     return self.offset + (self.limit if self.limit is not None else PAGE_SIZE)
-
+        return f'Pagination: offset={self.offset}, limit={self.limit or "None"}'
 
     def next_page(self):
-        return Pagination(offset=self.offset + self.limit, limit = self.limit)
-
-        # return self.model_copy(update={'offset': self.offset + self.limit})
+        return Pagination(offset=self.offset + self.limit, limit=self.limit)
 
     def prev_page(self):
         return Pagination(offset=max(0, self.offset - self.limit), limit=self.limit)
-        # return self.model_copy(update={'offset': self.offset - self.limit})
+
+
+

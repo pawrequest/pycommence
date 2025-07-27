@@ -42,6 +42,14 @@ def test_temp_contact(pycmc):
         pycmc.read_row(pk=NEW_KEY)
 
 
+def test_read_rows2(pycmc):
+    res = list(pycmc.read_rows(pagination=PAGINATED))
+    ...
+    # assert isinstance(res, list)
+    # assert isinstance(res[0], dict)
+
+
+
 def test_get_records(pycmc):
     res = list(pycmc.read_rows(pagination=PAGINATED))
     assert isinstance(res, list)
@@ -164,7 +172,7 @@ def test_read_rows_more_available(pycmc):
     total_rows = csr.row_count
     limit = 2
     pagination = Pagination(limit=limit, offset=0)
-    rows = list(pycmc.read_rows(pagination=pagination, append_more=True))
+    rows = list(pycmc.read_rows(pagination=pagination))
     if total_rows > limit:
         assert isinstance(rows[-1], MoreAvailable)
         more = next(row for row in rows if isinstance(row, MoreAvailable))
