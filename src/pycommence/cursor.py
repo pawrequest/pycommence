@@ -121,7 +121,7 @@ class CursorAPI:
 
     def pk_to_row_ids(self, pk: str) -> list[str]:
         """
-        Get all row IDs matching a primary key.
+        Get all row IDs matching a primary key. (Commence allows duplicate entries, disambiguation not yet implemented in PyCommence)
 
         Args:
             pk (str): Primary key value.
