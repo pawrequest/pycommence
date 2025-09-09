@@ -37,6 +37,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/build/html
+
+      - name: Copy index.rst to README.rst
+        run: cp docs/source/index.rst README.rst
 #
 #      - name: Build Sphinx Documentation
 #        run: |
