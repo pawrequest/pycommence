@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Commence Wrapper &mdash; PyCommence 0.2.0 documentation</title>
+  <title>Wrapper Layer &mdash; PyCommence 0.2.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Commence RM API" href="cmc_api.html" />
-    <link rel="prev" title="PyCommence Api" href="pycommence_api.html" /> 
+    <link rel="prev" title="Api Layer" href="pycommence_api.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,19 +50,14 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="pycommence_api.html">PyCommence Api</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Commence Wrapper</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pycommence_api.html">Api Layer</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Wrapper Layer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-pycommence.wrapper.cmc_wrapper">DB Wrapper</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CmcConnector"><code class="docutils literal notranslate"><span class="pre">CmcConnector</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CmcConnector._connections"><code class="docutils literal notranslate"><span class="pre">CmcConnector._connections</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CmcConnector._initialize_connection"><code class="docutils literal notranslate"><span class="pre">CmcConnector._initialize_connection()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CmcConnector"><code class="docutils literal notranslate"><span class="pre">CmcConnector</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.commence_instance_name"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.commence_instance_name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.commence_dispatch"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.commence_dispatch</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_new_cursor"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.get_new_cursor()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper._get_new_cursor_wrapper"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper._get_new_cursor_wrapper()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_new_cursor_wrapper"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.get_new_cursor_wrapper()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_conversation_api"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.get_conversation_api()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.name"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.name</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.path"><code class="docutils literal notranslate"><span class="pre">CommenceWrapper.path</span></code></a></li>
@@ -159,16 +154,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IApp.GetCursor"><code class="docutils literal notranslate"><span class="pre">IApp.GetCursor()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IApp.Version"><code class="docutils literal notranslate"><span class="pre">IApp.Version()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IApp.quit"><code class="docutils literal notranslate"><span class="pre">IApp.quit()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IApp._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IApp._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IApp._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IApp._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICmcApplication"><code class="docutils literal notranslate"><span class="pre">ICmcApplication</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICmcApplication.CLSID"><code class="docutils literal notranslate"><span class="pre">ICmcApplication.CLSID</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICmcApplication.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">ICmcApplication.coclass_clsid</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICmcApplication.IsScriptLevelSupported"><code class="docutils literal notranslate"><span class="pre">ICmcApplication.IsScriptLevelSupported()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICmcApplication._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICmcApplication._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICmcApplication._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICmcApplication._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceAddRowSet"><code class="docutils literal notranslate"><span class="pre">ICommenceAddRowSet</span></code></a><ul>
@@ -183,8 +174,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceAddRowSet.GetShared"><code class="docutils literal notranslate"><span class="pre">ICommenceAddRowSet.GetShared()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceAddRowSet.ModifyRow"><code class="docutils literal notranslate"><span class="pre">ICommenceAddRowSet.ModifyRow()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceAddRowSet.SetShared"><code class="docutils literal notranslate"><span class="pre">ICommenceAddRowSet.SetShared()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceAddRowSet._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceAddRowSet._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceAddRowSet._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceAddRowSet._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceConversation"><code class="docutils literal notranslate"><span class="pre">ICommenceConversation</span></code></a><ul>
@@ -192,8 +181,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceConversation.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">ICommenceConversation.coclass_clsid</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceConversation.Execute"><code class="docutils literal notranslate"><span class="pre">ICommenceConversation.Execute()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceConversation.Request"><code class="docutils literal notranslate"><span class="pre">ICommenceConversation.Request()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceConversation._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceConversation._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceConversation._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceConversation._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceCursor"><code class="docutils literal notranslate"><span class="pre">ICommenceCursor</span></code></a><ul>
@@ -216,8 +203,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceCursor.SetLogic"><code class="docutils literal notranslate"><span class="pre">ICommenceCursor.SetLogic()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceCursor.SetRelatedColumn"><code class="docutils literal notranslate"><span class="pre">ICommenceCursor.SetRelatedColumn()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceCursor.SetSort"><code class="docutils literal notranslate"><span class="pre">ICommenceCursor.SetSort()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceCursor._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceCursor._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceCursor._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceCursor._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDB"><code class="docutils literal notranslate"><span class="pre">ICommenceDB</span></code></a><ul>
@@ -226,8 +211,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDB.GetConversation"><code class="docutils literal notranslate"><span class="pre">ICommenceDB.GetConversation()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDB.GetCursor"><code class="docutils literal notranslate"><span class="pre">ICommenceDB.GetCursor()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDB.MLValidate"><code class="docutils literal notranslate"><span class="pre">ICommenceDB.MLValidate()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDB._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceDB._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDB._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceDB._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet"><code class="docutils literal notranslate"><span class="pre">ICommenceDeleteRowSet</span></code></a><ul>
@@ -242,8 +225,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet.GetRowTimeStamp"><code class="docutils literal notranslate"><span class="pre">ICommenceDeleteRowSet.GetRowTimeStamp()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet.GetRowValue"><code class="docutils literal notranslate"><span class="pre">ICommenceDeleteRowSet.GetRowValue()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet.GetShared"><code class="docutils literal notranslate"><span class="pre">ICommenceDeleteRowSet.GetShared()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceDeleteRowSet._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceDeleteRowSet._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceEditRowSet"><code class="docutils literal notranslate"><span class="pre">ICommenceEditRowSet</span></code></a><ul>
@@ -260,8 +241,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceEditRowSet.GetShared"><code class="docutils literal notranslate"><span class="pre">ICommenceEditRowSet.GetShared()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceEditRowSet.ModifyRow"><code class="docutils literal notranslate"><span class="pre">ICommenceEditRowSet.ModifyRow()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceEditRowSet.SetShared"><code class="docutils literal notranslate"><span class="pre">ICommenceEditRowSet.SetShared()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceEditRowSet._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceEditRowSet._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceEditRowSet._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceEditRowSet._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet"><code class="docutils literal notranslate"><span class="pre">ICommenceQueryRowSet</span></code></a><ul>
@@ -275,8 +254,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet.GetRowTimeStamp"><code class="docutils literal notranslate"><span class="pre">ICommenceQueryRowSet.GetRowTimeStamp()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet.GetRowValue"><code class="docutils literal notranslate"><span class="pre">ICommenceQueryRowSet.GetRowValue()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet.GetShared"><code class="docutils literal notranslate"><span class="pre">ICommenceQueryRowSet.GetShared()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ICommenceQueryRowSet._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ICommenceQueryRowSet._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IConnOA"><code class="docutils literal notranslate"><span class="pre">IConnOA</span></code></a><ul>
@@ -292,8 +269,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IConnOA.SetActiveItem"><code class="docutils literal notranslate"><span class="pre">IConnOA.SetActiveItem()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IConnOA.SetConnection"><code class="docutils literal notranslate"><span class="pre">IConnOA.SetConnection()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IConnOA.SetFilterKeyword"><code class="docutils literal notranslate"><span class="pre">IConnOA.SetFilterKeyword()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IConnOA._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IConnOA._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IConnOA._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IConnOA._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IControlOA"><code class="docutils literal notranslate"><span class="pre">IControlOA</span></code></a><ul>
@@ -302,22 +277,16 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IControlOA.ActiveXGetProperty"><code class="docutils literal notranslate"><span class="pre">IControlOA.ActiveXGetProperty()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IControlOA.ActiveXMethod"><code class="docutils literal notranslate"><span class="pre">IControlOA.ActiveXMethod()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IControlOA.ActiveXSetProperty"><code class="docutils literal notranslate"><span class="pre">IControlOA.ActiveXSetProperty()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IControlOA._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IControlOA._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IControlOA._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IControlOA._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IDatabaseOA"><code class="docutils literal notranslate"><span class="pre">IDatabaseOA</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IDatabaseOA.CLSID"><code class="docutils literal notranslate"><span class="pre">IDatabaseOA.CLSID</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IDatabaseOA.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">IDatabaseOA.coclass_clsid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IDatabaseOA._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IDatabaseOA._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IDatabaseOA._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IDatabaseOA._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IFieldOA"><code class="docutils literal notranslate"><span class="pre">IFieldOA</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFieldOA.CLSID"><code class="docutils literal notranslate"><span class="pre">IFieldOA.CLSID</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFieldOA.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">IFieldOA.coclass_clsid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFieldOA._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IFieldOA._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFieldOA._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IFieldOA._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IFormOA"><code class="docutils literal notranslate"><span class="pre">IFormOA</span></code></a><ul>
@@ -333,16 +302,12 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFormOA.Save"><code class="docutils literal notranslate"><span class="pre">IFormOA.Save()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFormOA.SetShared"><code class="docutils literal notranslate"><span class="pre">IFormOA.SetShared()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFormOA.SetValue"><code class="docutils literal notranslate"><span class="pre">IFormOA.SetValue()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFormOA._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IFormOA._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFormOA._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IFormOA._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IFullControl"><code class="docutils literal notranslate"><span class="pre">IFullControl</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFullControl.CLSID"><code class="docutils literal notranslate"><span class="pre">IFullControl.CLSID</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFullControl.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">IFullControl.coclass_clsid</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFullControl.myfunction"><code class="docutils literal notranslate"><span class="pre">IFullControl.myfunction()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFullControl._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IFullControl._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IFullControl._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IFullControl._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.ISimple"><code class="docutils literal notranslate"><span class="pre">ISimple</span></code></a><ul>
@@ -351,8 +316,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ISimple.MyEventCallback"><code class="docutils literal notranslate"><span class="pre">ISimple.MyEventCallback()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ISimple.Test"><code class="docutils literal notranslate"><span class="pre">ISimple.Test()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ISimple.Version"><code class="docutils literal notranslate"><span class="pre">ISimple.Version()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ISimple._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">ISimple._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.ISimple._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">ISimple._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.IUIObj"><code class="docutils literal notranslate"><span class="pre">IUIObj</span></code></a><ul>
@@ -365,35 +328,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IUIObj.OnClick"><code class="docutils literal notranslate"><span class="pre">IUIObj.OnClick()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IUIObj.Test"><code class="docutils literal notranslate"><span class="pre">IUIObj.Test()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IUIObj.clickIn"><code class="docutils literal notranslate"><span class="pre">IUIObj.clickIn()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IUIObj._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">IUIObj._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.IUIObj._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">IUIObj._prop_map_put_</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.Isample"><code class="docutils literal notranslate"><span class="pre">Isample</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.Isample.CLSID"><code class="docutils literal notranslate"><span class="pre">Isample.CLSID</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.Isample.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">Isample.coclass_clsid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.Isample._prop_map_get_"><code class="docutils literal notranslate"><span class="pre">Isample._prop_map_get_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence.Isample._prop_map_put_"><code class="docutils literal notranslate"><span class="pre">Isample._prop_map_put_</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents.CLSID"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents.CLSID</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents.CLSID_Sink"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents.CLSID_Sink</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents.coclass_clsid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents._public_methods_"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents._public_methods_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents._dispid_to_func_"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents._dispid_to_func_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents.close"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents.close()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents._query_interface_"><code class="docutils literal notranslate"><span class="pre">_DFormOAEvents._query_interface_()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents.CLSID"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents.CLSID</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents.CLSID_Sink"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents.CLSID_Sink</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents.coclass_clsid"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents.coclass_clsid</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents._public_methods_"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents._public_methods_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents._dispid_to_func_"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents._dispid_to_func_</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents.close"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents.close()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents._query_interface_"><code class="docutils literal notranslate"><span class="pre">_IFullControlEvents._query_interface_()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.wrapper._icommence.App"><code class="docutils literal notranslate"><span class="pre">App</span></code></a><ul>
@@ -468,7 +407,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Commence Wrapper</li>
+      <li class="breadcrumb-item active">Wrapper Layer</li>
       <li class="wy-breadcrumbs-aside">
               <a href="https://github.com/PawRequest/pycommence/blob/main/docs/_source/pycommence_wrapper.rst" class="fa fa-github"> Edit on GitHub</a>
       </li>
@@ -478,8 +417,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="commence-wrapper">
-<h1>Commence Wrapper<a class="headerlink" href="#commence-wrapper" title="Link to this heading"></a></h1>
+  <section id="wrapper-layer">
+<h1>Wrapper Layer<a class="headerlink" href="#wrapper-layer" title="Link to this heading"></a></h1>
 <p>Direct access to the Commence Com object is provided by the wrapper layer.</p>
 <section id="module-pycommence.wrapper.cmc_wrapper">
 <span id="db-wrapper"></span><h2>DB Wrapper<a class="headerlink" href="#module-pycommence.wrapper.cmc_wrapper" title="Link to this heading"></a></h2>
@@ -487,22 +426,6 @@
 <dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CmcConnector">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CmcConnector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commence_instance_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence.DB'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_wrapper.py#L16-L46"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CmcConnector" title="Link to this definition"></a></dt>
 <dd><p>Singleton managing cached connections to multiple Commence databases.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CmcConnector._connections">
-<span class="sig-name descname"><span class="pre">_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">,</span> <a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper" title="pycommence.wrapper.cmc_wrapper.CommenceWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">CommenceWrapper</span></code></a><span class="pre">]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CmcConnector._connections" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CmcConnector._initialize_connection">
-<span class="sig-name descname"><span class="pre">_initialize_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_wrapper.py#L37-L46"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CmcConnector._initialize_connection" title="Link to this definition"></a></dt>
-<dd><p>Initialize the COM connection to the Commence database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dispatch</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -510,7 +433,7 @@
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommenceWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commence_instance_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Commence.DB'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_wrapper.py#L49-L166"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper" title="Link to this definition"></a></dt>
 <dd><p>Commence Database object.</p>
 <p>Entry point for <code class="xref py py-class docutils literal notranslate"><span class="pre">cmc_csr.CsrCmc</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">conversation.CommenceConversation</span></code>.</p>
-<p>Caching Inherited from <a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CmcConnector" title="pycommence.wrapper.cmc_wrapper.CmcConnector"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmcConnector</span></code></a>.</p>
+<p>~~Caching Inherited from <a class="reference internal" href="#pycommence.wrapper.cmc_wrapper.CmcConnector" title="pycommence.wrapper.cmc_wrapper.CmcConnector"><code class="xref py py-class docutils literal notranslate"><span class="pre">CmcConnector</span></code></a>.~~ caching breaks in multithreaded environments</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CommenceWrapper.commence_instance_name">
 <span class="sig-name descname"><span class="pre">commence_instance_name</span></span><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.commence_instance_name" title="Link to this definition"></a></dt>
@@ -534,19 +457,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_new_cursor">
-<span class="sig-name descname"><span class="pre">get_new_cursor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csrname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CursorType.CATEGORY</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_wrapper.py#L62-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_new_cursor" title="Link to this definition"></a></dt>
-<dd><p>Create a new cursor with the specified name and mode.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="pycommence_api.html#pycommence.cursor_v2.CursorAPI" title="pycommence.cursor_v2.CursorAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">CursorAPI</span></code></a></span></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CommenceWrapper._get_new_cursor_wrapper">
-<span class="sig-name descname"><span class="pre">_get_new_cursor_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CursorType.CATEGORY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pilot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_wrapper.py#L67-L107"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper._get_new_cursor_wrapper" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_new_cursor_wrapper">
+<span class="sig-name descname"><span class="pre">get_new_cursor_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">CursorType.CATEGORY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pilot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">internet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/cmc_wrapper.py#L67-L107"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.cmc_wrapper.CommenceWrapper.get_new_cursor_wrapper" title="Link to this definition"></a></dt>
 <dd><p>Create a cursor wrapper.</p>
 <p>CursorTypes CATEGORY and VIEW require name to be set.</p>
 <dl class="field-list simple">
@@ -1014,7 +926,7 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 <span id="rowset-wrappers"></span><h2>RowSet Wrappers<a class="headerlink" href="#module-pycommence.wrapper.row_wrapper" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetBase">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L26-L163"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L26-L159"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetBase.headers">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">headers</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase.headers" title="Link to this definition"></a></dt>
@@ -1145,7 +1057,7 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetBase.rows">
-<span class="sig-name descname"><span class="pre">rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L139-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase.rows" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L139-L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase.rows" title="Link to this definition"></a></dt>
 <dd><p>Generates dicts of the first count rows.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -1156,7 +1068,7 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetBase.get_shared">
-<span class="sig-name descname"><span class="pre">get_shared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L152-L163"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase.get_shared" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_shared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L148-L159"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetBase.get_shared" title="Link to this definition"></a></dt>
 <dd><p>Determines whether the row at the specified index is shared.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1175,10 +1087,10 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetQuery">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L166-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetQuery" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L162-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetQuery" title="Link to this definition"></a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetQuery.get_field_to_file">
-<span class="sig-name descname"><span class="pre">get_field_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L170-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetQuery.get_field_to_file" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_field_to_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canonical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L166-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetQuery.get_field_to_file" title="Link to this definition"></a></dt>
 <dd><p>Saves the field value at the given (row, column) to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1202,11 +1114,11 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetModifies">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetModifies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L188-L245"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetModifies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L184-L241"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies" title="Link to this definition"></a></dt>
 <dd><p>adds functionality to modify rows</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetModifies.modify_value">
-<span class="sig-name descname"><span class="pre">modify_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L191-L204"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.modify_value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">modify_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L187-L200"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.modify_value" title="Link to this definition"></a></dt>
 <dd><p>Modifies a field value in the rowset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1227,7 +1139,7 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetModifies.modify_row">
-<span class="sig-name descname"><span class="pre">modify_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_dict</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L206-L221"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.modify_row" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">modify_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_dict</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L202-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.modify_row" title="Link to this definition"></a></dt>
 <dd><p>Modifies a row in the rowset.
 :type row_index: <span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>
 :param row_index: The index of the row to modify.
@@ -1244,7 +1156,7 @@ This call will add the Date field to the cursor via the ‘Relates to History’
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetModifies.commit">
-<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L223-L235"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.commit" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L219-L231"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.commit" title="Link to this definition"></a></dt>
 <dd><p>Commit to disk.
 After Commit(), the RowSet is no Longer valid and should be discarded.</p>
 <dl class="field-list simple">
@@ -1259,7 +1171,7 @@ After Commit(), the RowSet is no Longer valid and should be discarded.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetModifies.commit_get_cursor">
-<span class="sig-name descname"><span class="pre">commit_get_cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L237-L245"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.commit_get_cursor" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">commit_get_cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L233-L241"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetModifies.commit_get_cursor" title="Link to this definition"></a></dt>
 <dd><p>Makes row modifications permanent (commit to disk) and returns a cursor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1275,7 +1187,7 @@ After Commit(), the RowSet is no Longer valid and should be discarded.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetAdd">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetAdd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L248-L264"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetAdd" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetAdd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L244-L260"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetAdd" title="Link to this definition"></a></dt>
 <dd><p>Represents a set of new items to add to the database.</p>
 <dl class="simple">
 <dt>Inherits from:</dt><dd><p>RowSetBase: Base class for Commence Row Set objects.
@@ -1286,7 +1198,7 @@ RowSetModifies: Base class for Write-Enabled RowSet objects.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetDelete">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetDelete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L267-L307"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetDelete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_rs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L263-L303"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete" title="Link to this definition"></a></dt>
 <dd><p>Represents a set of items to delete from the database.</p>
 <dl class="simple">
 <dt>Inherits from:</dt><dd><p>RowSetBase: Base class for Commence Row Set objects.</p>
@@ -1294,7 +1206,7 @@ RowSetModifies: Base class for Write-Enabled RowSet objects.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetDelete.get_row_id">
-<span class="sig-name descname"><span class="pre">get_row_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L286-L287"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.get_row_id" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_row_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L282-L283"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.get_row_id" title="Link to this definition"></a></dt>
 <dd><p>Retrieves the ID of the specified row.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1311,7 +1223,7 @@ RowSetModifies: Base class for Write-Enabled RowSet objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetDelete.delete_row">
-<span class="sig-name descname"><span class="pre">delete_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L289-L301"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.delete_row" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">delete_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L285-L297"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.delete_row" title="Link to this definition"></a></dt>
 <dd><p>Marks a row for deletion.
 Deletion is not permanent until Commit() is called.</p>
 <dl class="field-list simple">
@@ -1329,7 +1241,7 @@ Deletion is not permanent until Commit() is called.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetDelete.commit_get_cursor">
-<span class="sig-name descname"><span class="pre">commit_get_cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L303-L304"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.commit_get_cursor" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">commit_get_cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L299-L300"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.commit_get_cursor" title="Link to this definition"></a></dt>
 <dd><p>Makes row modifications permanent (commit to disk) and returns a cursor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1343,7 +1255,7 @@ Deletion is not permanent until Commit() is called.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetDelete.modify_value">
-<span class="sig-name descname"><span class="pre">modify_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L306-L307"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.modify_value" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">modify_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L302-L303"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetDelete.modify_value" title="Link to this definition"></a></dt>
 <dd><p>Modifies a field value in the rowset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1366,7 +1278,7 @@ Deletion is not permanent until Commit() is called.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.wrapper.row_wrapper.RowSetEdit">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetEdit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edit_rowset</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L310-L313"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetEdit" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RowSetEdit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edit_rowset</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/row_wrapper.py#L306-L309"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper.row_wrapper.RowSetEdit" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -1485,16 +1397,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dd><p>method quit</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IApp._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IApp._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IApp._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IApp._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -1513,16 +1415,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICmcApplication.IsScriptLevelSupported">
 <span class="sig-name descname"><span class="pre">IsScriptLevelSupported</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L89-L90"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICmcApplication.IsScriptLevelSupported" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICmcApplication._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'CurrentScriptLevel':</span> <span class="pre">(7,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'CurrentScriptLevel',</span> <span class="pre">None),</span> <span class="pre">'Database':</span> <span class="pre">(9,</span> <span class="pre">2,</span> <span class="pre">(9,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Database',</span> <span class="pre">None),</span> <span class="pre">'DatabaseDirectory':</span> <span class="pre">(5,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'DatabaseDirectory',</span> <span class="pre">None),</span> <span class="pre">'DatabaseName':</span> <span class="pre">(4,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'DatabaseName',</span> <span class="pre">None),</span> <span class="pre">'DefaultScriptLevel':</span> <span class="pre">(6,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'DefaultScriptLevel',</span> <span class="pre">None),</span> <span class="pre">'Name':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Name',</span> <span class="pre">None),</span> <span class="pre">'ProgramDirectory':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ProgramDirectory',</span> <span class="pre">None),</span> <span class="pre">'ProgramName':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ProgramName',</span> <span class="pre">None),</span> <span class="pre">'Version':</span> <span class="pre">(8,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Version',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICmcApplication._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICmcApplication._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'CurrentScriptLevel':</span> <span class="pre">((7,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Database':</span> <span class="pre">((9,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'DatabaseDirectory':</span> <span class="pre">((5,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'DatabaseName':</span> <span class="pre">((4,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'DefaultScriptLevel':</span> <span class="pre">((6,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Name':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ProgramDirectory':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ProgramName':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Version':</span> <span class="pre">((8,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICmcApplication._prop_map_put_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1585,16 +1477,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">SetShared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nRow=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L195-L196"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceAddRowSet.SetShared" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceAddRowSet._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ColumnCount',</span> <span class="pre">None),</span> <span class="pre">'RowCount':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'RowCount',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceAddRowSet._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceAddRowSet._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'RowCount':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceAddRowSet._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -1618,16 +1500,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceConversation.Request">
 <span class="sig-name descname"><span class="pre">Request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pszCommand=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L223-L225"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceConversation.Request" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceConversation._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceConversation._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceConversation._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceConversation._prop_map_put_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1765,16 +1637,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">SetSort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pSort=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L412-L415"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceCursor.SetSort" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceCursor._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Category':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Category',</span> <span class="pre">None),</span> <span class="pre">'ColumnCount':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ColumnCount',</span> <span class="pre">None),</span> <span class="pre">'MaxFieldSize':</span> <span class="pre">(5,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'MaxFieldSize',</span> <span class="pre">None),</span> <span class="pre">'MaxRows':</span> <span class="pre">(6,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'MaxRows',</span> <span class="pre">None),</span> <span class="pre">'RowCount':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'RowCount',</span> <span class="pre">None),</span> <span class="pre">'Shared':</span> <span class="pre">(4,</span> <span class="pre">2,</span> <span class="pre">(11,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Shared',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceCursor._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceCursor._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Category':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ColumnCount':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'MaxFieldSize':</span> <span class="pre">((5,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'MaxRows':</span> <span class="pre">((6,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'RowCount':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Shared':</span> <span class="pre">((4,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceCursor._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -1813,16 +1675,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceDB.MLValidate">
 <span class="sig-name descname"><span class="pre">MLValidate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pszRequiredVersion=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L484-L487"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceDB.MLValidate" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceDB._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Name':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Name',</span> <span class="pre">None),</span> <span class="pre">'Path':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Path',</span> <span class="pre">None),</span> <span class="pre">'RegisteredUser':</span> <span class="pre">(6,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'RegisteredUser',</span> <span class="pre">None),</span> <span class="pre">'Shared':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(11,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Shared',</span> <span class="pre">None),</span> <span class="pre">'Version':</span> <span class="pre">(4,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Version',</span> <span class="pre">None),</span> <span class="pre">'VersionExt':</span> <span class="pre">(5,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'VersionExt',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceDB._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceDB._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Name':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Path':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'RegisteredUser':</span> <span class="pre">((6,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Shared':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Version':</span> <span class="pre">((4,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'VersionExt':</span> <span class="pre">((5,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceDB._prop_map_put_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1883,16 +1735,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceDeleteRowSet.GetShared">
 <span class="sig-name descname"><span class="pre">GetShared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nRow=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L572-L573"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet.GetShared" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceDeleteRowSet._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ColumnCount',</span> <span class="pre">None),</span> <span class="pre">'RowCount':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'RowCount',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceDeleteRowSet._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'RowCount':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceDeleteRowSet._prop_map_put_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1965,16 +1807,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">SetShared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nRow=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L676-L677"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceEditRowSet.SetShared" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceEditRowSet._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ColumnCount',</span> <span class="pre">None),</span> <span class="pre">'RowCount':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'RowCount',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceEditRowSet._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceEditRowSet._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'RowCount':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceEditRowSet._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -2028,16 +1860,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceQueryRowSet.GetShared">
 <span class="sig-name descname"><span class="pre">GetShared</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nRow=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L765-L766"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet.GetShared" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceQueryRowSet._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ColumnCount',</span> <span class="pre">None),</span> <span class="pre">'RowCount':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'RowCount',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ICommenceQueryRowSet._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ColumnCount':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'RowCount':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ICommenceQueryRowSet._prop_map_put_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2105,16 +1927,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">SetFilterKeyword</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sKeyword=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sValue=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L869-L877"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.IConnOA.SetFilterKeyword" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IConnOA._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ConnectedItemCount':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ConnectedItemCount',</span> <span class="pre">None),</span> <span class="pre">'CurrentSelection':</span> <span class="pre">(5,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'CurrentSelection',</span> <span class="pre">None),</span> <span class="pre">'ItemClarifyField':</span> <span class="pre">(7,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ItemClarifyField',</span> <span class="pre">None),</span> <span class="pre">'ItemName':</span> <span class="pre">(6,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ItemName',</span> <span class="pre">None),</span> <span class="pre">'Name':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Name',</span> <span class="pre">None),</span> <span class="pre">'ToCategory':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ToCategory',</span> <span class="pre">None),</span> <span class="pre">'UnconnectedItemCount':</span> <span class="pre">(4,</span> <span class="pre">2,</span> <span class="pre">(3,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'UnconnectedItemCount',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IConnOA._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IConnOA._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ConnectedItemCount':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'CurrentSelection':</span> <span class="pre">((5,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ItemClarifyField':</span> <span class="pre">((7,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ItemName':</span> <span class="pre">((6,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Name':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ToCategory':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'UnconnectedItemCount':</span> <span class="pre">((4,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IConnOA._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -2145,16 +1957,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">ActiveXSetProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">PropertyName=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Parameter1=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L939-L944"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.IControlOA.ActiveXSetProperty" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IControlOA._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ControlName':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ControlName',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IControlOA._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IControlOA._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ControlName':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IControlOA._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -2170,16 +1972,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">coclass_clsid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IDatabaseOA.coclass_clsid" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IDatabaseOA._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Name':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Name',</span> <span class="pre">None),</span> <span class="pre">'Path':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Path',</span> <span class="pre">None),</span> <span class="pre">'Version':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Version',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IDatabaseOA._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IDatabaseOA._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Name':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Path':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Version':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IDatabaseOA._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -2193,16 +1985,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFieldOA.coclass_clsid">
 <span class="sig-name descname"><span class="pre">coclass_clsid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFieldOA.coclass_clsid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFieldOA._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Label':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Label',</span> <span class="pre">None),</span> <span class="pre">'Name':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Name',</span> <span class="pre">None),</span> <span class="pre">'Value':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Value',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFieldOA._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFieldOA._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Label':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Name':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Value':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFieldOA._prop_map_put_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2270,16 +2052,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">SetValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Value=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1085-L1086"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.IFormOA.SetValue" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFormOA._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Application':</span> <span class="pre">(6,</span> <span class="pre">2,</span> <span class="pre">(9,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Application',</span> <span class="pre">'{18884001-732C-11D0-AC0A-00A02485EC15}'),</span> <span class="pre">'BackColor':</span> <span class="pre">(11,</span> <span class="pre">2,</span> <span class="pre">(19,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'BackColor',</span> <span class="pre">None),</span> <span class="pre">'Caption':</span> <span class="pre">(12,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Caption',</span> <span class="pre">None),</span> <span class="pre">'CategoryName':</span> <span class="pre">(2,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'CategoryName',</span> <span class="pre">None),</span> <span class="pre">'FieldName':</span> <span class="pre">(5,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'FieldName',</span> <span class="pre">None),</span> <span class="pre">'FieldValue':</span> <span class="pre">(8,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'FieldValue',</span> <span class="pre">None),</span> <span class="pre">'IsAdd':</span> <span class="pre">(7,</span> <span class="pre">2,</span> <span class="pre">(11,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'IsAdd',</span> <span class="pre">None),</span> <span class="pre">'IsShared':</span> <span class="pre">(9,</span> <span class="pre">2,</span> <span class="pre">(11,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'IsShared',</span> <span class="pre">None),</span> <span class="pre">'ItemName':</span> <span class="pre">(3,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'ItemName',</span> <span class="pre">None),</span> <span class="pre">'Name':</span> <span class="pre">(1,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Name',</span> <span class="pre">None),</span> <span class="pre">'Runtime':</span> <span class="pre">(10,</span> <span class="pre">2,</span> <span class="pre">(9,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Runtime',</span> <span class="pre">None),</span> <span class="pre">'TabName':</span> <span class="pre">(4,</span> <span class="pre">2,</span> <span class="pre">(8,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'TabName',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFormOA._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFormOA._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Application':</span> <span class="pre">((6,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'BackColor':</span> <span class="pre">((11,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Caption':</span> <span class="pre">((12,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'CategoryName':</span> <span class="pre">((2,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'FieldName':</span> <span class="pre">((5,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'FieldValue':</span> <span class="pre">((8,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'IsAdd':</span> <span class="pre">((7,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'IsShared':</span> <span class="pre">((9,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'ItemName':</span> <span class="pre">((3,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Name':</span> <span class="pre">((1,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'Runtime':</span> <span class="pre">((10,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">()),</span> <span class="pre">'TabName':</span> <span class="pre">((4,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFormOA._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -2301,16 +2073,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">myfunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y=&lt;PyOleEmpty</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1140-L1142"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.IFullControl.myfunction" title="Link to this definition"></a></dt>
 <dd><p>method myfunction</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFullControl._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFullControl._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IFullControl._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IFullControl._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -2345,16 +2107,6 @@ Deletion is not permanent until Commit() is called.</p>
 <span class="sig-name descname"><span class="pre">Version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1180-L1189"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.ISimple.Version" title="Link to this definition"></a></dt>
 <dd><p>method Version</p>
 </dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ISimple._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Application':</span> <span class="pre">(5,</span> <span class="pre">2,</span> <span class="pre">(9,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Application',</span> <span class="pre">None),</span> <span class="pre">'Database':</span> <span class="pre">(4,</span> <span class="pre">2,</span> <span class="pre">(9,</span> <span class="pre">0),</span> <span class="pre">(),</span> <span class="pre">'Database',</span> <span class="pre">None)}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ISimple._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.ISimple._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Application':</span> <span class="pre">((5,</span> <span class="pre">0,</span> <span class="pre">4,</span> <span class="pre">0),</span> <span class="pre">())}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.ISimple._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -2413,16 +2165,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dd><p>method clickIn</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IUIObj._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IUIObj._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.IUIObj._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.IUIObj._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <dl class="py class">
@@ -2437,98 +2179,6 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.Isample.coclass_clsid">
 <span class="sig-name descname"><span class="pre">coclass_clsid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{F22497D6-AAC1-4DA4-9DC7-CD5C1536431C}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.Isample.coclass_clsid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.Isample._prop_map_get_">
-<span class="sig-name descname"><span class="pre">_prop_map_get_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.Isample._prop_map_get_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence.Isample._prop_map_put_">
-<span class="sig-name descname"><span class="pre">_prop_map_put_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence.Isample._prop_map_put_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_DFormOAEvents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1301-L1357"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents" title="Link to this definition"></a></dt>
-<dd><p>Event interface for FormOA object</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents.CLSID">
-<span class="sig-name descname"><span class="pre">CLSID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{654E7742-2AB6-11D0-8A93-444553540000}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents.CLSID" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents.CLSID_Sink">
-<span class="sig-name descname"><span class="pre">CLSID_Sink</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{654E7742-2AB6-11D0-8A93-444553540000}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents.CLSID_Sink" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents.coclass_clsid">
-<span class="sig-name descname"><span class="pre">coclass_clsid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{654E7741-2AB6-11D0-8A93-444553540000}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents.coclass_clsid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents._public_methods_">
-<span class="sig-name descname"><span class="pre">_public_methods_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents._public_methods_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents._dispid_to_func_">
-<span class="sig-name descname"><span class="pre">_dispid_to_func_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{1:</span> <span class="pre">'OnLoad',</span> <span class="pre">2:</span> <span class="pre">'OnSave',</span> <span class="pre">3:</span> <span class="pre">'OnCancel',</span> <span class="pre">4:</span> <span class="pre">'OnEnterTab',</span> <span class="pre">5:</span> <span class="pre">'OnLeaveTab',</span> <span class="pre">6:</span> <span class="pre">'OnEnterField',</span> <span class="pre">7:</span> <span class="pre">'OnLeaveField',</span> <span class="pre">8:</span> <span class="pre">'OnEnterControl',</span> <span class="pre">9:</span> <span class="pre">'OnLeaveControl',</span> <span class="pre">10:</span> <span class="pre">'OnClick',</span> <span class="pre">11:</span> <span class="pre">'OnChange',</span> <span class="pre">12:</span> <span class="pre">'OnKeyPress',</span> <span class="pre">13:</span> <span class="pre">'OnActiveXControlEvent'}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents._dispid_to_func_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1343-L1351"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents.close" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._DFormOAEvents._query_interface_">
-<span class="sig-name descname"><span class="pre">_query_interface_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iid</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1353-L1357"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence._DFormOAEvents._query_interface_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_IFullControlEvents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oobj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1379-L1421"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents" title="Link to this definition"></a></dt>
-<dd><p>_IFullControlEvents Interface</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents.CLSID">
-<span class="sig-name descname"><span class="pre">CLSID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{8C5813AA-6C64-4B5F-BC50-BD2C768CD066}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents.CLSID" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents.CLSID_Sink">
-<span class="sig-name descname"><span class="pre">CLSID_Sink</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{8C5813AA-6C64-4B5F-BC50-BD2C768CD066}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents.CLSID_Sink" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents.coclass_clsid">
-<span class="sig-name descname"><span class="pre">coclass_clsid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">IID('{789D254B-2D9B-487C-BABF-89D0EF6BD76C}')</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents.coclass_clsid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents._public_methods_">
-<span class="sig-name descname"><span class="pre">_public_methods_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents._public_methods_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents._dispid_to_func_">
-<span class="sig-name descname"><span class="pre">_dispid_to_func_</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents._dispid_to_func_" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1407-L1415"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents.close" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pycommence.wrapper._icommence._IFullControlEvents._query_interface_">
-<span class="sig-name descname"><span class="pre">_query_interface_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iid</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1417-L1421"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence._IFullControlEvents._query_interface_" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -2601,7 +2251,7 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.FormOA.default_source">
 <span class="sig-name descname"><span class="pre">default_source</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1301-L1357"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.FormOA.default_source" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#pycommence.wrapper._icommence._DFormOAEvents" title="pycommence.wrapper._icommence._DFormOAEvents"><code class="xref py py-class docutils literal notranslate"><span class="pre">_DFormOAEvents</span></code></a></p>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">_DFormOAEvents</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2633,7 +2283,7 @@ Deletion is not permanent until Commit() is called.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.wrapper._icommence.FullControl.default_source">
 <span class="sig-name descname"><span class="pre">default_source</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/wrapper/_icommence.py#L1379-L1421"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.wrapper._icommence.FullControl.default_source" title="Link to this definition"></a></dt>
-<dd><p>alias of <a class="reference internal" href="#pycommence.wrapper._icommence._IFullControlEvents" title="pycommence.wrapper._icommence._IFullControlEvents"><code class="xref py py-class docutils literal notranslate"><span class="pre">_IFullControlEvents</span></code></a></p>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">_IFullControlEvents</span></code></p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2734,7 +2384,7 @@ Deletion is not permanent until Commit() is called.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pycommence_api.html" class="btn btn-neutral float-left" title="PyCommence Api" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycommence_api.html" class="btn btn-neutral float-left" title="Api Layer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="cmc_api.html" class="btn btn-neutral float-right" title="Commence RM API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
