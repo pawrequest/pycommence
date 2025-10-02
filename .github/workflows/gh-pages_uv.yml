@@ -1,9 +1,10 @@
 name: GitHub Pages
-
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+#on:
+#  push:
+#    branches:
+#      - main
 
 jobs:
   deploy:
@@ -27,7 +28,7 @@ jobs:
       #        run: uv python install
 
       - name: Install the project
-        run: uv sync --locked --all-extras --dev
+        run: uv sync --all-extras --dev
 
       - name: Build Sphinx Documentation
         run: |
