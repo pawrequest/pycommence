@@ -2,10 +2,9 @@
 requires = ["uv_build>=0.8.22,<0.9.0"]
 build-backend = "uv_build"
 
-
 [project]
 name = "pycommence"
-version = "0.2.3"
+version = "0.2.4"
 description = "wrapper for Commence Rm via pywin32"
 authors = [
     { name = "PawRequest", email = "pycommence+pawrequest@users.noreply.github.com" }
@@ -18,6 +17,9 @@ dependencies = [
 ]
 readme = "README.rst"
 requires-python = ">= 3.13"
+
+[project.urls]
+Homepage = "https://github.com/pawrequest/pycommence"
 
 [dependency-groups]
 dev = [
