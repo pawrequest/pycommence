@@ -7,4 +7,3 @@
 *.egg-info/
 
 /docs/build/
-/uv.lock
