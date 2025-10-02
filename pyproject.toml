@@ -1,6 +1,11 @@
+[build-system]
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
+
+
 [project]
 name = "pycommence"
-version = "0.2.2"
+version = "0.2.3"
 description = "wrapper for Commence Rm via pywin32"
 authors = [
     { name = "PawRequest", email = "pycommence+pawrequest@users.noreply.github.com" }
@@ -14,9 +19,10 @@ dependencies = [
 readme = "README.rst"
 requires-python = ">= 3.13"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-    'pytest',
+    "pytest-asyncio>=1.1.0",
+    "pytest>=8.3.5",
     'autodoc_pydantic',
     "sphinx",
     "sphinx-autodoc-typehints",
@@ -26,21 +32,9 @@ dev = [
     "sphinx_rtd_dark_mode",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
 [tool.ruff]
 line-length = 120
 extend-select = ["Q", "RUF100", "UP"]
 flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
 format.quote-style = "single"
 
-[dependency-groups]
-dev = [
-    "pytest-asyncio>=1.1.0",
-    "pytest>=8.3.5",
-]
