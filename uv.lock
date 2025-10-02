@@ -292,6 +292,19 @@ dependencies = [
     { name = "pywin32" },
 ]
 
+[package.optional-dependencies]
+dev = [
+    { name = "autodoc-pydantic" },
+    { name = "myst-parser" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "sphinx" },
+    { name = "sphinx-autodoc-typehints" },
+    { name = "sphinx-readme" },
+    { name = "sphinx-rtd-dark-mode" },
+    { name = "sphinx-rtd-theme" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "autodoc-pydantic" },
@@ -307,11 +320,21 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "autodoc-pydantic", marker = "extra == 'dev'" },
     { name = "comtypes", specifier = ">=1.4.11" },
     { name = "loguru" },
+    { name = "myst-parser", marker = "extra == 'dev'" },
     { name = "pydantic" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=1.1.0" },
     { name = "pywin32" },
+    { name = "sphinx", marker = "extra == 'dev'" },
+    { name = "sphinx-autodoc-typehints", marker = "extra == 'dev'" },
+    { name = "sphinx-readme", marker = "extra == 'dev'" },
+    { name = "sphinx-rtd-dark-mode", marker = "extra == 'dev'" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'dev'" },
 ]
+provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
 dev = [
