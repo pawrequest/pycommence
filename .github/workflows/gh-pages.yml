@@ -42,11 +42,6 @@ jobs:
       - name: Copy index.rst to README.rst
         run: cp docs/source/index.rst README.rst
 
-defaults:
-permissions:
-env:
-run-name:
-concurrency:
 #
 #      - name: Build Sphinx Documentation
 #        run: |
