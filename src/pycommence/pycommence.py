@@ -1,17 +1,17 @@
-import contextlib
 import typing as _t
 from dataclasses import dataclass, field
 
-from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
-from pycommence.cursor import CursorAPI, raise_for_id_or_pk, RESULTS_GENERATOR
+from pycommence.cursor import CursorAPI, RESULTS_GENERATOR, raise_for_id_or_pk
 from pycommence.filters import FilterArray
-from pycommence.pycmc_types import CursorType, MoreAvailable, Pagination, RowData, RowFilter
-
+from pycommence.meta.pycmc_fields import DELIM
+from pycommence.pycmc_types import CursorType, RowFilter
+from pycommence.pagination import Pagination
+from pycommence.rows import RowData, RowData2
 from pycommence.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
-from pycommence.wrapper.conversation_wrapper import ConversationAPI, ConversationTopic
+from pycommence.wrapper.conversation_wrapper import ConversationAPI, DDEKind, DDETopic
 
 
 # noinspection PyProtectedMember
@@ -34,13 +34,13 @@ class PyCommence:
 
     cmc_wrapper: CommenceWrapper = field(default_factory=CommenceWrapper)
     csrs: dict[str, CursorAPI] = field(default_factory=dict)
-    conversations: dict[ConversationTopic, ConversationAPI] = field(default_factory=dict)
+    conversations: dict[DDETopic, ConversationAPI] = field(default_factory=dict)
 
     @classmethod
     def with_csr(
-        cls,
-        csrname: str,
-        mode: CursorType = CursorType.CATEGORY,
+            cls,
+            csrname: str,
+            mode: CursorType = CursorType.CATEGORY,
     ):
         """
         Create a new PyCommence instance with a cursor.
@@ -56,9 +56,9 @@ class PyCommence:
 
     @resolve_csrname
     def set_csr(
-        self,
-        csrname: str,
-        mode: CursorType = CursorType.CATEGORY,
+            self,
+            csrname: str,
+            mode: CursorType = CursorType.CATEGORY,
     ) -> _t.Self:
         """
         Add or update a cursor by name and type.
@@ -70,7 +70,7 @@ class PyCommence:
         Returns:
             PyCommence: Self for chaining.
         """
-        cursor_wrapper = self.cmc_wrapper.get_new_cursor_wrapper(csrname, mode)
+        cursor_wrapper = self.cmc_wrapper.establish_cursor(csrname, mode)
         cursor = CursorAPI(cursor_wrapper=cursor_wrapper, mode=mode)
         # cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
         self.csrs[csrname] = cursor
@@ -89,32 +89,24 @@ class PyCommence:
         # logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
         return self
 
-    def set_conversation(self, topic: ConversationTopic = 'ViewData'):
-        """
-        Add a DDE conversation by topic.
+    # def send_dde_obj(self, dde_command: DDEMessage):
+    #     self.send_dde(topic=dde_command.topic, kind=dde_command.kind, cmd=dde_command.to_dde())
 
-        Args:
-            topic (ConversationTopic): DDE topic name.
+    def send_dde(self, cmd: str, topic: DDETopic = DDETopic.VIEW_DATA, kind: DDEKind = DDEKind.REQUEST):
+        logger.debug(f'Sending DDE command to topic {topic} ({kind}): {cmd}/\nCOMAND_LENGTH = {len(cmd)}')
+        conv = self.get_conversation(topic)
+        res = conv.send_dde(cmd, kind)
+        if isinstance(res, str) and DELIM in res:
+            res = res.split(DELIM)
+        return res
 
-        Returns:
-            PyCommence: Self for chaining.
-        """
-
-        self.conversations[topic] = self.cmc_wrapper.get_conversation_api(topic)
-        return self
-
-    @classmethod
-    def with_conversation(cls, topic: ConversationTopic = 'ViewData'):
-        """
-        Create a PyCommence instance with a DDE conversation.
-
-        Args:
-            topic (ConversationTopic): DDE topic name.
-
-        Returns:
-            PyCommence: Instance with conversation set.
-        """
-        return cls(cmc_wrapper=CommenceWrapper()).set_conversation(topic)
+    def get_conversation(self, topic: DDETopic) -> ConversationAPI | None:
+        conv = self.conversations.get(topic)
+        if not conv:
+            logger.debug(f'Establishing new conversation for topic: {topic}')
+            self.conversations[topic] = self.cmc_wrapper.establish_conversation(topic)
+            conv = self.conversations[topic]
+        return conv
 
     def create_row(self, create_pkg: dict[str, str], csrname: str | None = None):
         """
@@ -131,15 +123,27 @@ class PyCommence:
 
     @resolve_row_id
     def read_row(
-        self,
-        *,
-        csrname: str | None = None,
-        row_id: str | None = None,  # id or pk must be provided
-        pk: str | None = None,
+            self,
+            *,
+            csrname: str | None = None,
+            row_id: str | None = None,  # id or pk must be provided
+            pk: str | None = None,
     ) -> RowData:
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
         return csr.read_row(row_id=row_id)
+
+    @resolve_row_id
+    def read_row2(
+            self,
+            *,
+            csrname: str | None = None,
+            row_id: str | None = None,  # id or pk must be provided
+            pk: str | None = None,
+    ) -> RowData2:
+        raise_for_id_or_pk(row_id, pk)
+        csr = self.csr(csrname)
+        return csr.read_row2(row_id=row_id)
 
     # def read_rows(
     #     self,
@@ -168,12 +172,12 @@ class PyCommence:
     #     )
 
     def read_rows(
-        self,
-        csrname: str | None = None,
-        pagination: Pagination | None = None,
-        filter_array: FilterArray | None = None,
-        row_filter: RowFilter | None = None,
-        fetch_ids: bool = True,
+            self,
+            csrname: str | None = None,
+            pagination: Pagination | None = None,
+            filter_array: FilterArray | None = None,
+            row_filter: RowFilter | None = None,
+            fetch_ids: bool = True,
     ) -> RESULTS_GENERATOR:
         """
         Generate rows from a cursor
@@ -199,7 +203,7 @@ class PyCommence:
 
     @resolve_row_id
     def update_row(
-        self, update_pkg: dict, row_id: str | None = None, pk: str | None = None, csrname: str | None = None
+            self, update_pkg: dict, row_id: str | None = None, pk: str | None = None, csrname: str | None = None
     ):
         """Update a row by id or pk
 
@@ -223,26 +227,3 @@ class PyCommence:
         self.read_row(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
         csr.delete_row(id=row_id)
         self.refresh_csr(csr)
-
-
-@contextlib.contextmanager
-def pycommence_context(csrname: str, mode: CursorType = CursorType.CATEGORY) -> _t.Generator[PyCommence, None, None]:
-    """Context manager for PyCommence with a single cursor"""
-    CoInitialize()
-    pyc = PyCommence.with_csr(csrname, mode=mode)
-    yield pyc
-    CoUninitialize()
-
-
-@contextlib.contextmanager
-def pycommences_context(csrnames: list[str]) -> _t.Generator[PyCommence, None, None]:
-    """Context manager for PyCommence with multiple cursors"""
-    CoInitialize()
-    pyc = PyCommence()
-    for csrname in csrnames:
-        pyc.set_csr(csrname)
-    yield pyc
-    CoUninitialize()
-
-
-

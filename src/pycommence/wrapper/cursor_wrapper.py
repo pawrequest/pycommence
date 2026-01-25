@@ -187,7 +187,7 @@ class CursorWrapper:
         result = self._csr_cmc.GetQueryRowSet(limit, FLAGS_UNUSED)
         return rs.RowSetQuery(result)
 
-    def get_query_row_set_by_id(self, row_id: str):
+    def get_query_row_set_by_id(self, row_id: str) -> rs.RowSetQuery:
         """
         Args:
             row_id:str Unique ID string obtained from GetRowID().

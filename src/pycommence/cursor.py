@@ -15,8 +15,15 @@ from typing import Self
 
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import Connection, CursorType, MoreAvailable, Pagination, RowData, RowFilter, RowInfo, SeekBookmark
-from .wrapper.cursor_wrapper import CursorWrapper
+from .pycmc_types import (
+    Connection,
+    CursorType,
+    RowFilter,
+    SeekBookmark,
+)
+from pycommence.pagination import Pagination, MoreAvailable
+from pycommence.rows import RowInfo, RowData, RowData2
+from pycommence.wrapper.cursor_wrapper import CursorWrapper
 
 
 def raise_for_id_or_pk(id, pk):
@@ -41,10 +48,10 @@ class CursorAPI:
     """
 
     def __init__(
-        self,
-        cursor_wrapper: CursorWrapper,
-        mode: CursorType = CursorType.CATEGORY,
-        csrname: str = '',
+            self,
+            cursor_wrapper: CursorWrapper,
+            mode: CursorType = CursorType.CATEGORY,
+            csrname: str = '',
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -175,11 +182,25 @@ class CursorAPI:
         row = next(rs.rows())
         return RowData.from_data(category=self.category, row_id=row_id, data=row)
 
+    def read_row2(self, row_id: str) -> RowData2:
+        """
+        Retrieve a single row by row ID.
+
+        Args:
+            row_id (str): Row ID.
+
+        Returns:
+            RowData: Object containing row information and data.
+        """
+        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+        row = next(rs.rows())
+        return RowData2(category=self.category, id=row_id, data=row)
+
     def read_rows(
-        self,
-        pagination: Pagination | None = None,
-        filter_array: FilterArray | None = None,
-        row_filter: RowFilter | None = None,
+            self,
+            pagination: Pagination | None = None,
+            filter_array: FilterArray | None = None,
+            row_filter: RowFilter | None = None,
     ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
         pagination = pagination or Pagination()
         filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
@@ -195,11 +216,11 @@ class CursorAPI:
                 yield row
 
     def read_rows2(
-        self,
-        pagination: Pagination | None = None,
-        filter_array: FilterArray | None = None,
-        row_filter: RowFilter | None = None,
-        fetch_ids: bool = False,
+            self,
+            pagination: Pagination | None = None,
+            filter_array: FilterArray | None = None,
+            row_filter: RowFilter | None = None,
+            fetch_ids: bool = False,
     ) -> RESULTS_GENERATOR:
         pagination = pagination or Pagination()
         row_info_ = RowInfo(category=self.category, id='unknown')

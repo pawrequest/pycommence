@@ -1,33 +1,15 @@
 from __future__ import annotations
 
-import enum
-import pathlib
 from collections.abc import Callable, Generator
 from dataclasses import dataclass
 from datetime import date, datetime
 from enum import Enum, IntEnum, StrEnum
-from _decimal import Decimal
-from typing import NamedTuple
+from typing import Annotated, Any
 
-from pydantic import HttpUrl
-import pythoncom
+from pydantic import BeforeValidator
 
 RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
-
-
-class RowInfo(NamedTuple):
-    category: str
-    id: str
-
-
-class RowData(NamedTuple):
-    row_info: RowInfo
-    data: dict[str, str]
-
-    @classmethod
-    def from_data(cls, category: str, row_id: str, data: dict[str, str]) -> RowData:
-        """Create a RowData instance from category, row_id, and data."""
-        return cls(row_info=RowInfo(category=category, id=row_id), data=data)
+FLAGS_UNUSED = 0
 
 
 class NoneFoundHandler(StrEnum):
@@ -65,7 +47,7 @@ def to_cmc_date(datecheck: date):
     return datecheck.strftime(CmcDateFormat)
 
 
-def get_cmc_date(v: str) -> date | None:
+def get_cmc_date_maybe(v: Any) -> date | None:
     """Use CMC Cannonical flag"""
     if isinstance(v, datetime):
         return v.date()
@@ -81,9 +63,20 @@ def get_cmc_date(v: str) -> date | None:
     return None
 
 
+def get_cmc_date(v: str) -> date | None:
+    """Use CMC Cannonical flag"""
+    if converted := get_cmc_date_maybe(v):
+        return converted
+    raise ValueError(f'No date found: {v}')
+
+
 def get_cmc_time(time_str: str):
     """Use CMC Cannonical flag"""
     return datetime.strptime(time_str, CmcTimeFormat).time()
+
+
+CommenceDateOptional = Annotated[date | None, BeforeValidator(get_cmc_date_maybe)]
+CommenceDate = Annotated[date, BeforeValidator(get_cmc_date)]
 
 
 class CursorType(IntEnum):
@@ -160,100 +153,7 @@ class OptionFlagInt(IntEnum):
     INTERNET = 0x0020
 
 
-FLAGS_UNUSED = 0
 
-
-class CmcFieldType(enum.Enum):
-    TEXT = 0  # Text field.
-    NUMBER = 1  # Number field.
-    DATE = 2  # Date field.
-    TELEPHONE = 3  # Telephone field.
-    CHECKBOX = 7  # Check Box field.
-    NAME = 11  # Name field (= primary key).
-    DATAFILE = 12  # Data File field (= filepath).
-    IMAGE = 13  # Image field.
-    TIME = 14  # Time field.
-    EXCEL_CELL = 15  # Excel cell. (OBSOLETE)
-    CALCULATION = 20  # Calculation field.
-    SEQUENCE = 21  # Sequence number field.
-    SELECTION = 22  # Selection field.
-    EMAIL = 23  # E-mail address field.
-    URL = 24  # Internet address field.
-
-
-class CmcFieldDataType(enum.Enum):
-    TEXT = str
-    NUMBER = Decimal
-    DATE = datetime.date
-    TELEPHONE = str
-    CHECKBOX = bool
-    NAME = str
-    DATAFILE = pathlib.Path
-    IMAGE = pathlib.Path
-    TIME = datetime.time
-    EXCEL_CELL = str
-    CALCULATION = str
-    SEQUENCE = int
-    SELECTION = str
-    EMAIL = str
-    URL = HttpUrl
-
-
-@dataclass
-class CmcFieldDefinition:
-    type: CmcFieldType
-    combobox: bool
-    shared: bool
-    mandatory: bool
-    recurring: bool
-    max_chars: int
-    default_string: str = ''
-
-    @classmethod
-    def from_field_info(cls, field_info: str):
-        pythoncom.CoInitialize()  # Initialize COM library on this thread
-
-        parts = field_info.split(DELIM)
-        field_type, flags, max_chars, default_string = parts[0], parts[1], parts[2], parts[3]
-
-        return cls(
-            type=CmcFieldType(int(field_type)),
-            combobox=flags[6] == '1',
-            shared=flags[7] == '1',
-            mandatory=flags[8] == '1',
-            recurring=flags[9] == '1',
-            max_chars=int(max_chars),
-            default_string=default_string,
-        )
-
-
-DELIM = r';*;%'
-
-
-@dataclass
-class MoreAvailable:
-    n_more: int
-
-    def __bool__(self):
-        return self.n_more > 0
-
-
-@dataclass
-class Pagination:
-    offset: int = 0
-    limit: int = 0
-
-    def __bool__(self):
-        return any([self.limit, self.offset])
-
-    def __str__(self):
-        return f'Pagination: offset={self.offset}, limit={self.limit or "None"}'
-
-    def next_page(self):
-        return Pagination(offset=self.offset + self.limit, limit=self.limit)
-
-    def prev_page(self):
-        return Pagination(offset=max(0, self.offset - self.limit), limit=self.limit)
 
 
 

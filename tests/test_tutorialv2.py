@@ -6,9 +6,10 @@ from loguru import logger
 from pycommence.cursor import CursorAPI
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
-from pycommence.pycmc_types import Pagination, MoreAvailable
+from pycommence.pagination import Pagination
+from pycommence import MoreAvailable
 from pycommence.pycommence import PyCommence
-from .conftest import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
+from sample_data import NEW_DICT, UPDATE_DICT, JEFF_KEY, NEW_KEY
 
 PAGINATED = Pagination(offset=0, limit=5)
 

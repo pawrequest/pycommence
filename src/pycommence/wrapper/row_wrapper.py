@@ -9,6 +9,7 @@ from typing import TypeAlias
 from loguru import logger
 
 from ..exceptions import PyCommenceNotFoundError
+from ..meta.pycmc_fields import DELIM
 from ..pycmc_types import FLAGS_UNUSED, OptionFlagInt
 
 if typing.TYPE_CHECKING:
@@ -91,10 +92,10 @@ class RowSetBase(ABC):
         return self._rs.GetColumnIndex(label, flags)
 
     def get_row(
-        self,
-        row_index: int,
-        delim: str = ';',
-        cannonical: bool = True,
+            self,
+            row_index: int,
+            delim: str = ';',
+            cannonical: bool = True,
     ) -> str:
         """
         Retrieves the values of the specified row.
@@ -128,19 +129,17 @@ class RowSetBase(ABC):
         flags: int = FLAGS_UNUSED
         return self._rs.GetRowID(row_index, flags)
 
-    def row_dicts_list(self, num: int | None = None) -> list[dict[str, str]]:
+    def row_dicts_list(self, num: int | None = None, delim=DELIM) -> list[dict[str, str]]:
         """Returns a dictionary of the first num rows."""
         if num is None:
             num = self.row_count
-        delim = '%^&*'
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
-    def rows(self, count: int | None = None) -> Generator[dict[str, str], None, None]:
+    def rows(self, count: int | None = None, delim: str = DELIM) -> Generator[dict[str, str], None, None]:
         """Generates dicts of the first count rows."""
         if count is None:
             count = self.row_count
-        delim = '%^&*'
         for i in range(count):
             row = self.get_row(i, delim=delim)
             yield dict(zip(self.headers, row.split(delim)))

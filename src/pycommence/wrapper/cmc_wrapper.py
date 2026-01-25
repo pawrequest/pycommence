@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import typing as _t
 
+import pythoncom
 from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
 from pycommence.exceptions import PyCommenceServerError
-from .conversation_wrapper import ConversationAPI, ConversationTopic
+from .conversation_wrapper import ConversationAPI, DDETopic
 from .cursor_wrapper import CursorWrapper
-from ..cursor import CursorAPI
 from ..pycmc_types import CursorType, OptionFlagInt
 
 
@@ -31,19 +31,36 @@ class CmcConnector:
 
     def __init__(self, commence_instance_name: str = 'Commence.DB'):
         self.commence_instance_name = commence_instance_name
-        logger.debug(f'Initializing COM connection to {self.commence_instance_name}')
-        self.commence_dispatch: Dispatch = self._initialize_connection()
+        self.commence_dispatch: Dispatch | None = None
 
-    def _initialize_connection(self) -> Dispatch:
+    def _initialize_connection(self):
         """Initialize the COM connection to the Commence database."""
+
+        com_inited = False
         try:
-            return Dispatch(self.commence_instance_name)
-        except com_error as e:
-            error_msg = f'Error connecting to {self.commence_instance_name}: {str(e)}'
-            logger.error(error_msg)
-            raise PyCommenceServerError(error_msg) from e
-            # e.args = (error_msg,)
-            # raise
+            try:
+                pythoncom.CoInitializeEx(pythoncom.COINIT_APARTMENTTHREADED)
+                com_inited = True
+
+            except pythoncom.com_error:
+                pass
+
+            if self.commence_dispatch is not None:
+                return
+            try:
+                self.commence_dispatch = Dispatch(self.commence_instance_name)
+            except com_error as e:
+                error_msg = f'Error connecting to {self.commence_instance_name}: {str(e)}'
+                logger.error(error_msg)
+                raise PyCommenceServerError(error_msg) from e
+
+        finally:
+            if com_inited:
+                pythoncom.CoUninitialize()
+
+
+        logger.debug(f'Initializing COM connection to {self.commence_instance_name}')
+
 
 
 class CommenceWrapper(CmcConnector):
@@ -63,13 +80,19 @@ class CommenceWrapper(CmcConnector):
     #     """Create a new cursor with the specified name and mode."""
     #     cursor_wrapper: CursorWrapper = self._get_new_cursor_wrapper(csrname, mode=mode)
     #     return CursorAPI(cursor_wrapper, mode=mode, csrname=csrname)
+    _name: str | None = None
+    _path: str | None = None
+    _registered_user: str | None = None
+    _shared: bool | None = None
+    _version: str | None = None
+    _version_ext: str | None = None
 
-    def get_new_cursor_wrapper(
-        self,
-        name: str | None = None,
-        mode: CursorType = CursorType.CATEGORY,
-        pilot: bool = False,
-        internet: bool = False,
+    def establish_cursor(
+            self,
+            name: str | None = None,
+            mode: CursorType = CursorType.CATEGORY,
+            pilot: bool = False,
+            internet: bool = False,
     ) -> CursorWrapper:
         """Create a cursor wrapper.
 
@@ -88,6 +111,7 @@ class CommenceWrapper(CmcConnector):
             ValueError if no name given for name based searches
 
         """
+        self._initialize_connection()
         if pilot and internet:
             raise ValueError('Only one of pilot or internet can be set')
         if mode in [CursorType.CATEGORY, CursorType.VIEW] and not name:
@@ -106,8 +130,29 @@ class CommenceWrapper(CmcConnector):
         return csr
         # todo non-standard modes
 
-    def get_conversation_api(
-        self, topic: ConversationTopic, application_name: _t.Literal['Commence'] = 'Commence'
+    def establish_conversation(self, topic):
+        application_name = 'Commence'
+        self._initialize_connection()
+        conversation_obj = self.commence_dispatch.GetConversation(application_name, topic)
+        if conversation_obj is None:
+            raise ValueError(f'Could not create conversation object for {application_name}!{topic}')
+        return ConversationAPI(conversation_obj)
+
+        # com_inited = False
+        # try:
+        #     try:
+        #         pythoncom.CoInitializeEx(pythoncom.COINIT_APARTMENTTHREADED)
+        #         com_inited = True
+        #     except pythoncom.com_error:
+        #         pass
+        #     return self.establish_conversation_raw(*args, **kwargs)
+        #
+        # finally:
+        #     if com_inited:
+        #         pythoncom.CoUninitialize()
+
+    def establish_conversation_raw(
+            self, topic: DDETopic, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> ConversationAPI:
         """
         Create a conversation object.
@@ -132,35 +177,48 @@ class CommenceWrapper(CmcConnector):
     @property
     def name(self) -> str:
         """(read-only) Name of the Commence database."""
-        return self.commence_dispatch.Name
+        if self._name is None:
+            self._name = self.commence_dispatch.Name
+        return self._name
 
     @property
     def path(self) -> str:
         """(read-only) Full path of the Commence database."""
-        return self.commence_dispatch.Path
+        if self._path is None:
+            self._path = self.commence_dispatch.Path
+        return self._path
 
     @property
     def registered_user(self) -> str:
         """(read-only) CR/LF delimited string with username, company name, and serial number."""
-        return self.commence_dispatch.RegisteredUser
+        if self._registered_user is None:
+            self._registered_user = self.commence_dispatch.RegisteredUser
+        return self._registered_user
 
     @property
     def shared(self) -> bool:
         """(read-only) TRUE if the database is enrolled in a workgroup."""
-        return self.commence_dispatch.Shared
+        if self._shared is None:
+            self._shared = self.commence_dispatch.Shared
+        return self._shared
 
     @property
     def version(self) -> str:
         """(read-only) Version number in x.y format."""
-        return self.commence_dispatch.Version
+        if self._version is None:
+            self._version = self.commence_dispatch.Version
+        return self._version
 
     @property
     def version_ext(self) -> str:
         """(read-only) Version number in x.y.z.w format."""
-        return self.commence_dispatch.VersionExt
+        if self._version_ext is None:
+            self._version_ext = self.commence_dispatch.VersionExt
+        return self._version_ext
 
     def __str__(self) -> str:
         return f'<Cmc: "{self.name}">'
 
     def __repr__(self):
-        return f'<Cmc: {self.name}>'
+        name = self._name if self._name is not None else "<COM?>"
+        return f"<Cmc: {name}>"
