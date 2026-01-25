@@ -9,8 +9,9 @@ from fastapi import Depends, Query
 from pydantic import BaseModel, Field, model_validator
 
 from pycommence.filters import ConditionType
-from pycommence.meta import CommenceTable
-from pycommence.pycmc_types import MoreAvailable, Pagination as _Pagination
+from pycommence.meta.meta import CommenceTable
+from pycommence.pagination import Pagination as _Pagination
+from pycommence import MoreAvailable
 
 PAGE_SIZE = 50
 

@@ -21,16 +21,9 @@ requires-python = ">= 3.13"
 [project.urls]
 Homepage = "https://github.com/pawrequest/pycommence"
 [project.optional-dependencies]
-dev = [
-    "pytest-asyncio>=1.1.0",
-    "pytest>=8.3.5",
-    'autodoc_pydantic',
-    "sphinx",
-    "sphinx-autodoc-typehints",
-    "sphinx-rtd-theme",
-    "myst-parser",
-    "sphinx-readme",
-    "sphinx_rtd_dark_mode",
+fastapi = [
+    "fastapi>=0.128.0",
+    "uvicorn>=0.40.0",
 ]
 [dependency-groups]
 dev = [

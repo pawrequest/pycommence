@@ -13,11 +13,11 @@ from fastapi import Depends, Query
 from loguru import logger
 from pycommence.cursor import RESULTS_GENERATOR
 from pycommence.exceptions import PyCommenceNotFoundError
-from pycommence.fapi.backend_search_paginate import MoreAvailableFront, SearchRequest, SearchResponse
-from pycommence.meta import CommenceTable, TABLE_REGISTER, get_table_model
-from pycommence.pycmc_types import RowData, RowInfo
+from pycommence.fapi.old.backend_search_paginate import MoreAvailableFront, SearchRequest, SearchResponse
+from pycommence.meta.meta import CommenceTable, get_table_model
+from pycommence.rows import RowInfo, RowData
 from starlette.exceptions import HTTPException
-from pycommence import MoreAvailable, PyCommence, pycommence_context, pycommences_context
+from pycommence import MoreAvailable, PyCommence, pycommence_context, pycommence_context_multi_csr
 
 
 async def pycmc_f_query(
@@ -30,7 +30,7 @@ async def pycmc_f_query(
 async def pycmcs_f_query(
     csrnames: list[str] = Query(...),
 ) -> AsyncGenerator[PyCommence, None]:
-    with pycommences_context(csrnames=csrnames) as pycmc:
+    with pycommence_context_multi_csr(csrnames=csrnames) as pycmc:
         yield pycmc
 
 
