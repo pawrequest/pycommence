@@ -3,12 +3,12 @@ from dataclasses import dataclass, field
 
 from loguru import logger
 
-from pycommence.cursor import CursorAPI, RESULTS_GENERATOR, raise_for_id_or_pk
+from pycommence.cursor import CursorAPI, RESULTS_GENERATOR2, raise_for_id_or_pk
 from pycommence.filters import FilterArray
+from pycommence.meta.meta import CommenceTable
 from pycommence.meta.pycmc_fields import DELIM
 from pycommence.pycmc_types import CursorType, RowFilter
 from pycommence.pagination import Pagination
-from pycommence.rows import RowData, RowData2
 from pycommence.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, DDEKind, DDETopic
@@ -122,54 +122,17 @@ class PyCommence:
         self.refresh_csr(csr)
 
     @resolve_row_id
-    def read_row(
-            self,
-            *,
-            csrname: str | None = None,
-            row_id: str | None = None,  # id or pk must be provided
-            pk: str | None = None,
-    ) -> RowData:
-        raise_for_id_or_pk(row_id, pk)
-        csr = self.csr(csrname)
-        return csr.read_row(row_id=row_id)
-
-    @resolve_row_id
     def read_row2(
             self,
             *,
             csrname: str | None = None,
             row_id: str | None = None,  # id or pk must be provided
             pk: str | None = None,
-    ) -> RowData2:
+    ) -> CommenceTable:
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        return csr.read_row2(row_id=row_id)
+        return csr.read_row(row_id=row_id)
 
-    # def read_rows(
-    #     self,
-    #     csrname: str | None = None,
-    #     pagination: Pagination | None = None,
-    #     filter_array: FilterArray | None = None,
-    #     row_filter: RowFilter | None = None,
-    # ) -> _t.Generator[dict[str, str] | MoreAvailable, None, None]:
-    #     """
-    #     Generate rows from a cursor
-    #
-    #     Args:
-    #         csrname: Name of cursor (optional if only one cursor is set)
-    #         pagination: Pagination object
-    #         filter_array: FilterArray object (override cursor filter)
-    #         row_filter: Filter generator
-    #
-    #     Yields:
-    #         dict: Row data or MoreAvailable object
-    #     """
-    #     logger.debug(f'Reading rows from {csrname}: {filter_array} | {pagination}')
-    #     yield from self.csr(csrname).read_rows(
-    #         pagination=pagination,
-    #         filter_array=filter_array,
-    #         row_filter=row_filter,
-    #     )
 
     def read_rows(
             self,
@@ -177,8 +140,8 @@ class PyCommence:
             pagination: Pagination | None = None,
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
-            fetch_ids: bool = True,
-    ) -> RESULTS_GENERATOR:
+            # fetch_ids: bool = True,
+    ) -> RESULTS_GENERATOR2:
         """
         Generate rows from a cursor
 
@@ -194,11 +157,10 @@ class PyCommence:
             more_available: MoreAvailable
         """
         logger.debug(f'Reading rows from {csrname}: {filter_array} | {pagination}')
-        yield from self.csr(csrname).read_rows2(
+        yield from self.csr(csrname).read_rows(
             pagination=pagination,
             filter_array=filter_array,
             row_filter=row_filter,
-            fetch_ids=fetch_ids,
         )
 
     @resolve_row_id
@@ -224,6 +186,6 @@ class PyCommence:
         """Delete a row by ID or primary key."""
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        self.read_row(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
+        self.read_row2(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
         csr.delete_row(id=row_id)
         self.refresh_csr(csr)

@@ -340,7 +340,7 @@ wheels = [
 
 [[package]]
 name = "pycommence"
-version = "0.2.4"
+version = "0.2.666"
 source = { editable = "." }
 dependencies = [
     { name = "comtypes" },

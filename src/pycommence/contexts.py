@@ -13,24 +13,12 @@ else:
 from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
-from pycommence import CursorType, PyCommence
+from pycommence import PyCommence
 
 
 @contextlib.contextmanager
-def pycommence_context(csrname: str | None = None, mode: CursorType = CursorType.CATEGORY) -> _t.Generator[
-    PyCommence, None, None]:
-    """Context manager for PyCommence with a single cursor"""
-    CoInitialize()
-    pyc = PyCommence()
-    if csrname is not None:
-        pyc.set_csr(csrname, mode=mode)
-    yield pyc
-    CoUninitialize()
-
-
-@contextlib.contextmanager
-def pycommence_context_multi_csr(csrnames: list[str]) -> _t.Generator[PyCommence, None, None]:
-    """Context manager for PyCommence with multiple cursors"""
+def pycommence_context(*csrnames: str) -> _t.Generator[PyCommence, None, None]:
+    """Context manager for PyCommence with optional cursors"""
     CoInitialize()
     pyc = PyCommence()
     for csrname in csrnames:

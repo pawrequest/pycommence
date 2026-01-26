@@ -9,21 +9,23 @@ from __future__ import annotations
 
 import contextlib
 import typing as _t
-from collections.abc import Generator
 from functools import cached_property
 from typing import Self
 
+from pycommence.meta.meta import CommenceTable
+from pycommence.pagination import MoreAvailable, Pagination
+from pycommence.rows import RowData
+from pycommence.wrapper.cursor_wrapper import CursorWrapper
+
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
+from .meta.meta import get_table_type
 from .pycmc_types import (
     Connection,
     CursorType,
     RowFilter,
     SeekBookmark,
 )
-from pycommence.pagination import Pagination, MoreAvailable
-from pycommence.rows import RowInfo, RowData, RowData2
-from pycommence.wrapper.cursor_wrapper import CursorWrapper
 
 
 def raise_for_id_or_pk(id, pk):
@@ -32,7 +34,8 @@ def raise_for_id_or_pk(id, pk):
         raise ValueError('Must provide id or pk')
 
 
-class CursorAPI:
+# T = _t.TypeVar('T', bound=CommenceTable)
+class CursorAPI[T: CommenceTable]:
     """
     High-level API for interacting with a Commence database cursor.
 
@@ -52,10 +55,12 @@ class CursorAPI:
             cursor_wrapper: CursorWrapper,
             mode: CursorType = CursorType.CATEGORY,
             csrname: str = '',
+            table_model: type[T] | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
         self.csrname = csrname or self.category
+        self.table_model = table_model or get_table_type(self.category)
 
     # proxied from wrapper
     # @cached_property
@@ -167,80 +172,33 @@ class CursorAPI:
         rs.modify_row(0, create_pkg)
         rs.commit()
 
-    # READ
-    def read_row(self, row_id: str) -> RowData:
-        """
-        Retrieve a single row by row ID.
 
-        Args:
-            row_id (str): Row ID.
-
-        Returns:
-            RowData: Object containing row information and data.
-        """
+    def read_row(self, row_id: str) -> T:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
-        return RowData.from_data(category=self.category, row_id=row_id, data=row)
+        row['row_id'] = row_id
+        res = self.table_model.model_validate(row)
+        return res
 
-    def read_row2(self, row_id: str) -> RowData2:
-        """
-        Retrieve a single row by row ID.
-
-        Args:
-            row_id (str): Row ID.
-
-        Returns:
-            RowData: Object containing row information and data.
-        """
-        rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
-        row = next(rs.rows())
-        return RowData2(category=self.category, id=row_id, data=row)
 
     def read_rows(
             self,
-            pagination: Pagination | None = None,
+            pagination: Pagination | None = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
-    ) -> Generator[dict[str, str] | MoreAvailable, None, None]:
-        pagination = pagination or Pagination()
-        filter_manager = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
-        offset_manager = self.temporary_offset(pagination.offset)
-        with offset_manager, filter_manager:
-            rowset = self.cursor_wrapper.get_query_row_set()
-            rows = rowset.rows()
-            rows = row_filter(rows) if row_filter else rows
-            for i, row in enumerate(rows, start=1):
-                if pagination.limit and i > pagination.limit:
-                    yield MoreAvailable(n_more=self.row_count - (pagination.offset + i - 1))
-                    break
-                yield row
-
-    def read_rows2(
-            self,
-            pagination: Pagination | None = None,
-            filter_array: FilterArray | None = None,
-            row_filter: RowFilter | None = None,
-            fetch_ids: bool = False,
-    ) -> RESULTS_GENERATOR:
-        pagination = pagination or Pagination()
-        row_info_ = RowInfo(category=self.category, id='unknown')
-
+    ) -> _t.Generator[T | MoreAvailable, None, None]:
         cmc_filter = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
         offset = self.temporary_offset(pagination.offset)
         with offset, cmc_filter:
-            rowset = self.cursor_wrapper.get_query_row_set()
+            rowset = self.cursor_wrapper.get_query_row_set(limit=pagination.limit + 1 if pagination.limit else None)
             rows = rowset.rows()
             rows = row_filter(rows) if row_filter else rows
             for i, row in enumerate(rows):
-                if fetch_ids:
-                    row_info = RowInfo(category=self.category, id=rowset.get_row_id(i))
-                else:
-                    row_info = row_info_
-
                 if pagination.limit and i >= pagination.limit:
                     yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
                     break
-                yield RowData(row_info=row_info, data=row)
+                row_id = rowset.get_row_id(i)
+                yield self.table_model(row_id=row_id, **row)
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -315,3 +273,4 @@ class CursorAPI:
 
 
 RESULTS_GENERATOR = _t.Generator[RowData | MoreAvailable, None, None]
+RESULTS_GENERATOR2 = _t.Generator[CommenceTable | MoreAvailable, None, None]

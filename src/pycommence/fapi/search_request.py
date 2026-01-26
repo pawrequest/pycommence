@@ -1,17 +1,12 @@
-""" Backend search request and response models with pagination support. """
 from __future__ import annotations
 
-import dataclasses
-from collections.abc import Sequence
 from typing import Self
 
 from fastapi import Depends, Query
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 
 from pycommence.filters import ConditionType
-from pycommence.meta.meta import CommenceTable
 from pycommence.pagination import Pagination as _Pagination
-from pycommence import MoreAvailable
 
 PAGE_SIZE = 50
 
@@ -28,28 +23,18 @@ class Pagination(_Pagination):
 
 class SearchRequest(BaseModel):
     csrname: str | None = None
-    csrnames: list[str] | None = None
     row_id: str | None = None
     pk_value: str | None = None
-    customer_name: str | None = None
-    customer_names: list[str] | None = Field(default_factory=list)
     condition: ConditionType = ConditionType.CONTAIN
     max_rtn: int | None = None
     pagination: Pagination | None = Pagination()
     cmc_filter_i: int = 0
     py_filter_i: int = 0
 
-    @model_validator(mode='after')
-    def cursornames(self):
-        if not self.csrname and not self.csrnames:
-            raise ValueError('No csrname or csrnames provided')
-        if self.csrname and not self.csrnames:
-            self.csrnames = [self.csrname]
-        return self
 
     def __str__(self):
         return (
-            f'Csr: {self.csrname if self.csrname else ', '.join(self.csrnames)}'
+            f'Csr: {self.csrname}'
             f'{' | pk=:' + self.pk_value if self.pk_value else ''}'
             f'{' | row_id=:' + self.row_id if self.row_id else ''}'
             f'{' | customer_name="' + self.customer_name + '"' if self.customer_name else ''}'
@@ -85,7 +70,6 @@ class SearchRequest(BaseModel):
             'py_filter_i',
             'pk_value',
             'row_id',
-            'customer_id',
             'customer_name',
         ]:
             if val := getattr(self, attr):
@@ -103,25 +87,10 @@ class SearchRequest(BaseModel):
     def prev_request(self):
         return self.model_copy(update={'pagination': self.pagination.prev_page()})
 
-    # @classmethod
-    # @resolve_row_id
-    # def from_id_or_pk(
-    #     cls,
-    #     csrname: CursorName = Query(...),
-    #     pk: str = Query(''),
-    #     row_id: str = Query(None),
-    # ):
-    #     return cls(
-    #         csrname=csrname,
-    #         pk_value=pk,
-    #         row_id=row_id,
-    #     )
-
     @classmethod
     def from_query(
             cls,
             csrname: str = Query(None),
-            csrnames: list[str] = Query(None),
             pk_value: str = Query(''),
             pagination: Pagination = Depends(Pagination.from_query),
             condition: ConditionType = Depends(get_condition),
@@ -133,7 +102,6 @@ class SearchRequest(BaseModel):
     ):
         return cls(
             csrname=csrname,
-            csrnames=csrnames,
             pagination=pagination,
             pk_value=pk_value,
             condition=condition,
@@ -143,40 +111,3 @@ class SearchRequest(BaseModel):
             cmc_filter_i=cmc_filter_i,
             py_filter_i=py_filter_i,
         )
-
-
-class SearchResponse[T: CommenceTable](BaseModel):
-    records: list[T]
-    length: int = 0
-    search_request: SearchRequest
-    more: MoreAvailable | None = None
-
-    def __str__(self):
-        return (
-            f'Search Response: {self.length}x {self.search_request.csrname if self.search_request.csrname else ', '.join(self.search_request.csrnames)} records'
-            f'{' (' + str(self.more.n_more) + ' more available),' if self.more else '. '} '
-            f'SearchRequest[{str(self.search_request)}]'
-        )
-
-    @model_validator(mode='after')
-    def set_length(self):
-        self.length = len(self.records)
-        return self
-
-
-class SearchResponseMulti(SearchResponse):
-    search_request: Sequence[SearchRequest]
-
-    def __str__(self):
-        rtypes = '/'.join([req.csrname for req in self.search_request])
-        return (
-            f'Search Response with {self.length}x {rtypes} records. '
-            f'SearchRequests[{'; '.join(str(_) for _ in self.search_request)}]'
-            f'{', ' + str(self.more.n_more) + ' more available' if self.more else ''} '
-        )
-
-
-@dataclasses.dataclass
-class MoreAvailableFront(MoreAvailable):
-    json_link: str = None
-    html_link: str = None
