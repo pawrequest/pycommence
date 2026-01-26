@@ -145,12 +145,13 @@ class FilterArray(BaseModel):
 
     @model_validator(mode='after')
     def val_logics(self):
+        log_len = len(self.filters) - 1
         if not self.filters:
             return self
         if not self.logics:
-            self.logics = ['And'] * (len(self.filters) - 1)
-        if not len(self.logics) == len(self.filters) - 1:
-            logger.warning(f'{self.logics=}, {self.filters=}')
+            self.logics = ['And'] * log_len
+        if not len(self.logics) == log_len:
+            logger.warning(f'Check filter logics length? {self.logics=}, {self.filters=}')
             # raise ValueError('Logics must be one less than filters')
         return self
 
