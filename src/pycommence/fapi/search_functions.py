@@ -41,12 +41,11 @@ async def pycommence_gather(
     return records, more
 
 
-
 async def pycommence_search[T:CommenceTable](
         q: SearchRequest = Depends(SearchRequest.from_query),
         pycmc: PyCommence = Depends(pycmc_f_query),
 ) -> SearchResponse[T]:
-    table_type:type[T] = get_table_type(q.csrname)
+    table_type: type[T] = get_table_type(q.csrname)
     cmc_filter = FieldFilter(column=table_type.pk_key, condition=q.condition, value=q.pk_value) if q.pk_value else None
     filter_array = FilterArray.from_filters(cmc_filter)
     records, more = await pycommence_gather(pycmc=pycmc, q=q, filter_array=filter_array)
@@ -54,10 +53,10 @@ async def pycommence_search[T:CommenceTable](
     return resp
 
 
-async def pycommence_get_one(
+async def pycommence_get_one[T:CommenceTable](
         q: SearchRequest = Depends(SearchRequest.from_query),
         pycmc: PyCommence = Depends(pycmc_f_query),
-) -> CommenceTable:
+) -> T:
     q.max_rtn = 1
     if not q.row_id:
         logger.debug(f'Getting row_id for pk_value: {q.pk_value} in csr: {q.csrname}')
