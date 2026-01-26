@@ -13,8 +13,7 @@ from fastapi import Depends
 from loguru import logger
 
 from pycommence.fapi.depends import pycmc_f_query
-from pycommence.fapi.search_response import SearchResponse
-from pycommence.fapi.search_request import SearchRequest
+from pycommence.fapi.search_request_response import SearchRequest, SearchResponse
 from pycommence.filters import FieldFilter, FilterArray
 from pycommence.meta.meta import CommenceTable, get_table_type
 from pycommence import MoreAvailable, PyCommence
@@ -30,7 +29,7 @@ async def pycommence_gather(
     Add MoreAvailable if q has pagination and there are more records to fetch.
     """
 
-    logger.debug('GATHERING')
+    logger.debug('Gathering records from PyCommence')
     more = None
     records = []
     for row in pycmc.read_rows(csrname=q.csrname, pagination=q.pagination, filter_array=filter_array):
@@ -64,7 +63,7 @@ async def pycommence_get_one[T:CommenceTable](
         if pval.startswith('"') and pval.endswith('"'):
             pval = pval[1:-1]
         q.row_id = pycmc.csr(q.csrname).pk_to_id(pval)
-    return pycmc.read_row2(csrname=q.csrname, row_id=q.row_id)
+    return pycmc.read_row(csrname=q.csrname, row_id=q.row_id)
 
 
 @dataclasses.dataclass

@@ -1,6 +1,9 @@
+from typing import ClassVar
+
 import pytest
 
 from pycommence import pycommence_context
+from pycommence.meta.meta import CommenceTable
 from pycommence.pycommence import PyCommence
 
 
@@ -22,3 +25,13 @@ def pycmc():
 def pycmc_no_csr() -> PyCommence:
     with pycommence_context() as pycmc:
         return pycmc
+
+
+class Contact(CommenceTable):
+    category: ClassVar[str] = "Contact"
+    pk_key: ClassVar[str] = "contactKey"
+
+
+class Account(CommenceTable):
+    category: ClassVar[str] = "Account"
+    pk_key: ClassVar[str] = "accountKey"

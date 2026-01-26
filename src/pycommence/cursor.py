@@ -14,7 +14,6 @@ from typing import Self
 
 from pycommence.meta.meta import CommenceTable
 from pycommence.pagination import MoreAvailable, Pagination
-from pycommence.rows import RowData
 from pycommence.wrapper.cursor_wrapper import CursorWrapper
 
 from .exceptions import PyCommenceExistsError, raise_for_one
@@ -177,13 +176,14 @@ class CursorAPI[T: CommenceTable]:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
         row['row_id'] = row_id
+        # mydict = {'data': row, **row}
         res = self.table_model.model_validate(row)
         return res
 
 
     def read_rows(
             self,
-            pagination: Pagination | None = Pagination(),
+            pagination: Pagination = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
     ) -> _t.Generator[T | MoreAvailable, None, None]:
@@ -198,7 +198,7 @@ class CursorAPI[T: CommenceTable]:
                     yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
                     break
                 row_id = rowset.get_row_id(i)
-                yield self.table_model(row_id=row_id, **row)
+                yield self.table_model(row_id=row_id, data=row, **row)
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -272,5 +272,4 @@ class CursorAPI[T: CommenceTable]:
         return self
 
 
-RESULTS_GENERATOR = _t.Generator[RowData | MoreAvailable, None, None]
 RESULTS_GENERATOR2 = _t.Generator[CommenceTable | MoreAvailable, None, None]

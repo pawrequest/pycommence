@@ -1,5 +1,5 @@
 from pycommence.fapi.search_functions import pycommence_get_one, pycommence_search
-from pycommence.fapi.search_response import SearchResponse
+from pycommence.fapi.search_request_response import SearchResponse
 from pycommence.meta.meta import CommenceTable
 
 try:

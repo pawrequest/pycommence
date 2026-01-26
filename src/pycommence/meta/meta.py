@@ -2,7 +2,7 @@ from abc import ABC
 from typing import ClassVar, Self
 
 from loguru import logger
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, ConfigDict, model_validator
 
 TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
 
@@ -20,6 +20,7 @@ def get_table_type(table_name: str) -> type['CommenceTable'] | None:
 
 
 class CommenceTable(ABC, BaseModel):
+    model_config = ConfigDict(extra='allow')
     category: ClassVar[str]
     pk_key: ClassVar[str]
     row_id: str
@@ -33,36 +34,3 @@ class CommenceTable(ABC, BaseModel):
 
         register_table(cls)
 
-
-class Contact(CommenceTable):
-    category: ClassVar[str] = "Contact"
-    pk_key: ClassVar[str] = "contactKey"
-
-
-class CommenceRecord(BaseModel):
-    category: str
-    data: dict[str, str]
-    row_id: str | None = None
-    row_pk_value: str | None = None
-
-    # table_model: type = None
-
-    @classmethod
-    def from_dict(cls, table_name: str, data: dict):
-        table_model_type = get_table_type(table_name)
-        if not table_model_type:
-            raise ValueError(f"No table model registered for table type: {table_name} in {TABLE_TYPE_REGISTER=}")
-        return cls(data=data, category=table_model_type.category)
-
-    @model_validator(mode='after')
-    def id_or_pk(self) -> Self:
-        if not self.row_id and not self.row_pk_value:
-            table_model = get_table_type(self.category)
-            if not table_model:
-                raise ValueError(f"No table model registered for table type: {self.category} in {TABLE_TYPE_REGISTER=}")
-            pk_field = table_model.pk_key
-            if pk_field not in self.data:
-                raise ValueError(f"PK field '{pk_field}' not found in data to derive row_id")
-            self.row_pk_value = self.data[pk_field]
-
-        return self

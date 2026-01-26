@@ -3,13 +3,14 @@ import contextlib
 import pytest
 from loguru import logger
 
+from conftest import Contact
 from pycommence.cursor import CursorAPI
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.pagination import Pagination
 from pycommence import MoreAvailable
 from pycommence.pycommence import PyCommence
-from sample_data import NEW_DICT, UPDATE_DICT, JEFF_KEY, NEW_KEY
+from sample_data import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
 
 PAGINATED = Pagination(offset=0, limit=5)
 
@@ -43,37 +44,30 @@ def test_temp_contact(pycmc):
         pycmc.read_row(pk=NEW_KEY)
 
 
-def test_read_rows2(pycmc):
-    res = list(pycmc.read_rows(pagination=PAGINATED))
-    ...
-    # assert isinstance(res, list)
-    # assert isinstance(res[0], dict)
-
-
-
-def test_get_records(pycmc):
+def test_read_rows(pycmc):
     res = list(pycmc.read_rows(pagination=PAGINATED))
     assert isinstance(res, list)
-    assert isinstance(res[0], dict)
+    assert isinstance(res[0], Contact)
 
 
 def test_get_one_record(pycmc: PyCommence):
     with temp_contact(pycmc):
         res = pycmc.read_row(pk=NEW_KEY)
-        assert isinstance(res, dict)
-        assert res['Notes'] == 'Some Notes'
+        assert isinstance(res, Contact)
+        assert res.Notes == 'Some Notes'
+        # assert res.data['Notes'] == 'Some Notes'
 
 
 def test_edit_record(pycmc: PyCommence):
+    excludes = {'row_id', 'category'}
     with temp_contact(pycmc):
         original = pycmc.read_row(pk=NEW_KEY)
 
         pycmc.update_row(pk=NEW_KEY, update_pkg=UPDATE_DICT)
-        edited = pycmc.read_row(pk=NEW_KEY)
+        edited = pycmc.read_row(pk=NEW_KEY).model_dump(exclude=excludes)
         for k, v in UPDATE_DICT.items():
             assert edited[k] == v
-
-        pycmc.update_row(pk=NEW_KEY, update_pkg=original)
+        pycmc.update_row(pk=NEW_KEY, update_pkg=original.model_dump(exclude=excludes))
         reverted = pycmc.read_row(pk=NEW_KEY)
         assert reverted == original
 
@@ -86,7 +80,7 @@ def test_add_record(pycmc: PyCommence):
         row_count2 = pycmc.csr().row_count
         assert row_count2 == row_count1 + 1
 
-        res = pycmc.read_row(pk=NEW_KEY)
+        res = pycmc.read_row(pk=NEW_KEY).model_dump()
         for k, v in NEW_DICT.items():
             assert res[k] == v
 
@@ -105,6 +99,7 @@ def test_multiple_csrs(pycmc: PyCommence):
     pycmc.set_csr(csrname='Account')
     assert pycmc.csr(csrname='Account').category == 'Account'
     assert pycmc.csr(csrname='Contact').category == 'Contact'
+    ...
 
 
 # def test_pk_filter(pycmc):
@@ -126,7 +121,7 @@ def test_temporary_filter(pycmc):
     with cursor.temporary_filter(filter_array):
         rows = list(pycmc.read_rows())
         assert len(rows) == 1
-        assert rows[0]['contactKey'] == JEFF_KEY
+        assert rows[0].contactKey == JEFF_KEY
     assert cursor.row_count == num_rows
 
 
@@ -138,7 +133,7 @@ def test_pk_contains_filter(pycmc):
         rows = list(pycmc.read_rows(filter_array=filter_array))
         assert len(rows) > 0
         for row in rows:
-            assert partial_pk in row['contactKey']
+            assert partial_pk in row.contactKey
 
 
 def test_multiple_conditions(pycmc):
@@ -149,8 +144,8 @@ def test_multiple_conditions(pycmc):
         )
         rows = list(pycmc.read_rows(filter_array=filter_array))
         assert len(rows) == 1
-        assert rows[0]['contactKey'] == 'Guy.Some'
-        assert rows[0]['Title'] == 'CEO of SOMmeBix'
+        assert rows[0].contactKey == 'Guy.Some'
+        assert rows[0].Title == 'CEO of SOMmeBix'
 
 
 def test_pagination(pycmc):
@@ -162,10 +157,10 @@ def test_pagination(pycmc):
         rows = tuple(csr.read_rows(pagination=pagination))
 
         row3 = next(csr.read_rows(pagination=offest_pag))
-        assert row3['contactKey'] == rows[2]['contactKey']
+        assert row3.contactKey == rows[2].contactKey
 
         row1 = next(csr.read_rows(pagination=Pagination(limit=1)))
-        assert row1['contactKey'] == rows[0]['contactKey']
+        assert row1.contactKey == rows[0].contactKey
 
 
 def test_read_rows_more_available(pycmc):

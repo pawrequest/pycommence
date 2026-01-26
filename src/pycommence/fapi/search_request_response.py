@@ -3,9 +3,11 @@ from __future__ import annotations
 from typing import Self
 
 from fastapi import Depends, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
+from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.filters import ConditionType
+from pycommence.meta.meta import CommenceTable
 from pycommence.pagination import Pagination as _Pagination
 
 PAGE_SIZE = 50
@@ -70,7 +72,6 @@ class SearchRequest(BaseModel):
             'py_filter_i',
             'pk_value',
             'row_id',
-            'customer_name',
         ]:
             if val := getattr(self, attr):
                 qstr += f'&{attr}={val}'
@@ -96,7 +97,6 @@ class SearchRequest(BaseModel):
             condition: ConditionType = Depends(get_condition),
             max_rtn: int = Query(None),
             row_id: str = Query(None),
-            customer_name: str = Query(None),
             py_filter_i: int = Query(0),
             cmc_filter_i: int = Query(0),
     ):
@@ -107,7 +107,25 @@ class SearchRequest(BaseModel):
             condition=condition,
             max_rtn=max_rtn,
             row_id=row_id,
-            customer_name=customer_name,
             cmc_filter_i=cmc_filter_i,
             py_filter_i=py_filter_i,
         )
+
+
+class SearchResponse[T: CommenceTable](BaseModel):
+    records: list[T]
+    length: int = 0
+    search_request: SearchRequest
+    more: MoreAvailableFront | None = None
+
+    def __str__(self):
+        return (
+            f'Search Response: {self.length}x {self.search_request.csrname if self.search_request.csrname else ', '.join(self.search_request.csrnames)} records'
+            f'{' (' + str(self.more.n_more) + ' more available),' if self.more else '. '} '
+            f'SearchRequest[{str(self.search_request)}]'
+        )
+
+    @model_validator(mode='after')
+    def set_length(self):
+        self.length = len(self.records)
+        return self

@@ -122,7 +122,7 @@ class PyCommence:
         self.refresh_csr(csr)
 
     @resolve_row_id
-    def read_row2(
+    def read_row(
             self,
             *,
             csrname: str | None = None,
@@ -137,7 +137,7 @@ class PyCommence:
     def read_rows(
             self,
             csrname: str | None = None,
-            pagination: Pagination | None = None,
+            pagination: Pagination | None = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
             # fetch_ids: bool = True,
@@ -186,6 +186,6 @@ class PyCommence:
         """Delete a row by ID or primary key."""
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
-        self.read_row2(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
+        self.read_row(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
         csr.delete_row(id=row_id)
         self.refresh_csr(csr)

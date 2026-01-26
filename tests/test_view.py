@@ -5,13 +5,13 @@ from pycommence.pycommence import PyCommence
 
 
 @pytest.fixture
-def pycmc():
+def pycmc_view():
     pycmc = PyCommence.with_csr('Contact List', mode=CursorType.VIEW)
     if not pycmc.cmc_wrapper.name == 'Tutorial':
         raise ValueError('Expected Tutorial DB')
     return pycmc
 
 
-def test_view(pycmc):
-    print(len(list(pycmc.read_rows())), 'records')
-
+def test_view(pycmc_view):
+    rows = pycmc_view.read_rows()
+    print(len(list(rows)), 'records')
