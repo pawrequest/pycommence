@@ -23,7 +23,7 @@ async def pycommence_search_endpoint(
 
 
 @router.get('/get')
-async def pycommence_search_endpoint[T:CommenceTable](
+async def pycommence_get_endpoint[T:CommenceTable](
         record: T = Depends(pycommence_get_one),
 ) -> T:
     return record
