@@ -58,8 +58,7 @@ async def pycommence_get_one[T:CommenceTable](
     if not q.row_id:
         logger.debug(f'Getting row_id for pk_value: {q.pk_value} in csr: {q.csrname}')
         pval = q.pk_value
-        if pval.startswith('"') and pval.endswith('"'):
-            pval = pval[1:-1]
+        pval = pval.strip('"')
         q.row_id = pycmc.csr(q.csrname).pk_to_id(pval)
     return pycmc.read_row(csrname=q.csrname, row_id=q.row_id)
 
