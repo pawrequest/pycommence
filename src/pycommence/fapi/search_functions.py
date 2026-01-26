@@ -7,13 +7,11 @@ using PyCommence, with support for pagination and filtering.
 
 from __future__ import annotations
 
-import dataclasses
-
 from fastapi import Depends
 from loguru import logger
 
 from pycommence.fapi.depends import pycmc_f_query
-from pycommence.fapi.search_request_response import SearchRequest, SearchResponse
+from pycommence.fapi.search_request_response import SearchRequest, SearchResponse, MoreAvailableFront
 from pycommence.filters import FieldFilter, FilterArray
 from pycommence.meta.meta import CommenceTable, get_table_type
 from pycommence import MoreAvailable, PyCommence
@@ -66,7 +64,3 @@ async def pycommence_get_one[T:CommenceTable](
     return pycmc.read_row(csrname=q.csrname, row_id=q.row_id)
 
 
-@dataclasses.dataclass
-class MoreAvailableFront(MoreAvailable):
-    json_link: str = None
-    html_link: str = None

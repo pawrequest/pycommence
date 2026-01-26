@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import dataclasses
 from typing import Self
 
 from fastapi import Depends, Query
 from pydantic import BaseModel, Field, model_validator
 
-from pycommence.fapi.search_functions import MoreAvailableFront
+from pycommence import MoreAvailable
+# from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.filters import ConditionType
 from pycommence.meta.meta import CommenceTable
 from pycommence.pagination import Pagination as _Pagination
@@ -129,3 +131,9 @@ class SearchResponse[T: CommenceTable](BaseModel):
     def set_length(self):
         self.length = len(self.records)
         return self
+
+
+@dataclasses.dataclass
+class MoreAvailableFront(MoreAvailable):
+    json_link: str = None
+    html_link: str = None
