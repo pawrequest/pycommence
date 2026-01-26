@@ -136,13 +136,22 @@ class RowSetBase(ABC):
         rows = [self.get_row(i, delim=delim) for i in range(num)]
         return [dict(zip(self.headers, row.split(delim))) for row in rows]
 
-    def rows(self, count: int | None = None, delim: str = DELIM) -> Generator[dict[str, str], None, None]:
+    def rows(self, count: int | None = None, delim: str = DELIM, headers=True) -> Generator[
+        dict[str, str] | list[str], None, None]:
+        """Generates dicts of the first count rows."""
+        for row in self.rows_no_headers(count=count, delim=delim):
+            if headers:
+                yield dict(zip(self.headers, row))
+            else:
+                yield row
+
+    def rows_no_headers(self, count: int | None = None, delim: str = DELIM) -> Generator[list[str], None, None]:
         """Generates dicts of the first count rows."""
         if count is None:
             count = self.row_count
         for i in range(count):
             row = self.get_row(i, delim=delim)
-            yield dict(zip(self.headers, row.split(delim)))
+            yield row.split(delim)
 
     def get_shared(self, row_index: int) -> bool:
         """
