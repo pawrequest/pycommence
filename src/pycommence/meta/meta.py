@@ -20,7 +20,7 @@ def get_table_type(table_name: str) -> type['CommenceTable'] | None:
 
 
 class CommenceTable(ABC, BaseModel):
-    model_config = ConfigDict(extra='allow')
+    model_config = ConfigDict(extra='ignore')
     category: ClassVar[str]
     pk_key: ClassVar[str]
     row_id: str
