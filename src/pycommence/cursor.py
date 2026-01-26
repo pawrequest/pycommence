@@ -25,6 +25,7 @@ from .pycmc_types import (
     RowFilter,
     SeekBookmark,
 )
+from .rows import CommenceRecord, RowData
 
 
 def raise_for_id_or_pk(id, pk):
@@ -171,22 +172,18 @@ class CursorAPI[T: CommenceTable]:
         rs.modify_row(0, create_pkg)
         rs.commit()
 
-
-    def read_row(self, row_id: str) -> T:
+    def read_row(self, row_id: str) -> dict[str, str]:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
-        row['row_id'] = row_id
-        # mydict = {'data': row, **row}
-        res = self.table_model.model_validate(row)
-        return res
-
+        return row
 
     def read_rows(
             self,
             pagination: Pagination = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
-    ) -> _t.Generator[T | MoreAvailable, None, None]:
+    ) -> _t.Generator[tuple[str, dict[str, str]] | MoreAvailable, None, None]:
+        """Generate rows from the cursor. Yields (row_id, row_dict) tuples."""
         cmc_filter = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
         offset = self.temporary_offset(pagination.offset)
         with offset, cmc_filter:
@@ -198,7 +195,13 @@ class CursorAPI[T: CommenceTable]:
                     yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
                     break
                 row_id = rowset.get_row_id(i)
-                yield self.table_model(row_id=row_id, **row)
+                yield row_id, row
+
+    def convert_row(self, row_id: str, row: dict[str, str]) -> CommenceRecord[T]:
+        return CommenceRecord(
+            table=self.table_model,
+            row_data=RowData(category=self.category, row_id=row_id, data=row)
+        )
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -272,4 +275,6 @@ class CursorAPI[T: CommenceTable]:
         return self
 
 
-RESULTS_GENERATOR2 = _t.Generator[CommenceTable | MoreAvailable, None, None]
+RowGeneratorTupleIdDict = _t.Generator[tuple[str, dict[str, str]] | MoreAvailable, None, None]
+RowGeneratorTable = _t.Generator[CommenceTable | MoreAvailable, None, None]
+RowGeneratorRecord = _t.Generator[CommenceRecord | MoreAvailable, None, None]

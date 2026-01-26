@@ -3,12 +3,12 @@ from dataclasses import dataclass, field
 
 from loguru import logger
 
-from pycommence.cursor import CursorAPI, RESULTS_GENERATOR2, raise_for_id_or_pk
+from pycommence.cursor import CursorAPI, RowGeneratorTable, RowGeneratorRecord, raise_for_id_or_pk
 from pycommence.filters import FilterArray
 from pycommence.meta.meta import CommenceTable
 from pycommence.meta.pycmc_fields import DELIM
 from pycommence.pycmc_types import CursorType, RowFilter
-from pycommence.pagination import Pagination
+from pycommence.pagination import MoreAvailable, Pagination
 from pycommence.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, DDEKind, DDETopic
@@ -133,15 +133,13 @@ class PyCommence:
         csr = self.csr(csrname)
         return csr.read_row(row_id=row_id)
 
-
     def read_rows(
             self,
             csrname: str | None = None,
             pagination: Pagination | None = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
-            # fetch_ids: bool = True,
-    ) -> RESULTS_GENERATOR2:
+    ) -> RowGeneratorTable:
         """
         Generate rows from a cursor
 
@@ -150,7 +148,6 @@ class PyCommence:
             pagination: Pagination object
             filter_array: FilterArray object (override cursor filter)
             row_filter: Filter generator
-            fetch_ids: default: True, disable for performance
 
         Yields:
             row_data:RowData
@@ -162,6 +159,19 @@ class PyCommence:
             filter_array=filter_array,
             row_filter=row_filter,
         )
+
+    def convert_rows(
+            self,
+            rowgen: _t.Generator[_t.Union[tuple[str, dict[str, str]], 'MoreAvailable'], None, None],
+            csrname: str | None = None
+    ) -> RowGeneratorRecord:
+        """Convert a row generator to CommenceTable generator"""
+        for item in rowgen:
+            if isinstance(item, tuple):
+                row_id, row = item
+                yield self.csr(csrname).convert_row(row_id, row)
+            elif isinstance(item, MoreAvailable):
+                yield item
 
     @resolve_row_id
     def update_row(

@@ -1,7 +1,7 @@
 import pytest
 from starlette.testclient import TestClient
 
-from conftest import Contact
+from .conftest import Contact
 from pycommence.fapi.app import app
 
 
@@ -15,6 +15,7 @@ def test_status_endpoint(client):
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
+
 def test_get_one(client):
     response = client.get("/get", params={"csrname": 'Contact', "pk_value": "Bezos.Jeff"})
     data = response.json()
@@ -23,6 +24,7 @@ def test_get_one(client):
     contact = Contact.model_validate(data)
     assert contact.firstName == "Jeff"
     ...
+
 
 def test_search_endpoint(client):
     response = client.get("/search", params={"csrname": 'Contact', "pk_value": "Mark"})
