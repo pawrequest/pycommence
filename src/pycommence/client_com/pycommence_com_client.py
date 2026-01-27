@@ -1,15 +1,17 @@
+import contextlib
 import typing as _t
 from dataclasses import dataclass, field
 
+from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
-from pycommence.cursor import CursorAPI, raise_for_id_or_pk
+from pycommence.client_com.cursor import CursorAPI, raise_for_id_or_pk
 from pycommence.filters import FilterArray
-from pycommence.meta.pycmc_fields import DELIM
+from pycommence.fields import DELIM
 from pycommence.pycmc_types import CursorType
 from pycommence.rows import RowData, RowDataGenerator, RowFilter
 from pycommence.pagination import Pagination
-from pycommence.resolvers import resolve_csrname, resolve_row_id
+from pycommence.client_com.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, DDEKind, DDETopic
 
@@ -166,3 +168,14 @@ class PyCommence:
         self.read_row(csrname=csr.category, row_id=row_id)  # Ensure the row exists before deleting
         csr.delete_row(id=row_id)
         self.refresh_csr(csr)
+
+
+@contextlib.contextmanager
+def pycommence_context(*csrnames: str) -> _t.Generator[PyCommence, None, None]:
+    """Context manager for PyCommence with optional cursors"""
+    CoInitialize()
+    pyc = PyCommence()
+    for csrname in csrnames:
+        pyc.set_csr(csrname)
+    yield pyc
+    CoUninitialize()

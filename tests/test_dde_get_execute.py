@@ -1,4 +1,4 @@
-from pycommence.dde_generators.directory.execute_msgs import (
+from pycommence.client_dde.directory.execute_msgs import (
     execute_add_item,
     execute_add_shared_item,
     execute_append_text,

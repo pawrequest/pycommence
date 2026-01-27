@@ -5,9 +5,9 @@ import win32ui  # noqa
 import dde
 from loguru import logger
 
-from pycommence.dde_generators.dde_msg import DDEMessage
+from pycommence.client_dde.dde_msg import DDEMessage
 from pycommence.exceptions import PyCommenceDDEError
-from pycommence.meta.pycmc_fields import DELIM
+from pycommence.fields import DELIM
 from pycommence.wrapper.conversation_wrapper import DDEKind, DDETopic
 
 

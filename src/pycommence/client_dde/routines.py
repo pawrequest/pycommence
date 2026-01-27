@@ -1,14 +1,14 @@
 from typing import Any
 
-from pycommence.dde_generators.dde_server import DDEServer
-from pycommence.dde_generators.pycmc_dde.dde_request import (
+from pycommence.client_dde.dde_server import DDEServer
+from pycommence.client_dde.pycmc_dde.dde_request import (
     dde_get_field_definition,
     dde_get_field_names,
     dde_get_fields,
 )
-from pycommence.dde_generators.pycmc_dde.routines import MAX_FIELDS_CHUNK, get_pk
-from pycommence.meta.pycmc_fields import CmcDefsDict, CmcFieldDefinition, DELIM
-from pycommence.dde_generators.directory import request_msgs
+from pycommence.client_dde.pycmc_dde.routines import MAX_FIELDS_CHUNK, get_pk
+from pycommence.fields import CmcDefsDict, CmcFieldDefinition, DELIM
+from pycommence.client_dde.directory import request_msgs
 
 
 def fetch_field_names(category: str, server: DDEServer) -> bool | str | list[str]:

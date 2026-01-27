@@ -3,11 +3,11 @@ from collections.abc import Generator
 
 import pytest
 
-from pycommence.dde_generators.dde_msg import DDEMessage
-from pycommence.dde_generators.dde_server_pycmc import CommenceDDEServer
-from pycommence.meta.meta import CommenceTableGenerated
-from pycommence.meta.pycmc_fields import DELIM
-from pycommence.pycommence import PyCommence
+from pycommence.client_dde.dde_msg import DDEMessage
+from pycommence.client_dde.dde_server_pycmc import CommenceDDEServer
+from pycommence.meta import CommenceTableGenerated
+from pycommence.fields import DELIM
+from pycommence.client_com.pycommence_com_client import PyCommence
 from pycommence.wrapper.conversation_wrapper import DDETopic
 
 

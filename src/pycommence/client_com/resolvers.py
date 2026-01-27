@@ -1,7 +1,7 @@
 import functools
 import typing as _t
 
-from pycommence.cursor import CursorAPI
+from pycommence.client_com.cursor import CursorAPI
 from pycommence.exceptions import PyCommenceNotFoundError
 
 

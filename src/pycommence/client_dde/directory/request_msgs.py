@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 
-from pycommence.dde_generators.dde_msg import DDEMessage
-from pycommence.meta.pycmc_fields import DELIM
+from pycommence.client_dde.dde_msg import DDEMessage
+from pycommence.fields import DELIM
 
 
 # -------------------------

@@ -5,7 +5,7 @@ DDE Execute functions for Commence DDE interface.
 from __future__ import annotations
 
 
-from pycommence.dde_generators.dde_msg import _dde_format_function
+from pycommence.client_dde.dde_msg import _dde_format_function
 
 
 def dde_add_item(category: str, item: str, clarify_value: str | None = None) -> str:

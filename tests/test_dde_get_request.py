@@ -1,9 +1,9 @@
 import pytest
 
-from pycommence.dde_generators.dde_msg import DDEMessage
-from pycommence.dde_generators.pycmc_dde.dde_request import dde_get_field_count, dde_get_item_count
+from pycommence.client_dde.dde_msg import DDEMessage
+from pycommence.client_dde.pycmc_dde.dde_request import dde_get_field_count, dde_get_item_count
 from pycommence.wrapper.conversation_wrapper import DDETopic
-from pycommence.dde_generators.directory.request_msgs import (
+from pycommence.client_dde.directory.request_msgs import (
     clarify_item_names,
     get_active_view_info,
     get_caller_id,

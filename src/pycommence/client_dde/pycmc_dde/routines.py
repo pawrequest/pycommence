@@ -2,10 +2,10 @@ from typing import Any
 
 
 from pycommence import PyCommence, pycommence_context
-from pycommence.dde_generators.pycmc_dde.dde_request import dde_get_field_definition, dde_get_field_names, dde_get_fields
-from pycommence.dde_generators.pycmc_dde.view import dde_view_category, dde_view_filter
+from pycommence.client_dde.pycmc_dde.dde_request import dde_get_field_definition, dde_get_field_names, dde_get_fields
+from pycommence.client_dde.pycmc_dde.view import dde_view_category, dde_view_filter
 from pycommence.exceptions import PyCommenceDDEError
-from pycommence.meta.pycmc_fields import CmcDefsDict, CmcFieldDefinition, DELIM
+from pycommence.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 from pycommence.wrapper.conversation_wrapper import DDEKind, DDETopic
 
 CMC_FIELD_DEF_DICT = dict[str, CmcFieldDefinition]

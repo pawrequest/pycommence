@@ -13,14 +13,14 @@ from typing import Self
 
 from pycommence.pagination import MoreAvailable, Pagination
 from pycommence.wrapper.cursor_wrapper import CursorWrapper
-from .exceptions import PyCommenceExistsError, raise_for_one
-from .filters import ConditionType, FieldFilter, FilterArray
-from .pycmc_types import (
+from pycommence.exceptions import PyCommenceExistsError, raise_for_one
+from pycommence.filters import ConditionType, FieldFilter, FilterArray
+from pycommence.pycmc_types import (
     Connection,
     CursorType,
     SeekBookmark,
 )
-from .rows import RowData, RowDataGenerator, RowFilter
+from pycommence.rows import RowData, RowDataGenerator, RowFilter
 
 
 def raise_for_id_or_pk(id, pk):

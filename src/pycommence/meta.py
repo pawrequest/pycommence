@@ -4,7 +4,7 @@ from typing import ClassVar, Literal, cast
 from loguru import logger
 from pydantic import BaseModel, ConfigDict
 
-from pycommence.meta.pycmc_fields import CmcDefsDict
+from pycommence.fields import CmcDefsDict
 
 TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
 GENERATED_TABLE_TYPE_REGISTER: dict[str, type['CommenceTableGenerated']] = {}

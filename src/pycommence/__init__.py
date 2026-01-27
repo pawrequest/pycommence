@@ -1,8 +1,8 @@
 from pycommence.log_config import configure_loguru
-from pycommence.pycommence import PyCommence
+from pycommence.client_com.pycommence_com_client import PyCommence, pycommence_context
 from pycommence.pycmc_types import CursorType
 from pycommence.pagination import MoreAvailable
-from pycommence.contexts import pycommence_context
+
 logger = configure_loguru()
 
 

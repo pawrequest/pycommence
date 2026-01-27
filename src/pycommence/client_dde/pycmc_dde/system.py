@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from pycommence.dde_generators.dde_msg import _dde_format_function
+from pycommence.client_dde.dde_msg import _dde_format_function
 
 
 ## NOT WORKING??

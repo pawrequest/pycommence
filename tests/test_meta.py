@@ -1,7 +1,7 @@
 from conftest import get_pycmc
-from pycommence.dde_generators.pycmc_dde.routines import fetch_category_field_definitions
-from pycommence.meta.meta import generate_table_class_from_field_defs
-from pycommence.meta.pycmc_fields import CmcDefsDict
+from pycommence.client_dde.pycmc_dde.routines import fetch_category_field_definitions
+from pycommence.meta import generate_table_class_from_field_defs
+from pycommence.fields import CmcDefsDict
 from pycommence.pagination import Pagination
 
 

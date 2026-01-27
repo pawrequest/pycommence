@@ -1,5 +1,5 @@
 
-from pycommence.dde_generators.dde_msg import DDEMessage
+from pycommence.client_dde.dde_msg import DDEMessage
 from pycommence.wrapper.conversation_wrapper import DDETopic
 
 

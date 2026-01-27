@@ -1,8 +1,8 @@
 import pytest
 
 from pycommence import pycommence_context
-from pycommence.dde_generators.pycmc_dde.routines import fetch_category_field_definitions, get_item_routine
-from pycommence.dde_generators.pycmc_dde.dde_request import (
+from pycommence.client_dde.pycmc_dde.routines import fetch_category_field_definitions, get_item_routine
+from pycommence.client_dde.pycmc_dde.dde_request import (
     dde_get_field_count,
     dde_get_field_names,
     dde_get_item_count,

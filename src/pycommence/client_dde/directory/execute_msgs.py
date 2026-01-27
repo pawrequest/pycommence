@@ -5,7 +5,7 @@ DDE Execute functions for Commence DDE interface.
 from __future__ import annotations
 
 
-from pycommence.dde_generators.dde_msg import DDEMessage, DDEKind
+from pycommence.client_dde.dde_msg import DDEMessage, DDEKind
 
 
 def execute_add_item(category: str, item: str, clarify_value: str | None = None) -> DDEMessage:
@@ -124,7 +124,7 @@ def execute_log_phone_call(*category_item_pairs: str) -> DDEMessage:
 #
 # from typing import Optional, Union
 #
-# from pycommence.dde_generators.dde_msg import DDEMessage
+# from pycommence.client_dde.dde_msg import DDEMessage
 #
 #
 # def execute_add_item(category: str, item: str, clarify_value: Optional[str] = None) -> DDEMessage:

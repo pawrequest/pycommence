@@ -1,6 +1,6 @@
-from pycommence.dde_generators.dde_server import DDEServer
-from pycommence.dde_generators.directory import request_msgs
-from pycommence.meta.pycmc_fields import CmcDefsDict, CmcFieldDefinition, DELIM
+from pycommence.client_dde.dde_server import DDEServer
+from pycommence.client_dde.directory import request_msgs
+from pycommence.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 from pycommence.wrapper.conversation_wrapper import DDETopic
 
 

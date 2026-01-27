@@ -4,12 +4,12 @@ import pytest
 from loguru import logger
 
 from conftest import Contact
-from pycommence.cursor import CursorAPI
+from pycommence.client_com.cursor import CursorAPI
 from pycommence.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.pagination import Pagination
 from pycommence import MoreAvailable, CursorType
-from pycommence.pycommence import PyCommence
+from pycommence.client_com.pycommence_com_client import PyCommence
 from pycommence.rows import RowData
 from sample_data import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
 

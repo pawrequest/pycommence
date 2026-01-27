@@ -4,8 +4,8 @@ GetDara an
 """
 from collections.abc import Sequence
 
-from pycommence.dde_generators.dde_msg import _dde_format_function
-from pycommence.meta.pycmc_fields import DELIM
+from pycommence.client_dde.dde_msg import _dde_format_function
+from pycommence.fields import DELIM
 
 
 # -------------------------

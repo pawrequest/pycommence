@@ -13,7 +13,7 @@ from loguru import logger
 from pycommence.fapi.depends import pycmc_f_query
 from pycommence.fapi.search_request_response import MoreAvailableFront, SearchRequest, SearchResponse
 from pycommence.filters import FieldFilter, FilterArray
-from pycommence.meta.meta import get_table_type
+from pycommence.meta import get_table_type
 from pycommence import MoreAvailable, PyCommence
 from pycommence.rows import RowData
 

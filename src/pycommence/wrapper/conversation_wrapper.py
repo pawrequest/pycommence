@@ -6,7 +6,7 @@ import pywintypes
 from loguru import logger
 
 from pycommence.exceptions import PyCommenceDDEError
-from pycommence.meta.pycmc_fields import DELIM
+from pycommence.fields import DELIM
 from pycommence.wrapper._icommence import ICommenceConversation
 
 
