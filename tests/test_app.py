@@ -18,10 +18,11 @@ def test_status_endpoint(client):
 
 def test_get_one(client):
     response = client.get("/get", params={"csrname": 'Contact', "pk_value": "Bezos.Jeff"})
-    data = response.json()
     assert response.status_code == 200
-    assert data['row_id']
-    contact = Contact.model_validate(data)
+    row_data = response.json()
+    data_dict = row_data['data']
+    assert data_dict['firstName'] == "Jeff"
+    contact = Contact.model_validate(data_dict)
     assert contact.firstName == "Jeff"
     ...
 

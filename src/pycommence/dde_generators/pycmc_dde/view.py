@@ -1,7 +1,8 @@
+from enum import StrEnum
 from typing import Optional, Sequence
 
-from ._dde_format import _dde_format_function
-from ..meta.pycmc_fields import DELIM
+from pycommence.dde_generators.dde_msg import _dde_format_function
+from pycommence.meta.pycmc_fields import DELIM
 
 
 def dde_view_category(category: str) -> str:
@@ -115,3 +116,25 @@ def dde_view_save_view(new_view_name: str, shared: Optional[str] = None) -> str:
     Docs: shared is "yes" or "no"
     """
     return _dde_format_function("ViewSaveView", [new_view_name, shared])
+
+
+class DDECmdView(StrEnum):
+    CATEGORY = "ViewCategory"
+    CONJUNCTION = "ViewConjunction"
+    FILTER = "ViewFilter"
+    SORT = "ViewSort"
+    VIEW = "ViewView"
+    ITEM_COUNT = "ViewItemCount"
+    FIELD = "ViewField"
+    FIELDS = "ViewFields"
+    ITEM_NAME = "ViewItemName"
+    ITEM_INDEX = "ViewItemIndex"
+    CONNECTED_COUNT = "ViewConnectedCount"
+    CONNECTED_ITEM = "ViewConnectedItem"
+    CONNECTED_FIELD = "ViewConnectedField"
+    CONNECTED_FIELDS = "ViewConnectedFields"
+    MARK_ITEM = "ViewMarkItem"
+    DELETE_ALL_ITEMS = "ViewDeleteAllItems"
+    FIELD_TO_FILE = "ViewFieldToFile"
+    IMAGE_FIELD_TO_FILE = "ViewImageFieldToFile"
+    SAVE_VIEW = "ViewSaveView"

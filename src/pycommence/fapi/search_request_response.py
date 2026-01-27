@@ -4,13 +4,13 @@ import dataclasses
 from typing import Self
 
 from fastapi import Depends, Query
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, model_validator
 
 from pycommence import MoreAvailable
 # from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.filters import ConditionType
-from pycommence.meta.meta import CommenceTable
 from pycommence.pagination import Pagination as _Pagination
+from pycommence.rows import RowData
 
 PAGE_SIZE = 50
 
@@ -25,6 +25,12 @@ class Pagination(_Pagination):
         return cls(limit=limit, offset=offset)
 
 
+@dataclasses.dataclass
+class MoreAvailableFront(MoreAvailable):
+    json_link: str = None
+    html_link: str = None
+
+
 class SearchRequest(BaseModel):
     csrname: str | None = None
     row_id: str | None = None
@@ -34,7 +40,7 @@ class SearchRequest(BaseModel):
     pagination: Pagination | None = Pagination()
     cmc_filter_i: int = 0
     py_filter_i: int = 0
-
+    converted: bool = False
 
     def __str__(self):
         return (
@@ -114,8 +120,8 @@ class SearchRequest(BaseModel):
         )
 
 
-class SearchResponse[T: CommenceTable](BaseModel):
-    records: list[T]
+class SearchResponse(BaseModel):
+    records: list[RowData]
     length: int = 0
     search_request: SearchRequest
     more: MoreAvailableFront | None = None
@@ -131,9 +137,3 @@ class SearchResponse[T: CommenceTable](BaseModel):
     def set_length(self):
         self.length = len(self.records)
         return self
-
-
-@dataclasses.dataclass
-class MoreAvailableFront(MoreAvailable):
-    json_link: str = None
-    html_link: str = None

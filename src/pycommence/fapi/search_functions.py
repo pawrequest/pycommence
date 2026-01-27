@@ -11,17 +11,44 @@ from fastapi import Depends
 from loguru import logger
 
 from pycommence.fapi.depends import pycmc_f_query
-from pycommence.fapi.search_request_response import SearchRequest, SearchResponse, MoreAvailableFront
+from pycommence.fapi.search_request_response import MoreAvailableFront, SearchRequest, SearchResponse
 from pycommence.filters import FieldFilter, FilterArray
-from pycommence.meta.meta import CommenceTable, get_table_type
+from pycommence.meta.meta import get_table_type
 from pycommence import MoreAvailable, PyCommence
+from pycommence.rows import RowData
+
+
+async def pycommence_fetch(
+        q: SearchRequest = Depends(SearchRequest.from_query),
+        pycmc: PyCommence = Depends(pycmc_f_query),
+) -> RowData:
+    q.max_rtn = 1
+    if not q.row_id:
+        logger.debug(f'Getting row_id for pk_value: {q.pk_value} in csr: {q.csrname}')
+        pval = q.pk_value
+        pval = pval.strip('"')
+        q.row_id = pycmc.csr(q.csrname).pk_to_id(pval)
+    row: RowData = pycmc.read_row(csrname=q.csrname, row_id=q.row_id)
+    return row
+
+
+async def pycommence_search(
+        q: SearchRequest = Depends(SearchRequest.from_query),
+        pycmc: PyCommence = Depends(pycmc_f_query),
+) -> SearchResponse:
+    table_type = get_table_type(q.csrname, mode='all', missing='raise')
+    filter_array = FilterArray.from_filters(
+        FieldFilter(column=table_type.pk_key, condition=q.condition, value=q.pk_value) if q.pk_value else None
+    )
+    records, more = await pycommence_gather(pycmc=pycmc, q=q, filter_array=filter_array)
+    return SearchResponse(records=records, more=more, search_request=q)
 
 
 async def pycommence_gather(
         pycmc: PyCommence,
         q: SearchRequest,
         filter_array: FilterArray | None = None,
-) -> tuple[list[CommenceTable], MoreAvailable | None]:
+) -> tuple[list[RowData], MoreAvailable | None]:
     """
     Gather records from PyCommence based on the provided search request.
     Add MoreAvailable if q has pagination and there are more records to fetch.
@@ -36,30 +63,3 @@ async def pycommence_gather(
             break
         records.append(row)
     return records, more
-
-
-async def pycommence_search[T:CommenceTable](
-        q: SearchRequest = Depends(SearchRequest.from_query),
-        pycmc: PyCommence = Depends(pycmc_f_query),
-) -> SearchResponse[T]:
-    table_type: type[T] = get_table_type(q.csrname)
-    cmc_filter = FieldFilter(column=table_type.pk_key, condition=q.condition, value=q.pk_value) if q.pk_value else None
-    filter_array = FilterArray.from_filters(cmc_filter)
-    records, more = await pycommence_gather(pycmc=pycmc, q=q, filter_array=filter_array)
-    resp = SearchResponse(records=records, more=more, search_request=q)
-    return resp
-
-
-async def pycommence_get_one[T:CommenceTable](
-        q: SearchRequest = Depends(SearchRequest.from_query),
-        pycmc: PyCommence = Depends(pycmc_f_query),
-) -> T:
-    q.max_rtn = 1
-    if not q.row_id:
-        logger.debug(f'Getting row_id for pk_value: {q.pk_value} in csr: {q.csrname}')
-        pval = q.pk_value
-        pval = pval.strip('"')
-        q.row_id = pycmc.csr(q.csrname).pk_to_id(pval)
-    return pycmc.read_row(csrname=q.csrname, row_id=q.row_id)
-
-

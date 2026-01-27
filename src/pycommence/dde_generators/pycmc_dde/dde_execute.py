@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import Optional, Union
 
-from ._dde_format import _dde_format_function
+from pycommence.dde_generators.dde_msg import _dde_format_function
 
 
 def dde_add_item(category: str, item: str, clarify_value: Optional[str] = None) -> str:

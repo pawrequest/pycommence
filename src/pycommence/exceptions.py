@@ -103,14 +103,15 @@ class PyCommenceExistsError(PyCommenceError):
 
 
 class PyCommenceDDEError(PyCommenceError):
-    def __init__(self, cmd:str, code: int, msg: str | None = None):
+    def __init__(self, cmd: str, code: int, msg: str | None = None):
         self.code = code
         self.cmd = cmd
-        self.msg = msg or DDEErrorDict.get(code, f'Unknown DDE error code: {code}')
+        self.dde_msg = DDEErrorDict.get(code, 'Unknown DDE error code.')
+        self.msg = msg if msg is not None else self.dde_msg
         super().__init__(self.msg)
 
     def __str__(self):
-        return f'DDE Error {self.code} for command "{self.cmd}": {self.msg}'
+        return f'DDE Error {self.code} for command "{self.cmd}": {self.msg} ({self.dde_msg})'
 
 
 class PyCommenceNotFoundError(PyCommenceError):

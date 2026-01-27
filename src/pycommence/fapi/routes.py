@@ -1,6 +1,6 @@
-from pycommence.fapi.search_functions import pycommence_get_one, pycommence_search
+from pycommence.fapi.search_functions import pycommence_fetch, pycommence_search
 from pycommence.fapi.search_request_response import SearchResponse
-from pycommence.meta.meta import CommenceTable
+from pycommence.rows import RowData
 
 try:
     from fastapi import APIRouter, Depends
@@ -23,7 +23,7 @@ async def pycommence_search_endpoint(
 
 
 @router.get('/get')
-async def pycommence_get_endpoint[T:CommenceTable](
-        record: T = Depends(pycommence_get_one),
-) -> T:
+async def pycommence_get_endpoint(
+        record: RowData = Depends(pycommence_fetch),
+) -> RowData:
     return record

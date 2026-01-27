@@ -3,12 +3,12 @@ from dataclasses import dataclass, field
 
 from loguru import logger
 
-from pycommence.cursor import CursorAPI, RowGeneratorTable, RowGeneratorRecord, raise_for_id_or_pk
+from pycommence.cursor import CursorAPI, raise_for_id_or_pk
 from pycommence.filters import FilterArray
-from pycommence.meta.meta import CommenceTable
 from pycommence.meta.pycmc_fields import DELIM
-from pycommence.pycmc_types import CursorType, RowFilter
-from pycommence.pagination import MoreAvailable, Pagination
+from pycommence.pycmc_types import CursorType
+from pycommence.rows import RowData, RowDataGenerator, RowFilter
+from pycommence.pagination import Pagination
 from pycommence.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI, DDEKind, DDETopic
@@ -25,7 +25,7 @@ class PyCommence:
     Wraps an instance of :class:`~pycommence.wrapper.cmc_wrapper.CommenceWrapper`
 
     Typical Usage:
-        >>> pyc = PyCommence.with_csr("Contacts", mode=CursorType.CATEGORY)
+        >>> with pycommence_context('Customer') as pyc:
         >>> pyc.create_row({"Name": "Alice"})
         >>> for row in pyc.read_rows():
         ...     print(row)
@@ -35,24 +35,6 @@ class PyCommence:
     cmc_wrapper: CommenceWrapper = field(default_factory=CommenceWrapper)
     csrs: dict[str, CursorAPI] = field(default_factory=dict)
     conversations: dict[DDETopic, ConversationAPI] = field(default_factory=dict)
-
-    @classmethod
-    def with_csr(
-            cls,
-            csrname: str,
-            mode: CursorType = CursorType.CATEGORY,
-    ):
-        """
-        Create a new PyCommence instance with a cursor.
-
-        Args:
-            csrname (str): Name of the category or view.
-            mode (CursorType): Cursor type (default: CATEGORY).
-
-        Returns:
-            PyCommence: Instance with cursor initialised.
-        """
-        return cls().set_csr(csrname, mode=mode)
 
     @resolve_csrname
     def set_csr(
@@ -72,7 +54,6 @@ class PyCommence:
         """
         cursor_wrapper = self.cmc_wrapper.establish_cursor(csrname, mode)
         cursor = CursorAPI(cursor_wrapper=cursor_wrapper, mode=mode)
-        # cursor = self.cmc_wrapper.get_new_cursor(csrname, mode)
         self.csrs[csrname] = cursor
         logger.debug(f'Set "{csrname}" ({mode.name.title()}) cursor with {cursor.row_count} rows')
         return self
@@ -80,24 +61,23 @@ class PyCommence:
     @resolve_csrname
     def csr(self, csrname: str | None = None) -> CursorAPI:
         """Return a cursor by name, or the only cursor if only one is available."""
-        # csrname = self.get_csrname(csrname)
         return self.csrs[csrname]
 
     def refresh_csr(self, csr: CursorAPI) -> _t.Self:
-        """Reset an existing cursor with same name, mode and filter_array"""
+        """Reset an existing cursor with same name and mode."""
         self.set_csr(csr.csrname, csr.mode)
-        # logger.debug(f'Refreshed cursor on {csr.csrname} with {csr.row_count} rows')
         return self
 
     # def send_dde_obj(self, dde_command: DDEMessage):
     #     self.send_dde(topic=dde_command.topic, kind=dde_command.kind, cmd=dde_command.to_dde())
 
-    def send_dde(self, cmd: str, topic: DDETopic = DDETopic.VIEW_DATA, kind: DDEKind = DDEKind.REQUEST):
-        logger.debug(f'Sending DDE command to topic {topic} ({kind}): {cmd}/\nCOMAND_LENGTH = {len(cmd)}')
+    def send_dde(self, cmd: str, topic: DDETopic = DDETopic.VIEW, kind: DDEKind = DDEKind.REQUEST):
+        logger.debug(f'Sending DDE: {topic}:{kind}: {cmd}')
         conv = self.get_conversation(topic)
         res = conv.send_dde(cmd, kind)
         if isinstance(res, str) and DELIM in res:
             res = res.split(DELIM)
+        logger.debug(f'Received DDE: {topic}:{kind}:type{type(res)} len{len(res)}')
         return res
 
     def get_conversation(self, topic: DDETopic) -> ConversationAPI | None:
@@ -128,7 +108,7 @@ class PyCommence:
             csrname: str | None = None,
             row_id: str | None = None,  # id or pk must be provided
             pk: str | None = None,
-    ) -> CommenceTable:
+    ) -> RowData:
         raise_for_id_or_pk(row_id, pk)
         csr = self.csr(csrname)
         return csr.read_row(row_id=row_id)
@@ -139,7 +119,7 @@ class PyCommence:
             pagination: Pagination | None = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
-    ) -> RowGeneratorTable:
+    ) -> RowDataGenerator:
         """
         Generate rows from a cursor
 
@@ -159,19 +139,6 @@ class PyCommence:
             filter_array=filter_array,
             row_filter=row_filter,
         )
-
-    def convert_rows(
-            self,
-            rowgen: _t.Generator[_t.Union[tuple[str, dict[str, str]], 'MoreAvailable'], None, None],
-            csrname: str | None = None
-    ) -> RowGeneratorRecord:
-        """Convert a row generator to CommenceTable generator"""
-        for item in rowgen:
-            if isinstance(item, tuple):
-                row_id, row = item
-                yield self.csr(csrname).convert_row(row_id, row)
-            elif isinstance(item, MoreAvailable):
-                yield item
 
     @resolve_row_id
     def update_row(

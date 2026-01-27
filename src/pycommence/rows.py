@@ -1,20 +1,35 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import NamedTuple
+import typing as _t
+from dataclasses import dataclass
+from typing import Callable, Generator
 
-from pycommence.meta.meta import CommenceTable
+from loguru import logger
+
+from pycommence.pagination import MoreAvailable
+from pycommence.meta.meta import CommenceTable, get_table_type
 
 
 @dataclass
-class RowData(NamedTuple):
+class RowData:
     category: str
     row_id: str
     data: dict[str, str]
+    _table_model_type: type[CommenceTable] | None = None
+
+    @property
+    def table_model(self) -> type[CommenceTable] | None:
+        if not self._table_model_type:
+            self._table_model_type = get_table_type(self.category, mode='all', missing='raise')
+        return self._table_model_type
+
+    def construct_model(self) -> CommenceTable | None:
+        if table_type := self.table_model:
+            return table_type.model_validate(self.data)
+        logger.warning(f'No table model to construct: {self.category}')
+        return None
 
 
-@dataclass
-class CommenceRecord[T:CommenceTable]:
-    table: T
-    row_data: RowData
-    context: dict[str, str] = field(default_factory=dict)
+RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
+RowDataGenerator = _t.Generator[RowData | MoreAvailable, None, None]
+RowDataGeneratorAsync = _t.AsyncGenerator[RowData | MoreAvailable, None]

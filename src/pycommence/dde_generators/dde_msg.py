@@ -1,11 +1,31 @@
 from typing import Optional, Sequence, Union
 
+from pydantic import BaseModel, Field, model_validator
+
+from pycommence.wrapper.conversation_wrapper import DDEKind, DDETopic
+
 DDEParam = Optional[Union[str, int, float, bool]]
 
 
-def _dde_escape_param(value: str) -> str:
-    # Commence DDE rule: to embed a double quote in a parameter, use two double quotes.
-    return value.replace('"', '""')
+class DDEMessage(BaseModel):
+    func_name: str
+    topic: DDETopic = DDETopic.GET
+    kind: DDEKind = DDEKind.REQUEST
+    params: list[DDEParam] = Field(default_factory=list[DDEParam])
+    parms_formatted: list = Field(default_factory=list, init=False, repr=False)
+
+    @model_validator(mode='after')
+    def format_params(self):
+        self.parms_formatted = [_dde_format_param(p) for p in self.params]
+        return self
+
+    @property
+    def commence_format(self) -> str:
+        if not self.params:
+            return f"[{self.func_name}]"
+        inner = ",".join(self.parms_formatted)
+        res = f"[{self.func_name}({inner})]"
+        return res
 
 
 def _dde_format_param(value: DDEParam) -> str:
@@ -21,7 +41,7 @@ def _dde_format_param(value: DDEParam) -> str:
     # strings => quoted, internal quotes doubled
     if not isinstance(value, str):
         value = str(value)
-    return f'"{_dde_escape_param(value)}"'
+    return f'"{value}"'
 
 
 def _dde_format_function(func_name: str, params: Sequence[DDEParam] = None) -> str:

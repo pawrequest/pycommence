@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Generator
 from dataclasses import dataclass
 from datetime import date, datetime
 from enum import Enum, IntEnum, StrEnum
@@ -8,7 +7,6 @@ from typing import Annotated, Any
 
 from pydantic import BeforeValidator
 
-RowFilter = Callable[[Generator[dict[str, str], None, None]], Generator[dict[str, str], None, None]]
 FLAGS_UNUSED = 0
 
 

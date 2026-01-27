@@ -4,8 +4,8 @@ GetDara an
 """
 from typing import Optional, Sequence
 
-from ._dde_format import _dde_format_function
-from ..meta.pycmc_fields import DELIM
+from pycommence.dde_generators.dde_msg import _dde_format_function
+from pycommence.meta.pycmc_fields import DELIM
 
 
 # -------------------------

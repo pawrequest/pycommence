@@ -1,8 +1,8 @@
 import pytest
 
 from pycommence import pycommence_context
-from pycommence.dde_generators.routines import get_field_definitions, get_item_routine
-from pycommence.dde_generators.dde_request import (
+from pycommence.dde_generators.pycmc_dde.routines import fetch_category_field_definitions, get_item_routine
+from pycommence.dde_generators.pycmc_dde.dde_request import (
     dde_get_field_count,
     dde_get_field_names,
     dde_get_item_count,
@@ -66,7 +66,7 @@ def test_system_conv():
 
 
 def test_field_definiitions():
-    fields_defs = get_field_definitions('Contact')
+    fields_defs = fetch_category_field_definitions('Contact')
     assert len(fields_defs) == 45
 
 

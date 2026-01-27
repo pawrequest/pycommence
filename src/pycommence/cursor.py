@@ -8,24 +8,19 @@ Wraps :class:`~pycommence.wrapper.cursor_wrapper.CursorWrapper` for direct COM a
 from __future__ import annotations
 
 import contextlib
-import typing as _t
 from functools import cached_property
 from typing import Self
 
-from pycommence.meta.meta import CommenceTable
 from pycommence.pagination import MoreAvailable, Pagination
 from pycommence.wrapper.cursor_wrapper import CursorWrapper
-
 from .exceptions import PyCommenceExistsError, raise_for_one
 from .filters import ConditionType, FieldFilter, FilterArray
-from .meta.meta import get_table_type
 from .pycmc_types import (
     Connection,
     CursorType,
-    RowFilter,
     SeekBookmark,
 )
-from .rows import CommenceRecord, RowData
+from .rows import RowData, RowDataGenerator, RowFilter
 
 
 def raise_for_id_or_pk(id, pk):
@@ -34,8 +29,7 @@ def raise_for_id_or_pk(id, pk):
         raise ValueError('Must provide id or pk')
 
 
-# T = _t.TypeVar('T', bound=CommenceTable)
-class CursorAPI[T: CommenceTable]:
+class CursorAPI:
     """
     High-level API for interacting with a Commence database cursor.
 
@@ -55,18 +49,11 @@ class CursorAPI[T: CommenceTable]:
             cursor_wrapper: CursorWrapper,
             mode: CursorType = CursorType.CATEGORY,
             csrname: str = '',
-            table_model: type[T] | None = None,
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
         self.csrname = csrname or self.category
-        self.table_model = table_model or get_table_type(self.category)
 
-    # proxied from wrapper
-    # @cached_property
-    # def headers(self):
-    #     """Column labels."""
-    #     return self.cursor_wrapper.get_query_row_set(1).headers
 
     @property
     def category(self) -> str:
@@ -172,17 +159,17 @@ class CursorAPI[T: CommenceTable]:
         rs.modify_row(0, create_pkg)
         rs.commit()
 
-    def read_row(self, row_id: str) -> dict[str, str]:
+    def read_row(self, row_id: str) -> RowData:
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
-        return row
+        return RowData(category=self.category, row_id=row_id, data=row)
 
     def read_rows(
             self,
             pagination: Pagination = Pagination(),
             filter_array: FilterArray | None = None,
             row_filter: RowFilter | None = None,
-    ) -> _t.Generator[tuple[str, dict[str, str]] | MoreAvailable, None, None]:
+    ) -> RowDataGenerator:
         """Generate rows from the cursor. Yields (row_id, row_dict) tuples."""
         cmc_filter = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
         offset = self.temporary_offset(pagination.offset)
@@ -195,13 +182,7 @@ class CursorAPI[T: CommenceTable]:
                     yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
                     break
                 row_id = rowset.get_row_id(i)
-                yield row_id, row
-
-    def convert_row(self, row_id: str, row: dict[str, str]) -> CommenceRecord[T]:
-        return CommenceRecord(
-            table=self.table_model,
-            row_data=RowData(category=self.category, row_id=row_id, data=row)
-        )
+                yield RowData(category=self.category, row_id=row_id, data=row)
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
@@ -218,9 +199,6 @@ class CursorAPI[T: CommenceTable]:
         rs = self.cursor_wrapper.get_delete_row_set_by_id(id)
         rs.delete_row(0)
         assert rs.commit()
-
-    def add_category_to_dict(self, row):
-        row.update({'category': self.category})
 
     # FILTER
     def filter_by_array(self, filter_array: FilterArray) -> Self:
@@ -274,7 +252,3 @@ class CursorAPI[T: CommenceTable]:
             raise ValueError('Failed to add related column.')
         return self
 
-
-RowGeneratorTupleIdDict = _t.Generator[tuple[str, dict[str, str]] | MoreAvailable, None, None]
-RowGeneratorTable = _t.Generator[CommenceTable | MoreAvailable, None, None]
-RowGeneratorRecord = _t.Generator[CommenceRecord | MoreAvailable, None, None]
