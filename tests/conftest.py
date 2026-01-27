@@ -1,9 +1,9 @@
-from typing import ClassVar, Generator
+from typing import ClassVar
+from collections.abc import Generator
 
 import pytest
 
 from pycommence.dde_generators.dde_msg import DDEMessage
-from pycommence.dde_generators.dde_server import DDEServer
 from pycommence.dde_generators.dde_server_pycmc import CommenceDDEServer
 from pycommence.meta.meta import CommenceTableGenerated
 from pycommence.meta.pycmc_fields import DELIM
@@ -32,18 +32,18 @@ def pycmc_no_csr() -> PyCommence:
 
 
 class Contact(CommenceTableGenerated):
-    category: ClassVar[str] = "Contact"
-    pk_key: ClassVar[str] = "contactKey"
+    category: ClassVar[str] = 'Contact'
+    pk_key: ClassVar[str] = 'contactKey'
 
 
 class Account(CommenceTableGenerated):
-    category: ClassVar[str] = "Account"
-    pk_key: ClassVar[str] = "accountKey"
+    category: ClassVar[str] = 'Account'
+    pk_key: ClassVar[str] = 'accountKey'
 
 
 @pytest.fixture(scope='session')
 def dde_server() -> Generator[CommenceDDEServer]:
     with CommenceDDEServer(DDETopic.GET) as server:
         msg = DDEMessage(func_name='GetDatabase', params=[DELIM])
-        assert server.send_message(msg)[0] == 'Tutorial', "Must Use Tutorial DB"
+        assert server.send_message(msg)[0] == 'Tutorial', 'Must Use Tutorial DB'
         yield server

@@ -56,7 +56,7 @@ class DDEServer:
     def __enter__(self):
         pythoncom.CoInitializeEx(pythoncom.COINIT_APARTMENTTHREADED)
         self.server = dde.CreateServer()
-        self.server.Create("pycommence_dde_client")
+        self.server.Create('pycommence_dde_client')
         self.conversation = dde.CreateConversation(self.server)
         self.connect(self._topic)
         return self

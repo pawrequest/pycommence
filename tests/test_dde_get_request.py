@@ -1,20 +1,5 @@
 import pytest
 
-
-def test_fields(dde_server):
-    assert dde_server._send_request(dde_get_field_count('Contact')) == '45', "Field count mismatch"
-    assert dde_server._send_request(dde_get_item_count('Contact')) == '25', "Item count mismatch"
-
-
-def test_msg(dde_server):
-    msg = DDEMessage(func_name='GetFieldCount', params=['Contact'], topic=DDETopic.GET)
-    res = dde_server.send_message(msg)
-    assert res == '45'
-
-
-####
-
-
 from pycommence.dde_generators.dde_msg import DDEMessage
 from pycommence.dde_generators.pycmc_dde.dde_request import dde_get_field_count, dde_get_item_count
 from pycommence.wrapper.conversation_wrapper import DDETopic
@@ -32,11 +17,11 @@ from pycommence.dde_generators.directory.request_msgs import (
     get_desktop_count,
     get_desktop_names,
     get_field,
-    get_fields,
     get_field_count,
     get_field_definition,
     get_field_names,
     get_field_to_file,
+    get_fields,
     get_form_count,
     get_form_names,
     get_image_field_count,
@@ -46,7 +31,6 @@ from pycommence.dde_generators.directory.request_msgs import (
     get_item_names,
     get_last_error,
     get_mark_item,
-    mark_active_item,
     get_phone_number,
     get_preference,
     get_reverse_name,
@@ -54,8 +38,22 @@ from pycommence.dde_generators.directory.request_msgs import (
     get_trigger_names,
     get_view_count,
     get_view_names,
+    mark_active_item,
 )
 
+
+def test_fields(dde_server):
+    assert dde_server._send_request(dde_get_field_count('Contact')) == '45', 'Field count mismatch'
+    assert dde_server._send_request(dde_get_item_count('Contact')) == '25', 'Item count mismatch'
+
+
+def test_msg(dde_server):
+    msg = DDEMessage(func_name='GetFieldCount', params=['Contact'], topic=DDETopic.GET)
+    res = dde_server.send_message(msg)
+    assert res == '45'
+
+
+####
 
 def test_clarify_item_names(dde_server):
     msg = clarify_item_names()
@@ -140,6 +138,7 @@ def test_get_fields(dde_server):
     res = dde_server.send_message(msg)
     assert res == ['Elon', 'Musk']
 
+
 def test_get_fields2(dde_server):
     res = dde_server.fetch_field_names('Contact')
     ...
@@ -187,14 +186,14 @@ def test_get_image_field_count(dde_server):
     assert res
 
 
-@pytest.mark.skip(reason="No image fields in test db")
+@pytest.mark.skip(reason='No image fields in test db')
 def test_get_image_field_names(dde_server):
     msg = get_image_field_names('Contact')
     res = dde_server.send_message(msg)
     assert res
 
 
-@pytest.mark.skip(reason="No image fields in test db")
+@pytest.mark.skip(reason='No image fields in test db')
 def test_get_image_field_to_file(dde_server):
     msg = get_image_field_to_file('Contact', '1', 'Photo', 'test.jpg')
     res = dde_server.send_message(msg)
@@ -231,7 +230,7 @@ def test_mark_active_item(dde_server):
     assert res
 
 
-@pytest.mark.skip(reason="Requires TAPI setup")
+@pytest.mark.skip(reason='Requires TAPI setup')
 def test_get_phone_number(dde_server):
     msg = get_phone_number('412-555-7890')
     res = dde_server.send_message(msg)

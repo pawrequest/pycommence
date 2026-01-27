@@ -5,14 +5,14 @@ from pycommence.rows import RowData
 try:
     from fastapi import APIRouter, Depends
 except ImportError:
-    raise ImportError("FastAPI is not installed.")
+    raise ImportError('FastAPI is not installed.')
 
 router = APIRouter()
 
 
-@router.get("/status")
+@router.get('/status')
 async def get_status():
-    return {"status": "ok"}
+    return {'status': 'ok'}
 
 
 @router.get('/search')

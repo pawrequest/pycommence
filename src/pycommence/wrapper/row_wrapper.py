@@ -4,7 +4,6 @@ import typing
 from abc import ABC
 from collections.abc import Generator
 from functools import cached_property
-from typing import TypeAlias
 
 from loguru import logger
 
@@ -21,17 +20,17 @@ from pycommence.wrapper._icommence import (
     ICommenceQueryRowSet,
 )
 
-RowSetType: TypeAlias = ICommenceEditRowSet or ICommenceQueryRowSet or ICommenceAddRowSet or ICommenceDeleteRowSet
+RowSetType = ICommenceEditRowSet | ICommenceQueryRowSet | ICommenceAddRowSet | ICommenceDeleteRowSet
 
 
-class RowSetBase(ABC):
-    def __init__(self, cmc_rs: RowSetType):
+class RowSetBase[T:RowSetType](ABC):
+    def __init__(self, cmc_rs: T):
         """
         Args:
             cmc_rs: A Commence Row Set object.
 
         """
-        self._rs = cmc_rs
+        self._rs: T = cmc_rs
 
     @cached_property
     def headers(self) -> list:
@@ -186,7 +185,7 @@ class RowSetQuery(RowSetBase):
 
 
 class RowSetModifies(RowSetBase):
-    """ adds functionality to modify rows """ ''
+    """ adds functionality to modify rows """ ""
 
     def modify_value(self, row_index: int, column_index: int, value: str) -> bool:
         """

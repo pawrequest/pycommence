@@ -15,7 +15,7 @@ def test_dde_field_count():
     dde_cmd = dde_get_field_count('Contact')
     cached = '[GetFieldCount("Contact")]'
     assert dde_cmd == cached
-    with pycommence_context() as p:  # noqa
+    with pycommence_context() as p:
         res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
     assert res == '45'
 
@@ -24,14 +24,14 @@ def test_dde_item_count():
     dde_cmd = dde_get_item_count('Contact')
     cached = '[GetItemCount("Contact")]'
     assert dde_cmd == cached
-    with pycommence_context() as p:  # noqa
+    with pycommence_context() as p:
         res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
     assert res == '25'
 
 
 def test_dde_field_names():
     dde_cmd = dde_get_field_names('Contact')
-    with pycommence_context() as p:  # noqa
+    with pycommence_context() as p:
         res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
     expected = ['contactKey', 'Account', 'addModifyDate', 'addModifyUser', 'Birthday', 'busCity', 'busCountry',
                 'businessNumber', 'busState', 'busStreet', 'busZip', 'City', 'cityStateZip', 'DOB', 'doNotSolicit',
@@ -45,7 +45,7 @@ def test_dde_field_names():
 
 def test_dde_item_names():
     dde_cmd = dde_get_item_names('Contact')
-    with pycommence_context() as p:  # noqa
+    with pycommence_context() as p:
         res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
     expected = ['Bezos.Jeff', 'Branson.Richard', 'Buffett.Warren', 'Carney.Steve', 'Carr.Brian', 'Douglas.Michael',
                 'Findlay.Howard', 'Gates.Bill', 'Jennings.Kevin', 'Logan.Andrew', 'Madison.Bruce', 'Malick.Charles',
@@ -55,10 +55,10 @@ def test_dde_item_names():
     assert res == expected
 
 
-@pytest.mark.skip(reason="System Topic Broken?")
+@pytest.mark.skip(reason='System Topic Broken?')
 def test_system_conv():
     print('FAILS why??')
-    with pycommence_context() as p:  # noqa
+    with pycommence_context() as p:
         cached = '[Status]'
         # ddemsg = dde_formats()
         res = p.send_dde(cmd=cached, topic='System', kind=DDEKind.REQUEST)
@@ -72,6 +72,7 @@ def test_field_definiitions():
 
 def test_get_item():
     res = get_item_routine('Contact', 'Musk.Elon')
+    assert res
     ...
     # expected = ['Vertical Stab Company', 'Simpson.Barry.T', 'Cleveland', 'USA', 'OH', '5578 West 67th Street', '44144',
     #             '', 'Cleveland, OH 44144', '', 'Elon', '', '77OG6P', 'Musk', '', '', '', '', 'Mr. Elon Musk', '', '',

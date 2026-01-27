@@ -1,10 +1,10 @@
-from typing import Optional, Sequence, Union
+from collections.abc import Sequence
 
 from pydantic import BaseModel, Field, model_validator
 
 from pycommence.wrapper.conversation_wrapper import DDEKind, DDETopic
 
-DDEParam = Optional[Union[str, int, float, bool]]
+DDEParam = str | int | float | bool | None
 
 
 class DDEMessage(BaseModel):
@@ -22,21 +22,21 @@ class DDEMessage(BaseModel):
     @property
     def commence_format(self) -> str:
         if not self.params:
-            return f"[{self.func_name}]"
-        inner = ",".join(self.parms_formatted)
-        res = f"[{self.func_name}({inner})]"
+            return f'[{self.func_name}]'
+        inner = ','.join(self.parms_formatted)
+        res = f'[{self.func_name}({inner})]'
         return res
 
 
 def _dde_format_param(value: DDEParam) -> str:
     # None => blank placeholder
     if value is None:
-        return ""
+        return ''
     # bool => yes/no (common in Commence docs)
     if isinstance(value, bool):
-        return "yes" if value else "no"
+        return 'yes' if value else 'no'
     # numbers => as-is
-    if isinstance(value, (int, float)):
+    if isinstance(value, int | float):
         return str(value)
     # strings => quoted, internal quotes doubled
     if not isinstance(value, str):
@@ -46,6 +46,6 @@ def _dde_format_param(value: DDEParam) -> str:
 
 def _dde_format_function(func_name: str, params: Sequence[DDEParam] = None) -> str:
     if not params:
-        return f"[{func_name}]"  # todo these dont work? only system topic without args?
-    inner = ",".join(_dde_format_param(p) for p in params)
-    return f"[{func_name}({inner})]"
+        return f'[{func_name}]'  # todo these dont work? only system topic without args?
+    inner = ','.join(_dde_format_param(p) for p in params)
+    return f'[{func_name}({inner})]'

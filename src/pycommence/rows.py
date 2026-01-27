@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import typing as _t
 from dataclasses import dataclass
-from typing import Callable, Generator
+from collections.abc import Callable, Generator
 
 from loguru import logger
 

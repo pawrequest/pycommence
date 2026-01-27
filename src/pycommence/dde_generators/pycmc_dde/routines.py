@@ -15,7 +15,7 @@ MAX_CMD_LEN = 256  # undocumented limit in Commence DDE for command length
 
 
 def get_item_routine(category, pk_value) -> dict[str, str]:
-    with pycommence_context() as p:  # noqa
+    with pycommence_context() as p:
         field_defs_dict = fetch_category_field_definitions(category)
         primary_key = get_pk(category, field_defs_dict)
         field_defs_filtered = field_defs_dict
@@ -36,7 +36,7 @@ def get_item_routine(category, pk_value) -> dict[str, str]:
                 last = fields_chunk[-1]
                 failed_type = field_defs_dict[last]
                 raise RuntimeError(
-                    f"Failed to get fields for {category} where {primary_key} contains {pk_value}. Last attempted field: {last} of type {failed_type}"
+                    f'Failed to get fields for {category} where {primary_key} contains {pk_value}. Last attempted field: {last} of type {failed_type}'
                 ) from e
         return resd
 
@@ -47,18 +47,18 @@ def filter_by_pk_contains(category, p: PyCommence, pk_value, primary_key: str):
         cmd=(dde_view_filter(
             1, 'F', None, primary_key, 'Contains', pk_value
         ))
-    ) == 'OK', f"Failed to set view filter for {category} where {primary_key} contains {pk_value}"
+    ) == 'OK', f'Failed to set view filter for {category} where {primary_key} contains {pk_value}'
 
 
 def set_category(category, p: PyCommence):
-    assert p.send_dde(cmd=dde_view_category(category)) == 'OK', f"Failed to set view category to {category}"
+    assert p.send_dde(cmd=dde_view_category(category)) == 'OK', f'Failed to set view category to {category}'
 
 
 def get_pk(category, field_defs_dict: dict[str, CmcFieldDefinition]) -> str:
     _primary_keys = [fname for fname, finfo in field_defs_dict.items() if finfo.type.alias == 'NAME']
     assert len(
         _primary_keys
-    ) == 1, f"Expected exactly one primary key field for category {category}, found {_primary_keys}"
+    ) == 1, f'Expected exactly one primary key field for category {category}, found {_primary_keys}'
     primary_key: str = _primary_keys[0]
     return primary_key
 

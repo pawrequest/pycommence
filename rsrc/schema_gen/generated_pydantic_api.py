@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel
 from pydantic import Field as PField
@@ -221,9 +221,9 @@ class ComLibraryApi(BaseModel):
     ClearAll: dict[str, Any] | None = None
     FieldValue: FieldValue | None = None
     RestoreFilter: dict[str, Any] | None = None
-    field__call__: Optional[dict[str, Any]] = PField(None, alias='__call__')
-    field__str__: Optional[FieldStr] = PField(None, alias='__str__')
-    field__int__: Optional[FieldInt] = PField(None, alias='__int__')
+    field__call__: dict[str, Any] | None = PField(None, alias='__call__')
+    field__str__: FieldStr | None = PField(None, alias='__str__')
+    field__int__: FieldInt | None = PField(None, alias='__int__')
     Abort: dict[str, Any] | None = None
     Cancel: dict[str, Any] | None = None
     Control: Control | None = None

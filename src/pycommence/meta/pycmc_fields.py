@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import enum
 import pathlib
 from dataclasses import dataclass
 from datetime import date, time

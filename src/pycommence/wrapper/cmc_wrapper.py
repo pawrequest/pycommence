@@ -220,5 +220,5 @@ class CommenceWrapper(CmcConnector):
         return f'<Cmc: "{self.name}">'
 
     def __repr__(self):
-        name = self._name if self._name is not None else "<COM?>"
-        return f"<Cmc: {name}>"
+        name = self._name if self._name is not None else '<COM?>'
+        return f'<Cmc: {name}>'

@@ -1,6 +1,5 @@
 import json
 import re
-from pprint import pprint
 
 COM_DEFINITION = r'C:\Users\RYZEN\prdev\workbench\pycommence\src\pycommence\wrapper\_icommence.py'
 REFLECTION = r'C:\Users\RYZEN\prdev\workbench\pycommence\rsrc\schema_gen\namespaceMap.json'
