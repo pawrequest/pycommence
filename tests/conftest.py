@@ -1,7 +1,8 @@
 import contextlib
 import threading
-from typing import ClassVar
-from collections.abc import Generator
+from contextlib import AbstractContextManager
+from typing import ClassVar, ContextManager
+from collections.abc import Generator, Iterator
 
 import comtypes
 import pytest
@@ -46,27 +47,12 @@ class Account(CommenceTableGenerated):
 
 
 @pytest.fixture(scope='function')
-def dde_serverunsafe() -> Generator[PyCmcDDEServer]:
-    thread_id = threading.get_ident()
-    logger.warning(f'DDEServer fixture running in thread {thread_id}')
-    with PyCmcDDEServer() as server:
-        msg = DDEMessageBase(func_name='GetDatabase', params=[DELIM])
-        assert server.send_message(msg)[0] == 'Tutorial', 'Must Use Tutorial DB'
-        yield server
-        thread_id = threading.get_ident()
-        logger.warning(f'AFTER YEILD {thread_id}')
-    thread_id = threading.get_ident()
-    logger.warning(f'OUSIDE CONTEXT {thread_id}')
-
-
-@pytest.fixture(scope='function')
 def dde_server() -> Generator[PyCmcDDEServer, None, None]:
     thread_id = threading.get_ident()
     logger.warning(f'DDEServer fixture running in thread {thread_id}')
     inititialized = False
     with PyCmcDDEServer() as server:
         try:
-            # inititialized = initialise_com_multithreaded()
             msg = DDEMessageBase(func_name='GetDatabase', params=[DELIM])
             assert server.send_message(msg)[0] == 'Tutorial', 'Must Use Tutorial DB'
             yield server
@@ -77,14 +63,11 @@ def dde_server() -> Generator[PyCmcDDEServer, None, None]:
 
 
 @contextlib.contextmanager
-def temp_contact(server: PyCmcDDEServer):
-    item_name = TEST_ITEM_NAME
-    category = 'Contact'
+def temp_contact(server: PyCmcDDEServer, category='Contact') -> ContextManager[PyCmcDDEServer]: # prefer the pycharm false positive here to in callers
     try:
-        server.view_reset(category)
-        assert server.item_add(category, item_name, DDETopic.GET) is True
+        assert server.item_add(category, TEST_ITEM_NAME, DDETopic.GET) is True
         yield server
 
     finally:
         logger.info('Cleaning up temp contact')
-        assert server.item_delete(category, item_name, DDETopic.GET) is True
+        assert server.item_delete(category, TEST_ITEM_NAME, DDETopic.GET) is True

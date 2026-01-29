@@ -1,5 +1,5 @@
 from conftest import temp_contact
-from pycommence.core.dde_common.execute_msgs import (
+from pycommence.dde.msgs.execute import (
     execute_add_shared_item,
     execute_append_text,
     execute_assign_connection,
