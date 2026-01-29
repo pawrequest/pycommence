@@ -1,13 +1,12 @@
 import threading
 from collections.abc import Sequence
 
-
 import dde
 from loguru import logger
 
 from . import msgs
-from .types import DDEKind, DDEMessageBase, DDETopic, DDEExecuteGet, DDEExecuteBase, DDERequestBase
-from .dde_errors import PyCmcDDEError, dde_handler, PyCmcDDENoConnectionError
+from .types import DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic
+from .dde_errors import PyCmcDDEError, PyCmcDDENoConnectionError, dde_handler
 from pycommence.core.fields import DELIM
 from pycommence.com.context import com_multithreaded_context
 
@@ -43,8 +42,8 @@ class DDEServer:
         self._com_context = com_multithreaded_context()
         self._com_context.__enter__()
         self._create_server()
-        self.send_message(msgs.system.system_status())
         return self
+
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
@@ -106,7 +105,6 @@ class DDEServer:
                 logger.error('Failed to get last DDE error')
                 raise PyCmcDDEError(cmd='GetLastError', code=-1, msg='Failed to get last DDE error') from e
 
-
     @dde_handler
     def _create_server(self):
         with self._lock:
@@ -117,7 +115,7 @@ class DDEServer:
     @dde_handler
     def _create_conversation(self):
         with self._lock:
-            self._conversation= dde.CreateConversation(self._server)
+            self._conversation = dde.CreateConversation(self._server)
 
     @dde_handler
     def _connect_topic(self, topic: DDETopic):

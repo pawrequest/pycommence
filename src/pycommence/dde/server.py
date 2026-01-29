@@ -2,11 +2,24 @@ from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 from pycommence.core.filters import CmcFilter, ConditionType, FieldFilter
 from pycommence.core.meta import generate_table_pydantic_model, get_table_type
 from . import msgs
+from .dde_errors import PyCmcDDENoConnectionError, PyCmcDDEStatusError
 from .types import DDEMessageBase, DDETopic
 from ._server import DDEServer, EMPTY
 
 
 class PyCmcDDEServer(DDEServer):
+    def __enter__(self):
+        super().__enter__()
+        self.status_check()
+        return self
+
+    def status_check(self):
+        try:
+            assert self.send_message(msgs.system.system_status()) == 'Ready'
+        except AssertionError as e:
+            raise PyCmcDDEStatusError
+
+
     def db_name(self) -> tuple[str, str]:
         """ Returns the current database as (name, path) """
         return self.send_message(DDEMessageBase(func_name='GetDatabase', params=[DELIM]))

@@ -35,8 +35,16 @@ class PyCmcDDEError(PyCommenceError):
 
 
 class PyCmcDDENoConnectionError(PyCmcDDEError):
-    def __init__(self):
-        super().__init__(cmd='N/A', code=600, msg='DDE connection failed.')
+    def __init__(self, msg=''):
+        msg_ = 'DDE connection failed.'
+        msg = f'{msg_} - {msg}' if msg else msg_
+        super().__init__(cmd='N/A', code=600, msg=f'{msg}')
+
+
+class PyCmcDDEStatusError(PyCmcDDEError):
+    def __init__(self, status: str):
+        msg = f'Server status not ready: {status}'
+        super().__init__(cmd='StatusCheck', code=601, msg=msg)
 
 
 def raise_for_bad_dde(cmd: str, res):
