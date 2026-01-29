@@ -1,8 +1,8 @@
 from typing import Any
 
 from pycommence import PyCommence, pycommence_context
-from pycommence.dde.msgs import view as view_msgs, request as request_msgs
-from pycommence.core.exceptions import PyCommenceDDEError
+from pycommence.dde.msgs import view as view_msgs, get as request_msgs
+from pycommence.dde.dde_errors import PyCommenceDDEError
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 
 

@@ -7,7 +7,6 @@ from typing import Literal, NamedTuple
 from loguru import logger
 from pydantic import BaseModel, Field, model_validator
 
-from pycommence.core.fields import CmcFieldDefinition
 from pycommence.core.types import ConnectedColumn
 
 FilterKind = Literal['F', 'CTI', 'CTCF', 'CTCTI']

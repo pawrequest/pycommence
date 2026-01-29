@@ -22,7 +22,7 @@ class DDEKind(StrEnum):
     EXECUTE = 'execute'
 
 
-class DDEMessage(BaseModel):
+class DDEMessageBase(BaseModel):
     func_name: str
     topic_literal: DDETopicLiteral = 'GetData'
     topic: DDETopic = DDETopic.GET
@@ -45,8 +45,7 @@ class DDEMessage(BaseModel):
         return res
 
 
-
-class DDESystemMessage(DDEMessage):
+class DDESystemRequest(DDEMessageBase):
     topic: DDETopic = DDETopic.SYSTEM
 
     def __str__(self) -> str:
@@ -56,14 +55,28 @@ class DDESystemMessage(DDEMessage):
         return res
 
 
-
-
-class DDERequest(DDEMessage):
+class DDERequestBase(DDEMessageBase):
     kind: DDEKind = DDEKind.REQUEST
 
 
-class DDEExecute(DDEMessage):
+class DDEExecuteBase(DDEMessageBase):
     kind: DDEKind = DDEKind.EXECUTE
+
+
+class DDERequestGet(DDERequestBase):
+    topic: DDETopic = DDETopic.GET
+
+
+class DDERequestView(DDERequestBase):
+    topic: DDETopic = DDETopic.VIEW
+
+
+class DDEExecuteGet(DDEExecuteBase):
+    topic: DDETopic = DDETopic.GET
+
+
+class DDEExecuteView(DDEExecuteBase):
+    topic: DDETopic = DDETopic.VIEW
 
 
 def _dde_format_param(value: DDEParam) -> str:
@@ -86,7 +99,7 @@ def _dde_format_param(value: DDEParam) -> str:
 class DDEServerProtocol(Protocol):
     _lock: threading.Lock
 
-    def send_message(self, msg: DDEMessage) -> str | list[str] | bool:
+    def send_message(self, msg: DDEMessageBase) -> str | list[str] | bool:
         ...
 
     def last_error(self) -> int:

@@ -4,8 +4,8 @@ import pywintypes
 from loguru import logger
 
 from pycommence.core.fields import DELIM
-from pycommence.dde import DDEKind, DDEMessage
-from pycommence.core.exceptions import PyCommenceDDEError, commence_pycom_error_code
+from pycommence.dde import DDEKind, DDEMessageBase
+from pycommence.dde.dde_errors import commence_pycom_error_code, PyCommenceDDEError
 from pycommence.wrapper._icommence import ICommenceConversation
 
 
@@ -33,7 +33,7 @@ class ConversationAPI:
             code = commence_pycom_error_code(e)
             raise PyCommenceDDEError(cmd, code) from e
 
-    def send_dde_msg(self, msg: DDEMessage) -> str | bool:
+    def send_dde_msg(self, msg: DDEMessageBase) -> str | bool:
         logger.debug(f'Sending DDE message: {msg}')
         try:
             if msg.kind == DDEKind.EXECUTE:

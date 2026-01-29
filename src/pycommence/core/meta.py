@@ -10,7 +10,7 @@ TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
 GENERATED_TABLE_TYPE_REGISTER: dict[str, type['CommenceTableGenerated']] = {}
 
 FetchMode = Literal['manual', 'auto', 'all']
-HandleMissing = Literal['raise', 'ignore']
+HandleMissing = Literal['raise', 'ignore', 'generate']
 
 
 def register_table(cls: 'type[CommenceTable] | type[CommenceTableGenerated]'):
@@ -38,6 +38,10 @@ def get_table_type(table_name: str, mode: FetchMode = 'manual', missing: HandleM
         return res
     if missing == 'raise':
         raise KeyError(f'No registered table model for: {table_name} in mode: {mode}')
+    # if missing == 'generate':
+    #     logger.debug(f'Generating table model for missing table: {table_name}')
+    #     return generate_table_pydantic_model(table_name, table_name)
+
     return None
 
 

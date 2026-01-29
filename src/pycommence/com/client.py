@@ -14,7 +14,7 @@ from pycommence.core.pagination import Pagination
 from pycommence.com.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
 from pycommence.wrapper.conversation_wrapper import ConversationAPI
-from pycommence.dde import DDEKind, DDEMessage, DDETopic
+from pycommence.dde import DDEKind, DDEMessageBase, DDETopic
 
 
 # noinspection PyProtectedMember
@@ -71,7 +71,7 @@ class PyCommence:
         self.set_csr(csr.csrname, csr.mode)
         return self
 
-    def send_dde_msg(self, msg: DDEMessage) -> str | bool:
+    def send_dde_msg(self, msg: DDEMessageBase) -> str | bool:
         conv = self.get_conversation(msg.topic)
         return conv.send_dde_msg(msg)
 

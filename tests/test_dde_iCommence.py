@@ -42,7 +42,7 @@ def test_dde_item_names():
 def test_system_conv():
     msg = msgs.system.system_status()
     with pycommence_context() as p:
-        assert p.send_dde_msg(msg) == 'Ready', "System is not ready"
+        assert p.send_dde_msg(msg) == 'Ready', 'System is not ready'
 
 
 def test_field_definiitions():

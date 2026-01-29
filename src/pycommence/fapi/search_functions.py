@@ -10,11 +10,11 @@ from __future__ import annotations
 from fastapi import Depends
 from loguru import logger
 
-from pycommence.fapi.depends import pycmc_f_query
+from pycommence.dde.server import get_or_create_table_type
+from pycommence.fapi.depends import pycmc_f_query, dde_server_dep
 from pycommence.fapi.search_request_response import MoreAvailableFront, SearchRequest, SearchResponse
 from pycommence.core.filters import FieldFilter, FilterArray
-from pycommence.core.meta import get_table_type
-from pycommence import MoreAvailable, PyCommence
+from pycommence import MoreAvailable, PyCmcDDEServer, PyCommence
 from pycommence.core.row_data import RowData
 
 
@@ -35,10 +35,12 @@ async def pycommence_fetch(
 async def pycommence_search(
         q: SearchRequest = Depends(SearchRequest.from_query),
         pycmc: PyCommence = Depends(pycmc_f_query),
+        dde_server: PyCmcDDEServer = Depends(dde_server_dep),
 ) -> SearchResponse:
-    table_type = get_table_type(q.csrname, mode='all', missing='raise')
+    table_type = get_or_create_table_type(dde_server, q.csrname)
+    # table_type = get_table_type(q.csrname, mode='all', missing='raise')
     filter_array = FilterArray.from_filters(
-        FieldFilter(column=table_type.pk_key, condition=q.condition, value=q.pk_value) if q.pk_value else None
+        FieldFilter(column=table_type.name_field, condition=q.condition, value=q.pk_value) if q.pk_value else None
     )
     records, more = await pycommence_gather(pycmc=pycmc, q=q, filter_array=filter_array)
     return SearchResponse(records=records, more=more, search_request=q)

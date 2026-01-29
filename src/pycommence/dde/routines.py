@@ -1,6 +1,6 @@
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 from pycommence.dde._server import DDEServer
-from pycommence.dde.msgs.request import get_field_names, get_fields, get_field_definition
+from pycommence.dde.msgs.get import get_field_names, get_fields, get_field_definition
 
 MAX_CMD_LEN = 256  # undocumented limit in Commence DDE for command length
 MAX_FIELDS_CHUNK = 15

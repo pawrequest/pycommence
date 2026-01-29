@@ -1,43 +1,43 @@
 from enum import StrEnum
 
-from pycommence.dde.types import DDESystemMessage, DDETopic
+from pycommence.dde.types import DDESystemRequest, DDETopic
 
 
-def system_databases() -> DDESystemMessage:
+def system_databases() -> DDESystemRequest:
     """Generate DDE request for Databases."""
-    return DDESystemMessage(func_name='Databases', params=[], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='Databases', params=[], topic=DDETopic.SYSTEM)
 
 
-def system_formats() -> DDESystemMessage:
+def system_formats() -> DDESystemRequest:
     """Generate DDE request for Formats."""
-    return DDESystemMessage(func_name='Formats', params=[], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='Formats', params=[], topic=DDETopic.SYSTEM)
 
 
-def system_status(status: bool | None = None) -> DDESystemMessage:
+def system_status(status: bool | None = None) -> DDESystemRequest:
     """Generate DDE request for Status."""
     if status is not None:
-        return DDESystemMessage(func_name='Status', params=[True if status else False], topic=DDETopic.SYSTEM)
-    return DDESystemMessage(func_name='Status', topic=DDETopic.SYSTEM)
+        return DDESystemRequest(func_name='Status', params=[True if status else False], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='Status', topic=DDETopic.SYSTEM)
 
 
-def system_sysitems() -> DDESystemMessage:
+def system_sysitems() -> DDESystemRequest:
     """Generate DDE request for SysItems."""
-    return DDESystemMessage(func_name='SysItems', params=[], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='SysItems', params=[], topic=DDETopic.SYSTEM)
 
 
-def system_topics() -> DDESystemMessage:
+def system_topics() -> DDESystemRequest:
     """Generate DDE request for Topics."""
-    return DDESystemMessage(func_name='Topics', params=[], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='Topics', params=[], topic=DDETopic.SYSTEM)
 
 
-def system_version() -> DDESystemMessage:
+def system_version() -> DDESystemRequest:
     """Generate DDE request for Version."""
-    return DDESystemMessage(func_name='Version', params=[], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='Version', params=[], topic=DDETopic.SYSTEM)
 
 
-def system_version_extended() -> DDESystemMessage:
+def system_version_extended() -> DDESystemRequest:
     """Generate DDE request for VersionExtended."""
-    return DDESystemMessage(func_name='VersionExtended', params=[], topic=DDETopic.SYSTEM)
+    return DDESystemRequest(func_name='VersionExtended', params=[], topic=DDETopic.SYSTEM)
 
 class SystemMessageEnum(StrEnum):
     DATABASES = 'Databases'

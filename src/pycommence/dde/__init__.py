@@ -1,13 +1,13 @@
 from . import msgs
 from .server import PyCmcDDEServer
-from .types import DDEMessage, DDETopic, DDEKind
+from .types import DDEMessageBase, DDETopic, DDEKind
 
 __all__ = [
     'msgs',
 
     'PyCmcDDEServer',
 
-    'DDEMessage',
+    'DDEMessageBase',
     'DDETopic',
     'DDEKind',
 ]

@@ -1,7 +1,7 @@
 import pytest
 
-from pycommence.dde.server import DDEMessage, DDETopic
-from pycommence.dde.msgs.request import (
+from pycommence.dde.server import DDEMessageBase, DDETopic
+from pycommence.dde.msgs.get import (
     clarify_item_names,
     get_active_view_info,
     get_caller_id,
@@ -42,7 +42,7 @@ from pycommence.dde.msgs.request import (
 TESTCOUNT = 34 + 3
 
 def test_msg(dde_server):
-    msg = DDEMessage(func_name='GetFieldCount', params=['Contact'], topic=DDETopic.GET)
+    msg = DDEMessageBase(func_name='GetFieldCount', params=['Contact'], topic=DDETopic.GET)
     res = dde_server.send_message(msg)
     assert res == '45'
 

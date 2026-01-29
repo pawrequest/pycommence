@@ -1,5 +1,3 @@
-import threading
-from datetime import datetime
 
 CONTACT_ITEM_NAMES = ['Bezos.Jeff', 'Branson.Richard', 'Buffett.Warren', 'Carney.Steve', 'Carr.Brian',
                       'Douglas.Michael',

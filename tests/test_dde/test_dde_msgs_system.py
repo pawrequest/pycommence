@@ -14,9 +14,9 @@ def test_all_system_funcs(dde_server, caplog):
         for func in functions:
             msg = func()
             response = dde_server.send_message(msg)
-            assert response is not None, f"Response for {func.__name__} is None"
+            assert response is not None, f'Response for {func.__name__} is None'
             # sleep(2)  # To avoid overwhelming the DDE server
-    print("\nCaptured Logs:")
+    print('\nCaptured Logs:')
     for record in caplog.records:
-        print(f"{record.levelname}: {record.message}")
+        print(f'{record.levelname}: {record.message}')
 

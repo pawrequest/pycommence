@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import pathlib
 from dataclasses import dataclass
-from datetime import date, time
+from datetime import time
 from decimal import Decimal
 from typing import NamedTuple, Literal
 
 from loguru import logger
-from pydantic import HttpUrl
 
 from pycommence.core.types import CommenceDateOptional
 
