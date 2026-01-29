@@ -8,9 +8,9 @@ from pydantic import BaseModel, model_validator
 
 from pycommence import MoreAvailable
 # from pycommence.fapi.search_functions import MoreAvailableFront
-from pycommence.filters import ConditionType
-from pycommence.pagination import Pagination as _Pagination
-from pycommence.rows import RowData
+from pycommence.core.filters import ConditionType
+from pycommence.core.pagination import Pagination as _Pagination
+from pycommence.core.row_data import RowData
 
 PAGE_SIZE = 50
 

@@ -1,14 +1,11 @@
 from typing import Any
 
-
 from pycommence import PyCommence, pycommence_context
-from pycommence.client_dde.pycmc_dde.dde_request import dde_get_field_definition, dde_get_field_names, dde_get_fields
-from pycommence.client_dde.pycmc_dde.view import dde_view_category, dde_view_filter
-from pycommence.exceptions import PyCommenceDDEError
-from pycommence.fields import CmcDefsDict, CmcFieldDefinition, DELIM
-from pycommence.wrapper.conversation_wrapper import DDEKind, DDETopic
+from pycommence.dde.msgs import view as view_msgs, request as request_msgs
+from pycommence.core.exceptions import PyCommenceDDEError
+from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 
-CMC_FIELD_DEF_DICT = dict[str, CmcFieldDefinition]
+
 
 MAX_FIELDS_CHUNK = 15  # undocumented limit in Commence DDE for GetFields
 MAX_CMD_LEN = 256  # undocumented limit in Commence DDE for command length
@@ -22,36 +19,32 @@ def get_item_routine(category, pk_value) -> dict[str, str]:
 
         filter_by_pk_contains(category, p, pk_value, primary_key)
         to_fetch = list(field_defs_filtered.keys())
-        resd = {}
+        item_dict = {}
         for start in range(0, len(to_fetch), MAX_FIELDS_CHUNK):
             fields_chunk = to_fetch[start:start + MAX_FIELDS_CHUNK]
             try:
-                chunk_res = p.send_dde(
-                    cmd=dde_get_fields(category=category, item=pk_value, fields=fields_chunk, delim=DELIM),
-                    topic=DDETopic.VIEW
-                )
+                chunk_msg = request_msgs.get_fields(category, pk_value, fields_chunk, DELIM)
+                chunk_res = p.send_dde_msg(chunk_msg)
                 for fname, fvalue in zip(fields_chunk, chunk_res):
-                    resd[fname] = fvalue
+                    item_dict[fname] = fvalue
             except PyCommenceDDEError as e:
-                last = fields_chunk[-1]
-                failed_type = field_defs_dict[last]
                 raise RuntimeError(
                     f'Failed to get fields for {category} where {primary_key} contains {pk_value}. Last attempted field: {last} of type {failed_type}'
                 ) from e
-        return resd
+        return item_dict
 
 
 def filter_by_pk_contains(category, p: PyCommence, pk_value, primary_key: str):
     set_category(category, p)
-    assert p.send_dde(
-        cmd=(dde_view_filter(
-            1, 'F', None, primary_key, 'Contains', pk_value
-        ))
+    msg = view_msgs.view_filter(1, 'F', None, primary_key, 'Contains', pk_value)
+    assert p.send_dde_msg(
+        msg
     ) == 'OK', f'Failed to set view filter for {category} where {primary_key} contains {pk_value}'
 
 
 def set_category(category, p: PyCommence):
-    assert p.send_dde(cmd=dde_view_category(category)) == 'OK', f'Failed to set view category to {category}'
+    msg = view_msgs.view_category(category)
+    assert p.send_dde_msg(msg) == 'OK', f'Failed to set view category to {category}'
 
 
 def get_pk(category, field_defs_dict: dict[str, CmcFieldDefinition]) -> str:
@@ -76,12 +69,13 @@ def fetch_category_field_definitions(category: str, pycmc: PyCommence | None = N
 
 
 def fetch_field_names(category: str, p: PyCommence | Any) -> bool | str | list[str]:
-    get_fields_cmd = dde_get_field_names(category)
-    field_names = p.send_dde(cmd=get_fields_cmd, topic=DDETopic.GET, kind=DDEKind.REQUEST)
-    return field_names
+    msg = request_msgs.get_field_names(category)
+    return p.send_dde_msg(msg)
 
 
 def fetch_defintion(category: str, field_name: str | Any, p: PyCommence | Any) -> bool | str | list[str]:
-    dde_cmd = dde_get_field_definition(category, field_name)
-    field_def_res = p.send_dde(cmd=dde_cmd, topic=DDETopic.GET, kind=DDEKind.REQUEST)
+    # dde_cmd = dde_get_field_definition(category, field_name)
+    # field_def_res = p.send_dde(cmd=dde_cmd, topic=DDETopic.GET, kind=DDEKind.REQUEST)
+    msg = request_msgs.get_field_definition(category, field_name)
+    field_def_res = p.send_dde_msg(msg)
     return field_def_res

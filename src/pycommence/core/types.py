@@ -24,14 +24,16 @@ class SeekBookmark(Enum):
 
 
 @dataclass
-class Connection1:
+class Connection:
     name: str
     from_table: str
+    from_field: str
     to_table: str
+    to_field: str
 
 
 @dataclass
-class Connection:
+class ConnectedColumn:
     name: str
     category: str
     column: str
@@ -149,9 +151,3 @@ class OptionFlagInt(IntEnum):
     PILOT = 0x0008
     CANONICAL = 0x0010
     INTERNET = 0x0020
-
-
-
-
-
-

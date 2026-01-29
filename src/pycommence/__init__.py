@@ -1,9 +1,10 @@
 from pycommence.log_config import configure_loguru
-from pycommence.client_com.pycommence_com_client import PyCommence, pycommence_context
-from pycommence.pycmc_types import CursorType
-from pycommence.pagination import MoreAvailable
-
-logger = configure_loguru()
+configure_loguru()
+from pycommence.com.client import PyCommence, pycommence_context
+from pycommence.core.types import CursorType
+from pycommence.core.pagination import MoreAvailable
+from pycommence.dde import server
+from pycommence.dde.server import PyCmcDDEServer
 
 
 __all__ = [
@@ -11,4 +12,5 @@ __all__ = [
     'CursorType',
     'MoreAvailable',
     'pycommence_context',
+    'PyCmcDDEServer',
 ]

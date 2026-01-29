@@ -11,16 +11,17 @@ import contextlib
 from functools import cached_property
 from typing import Self
 
-from pycommence.pagination import MoreAvailable, Pagination
-from pycommence.wrapper.cursor_wrapper import CursorWrapper
-from pycommence.exceptions import PyCommenceExistsError, raise_for_one
-from pycommence.filters import ConditionType, FieldFilter, FilterArray
-from pycommence.pycmc_types import (
-    Connection,
+from pycommence.core.pagination import MoreAvailable, Pagination
+
+from pycommence.core.exceptions import PyCommenceExistsError, raise_for_one
+from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
+from pycommence.core.types import (
+    ConnectedColumn,
     CursorType,
     SeekBookmark,
 )
-from pycommence.rows import RowData, RowDataGenerator, RowFilter
+from pycommence.core.row_data import RowData, RowDataGenerator, RowFilter
+from pycommence.wrapper.cursor_wrapper import CursorWrapper
 
 
 def raise_for_id_or_pk(id, pk):
@@ -240,7 +241,7 @@ class CursorAPI:
         """Clear all filters."""
         [self.clear_filter(i) for i in range(1, 9)]
 
-    def add_related_column(self, connection: Connection) -> Self:
+    def add_related_column(self, connection: ConnectedColumn) -> Self:
         """Add a related column to the cursor."""
         res = self.cursor_wrapper.set_related_column(
             col=self.column_count + 1,

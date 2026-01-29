@@ -4,10 +4,12 @@ import pathlib
 from dataclasses import dataclass
 from datetime import date, time
 from decimal import Decimal
-from typing import NamedTuple
+from typing import NamedTuple, Literal
 
 from loguru import logger
 from pydantic import HttpUrl
+
+from pycommence.core.types import CommenceDateOptional
 
 DELIM = r';*;%'
 
@@ -78,8 +80,6 @@ class CmcFieldDefinition:
         )
 
 
-
-
 class CmcDataType(NamedTuple):
     int_value: int
     alias: str
@@ -89,7 +89,7 @@ class CmcDataType(NamedTuple):
 FIELD_DEFS: list[CmcDataType] = [
     CmcDataType(0, 'TEXT', str),
     CmcDataType(1, 'NUMBER', Decimal),
-    CmcDataType(2, 'DATE', date),
+    CmcDataType(2, 'DATE', CommenceDateOptional),
     CmcDataType(3, 'TELEPHONE', str),
     CmcDataType(7, 'CHECKBOX', bool),
     CmcDataType(11, 'NAME', str),
@@ -101,7 +101,7 @@ FIELD_DEFS: list[CmcDataType] = [
     CmcDataType(21, 'SEQUENCE', int),
     CmcDataType(22, 'SELECTION', str),
     CmcDataType(23, 'EMAIL', str),
-    CmcDataType(24, 'URL', HttpUrl),
+    CmcDataType(24, 'URL', str),
     CmcDataType(17, 'CONNECTION', str)
 ]
 INT_TO_DEF = {fd.int_value: fd for fd in FIELD_DEFS}
@@ -124,6 +124,21 @@ def lookup_field_definition(thingy: int | str | type) -> CmcDataType:
 
 class CmcDefsDict(dict[str, CmcFieldDefinition]):
     """Field Name to CmcFieldDefinition."""
+    _name_field: str | None = None
+
+    def name_field(self, error:Literal['raise', 'ignore'] = 'raise') -> str | None:
+        if self._name_field:
+            return self._name_field
+
+        defs = [(name, field_def) for name, field_def in self.items() if field_def.type.alias == 'NAME']
+        if len(defs) == 1:
+            self._name_field = defs[0][0]
+            return self._name_field
+        else:
+            if error != 'ignore':
+                raise RuntimeError(f'Expected exactly one NAME field in definitions - found {len(defs)}:{defs}.')
+
+        return self._name_field
 
     def py_types_dict(self) -> dict[str, type]:
         return {k: v.type.py_type for k, v in self.items()}

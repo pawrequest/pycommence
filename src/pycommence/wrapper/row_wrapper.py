@@ -7,9 +7,9 @@ from functools import cached_property
 
 from loguru import logger
 
-from ..exceptions import PyCommenceNotFoundError
-from pycommence.fields import DELIM
-from ..pycmc_types import FLAGS_UNUSED, OptionFlagInt
+from pycommence.core.exceptions import PyCommenceNotFoundError
+from pycommence.core.fields import DELIM
+from pycommence.core.types import FLAGS_UNUSED, OptionFlagInt
 
 if typing.TYPE_CHECKING:
     from .cursor_wrapper import CursorWrapper

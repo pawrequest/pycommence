@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 
 from loguru import logger
+
+
 def configure_loguru(
         level: str = 'DEBUG',
         log_file: Path | None = None,
@@ -23,9 +25,9 @@ def log_fmt_local_terminal(record) -> str:
     lvltext = f'<lvl>{record['level']: <7}</lvl>'
     msg_txt = f'<lvl>{record['message']}</lvl>'
     msg_txt = msg_txt.replace('{', '{{').replace('}', '}}')
+    # why file_txt must be at start for clickable?
     return f'{file_txt} - {lvltext} {category_txt} | {msg_txt}\n'
 
 
 def coloured(msg: str, colour: str) -> str:
     return f'<{colour}>{msg}</{colour}>'
-

@@ -1,10 +1,9 @@
 from loguru import logger
 
-import pycommence.pycmc_types
 from pycommence.wrapper import row_wrapper as rs
 from pycommence.wrapper._icommence import ICommenceCursor
-from pycommence.exceptions import PyCommenceNotFoundError, raise_for_one, PyCommenceServerError
-from pycommence.pycmc_types import FLAGS_UNUSED, SeekBookmark
+from pycommence.core.exceptions import PyCommenceNotFoundError, PyCommenceServerError, raise_for_one
+from pycommence.core.types import FLAGS_UNUSED, OptionFlagInt, SeekBookmark
 
 
 class CursorWrapper:
@@ -88,7 +87,7 @@ class CursorWrapper:
         self,
         column_index: int,
         field_name: str,
-        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
+        flags: OptionFlagInt | None = OptionFlagInt.NONE,
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -227,7 +226,7 @@ class CursorWrapper:
         When first created, each row is initialized to field default values.
 
         """
-        flags = pycommence.pycmc_types.OptionFlagInt.SHARED if shared else pycommence.pycmc_types.OptionFlagInt.NONE
+        flags = OptionFlagInt.SHARED if shared else OptionFlagInt.NONE
         if limit is None:
             limit = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(limit, flags.value))
@@ -289,7 +288,7 @@ class CursorWrapper:
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
-        self, row_id: str, flags: pycommence.pycmc_types.OptionFlagInt = pycommence.pycmc_types.OptionFlagInt.NONE
+        self, row_id: str, flags: OptionFlagInt = OptionFlagInt.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -356,7 +355,7 @@ class CursorWrapper:
         con_name: str,
         connected_cat: str,
         col_name: str,
-        flags: pycommence.pycmc_types.OptionFlagInt | None = pycommence.pycmc_types.OptionFlagInt.NONE,
+        flags: OptionFlagInt | None = OptionFlagInt.NONE,
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.

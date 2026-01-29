@@ -4,7 +4,7 @@ from typing import ClassVar, Literal, cast
 from loguru import logger
 from pydantic import BaseModel, ConfigDict
 
-from pycommence.fields import CmcDefsDict
+from pycommence.core.fields import CmcDefsDict
 
 TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
 GENERATED_TABLE_TYPE_REGISTER: dict[str, type['CommenceTableGenerated']] = {}
@@ -57,14 +57,14 @@ class CommenceTable(BaseModel, ABC):
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
         if getattr(cls, '__abstractmethods__', False):
-            logger.debug(f'Not registering abstract table model: {cls.__name__}')
+            logger.warning(f'SURPRISE!!! Not registering abstract table model: {cls.__name__}')
             return
         if not getattr(cls, 'category', None):
             raise TypeError(f'{cls.__name__} must define category class variable')
         register_table(cls)
 
 
-def generate_table_class_from_field_defs(
+def generate_table_pydantic_model(
         name: str,
         category: str,
         field_def_dict: CmcDefsDict = None,
@@ -73,15 +73,17 @@ def generate_table_class_from_field_defs(
     if existing_type := get_table_type(name, mode='auto'):
         logger.debug(f'Table class {name} already exists, reusing.')
         return existing_type
-    fields = field_def_dict or CmcDefsDict()
-    annotations = fields.py_types_dict()
+    defs_dict = field_def_dict or CmcDefsDict()
+    annotations = defs_dict.py_types_dict()
     annotations['category'] = ClassVar[str]
+    annotations['name_field'] = ClassVar[str]
 
     class_dict = {
         '__module__': __name__,
         '__qualname__': name,
         '__annotations__': annotations,
         'category': category,
+        'name_field': defs_dict.name_field(error='ignore'),
     }
     for k in field_def_dict.keys():
         class_dict[k] = None

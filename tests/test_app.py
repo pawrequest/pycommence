@@ -1,7 +1,7 @@
 import pytest
 from starlette.testclient import TestClient
 
-from .conftest import Contact
+from conftest import Contact
 from pycommence.fapi.app import app
 
 

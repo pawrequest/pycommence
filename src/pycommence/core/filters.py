@@ -7,7 +7,8 @@ from typing import Literal, NamedTuple
 from loguru import logger
 from pydantic import BaseModel, Field, model_validator
 
-from pycommence.pycmc_types import Connection
+from pycommence.core.fields import CmcFieldDefinition
+from pycommence.core.types import ConnectedColumn
 
 FilterKind = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
@@ -74,7 +75,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
     connected_column: str
 
     @classmethod
-    def from_fil(cls, field_fil: CmcFilter, connection: Connection):
+    def from_fil(cls, field_fil: CmcFilter, connection: ConnectedColumn):
         return cls.model_validate(
             cls(
                 column=connection.name,
@@ -131,6 +132,10 @@ class FilterArray(BaseModel):
     # sorts: Sorts = Field(default_factory=list)
     sorts: list[Sort] = Field(default_factory=list)
     logics: list[Logic] = Field(default_factory=list)
+
+    @property
+    def view_filter_dde_params(self) -> list[tuple]:
+        return [(slot, fil.kind, fil.not_flag, fil.column, fil.condition, fil.value) for slot, fil in self.filters.items()]
 
     def __bool__(self):
         return bool(self.filters)
@@ -201,7 +206,7 @@ class FilterArray(BaseModel):
             self.add_filter(cmcfilter)
 
 
-def field_fil_to_confil(field_fil: FieldFilter, connection: Connection):
+def field_fil_to_confil(field_fil: FieldFilter, connection: ConnectedColumn):
     connection_filter = ConnectedFieldFilter(
         column=connection.name,
         connection_category=connection.category,

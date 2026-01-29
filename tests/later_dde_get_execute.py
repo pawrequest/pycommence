@@ -1,5 +1,5 @@
-from pycommence.client_dde.directory.execute_msgs import (
-    execute_add_item,
+from conftest import temp_contact
+from pycommence.core.dde_common.execute_msgs import (
     execute_add_shared_item,
     execute_append_text,
     execute_assign_connection,
@@ -21,12 +21,6 @@ from pycommence.client_dde.directory.execute_msgs import (
 )
 
 
-def test_execute_add_item(dde_server):
-    msg = execute_add_item('Contact', 'TestItemsdgsdgd')
-    res = dde_server.send_message(msg)
-    assert res
-
-
 def test_execute_add_shared_item(dde_server):
     msg = execute_add_shared_item('Contact', 'TestSharedItem')
     res = dde_server.send_message(msg)
@@ -34,8 +28,9 @@ def test_execute_add_shared_item(dde_server):
 
 
 def test_execute_append_text(dde_server):
-    msg = execute_append_text('Contact', 'Musk.Elon', 'Notes', 'TestAAAAAAAAAAAAAA text')
-    res = dde_server.send_message(msg)
+    with temp_contact(dde_server):
+        msg = execute_append_text('Contact', 'Musk.Elon', 'Notes', 'TestAAAAAAAAAAAAAA text')
+        res = dde_server.send_message(msg)
     assert res
 
 

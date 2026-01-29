@@ -6,8 +6,8 @@ from collections.abc import Callable, Generator
 
 from loguru import logger
 
-from pycommence.pagination import MoreAvailable
-from pycommence.meta import CommenceTable, get_table_type
+from pycommence.core.pagination import MoreAvailable
+from pycommence.core.meta import CommenceTable, get_table_type
 
 
 @dataclass

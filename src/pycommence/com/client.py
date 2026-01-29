@@ -2,18 +2,19 @@ import contextlib
 import typing as _t
 from dataclasses import dataclass, field
 
-from comtypes import CoInitialize, CoUninitialize
 from loguru import logger
 
-from pycommence.client_com.cursor import CursorAPI, raise_for_id_or_pk
-from pycommence.filters import FilterArray
-from pycommence.fields import DELIM
-from pycommence.pycmc_types import CursorType
-from pycommence.rows import RowData, RowDataGenerator, RowFilter
-from pycommence.pagination import Pagination
-from pycommence.client_com.resolvers import resolve_csrname, resolve_row_id
+from pycommence.com.context import com_multithreaded_context
+from pycommence.com.cursor import CursorAPI, raise_for_id_or_pk
+from pycommence.core.filters import FilterArray
+from pycommence.core.fields import DELIM
+from pycommence.core.types import CursorType
+from pycommence.core.row_data import RowData, RowDataGenerator, RowFilter
+from pycommence.core.pagination import Pagination
+from pycommence.com.resolvers import resolve_csrname, resolve_row_id
 from pycommence.wrapper.cmc_wrapper import CommenceWrapper
-from pycommence.wrapper.conversation_wrapper import ConversationAPI, DDEKind, DDETopic
+from pycommence.wrapper.conversation_wrapper import ConversationAPI
+from pycommence.dde import DDEKind, DDEMessage, DDETopic
 
 
 # noinspection PyProtectedMember
@@ -70,8 +71,9 @@ class PyCommence:
         self.set_csr(csr.csrname, csr.mode)
         return self
 
-    # def send_dde_obj(self, dde_command: DDEMessage):
-    #     self.send_dde(topic=dde_command.topic, kind=dde_command.kind, cmd=dde_command.to_dde())
+    def send_dde_msg(self, msg: DDEMessage) -> str | bool:
+        conv = self.get_conversation(msg.topic)
+        return conv.send_dde_msg(msg)
 
     def send_dde(self, cmd: str, topic: DDETopic = DDETopic.VIEW, kind: DDEKind = DDEKind.REQUEST):
         logger.debug(f'Sending DDE: {topic}:{kind}: {cmd}')
@@ -173,9 +175,25 @@ class PyCommence:
 @contextlib.contextmanager
 def pycommence_context(*csrnames: str) -> _t.Generator[PyCommence, None, None]:
     """Context manager for PyCommence with optional cursors"""
-    CoInitialize()
-    pyc = PyCommence()
-    for csrname in csrnames:
-        pyc.set_csr(csrname)
-    yield pyc
-    CoUninitialize()
+    with com_multithreaded_context():
+        pyc = PyCommence()
+        for csrname in csrnames:
+            pyc.set_csr(csrname)
+        yield pyc
+
+
+# @contextlib.contextmanager
+# def pycommence_context1(*csrnames: str) -> _t.Generator[PyCommence, None, None]:
+#     """Context manager for PyCommence with optional cursors"""
+#     # comtypes.CoInitializeEx(comtypes.COINIT_MULTITHREADED)
+#     # pythoncom.CoInitialize()
+#     initialized = initialise_com_multithreaded()
+#     try:
+#         pyc = PyCommence()
+#         for csrname in csrnames:
+#             pyc.set_csr(csrname)
+#         yield pyc
+#     finally:
+#         if initialized:
+#             comtypes.CoUninitialize()
+

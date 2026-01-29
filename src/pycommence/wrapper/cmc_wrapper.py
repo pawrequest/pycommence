@@ -7,10 +7,11 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from pycommence.exceptions import PyCommenceServerError
-from .conversation_wrapper import ConversationAPI, DDETopic
+from pycommence.dde import DDETopic
+from pycommence.core.exceptions import PyCommenceServerError
+from pycommence.core.types import CursorType, OptionFlagInt
+from .conversation_wrapper import ConversationAPI
 from .cursor_wrapper import CursorWrapper
-from ..pycmc_types import CursorType, OptionFlagInt
 
 
 class CmcConnector:
@@ -58,9 +59,7 @@ class CmcConnector:
             if com_inited:
                 pythoncom.CoUninitialize()
 
-
         logger.debug(f'Initializing COM connection to {self.commence_instance_name}')
-
 
 
 class CommenceWrapper(CmcConnector):

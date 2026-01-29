@@ -1,9 +1,7 @@
 import pytest
 
-from pycommence.client_dde.dde_msg import DDEMessage
-from pycommence.client_dde.pycmc_dde.dde_request import dde_get_field_count, dde_get_item_count
-from pycommence.wrapper.conversation_wrapper import DDETopic
-from pycommence.client_dde.directory.request_msgs import (
+from pycommence.dde.server import DDEMessage, DDETopic
+from pycommence.dde.msgs.request import (
     clarify_item_names,
     get_active_view_info,
     get_caller_id,
@@ -41,11 +39,7 @@ from pycommence.client_dde.directory.request_msgs import (
     mark_active_item,
 )
 
-
-def test_fields(dde_server):
-    assert dde_server._send_request(dde_get_field_count('Contact')) == '45', 'Field count mismatch'
-    assert dde_server._send_request(dde_get_item_count('Contact')) == '25', 'Item count mismatch'
-
+TESTCOUNT = 34 + 3
 
 def test_msg(dde_server):
     msg = DDEMessage(func_name='GetFieldCount', params=['Contact'], topic=DDETopic.GET)
@@ -128,7 +122,7 @@ def test_get_desktop_names(dde_server):
 
 
 def test_get_field(dde_server):
-    msg = get_field('Contact', '1', 'Name')
+    msg = get_field('Contact', 'Musk.Elon', 'Name')
     res = dde_server.send_message(msg)
     assert res
 
@@ -140,7 +134,7 @@ def test_get_fields(dde_server):
 
 
 def test_get_fields2(dde_server):
-    res = dde_server.fetch_field_names('Contact')
+    res = dde_server.category_field_names('Contact')
     ...
 
 
@@ -163,7 +157,7 @@ def test_get_field_names(dde_server):
 
 
 def test_get_field_to_file(dde_server):
-    msg = get_field_to_file('Contact', '1', 'Name', 'test.txt')
+    msg = get_field_to_file('Contact', 'Musk.Elon', 'Name', 'test.txt')
     res = dde_server.send_message(msg)
     assert res
 

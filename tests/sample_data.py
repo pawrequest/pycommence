@@ -1,3 +1,23 @@
+import threading
+from datetime import datetime
+
+CONTACT_ITEM_NAMES = ['Bezos.Jeff', 'Branson.Richard', 'Buffett.Warren', 'Carney.Steve', 'Carr.Brian',
+                      'Douglas.Michael',
+                      'Findlay.Howard', 'Gates.Bill', 'Jennings.Kevin', 'Logan.Andrew', 'Madison.Bruce',
+                      'Malick.Charles',
+                      'Mark.Kane', 'Melrose.Harry', 'Musk.Elon', 'Nadella.Satya', 'Pichai.Sundar', 'Rubbel.John',
+                      'Ryder.Philip', 'Spring.Debbie', 'Steele.Patrick', 'Walsh.Peter', 'White.Peter', 'Winfrey.Oprah',
+                      'Zuckerberg.Mark']
+CONTACT_FIELD_NAMES = ['contactKey', 'Account', 'addModifyDate', 'addModifyUser', 'Birthday', 'busCity', 'busCountry',
+                       'businessNumber', 'busState', 'busStreet', 'busZip', 'City', 'cityStateZip', 'DOB',
+                       'doNotSolicit',
+                       'emailBusiness', 'emailHome', 'Extension', 'FacebookLink', 'faxNumber', 'firstName',
+                       'homeAddress',
+                       'homeNumber', 'ID', 'Influence', 'isPrimary', 'lastContact', 'lastName', 'LinkedInLink',
+                       'mailCode',
+                       'mainTelephone', 'MI', 'mobileNumber', 'nextContact', 'Nickname', 'Notes', 'otherTelephone',
+                       'pagerNumber', 'properName', 'Salutation', 'spouseName', 'stateProvince', 'Title', 'twitterLink',
+                       'zipPostal']
 JEFF_DICT = {
     'contactKey': 'Bezos.Jeff',
     'businessNumber': '1800 3000 9009',
@@ -157,11 +177,13 @@ NEW_DICT_RESPONSE = {
     'zipPostal': '',
 }
 UPDATE_DICT = {
-    'businessNumber': '1800 3000 3333',
-    'Title': 'CEO of AnotherBix',
-    'Notes': 'Updated Notes',
+    'businessNumber': '9999 8888 7777',
+    'Title': 'TEST UPDATE DICT TITLE',
+    'Notes': 'TEST UPDATE DICT NOTES',
 }
 JEFF_KEY = JEFF_DICT.get('contactKey')
 FNAME = NEW_DICT.get('firstName')
 LNAME = NEW_DICT.get('lastName')
 NEW_KEY = NEW_DICT.get('contactKey')
+TEST_ITEM_NAME = 'TestItem'
+# TEST_ITEM_NAME = 'TestItem' + threading.current_thread().name + datetime.now().strftime('%Y-%m-%d-%H-%M-%S')

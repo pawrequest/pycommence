@@ -1,6 +1,6 @@
 from pycommence.fapi.search_functions import pycommence_fetch, pycommence_search
 from pycommence.fapi.search_request_response import SearchResponse
-from pycommence.rows import RowData
+from pycommence.core.row_data import RowData
 
 try:
     from fastapi import APIRouter, Depends

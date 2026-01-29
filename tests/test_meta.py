@@ -1,14 +1,13 @@
 from conftest import get_pycmc
-from pycommence.client_dde.pycmc_dde.routines import fetch_category_field_definitions
-from pycommence.meta import generate_table_class_from_field_defs
-from pycommence.fields import CmcDefsDict
-from pycommence.pagination import Pagination
+from pycommence.core.meta import generate_table_pydantic_model
+from pycommence.core.fields import CmcDefsDict
+from pycommence.core.pagination import Pagination
 
 
-def test_generate_table():
+def test_generate_table(dde_server):
     category = 'Address'
-    fields_defs: CmcDefsDict = fetch_category_field_definitions(category=category)
-    clz = generate_table_class_from_field_defs(
+    fields_defs: CmcDefsDict = dde_server.fields_definition_dict(category)
+    clz = generate_table_pydantic_model(
         field_def_dict=fields_defs,
         name=category,
         category=category,

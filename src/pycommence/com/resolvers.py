@@ -1,8 +1,8 @@
 import functools
 import typing as _t
 
-from pycommence.client_com.cursor import CursorAPI
-from pycommence.exceptions import PyCommenceNotFoundError
+from pycommence.com.cursor import CursorAPI
+from pycommence.core.exceptions import PyCommenceNotFoundError
 
 
 class HasCursors(_t.Protocol):

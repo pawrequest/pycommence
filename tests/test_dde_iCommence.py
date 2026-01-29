@@ -1,68 +1,48 @@
-import pytest
-
 from pycommence import pycommence_context
-from pycommence.client_dde.pycmc_dde.routines import fetch_category_field_definitions, get_item_routine
-from pycommence.client_dde.pycmc_dde.dde_request import (
-    dde_get_field_count,
-    dde_get_field_names,
-    dde_get_item_count,
-    dde_get_item_names,
-)
-from pycommence.wrapper.conversation_wrapper import DDEKind
+from pycommence.com.dde_routines import fetch_category_field_definitions, get_item_routine
+from pycommence.core.fields import DELIM
+from pycommence.dde import msgs
+from sample_data import CONTACT_FIELD_NAMES, CONTACT_ITEM_NAMES
 
 
 def test_dde_field_count():
-    dde_cmd = dde_get_field_count('Contact')
+    msg = msgs.request.get_field_count('Contact')
     cached = '[GetFieldCount("Contact")]'
-    assert dde_cmd == cached
+    assert str(msg) == cached
     with pycommence_context() as p:
-        res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
+        res = p.send_dde_msg(msg)
     assert res == '45'
 
 
 def test_dde_item_count():
-    dde_cmd = dde_get_item_count('Contact')
+    msg = msgs.request.get_item_count('Contact')
     cached = '[GetItemCount("Contact")]'
-    assert dde_cmd == cached
+    assert str(msg) == cached
     with pycommence_context() as p:
-        res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
+        res = p.send_dde_msg(msg)
     assert res == '25'
 
 
 def test_dde_field_names():
-    dde_cmd = dde_get_field_names('Contact')
+    msg = msgs.request.get_field_names('Contact')
+    cached = f'[GetFieldNames("Contact","{DELIM}")]'
+    assert str(msg) == cached
     with pycommence_context() as p:
-        res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
-    expected = ['contactKey', 'Account', 'addModifyDate', 'addModifyUser', 'Birthday', 'busCity', 'busCountry',
-                'businessNumber', 'busState', 'busStreet', 'busZip', 'City', 'cityStateZip', 'DOB', 'doNotSolicit',
-                'emailBusiness', 'emailHome', 'Extension', 'FacebookLink', 'faxNumber', 'firstName', 'homeAddress',
-                'homeNumber', 'ID', 'Influence', 'isPrimary', 'lastContact', 'lastName', 'LinkedInLink', 'mailCode',
-                'mainTelephone', 'MI', 'mobileNumber', 'nextContact', 'Nickname', 'Notes', 'otherTelephone',
-                'pagerNumber', 'properName', 'Salutation', 'spouseName', 'stateProvince', 'Title', 'twitterLink',
-                'zipPostal']
-    assert res == expected
+        res = p.send_dde_msg(msg)
+    assert res == CONTACT_FIELD_NAMES
 
 
 def test_dde_item_names():
-    dde_cmd = dde_get_item_names('Contact')
+    msg = msgs.request.get_item_names('Contact')
     with pycommence_context() as p:
-        res = p.send_dde(cmd=dde_cmd, topic='Tutorial', kind=DDEKind.REQUEST)
-    expected = ['Bezos.Jeff', 'Branson.Richard', 'Buffett.Warren', 'Carney.Steve', 'Carr.Brian', 'Douglas.Michael',
-                'Findlay.Howard', 'Gates.Bill', 'Jennings.Kevin', 'Logan.Andrew', 'Madison.Bruce', 'Malick.Charles',
-                'Mark.Kane', 'Melrose.Harry', 'Musk.Elon', 'Nadella.Satya', 'Pichai.Sundar', 'Rubbel.John',
-                'Ryder.Philip', 'Spring.Debbie', 'Steele.Patrick', 'Walsh.Peter', 'White.Peter', 'Winfrey.Oprah',
-                'Zuckerberg.Mark']
-    assert res == expected
+        res = p.send_dde_msg(msg)
+    assert res == CONTACT_ITEM_NAMES
 
 
-@pytest.mark.skip(reason='System Topic Broken?')
 def test_system_conv():
-    print('FAILS why??')
+    msg = msgs.system.system_status()
     with pycommence_context() as p:
-        cached = '[Status]'
-        # ddemsg = dde_formats()
-        res = p.send_dde(cmd=cached, topic='System', kind=DDEKind.REQUEST)
-    ...
+        assert p.send_dde_msg(msg) == 'Ready', "System is not ready"
 
 
 def test_field_definiitions():
