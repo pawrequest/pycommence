@@ -1,7 +1,7 @@
 import threading
 from collections.abc import Sequence
-
-import dde
+import win32ui  # noqa before dde import to ensure proper initialization order
+import dde as pywindde
 from loguru import logger
 
 from . import msgs
@@ -43,7 +43,6 @@ class DDEServer:
         self._com_context.__enter__()
         self._create_server()
         return self
-
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
@@ -108,14 +107,14 @@ class DDEServer:
     @dde_handler
     def _create_server(self):
         with self._lock:
-            self._server = dde.CreateServer()
+            self._server = pywindde.CreateServer()
             self._server.Create(self.options.client_name)
         assert self._server is not None, 'Failed to create DDE server'
 
     @dde_handler
     def _create_conversation(self):
         with self._lock:
-            self._conversation = dde.CreateConversation(self._server)
+            self._conversation = pywindde.CreateConversation(self._server)
 
     @dde_handler
     def _connect_topic(self, topic: DDETopic):

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from enum import StrEnum
 from typing import Protocol, TYPE_CHECKING
-import win32ui  # noqa before dde import to ensure proper initialization order
 
 if TYPE_CHECKING:
     pass

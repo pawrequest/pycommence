@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from functools import wraps
 from collections.abc import Callable
-
-import dde
+import win32ui # noqa
+import dde as pywindde
 import pythoncom
 import pywintypes
 
@@ -71,12 +71,12 @@ def dde_handler(func: Callable):
             code = code_tup[0]
             raise PyCmcDDEError(cmd, code) from e
 
-        except dde.error as e:
+        except pywindde.error as e:
             try:
                 code = self._last_error_no_handler()
                 raise PyCmcDDEError(cmd, code) from e
             except Exception as e2:
-                if isinstance(e2, dde.error):
+                if isinstance(e2, pywindde.error):
                     e.add_note('Additionally, failed to get DDE error code from server.')
                     raise e
                 raise e2 from e
