@@ -4,7 +4,7 @@ import pathlib
 from dataclasses import dataclass
 from datetime import time
 from decimal import Decimal
-from typing import NamedTuple, Literal
+from typing import Literal, NamedTuple
 
 from loguru import logger
 
@@ -40,7 +40,7 @@ class CmcFieldDefinition:
     @classmethod
     def connection_field(cls) -> CmcFieldDefinition:
         return cls(
-            type=lookup_field_definition('CONNECTION'),
+            type=CmcDataType.lookup_datatype('CONNECTION'),
             combobox=False,
             shared=False,
             mandatory=False,
@@ -52,7 +52,7 @@ class CmcFieldDefinition:
     @classmethod
     def error_field(cls) -> CmcFieldDefinition:
         return cls(
-            type=lookup_field_definition('ERROR'),
+            type=CmcDataType.lookup_datatype('ERROR'),
             combobox=False,
             shared=False,
             mandatory=False,
@@ -64,12 +64,12 @@ class CmcFieldDefinition:
     @classmethod
     def from_field_info(cls, field_info: str | list[str], delim: str = DELIM) -> CmcFieldDefinition:
         default_string, field_type_str, flags, max_chars = parse_info_str(field_info, delim)
-        field_def = lookup_field_definition(field_type_str)
-        if not field_def:
+        datatype = CmcDataType.lookup_datatype(field_type_str)
+        if not datatype:
             logger.warning(f'Unknown field type: {field_type_str} - returning ERROR field definition')
             return cls.error_field()
         return cls(
-            type=field_def,
+            type=datatype,
             combobox=flags[6] == '1',
             shared=flags[7] == '1',
             mandatory=flags[8] == '1',
@@ -79,13 +79,52 @@ class CmcFieldDefinition:
         )
 
 
+class CmcDefsDict(dict[str, CmcFieldDefinition]):
+    """Field Name to CmcFieldDefinition."""
+    _name_field: str | None = None
+
+    def name_field(self, error: Literal['raise', 'ignore'] = 'raise') -> str | None:
+        if self._name_field:
+            return self._name_field
+
+        defs = [(name, field_def) for name, field_def in self.items() if field_def.type.alias == 'NAME']
+        if len(defs) == 1:
+            self._name_field = defs[0][0]
+            return self._name_field
+        else:
+            if error != 'ignore':
+                raise RuntimeError(f'Expected exactly one NAME field in definitions - found {len(defs)}:{defs}.')
+
+        return self._name_field
+
+    def py_types_dict(self) -> dict[str, type]:
+        return {k: v.type.py_type for k, v in self.items()}
+
+
 class CmcDataType(NamedTuple):
     int_value: int
     alias: str
     py_type: type
 
+    @classmethod
+    def unknown(cls) -> CmcDataType:
+        return CmcDataType(-1, 'ERROR', str)
 
-FIELD_DEFS: list[CmcDataType] = [
+    @classmethod
+    def lookup_datatype(cls, thingy: int | str | type) -> CmcDataType:
+        try:
+            inty = int(thingy)
+            return INT_TO_DEF.get(inty, cls.unknown())
+        except (ValueError, TypeError):
+            pass
+        if isinstance(thingy, str):
+            return ALIAS_TO_DEF.get(thingy.upper(), cls.unknown())
+        elif isinstance(thingy, type):
+            return TYPE_TO_DEF.get(thingy, cls.unknown())
+        raise ValueError(f'Unknown thingy type: {type(thingy)}')
+
+
+DATA_TYPES: list[CmcDataType] = [
     CmcDataType(0, 'TEXT', str),
     CmcDataType(1, 'NUMBER', Decimal),
     CmcDataType(2, 'DATE', CommenceDateOptional),
@@ -103,41 +142,19 @@ FIELD_DEFS: list[CmcDataType] = [
     CmcDataType(24, 'URL', str),
     CmcDataType(17, 'CONNECTION', str)
 ]
-INT_TO_DEF = {fd.int_value: fd for fd in FIELD_DEFS}
-ALIAS_TO_DEF = {fd.alias: fd for fd in FIELD_DEFS}
-TYPE_TO_DEF = {fd.py_type: fd for fd in FIELD_DEFS}
+INT_TO_DEF = {fd.int_value: fd for fd in DATA_TYPES}
+ALIAS_TO_DEF = {fd.alias: fd for fd in DATA_TYPES}
+TYPE_TO_DEF = {fd.py_type: fd for fd in DATA_TYPES}
 
 
-def lookup_field_definition(thingy: int | str | type) -> CmcDataType:
-    try:
-        inty = int(thingy)
-        return INT_TO_DEF.get(inty)
-    except (ValueError, TypeError):
-        pass
-    if isinstance(thingy, str):
-        return ALIAS_TO_DEF.get(thingy.upper())
-    elif isinstance(thingy, type):
-        return TYPE_TO_DEF.get(thingy)
-    raise ValueError(f'Unknown thingy type: {type(thingy)}')
-
-
-class CmcDefsDict(dict[str, CmcFieldDefinition]):
-    """Field Name to CmcFieldDefinition."""
-    _name_field: str | None = None
-
-    def name_field(self, error:Literal['raise', 'ignore'] = 'raise') -> str | None:
-        if self._name_field:
-            return self._name_field
-
-        defs = [(name, field_def) for name, field_def in self.items() if field_def.type.alias == 'NAME']
-        if len(defs) == 1:
-            self._name_field = defs[0][0]
-            return self._name_field
-        else:
-            if error != 'ignore':
-                raise RuntimeError(f'Expected exactly one NAME field in definitions - found {len(defs)}:{defs}.')
-
-        return self._name_field
-
-    def py_types_dict(self) -> dict[str, type]:
-        return {k: v.type.py_type for k, v in self.items()}
+# def lookup_datatype(thingy: int | str | type) -> CmcDataType:
+#     try:
+#         inty = int(thingy)
+#         return INT_TO_DEF.get(inty)
+#     except (ValueError, TypeError):
+#         pass
+#     if isinstance(thingy, str):
+#         return ALIAS_TO_DEF.get(thingy.upper())
+#     elif isinstance(thingy, type):
+#         return TYPE_TO_DEF.get(thingy)
+#     raise ValueError(f'Unknown thingy type: {type(thingy)}')
