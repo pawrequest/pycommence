@@ -52,13 +52,43 @@ def raise_for_bad_dde(cmd: str, res):
         raise PyCmcDDEError(cmd=cmd, code=610)
 
 
-def dde_handler(func: Callable):
+def dde_error_handler(func: Callable):
     """ Decorator to handle lock and DDE errors for DDEServer methods. First Arg must be DDEServer instance. """
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        # if not isinstance(args[0], DDEServer):
-        #     raise ValueError('DDE Error handler - requires DDEServer as first argument')
+        self = args[0]
+        cmd = str(args[1]) if len(args) > 1 else func.__name__
+        try:
+            res = func(*args, **kwargs)
+            raise_for_bad_dde(cmd, res)
+            return res
+
+        except pythoncom.error as e:
+            long_code, basic_msg, code_tup, sometype, *rest = e.args
+            code = code_tup[0]
+            raise PyCmcDDEError(cmd, code) from e
+
+        except pywindde.error as e:
+            try:
+                code = self._last_error_no_handler()
+                raise PyCmcDDEError(cmd, code) from e
+            except Exception as e2:
+                if isinstance(e2, pywindde.error):
+                    e.add_note('Additionally, failed to get DDE error code from server.')
+                    raise e
+                raise e2 from e
+
+        except Exception as e:
+            raise PyCmcDDEError(cmd, -1, msg=str(e)) from e
+
+    return wrapper
+
+def dde_handler_old(func: Callable):
+    """ Decorator to handle lock and DDE errors for DDEServer methods. First Arg must be DDEServer instance. """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
         self = args[0]
         cmd = str(args[1]) if len(args) > 1 else func.__name__
         try:

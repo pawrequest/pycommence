@@ -1,20 +1,23 @@
 import contextlib
 import typing as _t
 from dataclasses import dataclass, field
+from typing import ContextManager
 
 from loguru import logger
 
-from pycommence.com.context import com_multithreaded_context
-from pycommence.com.cursor import CursorAPI, raise_for_id_or_pk
+from pycommence.pycommence_options import get_options
+from pycommence.icommence.const import CursorType
+from pycommence.threads import com_context
+from pycommence.cursor import CursorAPI, raise_for_id_or_pk
 from pycommence.core.filters import FilterArray
-from pycommence.core.fields import DELIM
-from pycommence.core.types import CursorType
 from pycommence.core.row_data import RowData, RowDataGenerator, RowFilter
 from pycommence.core.pagination import Pagination
-from pycommence.com.resolvers import resolve_csrname, resolve_row_id
-from pycommence.wrapper.cmc_wrapper import CommenceWrapper
-from pycommence.wrapper.conversation_wrapper import ConversationAPI
+from bench.resolvers import resolve_csrname, resolve_row_id
+from bench.cmc_wrapper_legacy import PyCommenceAPI
+from pycommence.conversation import ConversationAPI
 from pycommence.dde import DDEKind, DDEMessageBase, DDETopic
+
+DELIM = get_options().delim
 
 
 # noinspection PyProtectedMember
@@ -25,7 +28,7 @@ class PyCommence:
 
     Manages database connections, cursors, and DDE conversations.
     Provides high-level methods for CRUD operations and cursor management.
-    Wraps an instance of :class:`~pycommence.wrapper.cmc_wrapper.CommenceWrapper`
+    Wraps an instance of :class:`~pycommence.wrapper.cmc_wrapper.PyCommenceAPI`
 
     Typical Usage:
         >>> with pycommence_context('Customer') as pyc:
@@ -35,7 +38,7 @@ class PyCommence:
 
     """
 
-    cmc_wrapper: CommenceWrapper = field(default_factory=CommenceWrapper)
+    cmc_wrapper: PyCommenceAPI = field(default_factory=PyCommenceAPI)
     csrs: dict[str, CursorAPI] = field(default_factory=dict)
     conversations: dict[DDETopic, ConversationAPI] = field(default_factory=dict)
 
@@ -173,27 +176,11 @@ class PyCommence:
 
 
 @contextlib.contextmanager
-def pycommence_context(*csrnames: str) -> _t.Generator[PyCommence, None, None]:
+def pycommence_context(*csrnames: str) -> ContextManager[
+    PyCommence]:  # pycharm no speaky cm, prefer warning here to in caller
     """Context manager for PyCommence with optional cursors"""
-    with com_multithreaded_context():
+    with com_context():
         pyc = PyCommence()
         for csrname in csrnames:
             pyc.set_csr(csrname)
         yield pyc
-
-
-# @contextlib.contextmanager
-# def pycommence_context1(*csrnames: str) -> _t.Generator[PyCommence, None, None]:
-#     """Context manager for PyCommence with optional cursors"""
-#     # comtypes.CoInitializeEx(comtypes.COINIT_MULTITHREADED)
-#     # pythoncom.CoInitialize()
-#     initialized = initialise_com_multithreaded()
-#     try:
-#         pyc = PyCommence()
-#         for csrname in csrnames:
-#             pyc.set_csr(csrname)
-#         yield pyc
-#     finally:
-#         if initialized:
-#             comtypes.CoUninitialize()
-

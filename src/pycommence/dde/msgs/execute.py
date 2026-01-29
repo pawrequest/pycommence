@@ -7,7 +7,7 @@ from __future__ import annotations
 from pycommence.dde.types import DDEExecuteBase, DDETopic
 
 
-def execute_add_item(
+def add_item(
         category: str,
         item: str,
         topic: DDETopic,
@@ -19,15 +19,15 @@ def execute_add_item(
     return msg
 
 
-def execute_add_shared_item(category: str, item: str, topic: DDETopic, ) -> DDEExecuteBase:
+def add_shared_item(category: str, item: str, topic: DDETopic, ) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='AddSharedItem', params=[category, item], topic=topic)
 
 
-def execute_append_text(category: str, item: str, field: str, text: str, topic: DDETopic) -> DDEExecuteBase:
+def append_text(category: str, item: str, field: str, text: str, topic: DDETopic) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='AppendText', params=[category, item, field, text], topic=topic)
 
 
-def execute_assign_connection(
+def assign_connection(
         from_category: str,
         from_item: str,
         connection_name: str,
@@ -42,7 +42,7 @@ def execute_assign_connection(
     )
 
 
-def execute_unassign_connection(
+def unassign_connection(
         from_category: str,
         from_item: str,
         connection_name: str,
@@ -57,19 +57,19 @@ def execute_unassign_connection(
     )
 
 
-def execute_edit_item(category: str, item: str, field: str, value: str, topic: DDETopic) -> DDEExecuteBase:
+def edit_item(category: str, item: str, field: str, value: str, topic: DDETopic) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='EditItem', params=[category, item, field, value], topic=topic)
 
 
-def execute_delete_item(category: str, item: str, topic: DDETopic) -> DDEExecuteBase:
+def delete_item(category: str, item: str, topic: DDETopic) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='DeleteItem', params=[category, item], topic=topic)
 
 
-def execute_delete_view(view_name: str, topic: DDETopic) -> DDEExecuteBase:
+def delete_view(view_name: str, topic: DDETopic) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='DeleteView', params=[view_name], topic=topic)
 
 
-def execute_fire_trigger(trigger: str, *args: str, topic: DDETopic) -> DDEExecuteBase:
+def fire_trigger(trigger: str, *args: str, topic: DDETopic) -> DDEExecuteBase:
     """
     FireTrigger(Trigger, Arg2..Arg9)
     Accepts up to 8 extra args.
@@ -79,22 +79,22 @@ def execute_fire_trigger(trigger: str, *args: str, topic: DDETopic) -> DDEExecut
     return DDEExecuteBase(func_name='FireTrigger', params=[trigger, *args], topic=topic)
 
 
-def execute_show_desktop(desktop_name: str, topic: DDETopic) -> DDEExecuteBase:
+def show_desktop(desktop_name: str, topic: DDETopic) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='ShowDesktop', params=[desktop_name], topic=topic)
 
 
-def execute_show_item(category: str, item: str, topic: DDETopic, form_name: str | None = None) -> DDEExecuteBase:
+def show_item(category: str, item: str, topic: DDETopic, form_name: str | None = None) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='ShowItem', params=[category, item, form_name], topic=topic)
 
 
-def execute_show_view(view_name: str, topic: DDETopic, force_new_copy: int | None = None) -> DDEExecuteBase:
+def show_view(view_name: str, topic: DDETopic, force_new_copy: int | None = None) -> DDEExecuteBase:
     """
     Docs show: [ShowView(View Name, 1)] to force a new copy.
     """
     return DDEExecuteBase(func_name='ShowView', params=[view_name, force_new_copy], topic=topic)
 
 
-def execute_get_view_to_file(
+def get_view_to_file(
         view_name: str,
         mode: int,
         param1: str | None,
@@ -105,15 +105,15 @@ def execute_get_view_to_file(
     return DDEExecuteBase(func_name='GetViewToFile', params=[view_name, mode, param1, param2, filename], topic=topic)
 
 
-def execute_check_in_form_script(category: str, form_name: str, filename: str) -> DDEExecuteBase:
+def check_in_form_script(category: str, form_name: str, filename: str) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='CheckInFormScript', params=[category, form_name, filename])
 
 
-def execute_check_out_form_script(category: str, form_name: str, filename: str) -> DDEExecuteBase:
+def check_out_form_script(category: str, form_name: str, filename: str) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='CheckOutFormScript', params=[category, form_name, filename])
 
 
-def execute_merge_template_create(name: str, category: str, shared: bool | int) -> DDEExecuteBase:
+def merge_template_create(name: str, category: str, shared: bool | int) -> DDEExecuteBase:
     """
     Docs: MergeTemplateCreate(name, Category, Shared) where Shared is 0|1.
     """
@@ -121,16 +121,16 @@ def execute_merge_template_create(name: str, category: str, shared: bool | int) 
     return DDEExecuteBase(func_name='MergeTemplateCreate', params=[name, category, shared_val])
 
 
-def execute_merge_template_save(name: str, shared: bool | int) -> DDEExecuteBase:
+def merge_template_save(name: str, shared: bool | int) -> DDEExecuteBase:
     shared_val = int(shared) if isinstance(shared, bool) else shared
     return DDEExecuteBase(func_name='MergeTemplateSave', params=[name, shared_val])
 
 
-def execute_promote_item_to_shared(category: str, item: str) -> DDEExecuteBase:
+def promote_item_to_shared(category: str, item: str) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='PromoteItemToShared', params=[category, item])
 
 
-def execute_log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
+def log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
     """
     Docs: LogPhoneCall(Category1, Item1, ..., CategoryN, ItemN)
     Pass as: category1, item1, category2, item2, ...
@@ -150,21 +150,21 @@ def execute_log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
 # from pycommence.pycommence_dde.pycommence_dde import DDEExecute
 #
 #
-# def execute_add_item(category: str, item: str, clarify_value: Optional[str] = None) -> DDEExecute:
+# def add_item(category: str, item: str, clarify_value: Optional[str] = None) -> DDEExecute:
 #     params = [category, item, clarify_value] if clarify_value is not None else [category, item]
 #     # params = [category, item, clarify_value]
 #     return DDEExecute(func_name="AddItem", params=params)
 #
 #
-# def execute_add_shared_item(category: str, item: str) -> DDEExecute:
+# def add_shared_item(category: str, item: str) -> DDEExecute:
 #     return DDEExecute(func_name="AddSharedItem", params=[category, item])
 #
 #
-# def execute_append_text(category: str, item: str, field: str, text: str) -> DDEExecute:
+# def append_text(category: str, item: str, field: str, text: str) -> DDEExecute:
 #     return DDEExecute(func_name="AppendText", params=[category, item, field, text])
 #
 #
-# def execute_assign_connection(
+# def assign_connection(
 #         from_category: str,
 #         from_item: str,
 #         connection_name: str,
@@ -174,7 +174,7 @@ def execute_log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
 #     return DDEExecute(func_name="AssignConnection", params=[from_category, from_item, connection_name, to_category, to_item])
 #
 #
-# def execute_unassign_connection(
+# def unassign_connection(
 #         from_category: str,
 #         from_item: str,
 #         connection_name: str,
@@ -184,19 +184,19 @@ def execute_log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
 #     return DDEExecute(func_name="UnassignConnection", params=[from_category, from_item, connection_name, to_category, to_item])
 #
 #
-# def execute_edit_item(category: str, item: str, field: str, value: str) -> DDEExecute:
+# def edit_item(category: str, item: str, field: str, value: str) -> DDEExecute:
 #     return DDEExecute(func_name="EditItem", params=[category, item, field, value])
 #
 #
-# def execute_delete_item(category: str, item: str) -> DDEExecute:
+# def delete_item(category: str, item: str) -> DDEExecute:
 #     return DDEExecute(func_name="DeleteItem", params=[category, item])
 #
 #
-# def execute_delete_view(view_name: str) -> DDEExecute:
+# def delete_view(view_name: str) -> DDEExecute:
 #     return DDEExecute(func_name="DeleteView", params=[view_name])
 #
 #
-# def execute_fire_trigger(trigger: str, *args: str) -> DDEExecute:
+# def fire_trigger(trigger: str, *args: str) -> DDEExecute:
 #     """
 #     FireTrigger(Trigger, Arg2..Arg9)
 #     Accepts up to 8 extra args.
@@ -206,34 +206,34 @@ def execute_log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
 #     return DDEExecute(func_name="FireTrigger", params=[trigger, *args])
 #
 #
-# def execute_show_desktop(desktop_name: str) -> DDEExecute:
+# def show_desktop(desktop_name: str) -> DDEExecute:
 #     return DDEExecute(func_name="ShowDesktop", params=[desktop_name])
 #
 #
-# def execute_show_item(category: str, item: str, form_name: Optional[str] = None) -> DDEExecute:
+# def show_item(category: str, item: str, form_name: Optional[str] = None) -> DDEExecute:
 #     return DDEExecute(func_name="ShowItem", params=[category, item, form_name])
 #
 #
-# def execute_show_view(view_name: str, force_new_copy: Optional[int] = None) -> DDEExecute:
+# def show_view(view_name: str, force_new_copy: Optional[int] = None) -> DDEExecute:
 #     """
 #     Docs show: [ShowView(View Name, 1)] to force a new copy.
 #     """
 #     return DDEExecute(func_name="ShowView", params=[view_name, force_new_copy])
 #
 #
-# def execute_get_view_to_file(view_name: str, mode: int, param1: Optional[str], param2: Optional[str], filename: str) -> DDEExecute:
+# def get_view_to_file(view_name: str, mode: int, param1: Optional[str], param2: Optional[str], filename: str) -> DDEExecute:
 #     return DDEExecute(func_name="GetViewToFile", params=[view_name, mode, param1, param2, filename])
 #
 #
-# def execute_check_in_form_script(category: str, form_name: str, filename: str) -> DDEExecute:
+# def check_in_form_script(category: str, form_name: str, filename: str) -> DDEExecute:
 #     return DDEExecute(func_name="CheckInFormScript", params=[category, form_name, filename])
 #
 #
-# def execute_check_out_form_script(category: str, form_name: str, filename: str) -> DDEExecute:
+# def check_out_form_script(category: str, form_name: str, filename: str) -> DDEExecute:
 #     return DDEExecute(func_name="CheckOutFormScript", params=[category, form_name, filename])
 #
 #
-# def execute_merge_template_create(name: str, category: str, shared: Union[bool, int]) -> DDEExecute:
+# def merge_template_create(name: str, category: str, shared: Union[bool, int]) -> DDEExecute:
 #     """
 #     Docs: MergeTemplateCreate(name, Category, Shared) where Shared is 0|1.
 #     """
@@ -241,16 +241,16 @@ def execute_log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
 #     return DDEExecute(func_name="MergeTemplateCreate", params=[name, category, shared_val])
 #
 #
-# def execute_merge_template_save(name: str, shared: Union[bool, int]) -> DDEExecute:
+# def merge_template_save(name: str, shared: Union[bool, int]) -> DDEExecute:
 #     shared_val = int(shared) if isinstance(shared, bool) else shared
 #     return DDEExecute(func_name="MergeTemplateSave", params=[name, shared_val])
 #
 #
-# def execute_promote_item_to_shared(category: str, item: str) -> DDEExecute:
+# def promote_item_to_shared(category: str, item: str) -> DDEExecute:
 #     return DDEExecute(func_name="PromoteItemToShared", params=[category, item])
 #
 #
-# def execute_log_phone_call(*category_item_pairs: str) -> DDEExecute:
+# def log_phone_call(*category_item_pairs: str) -> DDEExecute:
 #     """
 #     Docs: LogPhoneCall(Category1, Item1, ..., CategoryN, ItemN)
 #     Pass as: category1, item1, category2, item2, ...

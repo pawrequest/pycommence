@@ -1,14 +1,14 @@
 import threading
 from collections.abc import Sequence
+
 import win32ui  # noqa before dde import to ensure proper initialization order
 import dde as pywindde
 from loguru import logger
 
 from . import msgs
-from .types import DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic
-from .dde_errors import PyCmcDDEError, PyCmcDDENoConnectionError, dde_handler
-from pycommence.core.fields import DELIM
-from pycommence.com.context import com_multithreaded_context
+from .types import DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic, EMPTY
+from .dde_errors import PyCmcDDEError, PyCmcDDENoConnectionError, dde_error_handler
+from pycommence.threads import com_context
 
 
 class DDEOptions:
@@ -18,6 +18,7 @@ class DDEOptions:
     fields_chunk = 12
     client_name: str = 'pycommence_dde_client'
     application_name: str = 'Commence'
+    delim: str = r'*&^%£$&^*'
 
 
 class DDEServer:
@@ -28,9 +29,6 @@ class DDEServer:
         self._lock = threading.RLock()
         self._com_context = None
         self._conversation = None
-        # self.conversation = self._create_conversation()
-
-    # def __post_init__(self):
 
     @property
     def conversation(self):
@@ -39,7 +37,7 @@ class DDEServer:
         return self._conversation
 
     def __enter__(self):
-        self._com_context = com_multithreaded_context()
+        self._com_context = com_context()
         self._com_context.__enter__()
         self._create_server()
         return self
@@ -62,29 +60,27 @@ class DDEServer:
         if isinstance(res, str):
             if self.options.strip_strs:
                 res = res.strip()
-            if DELIM in res and self.options.split_str_lists:
-                res = res.split(DELIM)
+            delim = self.options.delim
+            if delim in res and self.options.split_str_lists:
+                res = res.split(self.options.delim)
         lentext = str(len(res)) if isinstance(res, Sequence) else 'N/A'
         logger.debug(f'Received DDE response ({type(res).__name__}, len={lentext}): {res}')
         return res if res else EMPTY
 
-    @dde_handler
+    @dde_error_handler
     def _send_request(self, cmd: str | DDERequestBase) -> str | bool:
         with self._lock:
             logger.debug(f'Sending DDE request: {cmd}')
             return self.conversation.Request(str(cmd))
 
-    @dde_handler
+    @dde_error_handler
     def _send_execute(self, cmd: str | DDEExecuteBase) -> str | bool:
         with self._lock:
             logger.debug(f'Sending DDE execute: {cmd}')
             return self.conversation.Exec(str(cmd))
 
     def last_error(self) -> int:
-        # if not self.connected == DDETopic.SYSTEM:
-        #     self._connect_topic(DDETopic.SYSTEM)
-        # res = self._send_request('GetLastError')
-        msg = msgs.get.get_last_error()
+        msg = msgs.get.last_error()
         res = self.send_message(msg)
         try:
             return int(res)
@@ -104,19 +100,19 @@ class DDEServer:
                 logger.error('Failed to get last DDE error')
                 raise PyCmcDDEError(cmd='GetLastError', code=-1, msg='Failed to get last DDE error') from e
 
-    @dde_handler
+    @dde_error_handler
     def _create_server(self):
         with self._lock:
             self._server = pywindde.CreateServer()
             self._server.Create(self.options.client_name)
         assert self._server is not None, 'Failed to create DDE server'
 
-    @dde_handler
+    @dde_error_handler
     def _create_conversation(self):
         with self._lock:
             self._conversation = pywindde.CreateConversation(self._server)
 
-    @dde_handler
+    @dde_error_handler
     def _connect_topic(self, topic: DDETopic):
         if self.connected == topic:
             return
@@ -125,4 +121,3 @@ class DDEServer:
         self.connected = topic
 
 
-EMPTY = 'empty'

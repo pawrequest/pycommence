@@ -15,6 +15,7 @@ class DDETopic(StrEnum):
     VIEW = 'ViewData'
     GET = 'GetData'
     SYSTEM = 'System'
+    TUTORIAL = 'Tutorial'
 
 
 class DDEKind(StrEnum):
@@ -28,18 +29,18 @@ class DDEMessageBase(BaseModel):
     topic: DDETopic = DDETopic.GET
     kind: DDEKind = DDEKind.REQUEST
     params: list[DDEParam] = Field(default_factory=list[DDEParam])
-    parms_formatted: list = Field(default_factory=list, init=False, repr=False)
+    params_formatted: list = Field(default_factory=list, init=False, repr=False)
     returns: list[type] = Field(default_factory=list)
 
     @model_validator(mode='after')
     def format_params(self):
         if self.params is None:
             return self
-        self.parms_formatted = [_dde_format_param(p) for p in self.params]
+        self.params_formatted = [_dde_format_param(p) for p in self.params]
         return self
 
     def __str__(self) -> str:
-        args = ','.join(self.parms_formatted)
+        args = ','.join(self.params_formatted)
         args_str = f'({args})' if self.params else ''
         res = f'[{self.func_name}{args_str}]'
         return res
@@ -49,7 +50,7 @@ class DDESystemRequest(DDEMessageBase):
     topic: DDETopic = DDETopic.SYSTEM
 
     def __str__(self) -> str:
-        args = ','.join(self.parms_formatted)
+        args = ','.join(self.params_formatted)
         args_str = f'({args})' if self.params else ''
         res = f'{self.func_name}{args_str}'
         return res
@@ -92,6 +93,7 @@ def _dde_format_param(value: DDEParam) -> str:
     # strings => quoted, internal quotes doubled
     if not isinstance(value, str):
         value = str(value)
+    value = value.strip('"\'')
     return f'"{value}"'
 
 
@@ -104,3 +106,6 @@ class DDEServerProtocol(Protocol):
 
     def last_error(self) -> int:
         ...
+
+
+EMPTY = 'empty'

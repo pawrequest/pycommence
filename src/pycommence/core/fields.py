@@ -9,11 +9,13 @@ from typing import Literal, NamedTuple
 from loguru import logger
 
 from pycommence.core.types import CommenceDateOptional
+from pycommence.pycommence_options import get_options
 
-DELIM = r';*;%'
+# DELIM = r';*;%'
+DELIM = get_options().delim
 
 
-def parse_info_str(field_info: str | list[str], delim: str = DELIM, ) -> tuple[str, str, str, str]:
+def parse_info_str(field_info: str | list[str], delim: str = DELIM) -> tuple[str, str, str, str]:
     if isinstance(field_info, str):
         parts = field_info.split(delim)
     else:
@@ -145,7 +147,6 @@ DATA_TYPES: list[CmcDataType] = [
 INT_TO_DEF = {fd.int_value: fd for fd in DATA_TYPES}
 ALIAS_TO_DEF = {fd.alias: fd for fd in DATA_TYPES}
 TYPE_TO_DEF = {fd.py_type: fd for fd in DATA_TYPES}
-
 
 # def lookup_datatype(thingy: int | str | type) -> CmcDataType:
 #     try:

@@ -1,7 +1,7 @@
 import functools
 import typing as _t
 
-from pycommence.com.cursor import CursorAPI
+from pycommence.cursor import CursorAPI
 from pycommence.core.exceptions import PyCommenceNotFoundError
 
 
@@ -24,6 +24,25 @@ def resolve_csrname(func):
 
     @functools.wraps(func)
     def wrapper(self: HasCursors, *args, **kwargs):
+        if args:
+            csrname = get_csrname(self, args[0])
+            args = (csrname,) if len(args) == 1 else (csrname, *args[1:])
+        elif 'csrname' in kwargs:
+            if args:
+                raise ValueError('Cannot use both positional and keyword csrname arguments')
+            kwargs['csrname'] = get_csrname(self, kwargs['csrname'])
+        else:
+            kwargs['csrname'] = get_csrname(self)
+        return func(self, *args, **kwargs)
+
+    return wrapper
+
+
+def resolve_csrname2(func):
+    """Decorator to get csrname from first positional argument or kwargs['csrname'], or else the only cursor available, or else raise ValueError"""
+
+    @functools.wraps(func)
+    def wrapper(self, *args, **kwargs):
         if args:
             csrname = get_csrname(self, args[0])
             args = (csrname,) if len(args) == 1 else (csrname, *args[1:])

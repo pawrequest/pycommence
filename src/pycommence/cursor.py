@@ -12,16 +12,12 @@ from functools import cached_property
 from typing import Self
 
 from pycommence.core.pagination import MoreAvailable, Pagination
-
 from pycommence.core.exceptions import PyCommenceExistsError, raise_for_one
 from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
-from pycommence.core.types import (
-    ConnectedColumn,
-    CursorType,
-    SeekBookmark,
-)
+from pycommence.icommence.const import CursorType, SeekBookmark
+from pycommence.core.types import ConnectedColumn
 from pycommence.core.row_data import RowData, RowDataGenerator, RowFilter
-from pycommence.wrapper.cursor_wrapper import CursorWrapper
+from pycommence.icommence.cursor_wrapper import CursorWrapper
 
 
 def raise_for_id_or_pk(id, pk):
@@ -54,7 +50,6 @@ class CursorAPI:
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
         self.csrname = csrname or self.category
-
 
     @property
     def category(self) -> str:
@@ -160,7 +155,14 @@ class CursorAPI:
         rs.modify_row(0, create_pkg)
         rs.commit()
 
-    def read_row(self, row_id: str) -> RowData:
+    # def read_row(self, row_id: str) -> RowData:
+    #     rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
+    #     row = next(rs.rows())
+    #     return RowData(category=self.category, row_id=row_id, data=row)
+
+    def read_row(self, *, row_id: str = None, pk: str = None) -> RowData:
+        raise_for_id_or_pk(row_id, pk)
+        row_id = row_id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
         return RowData(category=self.category, row_id=row_id, data=row)
@@ -252,4 +254,3 @@ class CursorAPI:
         if not res:
             raise ValueError('Failed to add related column.')
         return self
-

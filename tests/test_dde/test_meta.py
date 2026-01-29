@@ -2,19 +2,21 @@ from conftest import get_pycmc
 from pycommence.core.meta import generate_table_pydantic_model
 from pycommence.core.fields import CmcDefsDict
 from pycommence.core.pagination import Pagination
+from pycommence.dde import DDETopic
 
 
-def test_generate_table(dde_server):
+def test_generate_table(pycmc_client):
     category = 'Address'
-    fields_defs: CmcDefsDict = dde_server.fields_definition_dict(category)
+    conv = pycmc_client.conversation(DDETopic.GET)
+    fields_defs = conv.category_field_definitions(category)
     clz = generate_table_pydantic_model(
         field_def_dict=fields_defs,
         name=category,
         category=category,
     )
 
-    p = get_pycmc(category)
-    data = p.csr().read_rows(Pagination(limit=3))
+    csr = pycmc_client.cursor(category)
+    data = csr.read_rows(Pagination(limit=3))
     row = next(data)
 
     obj = clz.model_validate(row.data)

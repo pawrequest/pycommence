@@ -8,12 +8,12 @@ from functools import cached_property
 from loguru import logger
 
 from pycommence.core.exceptions import PyCommenceNotFoundError
-from pycommence.core.fields import DELIM
-from pycommence.core.types import FLAGS_UNUSED, OptionFlagInt
+from pycommence.icommence.const import OptionFlag
+from pycommence.pycommence_options import get_options
 
 if typing.TYPE_CHECKING:
-    from .cursor_wrapper import CursorWrapper
-from pycommence.wrapper._icommence import (
+    from pycommence.icommence.cursor_wrapper import CursorWrapper
+from pycommence.icommence.row import (
     ICommenceAddRowSet,
     ICommenceDeleteRowSet,
     ICommenceEditRowSet,
@@ -21,6 +21,8 @@ from pycommence.wrapper._icommence import (
 )
 
 RowSetType = ICommenceEditRowSet | ICommenceQueryRowSet | ICommenceAddRowSet | ICommenceDeleteRowSet
+
+DELIM = get_options().delim
 
 
 class RowSetBase[T:RowSetType](ABC):
@@ -47,7 +49,7 @@ class RowSetBase[T:RowSetType](ABC):
         """Returns the number of rows in the row set."""
         return self._rs.RowCount
 
-    def get_value(self, row_index: int, column_index: int, flags: int = OptionFlagInt.CANONICAL.value) -> str:
+    def get_value(self, row_index: int, column_index: int, flags: int = OptionFlag.CANONICAL.value) -> str:
         """Retrieves the value at the specified row and column.
 
         Args:
@@ -72,7 +74,7 @@ class RowSetBase[T:RowSetType](ABC):
             Label of the specified column.
 
         """
-        flags = OptionFlagInt.FIELD_NAME if by_field else 0
+        flags = OptionFlag.FIELD_NAME if by_field else 0
         return self._rs.GetColumnLabel(index, flags)
 
     def get_column_index(self, label: str, by_field: bool = True) -> int:
@@ -87,7 +89,7 @@ class RowSetBase[T:RowSetType](ABC):
             Index of the specified column label.
 
         """
-        flags = OptionFlagInt.FIELD_NAME if by_field else 0
+        flags = OptionFlag.FIELD_NAME if by_field else 0
         return self._rs.GetColumnIndex(label, flags)
 
     def get_row(
@@ -108,7 +110,7 @@ class RowSetBase[T:RowSetType](ABC):
             Values of the specified row.
 
         """
-        flags = OptionFlagInt.CANONICAL if cannonical else 0
+        flags = OptionFlag.CANONICAL if cannonical else 0
         try:
             return self._rs.GetRow(row_index, delim, flags)
         except Exception as e:
@@ -125,7 +127,7 @@ class RowSetBase[T:RowSetType](ABC):
             ID of the specified row.
 
         """
-        flags: int = FLAGS_UNUSED
+        flags: OptionFlag = OptionFlag.NONE
         return self._rs.GetRowID(row_index, flags)
 
     def row_dicts_list(self, num: int | None = None, delim=DELIM) -> list[dict[str, str]]:
@@ -180,7 +182,7 @@ class RowSetQuery(RowSetBase):
             bool: True on success, False on failure.
 
         """
-        flags = OptionFlagInt.CANONICAL if canonical else 0
+        flags = OptionFlag.CANONICAL if canonical else 0
         return self._rs.GetFieldToFile(row_index, column_index, file_path, flags)
 
 
@@ -200,7 +202,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
 
         """
-        return self._rs.ModifyRow(row_index, column_index, value, FLAGS_UNUSED)
+        return self._rs.ModifyRow(row_index, column_index, value, OptionFlag.NONE)
 
     def modify_row(self, row_index: int, row_dict: dict) -> None:
         """
@@ -228,7 +230,7 @@ class RowSetModifies(RowSetBase):
             bool: True on success, False on failure.
 
         """
-        res = self._rs.Commit(FLAGS_UNUSED)
+        res = self._rs.Commit(OptionFlag.NONE)
         if res != 0:
             raise ValueError('Commit failed')
         return True
@@ -241,7 +243,7 @@ class RowSetModifies(RowSetBase):
             CommenceCursor: Cursor object with the committed data.
 
         """
-        return self._rs.CommitGetCursor(FLAGS_UNUSED)
+        return self._rs.CommitGetCursor(OptionFlag.NONE)
 
 
 class RowSetAdd(RowSetModifies):
@@ -297,7 +299,7 @@ class RowSetDelete(RowSetModifies):
             bool: True on success, False on failure.
 
         """
-        return self._rs.DeleteRow(row_index, FLAGS_UNUSED)
+        return self._rs.DeleteRow(row_index, OptionFlag.NONE)
 
     def commit_get_cursor(self):
         raise NotImplementedError('Can not get a cursor for deleted rows.')

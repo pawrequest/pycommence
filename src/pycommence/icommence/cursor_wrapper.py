@@ -1,9 +1,8 @@
 from loguru import logger
 
-from pycommence.wrapper import row_wrapper as rs
-from pycommence.wrapper._icommence import ICommenceCursor
+from pycommence.icommence import ICommenceCursor, row_wrapper as rs
 from pycommence.core.exceptions import PyCommenceNotFoundError, PyCommenceServerError, raise_for_one
-from pycommence.core.types import FLAGS_UNUSED, OptionFlagInt, SeekBookmark
+from pycommence.icommence.const import SeekBookmark, OptionFlag
 
 
 class CursorWrapper:
@@ -48,7 +47,7 @@ class CursorWrapper:
         The rowset only contains items that satisfy both filters.
 
         """
-        return self._csr_cmc.SetFilter(filter_text, FLAGS_UNUSED)
+        return self._csr_cmc.SetFilter(filter_text, OptionFlag.NONE)
 
     def set_filter_logic(self, logic_text: str):
         """
@@ -61,7 +60,7 @@ class CursorWrapper:
         Unless otherwise specified, the default logic is AND, AND, AND.
 
         """
-        res = self._csr_cmc.SetLogic(logic_text, FLAGS_UNUSED)
+        res = self._csr_cmc.SetLogic(logic_text, OptionFlag.NONE)
         if not res:
             logger.error(f'Unable to set filter logic to {logic_text}')
             raise ValueError('Unable to set filter logic')
@@ -78,7 +77,7 @@ class CursorWrapper:
         All other cursor modes default to ascending sort by the Name field.
 
         """
-        res = self._csr_cmc.SetSort(sort_text, FLAGS_UNUSED)
+        res = self._csr_cmc.SetSort(sort_text, OptionFlag.NONE)
         if not res:
             logger.error(f'Unable to set sort to {sort_text}')
             raise ValueError('Unable to sort')
@@ -87,7 +86,7 @@ class CursorWrapper:
         self,
         column_index: int,
         field_name: str,
-        flags: OptionFlagInt | None = OptionFlagInt.NONE,
+        flags: OptionFlag | None = OptionFlag.NONE,
     ) -> bool:
         """
         Defines the column set for the cursor.
@@ -183,7 +182,7 @@ class CursorWrapper:
         if limit > 5025:
             logger.warning(f'Limit of {limit} exceeds maximum of 5025 rows - truncating to 5025')
             limit = 5025
-        result = self._csr_cmc.GetQueryRowSet(limit, FLAGS_UNUSED)
+        result = self._csr_cmc.GetQueryRowSet(limit, OptionFlag.NONE)
         return rs.RowSetQuery(result)
 
     def get_query_row_set_by_id(self, row_id: str) -> rs.RowSetQuery:
@@ -203,7 +202,7 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, FLAGS_UNUSED))
+        res = rs.RowSetQuery(self._csr_cmc.GetQueryRowSetByID(row_id, OptionFlag.NONE))
         raise_for_one(res)
         return res
 
@@ -226,7 +225,7 @@ class CursorWrapper:
         When first created, each row is initialized to field default values.
 
         """
-        flags = OptionFlagInt.SHARED if shared else OptionFlagInt.NONE
+        flags = OptionFlag.SHARED if shared else OptionFlag.NONE
         if limit is None:
             limit = self.row_count
         res = rs.RowSetAdd(self._csr_cmc.GetAddRowSet(limit, flags.value))
@@ -248,7 +247,7 @@ class CursorWrapper:
 
         """
         limit = limit or self.row_count
-        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(limit, FLAGS_UNUSED))
+        return rs.RowSetEdit(self._csr_cmc.GetEditRowSet(limit, OptionFlag.NONE))
 
     def get_edit_row_set_by_id(
         self,
@@ -267,7 +266,7 @@ class CursorWrapper:
         The cursor's 'current row pointer' is not advanced.
 
         """
-        res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id, FLAGS_UNUSED))
+        res = rs.RowSetEdit(self._csr_cmc.GetEditRowSetByID(row_id, OptionFlag.NONE))
         raise_for_one(res)
         return res
 
@@ -288,7 +287,7 @@ class CursorWrapper:
         return rs.RowSetDelete(delset)
 
     def get_delete_row_set_by_id(
-        self, row_id: str, flags: OptionFlagInt = OptionFlagInt.NONE
+        self, row_id: str, flags: OptionFlag = OptionFlag.NONE
     ) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
@@ -320,7 +319,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveItem(category, row_id, FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveItem(category, row_id, OptionFlag.NONE)
 
     def set_active_date(self, active_date: str):
         """
@@ -333,7 +332,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDate(active_date, FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveDate(active_date, OptionFlag.NONE)
 
     def set_active_date_range(self, start: str, end: str):
         """
@@ -347,7 +346,7 @@ class CursorWrapper:
             bool: True on success, else False on error.
 
         """
-        return self._csr_cmc.SetActiveDateRange(start, end, FLAGS_UNUSED)
+        return self._csr_cmc.SetActiveDateRange(start, end, OptionFlag.NONE)
 
     def set_related_column(
         self,
@@ -355,7 +354,7 @@ class CursorWrapper:
         con_name: str,
         connected_cat: str,
         col_name: str,
-        flags: OptionFlagInt | None = OptionFlagInt.NONE,
+        flags: OptionFlag | None = OptionFlag.NONE,
     ):
         """
         Adds a related (indirect/connected field) column to the cursor.

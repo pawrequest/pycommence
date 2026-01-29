@@ -1,7 +1,9 @@
 from collections.abc import Sequence
 
 from pycommence.dde.types import DDERequestGet
-from pycommence.core.fields import DELIM
+from pycommence.pycommence_options import get_options
+
+DELIM = get_options().delim
 
 
 # -------------------------
@@ -18,112 +20,109 @@ def clarify_item_names(status: bool | None = None) -> DDERequestGet:
     return DDERequestGet(func_name='ClarifyItemNames', params=[True if status else False])
 
 
-def get_active_view_info(delim: str = DELIM) -> DDERequestGet:
+def active_view_info(delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetActiveViewInfo', params=[delim])
 
 
-def get_caller_id(category: str | None, phone_number: str, delim: str = DELIM) -> DDERequestGet:
+def caller_id(category: str | None, phone_number: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetCallerID', params=[category, phone_number, delim])
 
 
-def get_category_count() -> DDERequestGet:
+def category_count() -> DDERequestGet:
     return DDERequestGet(func_name='GetCategoryCount')
 
 
-def get_category_definition(category: str, delim: str = DELIM) -> DDERequestGet:
+def category_definition(category: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetCategoryDefinition', params=[category, delim])
 
 
-def get_category_names(delim: str = DELIM) -> DDERequestGet:
+def category_names(delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetCategoryNames', params=[delim])
 
 
-def get_connection_count(category: str) -> DDERequestGet:
+def connection_count(category: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetConnectionCount', params=[category])
 
 
-def get_connection_names(category: str, delim: str = DELIM, conn_cat_delim: str = DELIM) -> DDERequestGet:
+def connection_names(category: str, delim: str = DELIM, conn_cat_delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetConnectionNames', params=[category, delim, conn_cat_delim])
 
 
-def get_database(delim: str = DELIM) -> DDERequestGet:
+def database(delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetDatabase', params=[delim])
 
 
-def get_database_definition(delim: str = DELIM) -> DDERequestGet:
+def database_definition(delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetDatabaseDefinition', params=[delim])
 
 
-def get_desktop_count() -> DDERequestGet:
+def desktop_count() -> DDERequestGet:
     return DDERequestGet(func_name='GetDesktopCount')
 
 
-def get_desktop_names(delim: str = DELIM) -> DDERequestGet:
+def desktop_names(delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetDesktopNames', params=[delim])
 
 
-def get_field(category: str, item: str, field: str) -> DDERequestGet:
+def field(category: str, item: str, field: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetField', params=[category, item, field])
 
 
-def get_fields(category: str, item: str, fields: Sequence[str], delim: str = DELIM) -> DDERequestGet:
-    """
-    Docs: GetFields(Category, Item, n, Field_1..., Field_n, Delim)
-    """
+def fields(category: str, item: str, fields: Sequence[str], delim: str = DELIM) -> DDERequestGet:
     n = len(fields)
     params = [category, item, n] + list(fields) + [delim]
     return DDERequestGet(func_name='GetFields', params=params)
 
 
-def get_field_count(category: str) -> DDERequestGet:
+def field_count(category: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetFieldCount', params=[category])
 
 
-def get_field_definition(category: str, field: str, delim: str = DELIM) -> DDERequestGet:
+def field_definition(category: str, field: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetFieldDefinition', params=[category, field, delim])
 
 
-def get_field_names(category: str, delim: str = DELIM) -> DDERequestGet:
+def field_names(category: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetFieldNames', params=[category, delim])
 
 
-def get_field_to_file(category: str, item: str, field: str, filename: str) -> DDERequestGet:
+def field_to_file(category: str, item: str, field: str, filename: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetFieldToFile', params=[category, item, field, filename])
 
 
-def get_form_count(category: str) -> DDERequestGet:
+def form_count(category: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetFormCount', params=[category])
 
 
-def get_form_names(category: str, delim: str = DELIM) -> DDERequestGet:
+def form_names(category: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetFormNames', params=[category, delim])
 
 
-def get_image_field_count(category: str) -> DDERequestGet:
+def image_field_count(category: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetImageFieldCount', params=[category])
 
 
-def get_image_field_names(category: str, delim: str = DELIM) -> DDERequestGet:
+def image_field_names(category: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetImageFieldNames', params=[category, delim])
 
 
-def get_image_field_to_file(category: str, item: str, field: str, filename: str) -> DDERequestGet:
+def image_field_to_file(category: str, item: str, field: str, filename: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetImageFieldToFile', params=[category, item, field, filename])
 
 
-def get_item_count(category: str) -> DDERequestGet:
+def item_count(category: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetItemCount', params=[category], returns=[int])
 
 
-def get_item_names(category: str, delim: str | None = DELIM) -> DDERequestGet:
+def item_names(category: str, delim: str | None = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetItemNames', params=[category, delim])
 
 
-def get_last_error() -> DDERequestGet:
+def last_error() -> DDERequestGet:
     return DDERequestGet(func_name='GetLastError')
 
 
-def get_mark_item(category: str, item: str, clarify_value: str | None = None) -> DDERequestGet:
+def mark_item(category: str, item: str, clarify_value: str | None = None) -> DDERequestGet:
     """
     Docs: GetMarkItem(Category, Item, Clarify Value)
     Also supports: GetMarkItem("(-Me-)")
@@ -136,29 +135,29 @@ def mark_active_item() -> DDERequestGet:
     return DDERequestGet(func_name='MarkActiveItem')
 
 
-def get_phone_number(phone_number: str) -> DDERequestGet:
+def phone_number(phone_number: str) -> DDERequestGet:
     return DDERequestGet(func_name='GetPhoneNumber', params=[phone_number])
 
 
-def get_preference(setting: str, delim: str = DELIM) -> DDERequestGet:
+def preference(setting: str, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetPreference', params=[setting, delim])
 
 
-def get_reverse_name(name: str, pref_flag: int | None = None) -> DDERequestGet:
+def reverse_name(name: str, pref_flag: int | None = None) -> DDERequestGet:
     return DDERequestGet(func_name='GetReverseName', params=[name, pref_flag])
 
 
-def get_trigger_count() -> DDERequestGet:
+def trigger_count() -> DDERequestGet:
     return DDERequestGet(func_name='GetTriggerCount')
 
 
-def get_trigger_names(delim: str = DELIM) -> DDERequestGet:
+def trigger_names(delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetTriggerNames', params=[delim])
 
 
-def get_view_count(category: str | None = None) -> DDERequestGet:
+def view_count(category: str | None = None) -> DDERequestGet:
     return DDERequestGet(func_name='GetViewCount', params=[category])
 
 
-def get_view_names(category: str | None = None, delim: str = DELIM) -> DDERequestGet:
+def view_names(category: str | None = None, delim: str = DELIM) -> DDERequestGet:
     return DDERequestGet(func_name='GetViewNames', params=[category, delim])

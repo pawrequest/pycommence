@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field, model_validator
 
 from pycommence.core.types import ConnectedColumn
 
+# from pycommence.wrapper.const import ConnectedColumn
+
 FilterKind = Literal['F', 'CTI', 'CTCF', 'CTCTI']
 NotFlagType = Literal['Not', '']
 
@@ -37,6 +39,10 @@ class CmcFilter(BaseModel, ABC):
 
     def __str__(self):
         return f'{self.__class__.__name__}: col="{self.column}" condition="{self.condition}" value="{self.value}"'
+
+    @property
+    def get_params(self):
+        return [self.kind, self.not_flag, self._filter_str]
 
     @property
     def _filter_str(self):
@@ -134,7 +140,8 @@ class FilterArray(BaseModel):
 
     @property
     def view_filter_dde_params(self) -> list[tuple]:
-        return [(slot, fil.kind, fil.not_flag, fil.column, fil.condition, fil.value) for slot, fil in self.filters.items()]
+        return [(slot, fil.kind, fil.not_flag, fil.column, fil.condition, fil.value) for slot, fil in
+                self.filters.items()]
 
     def __bool__(self):
         return bool(self.filters)

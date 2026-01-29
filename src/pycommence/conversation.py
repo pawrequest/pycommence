@@ -3,10 +3,12 @@ from __future__ import annotations
 import pywintypes
 from loguru import logger
 
-from pycommence.core.fields import DELIM
 from pycommence.dde import DDEKind, DDEMessageBase
-from pycommence.dde.dde_errors import commence_pycom_error_code, PyCmcDDEError
-from pycommence.wrapper._icommence import ICommenceConversation
+from pycommence.dde.dde_errors import PyCmcDDEError, commence_pycom_error_code
+from pycommence.icommence.conversation import ICommenceConversation
+from pycommence.pycommence_options import get_options
+
+DELIM = get_options().delim
 
 
 def parse_com_error_code(args: tuple):
@@ -19,14 +21,14 @@ class ConversationAPI:
     """Thin Wrapper on Commence's Conversation object using DDE."""
 
     def __init__(self, cmc_conversation: ICommenceConversation):
-        self._conv_wrapper = cmc_conversation
+        self._conv = cmc_conversation
 
     def send_dde(self, cmd: str, kind: DDEKind = DDEKind.REQUEST) -> str | bool:
         try:
             if kind == DDEKind.EXECUTE:
-                return self._conv_wrapper.Execute(cmd)
+                return self._conv.Execute(cmd)
             elif kind == DDEKind.REQUEST:
-                return self._conv_wrapper.Request(cmd)
+                return self._conv.Request(cmd)
             else:
                 raise ValueError(f'Unknown DDE kind: {kind}')
         except pywintypes.com_error as e:
@@ -37,9 +39,9 @@ class ConversationAPI:
         logger.debug(f'Sending DDE message: {msg}')
         try:
             if msg.kind == DDEKind.EXECUTE:
-                res = self._conv_wrapper.Execute(str(msg))
+                res = self._conv.Execute(str(msg))
             elif msg.kind == DDEKind.REQUEST:
-                res = self._conv_wrapper.Request(str(msg))
+                res = self._conv.Request(str(msg))
             else:
                 raise ValueError(f'Unknown DDE kind: {msg.kind}')
         except pywintypes.com_error as e:

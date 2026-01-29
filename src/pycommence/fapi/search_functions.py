@@ -36,7 +36,9 @@ async def pycommence_search(
         q: SearchRequest = Depends(SearchRequest.from_query),
         pycmc: PyCommence = Depends(pycmc_f_query),
         dde_server: PyCmcDDEServer = Depends(dde_server_dep),
+        generate_table: bool = False,
 ) -> SearchResponse:
+    missing = 'generate' if generate_table else 'raise'
     table_type = get_or_create_table_type(dde_server, q.csrname)
     # table_type = get_table_type(q.csrname, mode='all', missing='raise')
     filter_array = FilterArray.from_filters(
