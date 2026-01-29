@@ -6,7 +6,7 @@ from sample_data import CONTACT_FIELD_NAMES, CONTACT_ITEM_NAMES
 
 
 def test_dde_field_count():
-    msg = msgs.request.get_field_count('Contact')
+    msg = msgs.get.get_field_count('Contact')
     cached = '[GetFieldCount("Contact")]'
     assert str(msg) == cached
     with pycommence_context() as p:
@@ -15,7 +15,7 @@ def test_dde_field_count():
 
 
 def test_dde_item_count():
-    msg = msgs.request.get_item_count('Contact')
+    msg = msgs.get.get_item_count('Contact')
     cached = '[GetItemCount("Contact")]'
     assert str(msg) == cached
     with pycommence_context() as p:
@@ -24,7 +24,7 @@ def test_dde_item_count():
 
 
 def test_dde_field_names():
-    msg = msgs.request.get_field_names('Contact')
+    msg = msgs.get.get_field_names('Contact')
     cached = f'[GetFieldNames("Contact","{DELIM}")]'
     assert str(msg) == cached
     with pycommence_context() as p:
@@ -33,7 +33,7 @@ def test_dde_field_names():
 
 
 def test_dde_item_names():
-    msg = msgs.request.get_item_names('Contact')
+    msg = msgs.get.get_item_names('Contact')
     with pycommence_context() as p:
         res = p.send_dde_msg(msg)
     assert res == CONTACT_ITEM_NAMES

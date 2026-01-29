@@ -1,3 +1,5 @@
+import threading
+from datetime import datetime
 
 CONTACT_ITEM_NAMES = ['Bezos.Jeff', 'Branson.Richard', 'Buffett.Warren', 'Carney.Steve', 'Carr.Brian',
                       'Douglas.Michael',
@@ -183,5 +185,5 @@ JEFF_KEY = JEFF_DICT.get('contactKey')
 FNAME = NEW_DICT.get('firstName')
 LNAME = NEW_DICT.get('lastName')
 NEW_KEY = NEW_DICT.get('contactKey')
-TEST_ITEM_NAME = 'TestItem'
-# TEST_ITEM_NAME = 'TestItem' + threading.current_thread().name + datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+# TEST_ITEM_NAME = 'TestItem'
+TEST_ITEM_NAME = 'TestItem' + threading.current_thread().name + datetime.now().strftime('%Y-%m-%d-%H-%M-%S')

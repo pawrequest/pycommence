@@ -2,7 +2,7 @@ from typing import Any
 
 from pycommence import PyCommence, pycommence_context
 from pycommence.dde.msgs import view as view_msgs, get as request_msgs
-from pycommence.dde.dde_errors import PyCommenceDDEError
+from pycommence.dde.dde_errors import PyCmcDDEError
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition, DELIM
 
 
@@ -27,7 +27,7 @@ def get_item_routine(category, pk_value) -> dict[str, str]:
                 chunk_res = p.send_dde_msg(chunk_msg)
                 for fname, fvalue in zip(fields_chunk, chunk_res):
                     item_dict[fname] = fvalue
-            except PyCommenceDDEError as e:
+            except PyCmcDDEError as e:
                 raise RuntimeError(
                     f'Failed to get fields for {category} where {primary_key} contains {pk_value}. Last attempted field: {last} of type {failed_type}'
                 ) from e

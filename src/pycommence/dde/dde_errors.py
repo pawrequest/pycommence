@@ -22,7 +22,7 @@ def commence_pycom_error_code(e: pywintypes.com_error) -> int:
     return int(code)
 
 
-class PyCommenceDDEError(PyCommenceError):
+class PyCmcDDEError(PyCommenceError):
     def __init__(self, cmd: str, code: int, msg: str | None = None, og_exception: Exception | None = None):
         self.cmd = cmd
         self.code = code
@@ -34,9 +34,14 @@ class PyCommenceDDEError(PyCommenceError):
         return f'DDE Error {self.code} for command "{self.cmd}": {self.msg} ({self.dde_msg})'
 
 
+class PyCmcDDENoConnectionError(PyCmcDDEError):
+    def __init__(self):
+        super().__init__(cmd='N/A', code=600, msg='DDE connection failed.')
+
+
 def raise_for_bad_dde(cmd: str, res):
     if isinstance(res, str) and res == '(Active item not found)':
-        raise PyCommenceDDEError(cmd=cmd, code=600)
+        raise PyCmcDDEError(cmd=cmd, code=610)
 
 
 def dde_handler(func: Callable):
@@ -56,12 +61,12 @@ def dde_handler(func: Callable):
         except pythoncom.error as e:
             long_code, basic_msg, code_tup, sometype, rest = e.args
             code = code_tup[0]
-            raise PyCommenceDDEError(cmd, code) from e
+            raise PyCmcDDEError(cmd, code) from e
 
         except dde.error as e:
             try:
-                code = self.last_error()
-                raise PyCommenceDDEError(cmd, code) from e
+                code = self._last_error_no_handler()
+                raise PyCmcDDEError(cmd, code) from e
             except Exception as e2:
                 if isinstance(e2, dde.error):
                     e.add_note('Additionally, failed to get DDE error code from server.')
@@ -105,5 +110,6 @@ DDEErrorDict = {
     202: 'Filter 2 has been invalidated',
     203: 'Filter 3 has been invalidated',
     204: 'Filter 4 has been invalidated',
-    600: 'PyCmc: Active Item not found',
+    600: 'Cannot Connect to server application',
+    610: 'PyCmc: Active Item not found',
 }

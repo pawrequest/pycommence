@@ -73,7 +73,7 @@ class PyCmcDDEServer(DDEServer):
         assert self.send_message(msgs.execute.execute_add_item(category, item_name, topic)) == EMPTY
         return True
 
-    def item_delete(self, category, item_name: str, topic:DDETopic) -> bool:
+    def item_delete(self, category, item_name: str, topic: DDETopic) -> bool:
         assert self.send_message(msgs.execute.execute_delete_item(category, item_name, topic)) == EMPTY
         return True
 

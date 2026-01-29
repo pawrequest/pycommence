@@ -5,7 +5,7 @@ from loguru import logger
 
 from pycommence.core.fields import DELIM
 from pycommence.dde import DDEKind, DDEMessageBase
-from pycommence.dde.dde_errors import commence_pycom_error_code, PyCommenceDDEError
+from pycommence.dde.dde_errors import commence_pycom_error_code, PyCmcDDEError
 from pycommence.wrapper._icommence import ICommenceConversation
 
 
@@ -31,7 +31,7 @@ class ConversationAPI:
                 raise ValueError(f'Unknown DDE kind: {kind}')
         except pywintypes.com_error as e:
             code = commence_pycom_error_code(e)
-            raise PyCommenceDDEError(cmd, code) from e
+            raise PyCmcDDEError(cmd, code) from e
 
     def send_dde_msg(self, msg: DDEMessageBase) -> str | bool:
         logger.debug(f'Sending DDE message: {msg}')
@@ -44,7 +44,7 @@ class ConversationAPI:
                 raise ValueError(f'Unknown DDE kind: {msg.kind}')
         except pywintypes.com_error as e:
             code = commence_pycom_error_code(e)
-            raise PyCommenceDDEError(str(msg), code) from e
+            raise PyCmcDDEError(str(msg), code) from e
         if isinstance(res, str) and DELIM in res:
             res = res.split(DELIM)
         return res

@@ -7,7 +7,7 @@ from loguru import logger
 
 from . import msgs
 from .types import DDEKind, DDEMessageBase, DDETopic, DDEExecuteGet, DDEExecuteBase, DDERequestBase
-from .dde_errors import PyCommenceDDEError, dde_handler
+from .dde_errors import PyCmcDDEError, dde_handler, PyCmcDDENoConnectionError
 from pycommence.core.fields import DELIM
 from pycommence.com.context import com_multithreaded_context
 
@@ -26,9 +26,12 @@ class DDEServer:
         self.options = options
         self._server = None
         self.connected = None
-        self._conversation = None
         self._lock = threading.RLock()
         self._com_context = None
+        self._conversation = None
+        # self.conversation = self._create_conversation()
+
+    # def __post_init__(self):
 
     @property
     def conversation(self):
@@ -40,6 +43,7 @@ class DDEServer:
         self._com_context = com_multithreaded_context()
         self._com_context.__enter__()
         self._create_server()
+        self.send_message(msgs.system.system_status())
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -89,16 +93,19 @@ class DDEServer:
         except (ValueError, TypeError):
             return res
 
-    def _last_error_no_lock(self) -> int:
-        try:
-            logger.debug('Getting last DDE error without lock')
-            if self.connected != DDETopic.SYSTEM:
-                self.conversation.ConnectTo(self.options.application_name, DDETopic.SYSTEM.value)
-            res = int(self.conversation.Request('GetLastError'))
-            return res
-        except Exception as e:
-            logger.error('Failed to get last DDE error without lock')
-            raise PyCommenceDDEError(cmd='GetLastError', code=-1, msg='Failed to get last DDE error') from e
+    def _last_error_no_handler(self) -> int:
+        with self._lock:
+            try:
+                if self.connected != DDETopic.GET:
+                    self.conversation.ConnectTo(self.options.application_name, DDETopic.GET.value)
+                res = int(self.conversation.Request('GetLastError'))
+                return res
+            except Exception as e:
+                if e.args[0] == 'ConnectTo failed':
+                    raise PyCmcDDENoConnectionError
+                logger.error('Failed to get last DDE error')
+                raise PyCmcDDEError(cmd='GetLastError', code=-1, msg='Failed to get last DDE error') from e
+
 
     @dde_handler
     def _create_server(self):
@@ -110,7 +117,7 @@ class DDEServer:
     @dde_handler
     def _create_conversation(self):
         with self._lock:
-            self._conversation = dde.CreateConversation(self._server)
+            self._conversation= dde.CreateConversation(self._server)
 
     @dde_handler
     def _connect_topic(self, topic: DDETopic):
