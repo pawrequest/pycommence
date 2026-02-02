@@ -1,9 +1,9 @@
 from pycommence.fapi.search_functions import pycommence_fetch, pycommence_search
-from pycommence.fapi.search_request_response import SearchResponse
+from pycommence.fapi.search_request_response import SearchRequest, SearchResponse
 from pycommence.core.row_data import RowData
 
 try:
-    from fastapi import APIRouter, Depends
+    from fastapi import APIRouter, Depends, Query
 except ImportError:
     raise ImportError('FastAPI is not installed.')
 
@@ -17,13 +17,24 @@ async def get_status():
 
 @router.get('/search')
 async def pycommence_search_endpoint(
-        search_response: SearchResponse = Depends(pycommence_search),
+        q: SearchRequest = Depends(SearchRequest.from_query),
+        auto_model: bool = Query(False)
 ) -> SearchResponse:
+    search_response = await pycommence_search(q=q, auto_model=auto_model)
     return search_response
+
+
+# @router.get('/search1')
+# async def pycommence_search_endpoint1(
+#         search_response: SearchResponse = Depends(pycommence_search),
+#
+# ) -> SearchResponse:
+#     return search_response
 
 
 @router.get('/get')
 async def pycommence_get_endpoint(
-        record: RowData = Depends(pycommence_fetch),
+        q: SearchRequest = Depends(SearchRequest.from_query),
 ) -> RowData:
+    record = await pycommence_fetch(q=q)
     return record

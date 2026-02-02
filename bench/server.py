@@ -1,3 +1,5 @@
+from loguru import logger
+
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition
 from pycommence.core.filters import CmcFilter, ConditionType, FieldFilter
 from pycommence.core.meta import generate_table_pydantic_model, get_table_type
@@ -5,6 +7,7 @@ from pycommence.dde import msgs
 from pycommence.dde._server import DDEServer
 from pycommence.dde.dde_errors import PyCmcDDEStatusError
 from pycommence.dde.types import DDEMessageBase, DDETopic, EMPTY
+from pycommence.conversation import ConversationAPI
 from pycommence.pycommence_options import get_options
 
 DELIM = get_options().delim
@@ -107,9 +110,10 @@ class PyCmcDDEServer(DDEServer):
         return True
 
 
-def get_or_create_table_type(self: PyCmcDDEServer, category: str):
+def get_or_create_table_type(self: ConversationAPI, category: str):
     table_type = get_table_type(category, 'all')
     if not table_type:
+        logger.info(f'No existing table type for category {category}, generating new one.')
         field_defs = self.category_field_definitions(category)
         table_type = generate_table_pydantic_model(category, category, field_defs)
     return table_type

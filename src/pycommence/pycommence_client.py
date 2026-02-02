@@ -11,7 +11,7 @@ from pycommence.core.exceptions import PyCommenceServerError
 from pycommence.dde import DDEMessageBase, DDETopic, msgs
 from pycommence.dde.dde_errors import dde_error_handler
 from pycommence.dde.types import EMPTY
-from pycommence.icommence.conversation import ConversationAPI
+from pycommence.conversation import ConversationAPI
 from pycommence.icommence.db import ICommenceDB
 from pycommence.pycommence_options import Options, get_options
 from pycommence.icommence.const import CursorType, OptionFlag
@@ -137,8 +137,7 @@ class PyCommenceClient(_PyCommenceClientConnector):
         conv = self.conversation(msg.topic)
         return conv.send_message(msg)
 
-    # ITEM
-    def item_read(self, category, name, fields: list[str] = None, topic: DDETopic = DDETopic.GET) -> dict[str, str]:
+    def item_read_dde(self, category, name, fields: list[str] = None, topic: DDETopic = DDETopic.GET) -> dict[str, str]:
         item_dict = {}
         field_names = fields if fields else self.conversation(topic).category_field_names(category)
         master_msg = msgs.get.fields(category=category, item=name, fields=field_names, delim=self.options.delim)
@@ -162,17 +161,17 @@ class PyCommenceClient(_PyCommenceClientConnector):
         assert len(item_dict) == len(field_names)
         return item_dict
 
-    def item_add(self, category, item_name: str, topic: DDETopic) -> bool:
+    def item_add_dde(self, category, item_name: str, topic: DDETopic) -> bool:
         msg = msgs.execute.add_item(category, item_name, topic)
         res = self.send_dde_message(msg)
         return res
 
-    def item_delete(self, category, item_name: str, topic: DDETopic) -> bool:
+    def item_delete_dde(self, category, item_name: str, topic: DDETopic) -> bool:
         msg = msgs.execute.delete_item(category, item_name, topic)
         res = self.send_dde_message(msg)
         return res
 
-    def item_edit(
+    def item_edit_dde(
             self,
             category,
             item_name: str,
@@ -184,3 +183,4 @@ class PyCommenceClient(_PyCommenceClientConnector):
             res = self.send_dde_message(msg)
             assert res is True
         return True
+

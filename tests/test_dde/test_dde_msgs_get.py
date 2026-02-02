@@ -1,6 +1,6 @@
 import pytest
 
-from pycommence.dde.server import DDEMessageBase, DDETopic
+from pycommence.dde import DDEMessageBase, DDETopic
 from pycommence.dde.msgs import get
 
 TESTCOUNT = 34 + 3

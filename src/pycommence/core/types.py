@@ -66,8 +66,8 @@ class ConnectedColumn:
 
 #
 # class PyCmcProtocol(Protocol):
-#     def item_add(self, category: str, item_name: str, topic: DDETopic) -> bool:
+#     def item_add_dde(self, category: str, item_name: str, topic: DDETopic) -> bool:
 #         ...
 #
-#     def item_delete(self, category: str, item_name: str, topic: DDETopic) -> bool:
+#     def item_delete_dde(self, category: str, item_name: str, topic: DDETopic) -> bool:
 #         ...

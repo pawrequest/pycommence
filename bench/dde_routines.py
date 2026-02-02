@@ -1,6 +1,5 @@
 from typing import Any
 
-from pycommence import PyCommence, pycommence_context
 from pycommence.dde.msgs import get as request_msgs, view as view_msgs
 from pycommence.dde.dde_errors import PyCmcDDEError
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition

@@ -1,6 +1,4 @@
-from conftest import get_pycmc
 from pycommence.core.meta import generate_table_pydantic_model
-from pycommence.core.fields import CmcDefsDict
 from pycommence.core.pagination import Pagination
 from pycommence.dde import DDETopic
 

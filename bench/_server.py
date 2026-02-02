@@ -5,9 +5,9 @@ import win32ui  # noqa before dde import to ensure proper initialization order
 import dde as pywindde
 from loguru import logger
 
-from . import msgs
-from .types import DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic, EMPTY
-from .dde_errors import PyCmcDDEError, PyCmcDDENoConnectionError, dde_error_handler
+from pycommence.dde import msgs
+from pycommence.dde.types import DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic, EMPTY
+from pycommence.dde.dde_errors import PyCmcDDEError, PyCmcDDENoConnectionError, dde_error_handler
 from pycommence.threads import com_context
 
 
