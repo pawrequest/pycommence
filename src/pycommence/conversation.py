@@ -77,7 +77,7 @@ class ConversationAPI:
         logger.debug(f'Sending DDE message: {msg}')
         with self._lock:
             res = self.conv.Execute(str(msg)) if msg.kind == DDEKind.EXECUTE else self.conv.Request(str(msg))
-        logger.debug(f'Received DDE response ({type(res).__name__}): {res}')
+        logger.debug(f'Received raw DDE response ({type(res).__name__}): {res}')
         if not isinstance(res, str | bool):
             raise PyCommenceServerError(f'Unexpected response type from DDE: {type(res).__name__}')
         return res
@@ -91,7 +91,7 @@ class ConversationAPI:
             if self.options.split_str_lists and self.options.delim in res:
                 res = res.split(self.options.delim)
         lentext = str(len(res)) if isinstance(res, Sequence) else 'N/A'
-        logger.debug(f'Received DDE response ({type(res).__name__}, len={lentext}): {res}')
+        logger.debug(f'Processed DDE response ({type(res).__name__}, len={lentext}): {res}')
         return res if res else EMPTY
 
     def status_check(self):

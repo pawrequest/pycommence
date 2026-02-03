@@ -53,7 +53,6 @@ def raise_for_bad_dde(cmd: str, res):
 
 
 def dde_error_handler(func: Callable):
-    """ Decorator to handle lock and DDE errors for DDEServer methods. First Arg must be DDEServer instance. """
 
     @wraps(func)
     def wrapper(*args, **kwargs):

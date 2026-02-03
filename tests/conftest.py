@@ -22,6 +22,14 @@ class Account(CommenceTable):
     name_field: ClassVar[str] = 'accountKey'
 
 
+@pytest.fixture(scope='function')
+def timed():
+    from time import time
+    start = time()
+    yield
+    end = time()
+    logger.debug(f'Test took {end - start:.4f} seconds')
+
 @pytest.fixture(scope='function', autouse=True)
 def delay_log(caplog):
     with caplog.at_level('DEBUG'):

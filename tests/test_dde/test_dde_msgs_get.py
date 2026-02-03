@@ -38,7 +38,7 @@ def test_get_category_count(pycmc_client):
     assert res
 
 
-def test_get_category_definition(pycmc_client):
+def test_get_category_definition(pycmc_client, timed):
     msg = get.category_definition('Contact')
     res = pycmc_client.send_dde_message(msg)
     assert res
@@ -96,7 +96,6 @@ def test_get_fields(pycmc_client):
     msg = get.fields('Contact', 'Musk.Elon', ['firstName', 'lastName'])
     res = pycmc_client.send_dde_message(msg)
     assert res == ['Elon', 'Musk']
-
 
 
 def test_get_field_count(pycmc_client):

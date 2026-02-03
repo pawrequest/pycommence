@@ -55,3 +55,9 @@ def test_edit_item(pycmc_client: PyCommenceClient):
         pycmc_client.conversation(DDETopic.VIEW).view_reset(category)
         item = pycmc_client.item_read_dde(category, TEST_ITEM_NAME)
         assert item['Notes'] == tstamp, 'Notes field not updated correctly'
+
+
+def test_get_category_field_def(pycmc_client: PyCommenceClient, timed):
+    category = 'Contact'
+    res = pycmc_client.conversation().category_field_definitions(category)
+    ...
