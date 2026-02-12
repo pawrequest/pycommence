@@ -74,9 +74,6 @@ class CommenceTable(BaseModel, ABC):
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
-        if getattr(cls, '__abstractmethods__', False):
-            logger.warning(f'SURPRISE!!! Not registering abstract table model: {cls.__name__}')
-            return
         if not getattr(cls, 'category', None):
             raise TypeError(f'{cls.__name__} must define category class variable')
         register_table(cls)
