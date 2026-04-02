@@ -1,8 +1,9 @@
 from loguru import logger
 
-from pycommence.icommence import ICommenceCursor, row_wrapper as rs
 from pycommence.core.exceptions import PyCommenceNotFoundError, PyCommenceServerError, raise_for_one
-from pycommence.icommence.const import SeekBookmark, OptionFlag
+from pycommence.icommence import ICommenceCursor
+from pycommence.icommence import row_wrapper as rs
+from pycommence.icommence.const import OptionFlag, SeekBookmark
 
 
 class CursorWrapper:
@@ -286,9 +287,7 @@ class CursorWrapper:
         delset = self._csr_cmc.GetDeleteRowSet(limit, 0)
         return rs.RowSetDelete(delset)
 
-    def get_delete_row_set_by_id(
-        self, row_id: str, flags: OptionFlag = OptionFlag.NONE
-    ) -> rs.RowSetDelete:
+    def get_delete_row_set_by_id(self, row_id: str, flags: OptionFlag = OptionFlag.NONE) -> rs.RowSetDelete:
         """
         Creates a rowset for deleting a particular row.
 

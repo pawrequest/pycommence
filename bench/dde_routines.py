@@ -1,8 +1,9 @@
 from typing import Any
 
-from pycommence.dde.msgs import get as request_msgs, view as view_msgs
-from pycommence.dde.dde_errors import PyCmcDDEError
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition
+from pycommence.dde.dde_errors import PyCmcDDEError
+from pycommence.dde.msgs import get as request_msgs
+from pycommence.dde.msgs import view as view_msgs
 from pycommence.pycommence_options import get_options
 
 MAX_FIELDS_CHUNK = 15  # undocumented limit in Commence DDE for GetFields
@@ -20,7 +21,7 @@ def get_item_routine(category, pk_value) -> dict[str, str]:
         to_fetch = list(field_defs_filtered.keys())
         item_dict = {}
         for start in range(0, len(to_fetch), MAX_FIELDS_CHUNK):
-            fields_chunk = to_fetch[start:start + MAX_FIELDS_CHUNK]
+            fields_chunk = to_fetch[start : start + MAX_FIELDS_CHUNK]
             try:
                 chunk_msg = request_msgs.fields(category, pk_value, fields_chunk, DELIM)
                 chunk_res = p.send_dde_msg(chunk_msg)
@@ -30,7 +31,7 @@ def get_item_routine(category, pk_value) -> dict[str, str]:
                 raise PyCmcDDEError(
                     cmd=chunk_msg.cmd,
                     code=e.code,
-                    msg=f'Failed to get fields for {category} where {primary_key} contains {pk_value}'
+                    msg=f'Failed to get fields for {category} where {primary_key} contains {pk_value}',
                 ) from e
         return item_dict
 
@@ -38,9 +39,9 @@ def get_item_routine(category, pk_value) -> dict[str, str]:
 def filter_by_pk_contains(category, p: PyCommence, pk_value, primary_key: str):
     set_category(category, p)
     msg = view_msgs.filter_(1, 'F', None, primary_key, 'Contains', pk_value)
-    assert p.send_dde_msg(
-        msg
-    ) == 'OK', f'Failed to set view filter for {category} where {primary_key} contains {pk_value}'
+    assert (
+        p.send_dde_msg(msg) == 'OK'
+    ), f'Failed to set view filter for {category} where {primary_key} contains {pk_value}'
 
 
 def set_category(category, p: PyCommence):
@@ -50,15 +51,15 @@ def set_category(category, p: PyCommence):
 
 def get_pk(category, field_defs_dict: dict[str, CmcFieldDefinition]) -> str:
     _primary_keys = [fname for fname, finfo in field_defs_dict.items() if finfo.type.alias == 'NAME']
-    assert len(
-        _primary_keys
-    ) == 1, f'Expected exactly one primary key field for category {category}, found {_primary_keys}'
+    assert (
+        len(_primary_keys) == 1
+    ), f'Expected exactly one primary key field for category {category}, found {_primary_keys}'
     primary_key: str = _primary_keys[0]
     return primary_key
 
 
 def fetch_category_field_definitions(category: str, pycmc: PyCommence | None = None) -> CmcDefsDict:
-    """ Gets PyCommence connection and retrieves field definitions via DDE for a given category."""
+    """Gets PyCommence connection and retrieves field definitions via DDE for a given category."""
     fields_definitions = CmcDefsDict()
     # noinspection PydanticTypeChecker
     with pycmc or pycommence_context() as p:

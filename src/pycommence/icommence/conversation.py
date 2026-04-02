@@ -23,11 +23,9 @@ class ICommenceConversation(DispatchBaseClass):
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
             raise TypeError('This object does not support enumeration')
         return client.util.Iterator(ob, None)
-
-

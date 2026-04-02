@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from functools import wraps
 from collections.abc import Callable
-import win32ui # noqa
+from functools import wraps
+
 import dde as pywindde
 import pythoncom
 import pywintypes
+import win32ui  # noqa
 
 from pycommence.core.exceptions import PyCommenceError
 
@@ -53,7 +54,6 @@ def raise_for_bad_dde(cmd: str, res):
 
 
 def dde_error_handler(func: Callable):
-
     @wraps(func)
     def wrapper(*args, **kwargs):
         self = args[0]
@@ -83,8 +83,9 @@ def dde_error_handler(func: Callable):
 
     return wrapper
 
+
 def dde_handler_old(func: Callable):
-    """ Decorator to handle lock and DDE errors for DDEServer methods. First Arg must be DDEServer instance. """
+    """Decorator to handle lock and DDE errors for DDEServer methods. First Arg must be DDEServer instance."""
 
     @wraps(func)
     def wrapper(*args, **kwargs):

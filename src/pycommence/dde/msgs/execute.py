@@ -2,16 +2,17 @@
 DDE Execute functions for Commence DDE interface.
 - for ViewData and GetData Topics
 """
+
 from __future__ import annotations
 
 from pycommence.dde.types import DDEExecuteBase, DDETopic
 
 
 def add_item(
-        category: str,
-        item: str,
-        topic: DDETopic,
-        clarify_value: str | None = None,
+    category: str,
+    item: str,
+    topic: DDETopic,
+    clarify_value: str | None = None,
 ) -> DDEExecuteBase:
     params = [category, item, clarify_value]  # if clarify_value is not None else [category, item]
     msg = DDEExecuteBase(func_name='AddItem', params=params)
@@ -19,7 +20,11 @@ def add_item(
     return msg
 
 
-def add_shared_item(category: str, item: str, topic: DDETopic, ) -> DDEExecuteBase:
+def add_shared_item(
+    category: str,
+    item: str,
+    topic: DDETopic,
+) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='AddSharedItem', params=[category, item], topic=topic)
 
 
@@ -28,32 +33,22 @@ def append_text(category: str, item: str, field: str, text: str, topic: DDETopic
 
 
 def assign_connection(
-        from_category: str,
-        from_item: str,
-        connection_name: str,
-        to_category: str,
-        to_item: str,
-        topic: DDETopic
+    from_category: str, from_item: str, connection_name: str, to_category: str, to_item: str, topic: DDETopic
 ) -> DDEExecuteBase:
     return DDEExecuteBase(
         func_name='AssignConnection',
         params=[from_category, from_item, connection_name, to_category, to_item],
-        topic=topic
+        topic=topic,
     )
 
 
 def unassign_connection(
-        from_category: str,
-        from_item: str,
-        connection_name: str,
-        to_category: str,
-        to_item: str,
-        topic: DDETopic
+    from_category: str, from_item: str, connection_name: str, to_category: str, to_item: str, topic: DDETopic
 ) -> DDEExecuteBase:
     return DDEExecuteBase(
         func_name='UnassignConnection',
         params=[from_category, from_item, connection_name, to_category, to_item],
-        topic=topic
+        topic=topic,
     )
 
 
@@ -95,12 +90,12 @@ def show_view(view_name: str, topic: DDETopic, force_new_copy: int | None = None
 
 
 def get_view_to_file(
-        view_name: str,
-        mode: int,
-        param1: str | None,
-        param2: str | None,
-        filename: str,
-        topic: DDETopic,
+    view_name: str,
+    mode: int,
+    param1: str | None,
+    param2: str | None,
+    filename: str,
+    topic: DDETopic,
 ) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='GetViewToFile', params=[view_name, mode, param1, param2, filename], topic=topic)
 
@@ -138,6 +133,7 @@ def log_phone_call(*category_item_pairs: str) -> DDEExecuteBase:
     if len(category_item_pairs) < 2 or (len(category_item_pairs) % 2) != 0:
         raise ValueError('LogPhoneCall requires an even number of args: Category, Item pairs.')
     return DDEExecuteBase(func_name='LogPhoneCall', params=list(category_item_pairs))
+
 
 # """
 # DDE Execute functions for Commence DDE interface.

@@ -83,6 +83,7 @@ class CmcFieldDefinition:
 
 class CmcDefsDict(dict[str, CmcFieldDefinition]):
     """Field Name to CmcFieldDefinition."""
+
     _name_field: str | None = None
 
     def name_field(self, error: Literal['raise', 'ignore'] = 'raise') -> str | None:
@@ -142,7 +143,7 @@ DATA_TYPES: list[CmcDataType] = [
     CmcDataType(22, 'SELECTION', str),
     CmcDataType(23, 'EMAIL', str),
     CmcDataType(24, 'URL', str),
-    CmcDataType(17, 'CONNECTION', str)
+    CmcDataType(17, 'CONNECTION', str),
 ]
 INT_TO_DEF = {fd.int_value: fd for fd in DATA_TYPES}
 ALIAS_TO_DEF = {fd.alias: fd for fd in DATA_TYPES}

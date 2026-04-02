@@ -101,11 +101,9 @@ def _dde_format_param(value: DDEParam) -> str:
 class DDEServerProtocol(Protocol):
     _lock: threading.Lock
 
-    def send_message(self, msg: DDEMessageBase) -> str | list[str] | bool:
-        ...
+    def send_message(self, msg: DDEMessageBase) -> str | list[str] | bool: ...
 
-    def last_error(self) -> int:
-        ...
+    def last_error(self) -> int: ...
 
 
 EMPTY = 'empty'

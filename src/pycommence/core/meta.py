@@ -22,8 +22,9 @@ def register_table(cls: 'type[CommenceTable] | type[CommenceTableGenerated]'):
         TABLE_TYPE_REGISTER[str(cls.category)] = cls
 
 
-def get_table_type(table_name: str, mode: FetchMode = 'manual', missing: HandleMissing = 'ignore') \
-        -> type['CommenceTableGenerated'] | type['CommenceTable'] | None:
+def get_table_type(
+    table_name: str, mode: FetchMode = 'manual', missing: HandleMissing = 'ignore'
+) -> type['CommenceTableGenerated'] | type['CommenceTable'] | None:
     register = None
     match mode:
         case 'auto':
@@ -69,9 +70,9 @@ class CommenceTable(BaseModel, ABC):
 
 
 def generate_table_pydantic_model(
-        name: str,
-        category: str,
-        field_def_dict: CmcDefsDict = None,
+    name: str,
+    category: str,
+    field_def_dict: CmcDefsDict = None,
 ) -> type[CommenceTableGenerated]:
     """Dynamically generate a CommenceTable subclass."""
     if existing_type := get_table_type(name, mode='auto'):

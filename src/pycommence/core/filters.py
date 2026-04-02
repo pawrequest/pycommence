@@ -140,8 +140,9 @@ class FilterArray(BaseModel):
 
     @property
     def view_filter_dde_params(self) -> list[tuple]:
-        return [(slot, fil.kind, fil.not_flag, fil.column, fil.condition, fil.value) for slot, fil in
-                self.filters.items()]
+        return [
+            (slot, fil.kind, fil.not_flag, fil.column, fil.condition, fil.value) for slot, fil in self.filters.items()
+        ]
 
     def __bool__(self):
         return bool(self.filters)

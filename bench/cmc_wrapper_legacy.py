@@ -8,11 +8,10 @@ from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from pycommence.dde import DDETopic
-from pycommence.core.exceptions import PyCommenceServerError
-from pycommence.icommence.const import OptionFlag
-from pycommence.icommence.const import CursorType
 from pycommence.conversation import ConversationAPI
+from pycommence.core.exceptions import PyCommenceServerError
+from pycommence.dde import DDETopic
+from pycommence.icommence.const import CursorType, OptionFlag
 from pycommence.icommence.cursor_wrapper import CursorWrapper
 from pycommence.icommence.db import ICommenceDB
 
@@ -46,7 +45,7 @@ class PyCommenceConnector:
                 pythoncom.CoInitializeEx(pythoncom.COINIT_APARTMENTTHREADED)
                 com_inited = True
 
-            except pythoncom.com_error as e:
+            except pythoncom.com_error:
                 pass
 
             if self.commence_app is not None:
@@ -92,11 +91,11 @@ class PyCommenceAPI(PyCommenceConnector):
     _version_ext: str | None = None
 
     def establish_cursor(
-            self,
-            name: str | None = None,
-            mode: CursorType = CursorType.CATEGORY,
-            pilot: bool = False,
-            internet: bool = False,
+        self,
+        name: str | None = None,
+        mode: CursorType = CursorType.CATEGORY,
+        pilot: bool = False,
+        internet: bool = False,
     ) -> CursorWrapper:
         """Create a cursor wrapper.
 
@@ -142,7 +141,7 @@ class PyCommenceAPI(PyCommenceConnector):
             if conversation_obj is None:
                 raise ValueError(f'Could not create conversation object for {application_name}!{topic}')
             return ConversationAPI(conversation_obj)
-        except Exception as e:
+        except Exception:
             raise
 
         # com_inited = False
@@ -159,7 +158,7 @@ class PyCommenceAPI(PyCommenceConnector):
         #         pythoncom.CoUninitialize()
 
     def establish_conversation_raw(
-            self, topic: DDETopic, application_name: _t.Literal['Commence'] = 'Commence'
+        self, topic: DDETopic, application_name: _t.Literal['Commence'] = 'Commence'
     ) -> ConversationAPI:
         conversation_obj = self.commence_app.GetConversation(application_name, topic)
         if conversation_obj is None:

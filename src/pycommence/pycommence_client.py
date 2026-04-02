@@ -1,21 +1,20 @@
 import threading
 from typing import cast
 
-from win32com.client import Dispatch
 from loguru import logger
+from win32com.client import Dispatch
 from win32com.universal import com_error
 
-from pycommence.cursor import CursorAPI
-from pycommence.threads import com_context
+from pycommence.conversation import ConversationAPI
 from pycommence.core.exceptions import PyCommenceServerError
+from pycommence.cursor import CursorAPI
 from pycommence.dde import DDEMessageBase, DDETopic, msgs
 from pycommence.dde.dde_errors import dde_error_handler
-from pycommence.dde.types import EMPTY
-from pycommence.conversation import ConversationAPI
-from pycommence.icommence.db import ICommenceDB
-from pycommence.pycommence_options import Options, get_options
 from pycommence.icommence.const import CursorType, OptionFlag
 from pycommence.icommence.cursor_wrapper import CursorWrapper
+from pycommence.icommence.db import ICommenceDB
+from pycommence.pycommence_options import Options, get_options
+from pycommence.threads import com_context
 
 
 class _PyCommenceClientConnector:
@@ -72,7 +71,9 @@ class _PyCommenceClientConnector:
 
     def _sole_conversation_topic(self) -> DDETopic:
         if not len(self._conversations) == 1:
-            raise ValueError(f'Conversation topic must be specified if multiple or zero conversations exist.{self._conversations=}')
+            raise ValueError(
+                f'Conversation topic must be specified if multiple or zero conversations exist.{self._conversations=}'
+            )
         return next(iter(self._conversations.keys()))
 
     def _create_conversation(self, topic: DDETopic) -> ConversationAPI:
@@ -98,11 +99,11 @@ class _PyCommenceClientConnector:
         return self.cursors[csrname]
 
     def _create_cursor(
-            self,
-            name: str | None = None,
-            mode: CursorType = CursorType.CATEGORY,
-            pilot: bool = False,
-            internet: bool = False,
+        self,
+        name: str | None = None,
+        mode: CursorType = CursorType.CATEGORY,
+        pilot: bool = False,
+        internet: bool = False,
     ) -> CursorAPI:
         if pilot and internet:
             raise ValueError('Only one of pilot or internet can be set')
@@ -148,13 +149,8 @@ class PyCommenceClient(_PyCommenceClientConnector):
                 item_dict[attr] = value
         else:
             for start in range(0, len(field_names), self.options.fields_chunk):
-                fields_chunk = field_names[start:start + self.options.fields_chunk]
-                chunk_msg = msgs.get.fields(
-                    category=category,
-                    item=name,
-                    fields=fields_chunk,
-                    delim=self.options.delim
-                )
+                fields_chunk = field_names[start : start + self.options.fields_chunk]
+                chunk_msg = msgs.get.fields(category=category, item=name, fields=fields_chunk, delim=self.options.delim)
                 chunk_res = self.send_dde_message(chunk_msg)
                 for attr, value in zip(fields_chunk, chunk_res):
                     item_dict[attr] = value
@@ -172,15 +168,10 @@ class PyCommenceClient(_PyCommenceClientConnector):
         return res
 
     def item_edit_dde(
-            self,
-            category,
-            item_name: str,
-            field_updates: dict[str, str],
-            topic: DDETopic = DDETopic.GET
+        self, category, item_name: str, field_updates: dict[str, str], topic: DDETopic = DDETopic.GET
     ) -> bool:
         for field_name, field_value in field_updates.items():
             msg = msgs.execute.edit_item(category, item_name, field_name, field_value, topic)
             res = self.send_dde_message(msg)
             assert res is True
         return True
-

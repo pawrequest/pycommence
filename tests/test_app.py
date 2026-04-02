@@ -1,8 +1,7 @@
 import pytest
+from conftest import Contact
 from starlette.testclient import TestClient
 
-from conftest import Contact
-from pycommence.conversation import get_or_create_table_type
 from pycommence.fapi.app import app
 
 
@@ -26,7 +25,6 @@ def test_get_one(client):
     contact = Contact.model_validate(data_dict)
     assert contact.firstName == 'Jeff'
     ...
-
 
 
 # def test_get_one_auto(client):

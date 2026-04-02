@@ -81,9 +81,7 @@ class ICommenceCursor(DispatchBaseClass):
         return cast('ICommenceQueryRowSet', cast(object, ret))
 
     # Result is of type ICommenceQueryRowSet
-    def GetQueryRowSetByID(
-            self, pRowID, flags
-    ) -> 'ICommenceQueryRowSet':
+    def GetQueryRowSetByID(self, pRowID, flags) -> 'ICommenceQueryRowSet':
         ret = self._oleobj_.InvokeTypes(27, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags)
         if ret is not None:
             ret = Dispatch(ret, 'GetQueryRowSetByID', '{C5D7DAE2-9BEC-11D1-99CC-00C04FD3695E}')
@@ -113,7 +111,14 @@ class ICommenceCursor(DispatchBaseClass):
     def SetLogic(self, pLogic, flags: OptionFlag = OptionFlag.NONE):
         return self._oleobj_.InvokeTypes(21, LCID, 1, (11, 0), ((8, 1), (3, 1)), pLogic, flags)
 
-    def SetRelatedColumn(self, nColumn, pConnName, pCatName, pName, flags, ):
+    def SetRelatedColumn(
+        self,
+        nColumn,
+        pConnName,
+        pCatName,
+        pName,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(
             36,
             LCID,
@@ -124,7 +129,8 @@ class ICommenceCursor(DispatchBaseClass):
             pConnName,
             pCatName,
             pName,
-            flags, )
+            flags,
+        )
 
     def SetSort(self, pSort, flags: OptionFlag = OptionFlag.NONE):
         return self._oleobj_.InvokeTypes(22, LCID, 1, (11, 0), ((8, 1), (3, 1)), pSort, flags)
@@ -147,7 +153,7 @@ class ICommenceCursor(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:

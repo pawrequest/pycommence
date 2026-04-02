@@ -25,7 +25,7 @@ RowSetType = ICommenceEditRowSet | ICommenceQueryRowSet | ICommenceAddRowSet | I
 DELIM = get_options().delim
 
 
-class RowSetBase[T:RowSetType](ABC):
+class RowSetBase[T: RowSetType](ABC):
     def __init__(self, cmc_rs: T):
         """
         Args:
@@ -93,10 +93,10 @@ class RowSetBase[T:RowSetType](ABC):
         return self._rs.GetColumnIndex(label, flags)
 
     def get_row(
-            self,
-            row_index: int,
-            delim: str = ';',
-            cannonical: bool = True,
+        self,
+        row_index: int,
+        delim: str = ';',
+        cannonical: bool = True,
     ) -> str:
         """
         Retrieves the values of the specified row.
@@ -187,7 +187,7 @@ class RowSetQuery(RowSetBase):
 
 
 class RowSetModifies(RowSetBase):
-    """ adds functionality to modify rows """ ""
+    """ adds functionality to modify rows """ ''
 
     def modify_value(self, row_index: int, column_index: int, value: str) -> bool:
         """

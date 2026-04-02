@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
-from pycommence.icommence.db import ICommenceDB
 from pycommence.icommence.const import LCID, OptionFlag
+from pycommence.icommence.db import ICommenceDB
 
 if TYPE_CHECKING:
     pass
@@ -28,13 +28,19 @@ class IApp(DispatchBaseClass):
 
     def quit(self):
         """method quit"""
-        return self._oleobj_.InvokeTypes(3, LCID, 1, (24, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            3,
+            LCID,
+            1,
+            (24, 0),
+            (),
+        )
 
     _prop_map_get_ = {}
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -73,7 +79,7 @@ class ICmcApplication(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -86,10 +92,22 @@ class IConnOA(DispatchBaseClass):
     coclass_clsid = None
 
     def Clear(self):
-        return self._oleobj_.InvokeTypes(10, LCID, 1, (11, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            10,
+            LCID,
+            1,
+            (11, 0),
+            (),
+        )
 
     def ClearAll(self):
-        return self._oleobj_.InvokeTypes(11, LCID, 1, (11, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            11,
+            LCID,
+            1,
+            (11, 0),
+            (),
+        )
 
     def ClearConnection(self, ItemName, Clarify):
         return self._oleobj_.InvokeTypes(12, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify)
@@ -99,17 +117,32 @@ class IConnOA(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(14, LCID, 1, (8, 0), ((8, 1),), FieldName)
 
     def RestoreFilter(self):
-        return self._oleobj_.InvokeTypes(18, LCID, 1, (11, 0), (), )
-
-    def SetActiveDate(self, sDate, flags: OptionFlag = OptionFlag.NONE):
         return self._oleobj_.InvokeTypes(
-            16, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags
+            18,
+            LCID,
+            1,
+            (11, 0),
+            (),
         )
 
-    def SetActiveDateRange(self, startDate, endDate, flags, ):
+    def SetActiveDate(self, sDate, flags: OptionFlag = OptionFlag.NONE):
+        return self._oleobj_.InvokeTypes(16, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags)
+
+    def SetActiveDateRange(
+        self,
+        startDate,
+        endDate,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(17, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags)
 
-    def SetActiveItem(self, pCategoryName, ItemName, Clarify, flags, ):
+    def SetActiveItem(
+        self,
+        pCategoryName,
+        ItemName,
+        Clarify,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(
             15,
             LCID,
@@ -119,12 +152,18 @@ class IConnOA(DispatchBaseClass):
             pCategoryName,
             ItemName,
             Clarify,
-            flags, )
+            flags,
+        )
 
     def SetConnection(self, ItemName, Clarify):
         return self._oleobj_.InvokeTypes(13, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify)
 
-    def SetFilterKeyword(self, sKeyword, sValue, flags, ):
+    def SetFilterKeyword(
+        self,
+        sKeyword,
+        sValue,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(19, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), sKeyword, sValue, flags)
 
     _prop_map_get_ = {
@@ -147,7 +186,7 @@ class IConnOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -168,10 +207,20 @@ class IControlOA(DispatchBaseClass):
             'ActiveXGetProperty',
             None,
             PropertyName,
-            Parameter1, )
+            Parameter1,
+        )
 
     def ActiveXMethod(self, MethodName, ParameterArr):
-        return self._ApplyTypes_(4, 1, (12, 0), ((8, 1), (8204, 3)), 'ActiveXMethod', None, MethodName, ParameterArr, )
+        return self._ApplyTypes_(
+            4,
+            1,
+            (12, 0),
+            ((8, 1), (8204, 3)),
+            'ActiveXMethod',
+            None,
+            MethodName,
+            ParameterArr,
+        )
 
     def ActiveXSetProperty(self, PropertyName, Parameter1):
         return self._oleobj_.InvokeTypes(3, LCID, 1, (11, 0), ((8, 1), (16396, 1)), PropertyName, Parameter1)
@@ -184,7 +233,7 @@ class IControlOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -208,7 +257,7 @@ class IDatabaseOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -242,7 +291,7 @@ class IFieldOA(DispatchBaseClass):
         return int(self.__call__(*args))
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -255,10 +304,22 @@ class IFormOA(DispatchBaseClass):
     coclass_clsid = IID('{654E7741-2AB6-11D0-8A93-444553540000}')
 
     def Abort(self):
-        return self._oleobj_.InvokeTypes(25, LCID, 1, (11, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            25,
+            LCID,
+            1,
+            (11, 0),
+            (),
+        )
 
     def Cancel(self):
-        return self._oleobj_.InvokeTypes(24, LCID, 1, (11, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            24,
+            LCID,
+            1,
+            (11, 0),
+            (),
+        )
 
     # Result is of type IConnOA
     def Connection(self, ConnectionName, CategoryName):
@@ -288,7 +349,13 @@ class IFormOA(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(27, LCID, 1, (24, 0), ((8, 1),), TabName)
 
     def Save(self):
-        return self._oleobj_.InvokeTypes(23, LCID, 1, (11, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            23,
+            LCID,
+            1,
+            (11, 0),
+            (),
+        )
 
     def SetShared(self, Value):
         return self._oleobj_.InvokeTypes(21, LCID, 1, (11, 0), ((3, 1),), Value)
@@ -334,7 +401,7 @@ class IFormOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -343,20 +410,20 @@ class IFormOA(DispatchBaseClass):
 
 
 class IFullControl(DispatchBaseClass):
-    'IFullControl Interface'
+    "IFullControl Interface"
 
     CLSID = IID('{BE0B47E8-0BD2-4114-923E-EEFFEB740942}')
     coclass_clsid = IID('{789D254B-2D9B-487C-BABF-89D0EF6BD76C}')
 
     def myfunction(self, x, y):
-        'method myfunction'
+        "method myfunction"
         return self._oleobj_.InvokeTypes(1, LCID, 1, (24, 0), ((3, 1), (3, 1)), x, y)
 
     _prop_map_get_ = {}
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -365,7 +432,7 @@ class IFullControl(DispatchBaseClass):
 
 
 class ISimple(DispatchBaseClass):
-    'ISimple Interface'
+    "ISimple Interface"
 
     CLSID = IID('{1C9DF726-86D4-4C5B-8398-7418F0903597}')
     coclass_clsid = IID('{DADC9CCF-FA28-4738-B142-B4CBD17267A6}')
@@ -374,11 +441,23 @@ class ISimple(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(3, LCID, 1, (24, 0), ((3, 0), (16396, 0)), id, pVarResult)
 
     def Test(self):
-        return self._oleobj_.InvokeTypes(1, LCID, 1, (24, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            1,
+            LCID,
+            1,
+            (24, 0),
+            (),
+        )
 
     def Version(self):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(2, LCID, 1, (8, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            2,
+            LCID,
+            1,
+            (8, 0),
+            (),
+        )
 
     _prop_map_get_ = {
         'Application': (5, 2, (9, 0), (), 'Application', None),
@@ -389,7 +468,7 @@ class ISimple(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -398,13 +477,19 @@ class ISimple(DispatchBaseClass):
 
 
 class IUIObj(DispatchBaseClass):
-    'IUIObj Interface'
+    "IUIObj Interface"
 
     CLSID = IID('{2BAE3CB5-A80C-11D4-A632-0040D0051497}')
     coclass_clsid = IID('{2BAE3CB6-A80C-11D4-A632-0040D0051497}')
 
     def Application(self):
-        ret = self._oleobj_.InvokeTypes(3, LCID, 1, (9, 0), (), )
+        ret = self._oleobj_.InvokeTypes(
+            3,
+            LCID,
+            1,
+            (9, 0),
+            (),
+        )
         if ret is not None:
             ret = Dispatch(ret, 'Application', None)
         return ret
@@ -413,17 +498,35 @@ class IUIObj(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(5, LCID, 1, (24, 0), ((16392, 0),), bstrVal)
 
     def GoToURL(self):
-        return self._oleobj_.InvokeTypes(2, LCID, 1, (24, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            2,
+            LCID,
+            1,
+            (24, 0),
+            (),
+        )
 
     def HelloHTML(self):
-        return self._oleobj_.InvokeTypes(1, LCID, 1, (24, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            1,
+            LCID,
+            1,
+            (24, 0),
+            (),
+        )
 
     def OnClick(self, pdispBody, varColor):
         return self._oleobj_.InvokeTypes(1610743808, LCID, 1, (24, 0), ((9, 1), (12, 1)), pdispBody, varColor)
 
     def Test(self):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(4, LCID, 1, (8, 0), (), )
+        return self._oleobj_.InvokeTypes(
+            4,
+            LCID,
+            1,
+            (8, 0),
+            (),
+        )
 
     def clickIn(self, x, y):
         return self._oleobj_.InvokeTypes(6, LCID, 1, (24, 0), ((3, 1), (3, 1)), x, y)
@@ -432,7 +535,7 @@ class IUIObj(DispatchBaseClass):
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -448,7 +551,7 @@ class Isample(DispatchBaseClass):
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -457,7 +560,7 @@ class Isample(DispatchBaseClass):
 
 
 class _DFormOAEvents:
-    'Event interface for FormOA object'
+    "Event interface for FormOA object"
 
     CLSID = CLSID_Sink = IID('{654E7742-2AB6-11D0-8A93-444553540000}')
     coclass_clsid = IID('{654E7741-2AB6-11D0-8A93-444553540000}')
@@ -487,9 +590,7 @@ class _DFormOAEvents:
 
             cpc = oobj._oleobj_.QueryInterface(pythoncom.IID_IConnectionPointContainer)
             cp = cpc.FindConnectionPoint(self.CLSID_Sink)
-            cookie = cp.Advise(
-                win32com.server.util.wrap(self, usePolicy=EventHandlerPolicy)
-            )
+            cookie = cp.Advise(win32com.server.util.wrap(self, usePolicy=EventHandlerPolicy))
             self._olecp, self._olecp_cookie = cp, cookie
 
     def __del__(self):
@@ -500,7 +601,12 @@ class _DFormOAEvents:
 
     def close(self):
         if self._olecp is not None:
-            cp, cookie, self._olecp, self._olecp_cookie = (self._olecp, self._olecp_cookie, None, None,)
+            cp, cookie, self._olecp, self._olecp_cookie = (
+                self._olecp,
+                self._olecp_cookie,
+                None,
+                None,
+            )
             cp.Unadvise(cookie)
 
     def _query_interface_(self, iid):
@@ -555,7 +661,12 @@ class _IFullControlEvents:
 
     def close(self):
         if self._olecp is not None:
-            cp, cookie, self._olecp, self._olecp_cookie = (self._olecp, self._olecp_cookie, None, None,)
+            cp, cookie, self._olecp, self._olecp_cookie = (
+                self._olecp,
+                self._olecp_cookie,
+                None,
+                None,
+            )
             cp.Unadvise(cookie)
 
     def _query_interface_(self, iid):

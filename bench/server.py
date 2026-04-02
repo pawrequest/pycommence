@@ -1,13 +1,13 @@
 from loguru import logger
 
+from pycommence.conversation import ConversationAPI
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition
 from pycommence.core.filters import CmcFilter, ConditionType, FieldFilter
 from pycommence.core.meta import generate_table_pydantic_model, get_table_type
 from pycommence.dde import msgs
 from pycommence.dde._server import DDEServer
 from pycommence.dde.dde_errors import PyCmcDDEStatusError
-from pycommence.dde.types import DDEMessageBase, DDETopic, EMPTY
-from pycommence.conversation import ConversationAPI
+from pycommence.dde.types import EMPTY, DDEMessageBase, DDETopic
 from pycommence.pycommence_options import get_options
 
 DELIM = get_options().delim
@@ -22,11 +22,11 @@ class PyCmcDDEServer(DDEServer):
     def status_check(self):
         try:
             assert self.send_message(msgs.system.status()) == 'Ready'
-        except AssertionError as e:
+        except AssertionError:
             raise PyCmcDDEStatusError
 
     def db_name(self) -> tuple[str, str]:
-        """ Returns the current database as (name, path) """
+        """Returns the current database as (name, path)"""
         return self.send_message(DDEMessageBase(func_name='GetDatabase', params=[DELIM]))
 
     # CATEGORY
@@ -36,7 +36,7 @@ class PyCmcDDEServer(DDEServer):
         return field_names
 
     def category_field_definitions(self, category: str, fields: list[str] = None) -> CmcDefsDict:
-        """ Gets PyCommence connection and retrieves field definitions via DDE for a given category."""
+        """Gets PyCommence connection and retrieves field definitions via DDE for a given category."""
         fields_definitions = CmcDefsDict()
         fields = fields or self.category_field_names(category)
         for field_name in fields:
@@ -71,7 +71,7 @@ class PyCmcDDEServer(DDEServer):
                 item_dict[attr] = value
         else:
             for start in range(0, len(field_names), self.options.fields_chunk):
-                fields_chunk = field_names[start:start + self.options.fields_chunk]
+                fields_chunk = field_names[start : start + self.options.fields_chunk]
                 chunk_msg = msgs.get.fields(category=category, item=name, fields=fields_chunk, delim=DELIM)
                 chunk_res = self.send_message(chunk_msg)
                 for attr, value in zip(fields_chunk, chunk_res):
@@ -98,11 +98,7 @@ class PyCmcDDEServer(DDEServer):
         return True
 
     def item_edit(
-            self,
-            category,
-            item_name: str,
-            field_updates: dict[str, str],
-            topic: DDETopic = DDETopic.GET
+        self, category, item_name: str, field_updates: dict[str, str], topic: DDETopic = DDETopic.GET
     ) -> bool:
         for field_name, field_value in field_updates.items():
             msg = msgs.execute.edit_item(category, item_name, field_name, field_value, topic)

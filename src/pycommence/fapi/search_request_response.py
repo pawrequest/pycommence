@@ -7,6 +7,7 @@ from fastapi import Depends, Query
 from pydantic import BaseModel, model_validator
 
 from pycommence import MoreAvailable
+
 # from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.core.filters import ConditionType
 from pycommence.core.pagination import Pagination as _Pagination
@@ -98,15 +99,15 @@ class SearchRequest(BaseModel):
 
     @classmethod
     def from_query(
-            cls,
-            csrname: str = Query(None),
-            pk_value: str = Query(''),
-            pagination: Pagination = Depends(Pagination.from_query),
-            condition: ConditionType = Depends(get_condition),
-            max_rtn: int = Query(None),
-            row_id: str = Query(None),
-            py_filter_i: int = Query(0),
-            cmc_filter_i: int = Query(0),
+        cls,
+        csrname: str = Query(None),
+        pk_value: str = Query(''),
+        pagination: Pagination = Depends(Pagination.from_query),
+        condition: ConditionType = Depends(get_condition),
+        max_rtn: int = Query(None),
+        row_id: str = Query(None),
+        py_filter_i: int = Query(0),
+        cmc_filter_i: int = Query(0),
     ):
         return cls(
             csrname=csrname,

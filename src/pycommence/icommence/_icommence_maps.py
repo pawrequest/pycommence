@@ -15,9 +15,9 @@ from pycommence.icommence._icommence_other import (
     IFieldOA,
     IFormOA,
     IFullControl,
+    Isample,
     ISimple,
     IUIObj,
-    Isample,
     Simple,
     UIObj,
     _DFormOAEvents,
@@ -38,16 +38,94 @@ from pycommence.icommence.row import (
 
 IApp_vtables_dispatch_ = 1
 IApp_vtables_ = [
-    (('Version', 'bstrVersion',), 1, (1, (), [(16392, 10, None, None), ], 1, 1, 4, 0, 56, (3, 0, None, None), 0,),),
-    (('GetCursor', 'mode', 'flag', 'name',), 2,
-     (2, (), [(3, 0, None, None), (3, 0, None, None), (16392, 10, None, None), ], 1, 1, 4, 0, 64, (3, 0, None, None),
-      0,),),
-    (('quit',), 3, (3, (), [], 1, 1, 4, 0, 72, (3, 0, None, None), 0,),),
+    (
+        (
+            'Version',
+            'bstrVersion',
+        ),
+        1,
+        (
+            1,
+            (),
+            [
+                (16392, 10, None, None),
+            ],
+            1,
+            1,
+            4,
+            0,
+            56,
+            (3, 0, None, None),
+            0,
+        ),
+    ),
+    (
+        (
+            'GetCursor',
+            'mode',
+            'flag',
+            'name',
+        ),
+        2,
+        (
+            2,
+            (),
+            [
+                (3, 0, None, None),
+                (3, 0, None, None),
+                (16392, 10, None, None),
+            ],
+            1,
+            1,
+            4,
+            0,
+            64,
+            (3, 0, None, None),
+            0,
+        ),
+    ),
+    (
+        ('quit',),
+        3,
+        (
+            3,
+            (),
+            [],
+            1,
+            1,
+            4,
+            0,
+            72,
+            (3, 0, None, None),
+            0,
+        ),
+    ),
 ]
 IFullControl_vtables_dispatch_ = 1
 IFullControl_vtables_ = [
-    (('myfunction', 'x', 'y',), 1,
-     (1, (), [(3, 1, None, None), (3, 1, None, None), ], 1, 1, 4, 0, 56, (3, 0, None, None), 0,),),
+    (
+        (
+            'myfunction',
+            'x',
+            'y',
+        ),
+        1,
+        (
+            1,
+            (),
+            [
+                (3, 1, None, None),
+                (3, 1, None, None),
+            ],
+            1,
+            1,
+            4,
+            0,
+            56,
+            (3, 0, None, None),
+            0,
+        ),
+    ),
 ]
 ISimple_vtables_dispatch_ = 1
 ISimple_vtables_ = [

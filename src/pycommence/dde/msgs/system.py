@@ -39,6 +39,7 @@ def version_extended() -> DDESystemRequest:
     """Generate DDE request for VersionExtended."""
     return DDESystemRequest(func_name='VersionExtended', params=[], topic=DDETopic.SYSTEM)
 
+
 class SystemMessageEnum(StrEnum):
     DATABASES = 'Databases'
     FORMATS = 'Formats'

@@ -1,14 +1,14 @@
 import contextlib
 from typing import ClassVar, ContextManager
 
-from loguru import logger
 import pytest
-
-from pycommence.threads import com_context
-from pycommence.pycommence_client import PyCommenceClient
+from loguru import logger
 from sample_data import TEST_ITEM_NAME
-from pycommence.core.meta import CommenceTableGenerated, CommenceTable
+
+from pycommence.core.meta import CommenceTable
 from pycommence.dde import DDETopic
+from pycommence.pycommence_client import PyCommenceClient
+from pycommence.threads import com_context
 
 
 class Contact(CommenceTable):
@@ -25,10 +25,12 @@ class Account(CommenceTable):
 @pytest.fixture(scope='function')
 def timed():
     from time import time
+
     start = time()
     yield
     end = time()
     logger.debug(f'Test took {end - start:.4f} seconds')
+
 
 @pytest.fixture(scope='function', autouse=True)
 def delay_log(caplog):
@@ -60,8 +62,9 @@ def contact_cursor(pycmc_client):
 
 
 @contextlib.contextmanager
-def temp_contact(client: PyCommenceClient, category='Contact') -> ContextManager[
-    PyCommenceClient]:  # prefer the pycharm false positive here to in callers
+def temp_contact(
+    client: PyCommenceClient, category='Contact'
+) -> ContextManager[PyCommenceClient]:  # prefer the pycharm false positive here to in callers
     topic = DDETopic.GET
     try:
         res = client.item_add_dde(category, TEST_ITEM_NAME, DDETopic.GET)

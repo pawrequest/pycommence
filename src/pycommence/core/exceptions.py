@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Protocol, TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
     pass
@@ -37,8 +37,7 @@ class Handle(StrEnum):
 
 class HasRowCount(Protocol):
     @property
-    def row_count(self) -> int:
-        ...
+    def row_count(self) -> int: ...
 
 
 def raise_for_one(res: HasRowCount):
@@ -46,5 +45,3 @@ def raise_for_one(res: HasRowCount):
         raise PyCommenceNotFoundError('Row not found.')
     if res.row_count > 1:
         raise PyCommenceMaxExceededError('Multiple rows found')
-
-

@@ -3,9 +3,9 @@ from __future__ import annotations
 import pythoncom
 import win32com.client
 from win32.lib.pywintypes import IID
-from win32com.client import DispatchBaseClass, Dispatch
+from win32com.client import Dispatch, DispatchBaseClass
 
-from pycommence.icommence.const import OptionFlag, LCID
+from pycommence.icommence.const import LCID, OptionFlag
 
 
 class ICommenceAddRowSet(DispatchBaseClass):
@@ -29,18 +29,34 @@ class ICommenceAddRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), column_index, flags)
 
-    def GetRow(self, nRow, pDelim, flags, ):
+    def GetRow(
+        self,
+        nRow,
+        pDelim,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(26, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
-    def GetRowValue(self, nRow, nCol, flags, ):
+    def GetRowValue(
+        self,
+        nRow,
+        nCol,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
     def GetShared(self, nRow):
         return self._oleobj_.InvokeTypes(28, LCID, 1, (11, 0), ((3, 1),), nRow)
 
-    def ModifyRow(self, nRow, nCol, pBuf, flags, ):
+    def ModifyRow(
+        self,
+        nRow,
+        nCol,
+        pBuf,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(
             23,
             LCID,
@@ -50,7 +66,8 @@ class ICommenceAddRowSet(DispatchBaseClass):
             nRow,
             nCol,
             pBuf,
-            flags, )
+            flags,
+        )
 
     def SetShared(self, nRow):
         return self._oleobj_.InvokeTypes(27, LCID, 1, (11, 0), ((3, 1),), nRow)
@@ -65,7 +82,7 @@ class ICommenceAddRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -90,11 +107,14 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
-    def GetRow(self, nRow, pDelim, flags, ):
+    def GetRow(
+        self,
+        nRow,
+        pDelim,
+        flags,
+    ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            25, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags
-        )
+        return self._oleobj_.InvokeTypes(25, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
     def GetRowID(self, nRow, flags: OptionFlag = OptionFlag.NONE):
         # Result is a Unicode object
@@ -104,7 +124,12 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(28, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
-    def GetRowValue(self, nRow, nCol, flags, ):
+    def GetRowValue(
+        self,
+        nRow,
+        nCol,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
@@ -121,7 +146,7 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -150,7 +175,12 @@ class ICommenceEditRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
-    def GetRow(self, nRow, pDelim, flags, ):
+    def GetRow(
+        self,
+        nRow,
+        pDelim,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(26, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
@@ -162,14 +192,25 @@ class ICommenceEditRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(30, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
-    def GetRowValue(self, nRow, nCol, flags, ):
+    def GetRowValue(
+        self,
+        nRow,
+        nCol,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
     def GetShared(self, nRow):
         return self._oleobj_.InvokeTypes(28, LCID, 1, (11, 0), ((3, 1),), nRow)
 
-    def ModifyRow(self, nRow, nCol, pBuf, flags, ):
+    def ModifyRow(
+        self,
+        nRow,
+        nCol,
+        pBuf,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(
             23,
             LCID,
@@ -179,7 +220,8 @@ class ICommenceEditRowSet(DispatchBaseClass):
             nRow,
             nCol,
             pBuf,
-            flags, )
+            flags,
+        )
 
     def SetShared(self, nRow):
         return self._oleobj_.InvokeTypes(27, LCID, 1, (11, 0), ((3, 1),), nRow)
@@ -194,7 +236,7 @@ class ICommenceEditRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -213,7 +255,13 @@ class ICommenceQueryRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
-    def GetFieldToFile(self, nRow, nCol, filename, flags, ):
+    def GetFieldToFile(
+        self,
+        nRow,
+        nCol,
+        filename,
+        flags,
+    ):
         return self._oleobj_.InvokeTypes(
             26,
             LCID,
@@ -223,9 +271,15 @@ class ICommenceQueryRowSet(DispatchBaseClass):
             nRow,
             nCol,
             filename,
-            flags, )
+            flags,
+        )
 
-    def GetRow(self, nRow, pDelim, flags, ):
+    def GetRow(
+        self,
+        nRow,
+        pDelim,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(23, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
@@ -237,7 +291,12 @@ class ICommenceQueryRowSet(DispatchBaseClass):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(27, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
-    def GetRowValue(self, nRow, nCol, flags, ):
+    def GetRowValue(
+        self,
+        nRow,
+        nCol,
+        flags,
+    ):
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
@@ -254,7 +313,7 @@ class ICommenceQueryRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:

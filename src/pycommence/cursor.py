@@ -11,12 +11,12 @@ import contextlib
 from functools import cached_property
 from typing import Self
 
-from pycommence.core.pagination import MoreAvailable, Pagination
 from pycommence.core.exceptions import PyCommenceExistsError, raise_for_one
 from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
-from pycommence.icommence.const import CursorType, SeekBookmark
-from pycommence.core.types import ConnectedColumn
+from pycommence.core.pagination import MoreAvailable, Pagination
 from pycommence.core.row_data import RowData, RowDataGenerator, RowFilter
+from pycommence.core.types import ConnectedColumn
+from pycommence.icommence.const import CursorType, SeekBookmark
 from pycommence.icommence.cursor_wrapper import CursorWrapper
 
 
@@ -42,10 +42,10 @@ class CursorAPI:
     """
 
     def __init__(
-            self,
-            cursor_wrapper: CursorWrapper,
-            mode: CursorType = CursorType.CATEGORY,
-            csrname: str = '',
+        self,
+        cursor_wrapper: CursorWrapper,
+        mode: CursorType = CursorType.CATEGORY,
+        csrname: str = '',
     ):
         self.cursor_wrapper = cursor_wrapper
         self.mode = mode
@@ -168,10 +168,10 @@ class CursorAPI:
         return RowData(category=self.category, row_id=row_id, data=row)
 
     def read_rows(
-            self,
-            pagination: Pagination = Pagination(),
-            filter_array: FilterArray | None = None,
-            row_filter: RowFilter | None = None,
+        self,
+        pagination: Pagination = Pagination(),
+        filter_array: FilterArray | None = None,
+        row_filter: RowFilter | None = None,
     ) -> RowDataGenerator:
         """Generate rows from the cursor. Yields (row_id, row_dict) tuples."""
         cmc_filter = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()

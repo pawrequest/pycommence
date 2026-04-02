@@ -51,16 +51,16 @@
 #             res = res.split(DELIM)
 #         return res
 import threading
-from typing import Sequence
+from collections.abc import Sequence
 
 from loguru import logger
 
 from pycommence.core.exceptions import PyCommenceServerError
 from pycommence.core.fields import CmcDefsDict, CmcFieldDefinition
 from pycommence.core.filters import CmcFilter, ConditionType, FieldFilter
-from pycommence.core.meta import get_table_type, generate_table_pydantic_model, FetchMode
-from pycommence.dde import DDEMessageBase, DDEKind, msgs
-from pycommence.dde.dde_errors import dde_error_handler, PyCmcDDEStatusError
+from pycommence.core.meta import FetchMode, generate_table_pydantic_model, get_table_type
+from pycommence.dde import DDEKind, DDEMessageBase, msgs
+from pycommence.dde.dde_errors import PyCmcDDEStatusError, dde_error_handler
 from pycommence.dde.types import EMPTY
 from pycommence.icommence import ICommenceConversation
 from pycommence.pycommence_options import Options, get_options
@@ -97,11 +97,11 @@ class ConversationAPI:
     def status_check(self):
         try:
             assert self.send_message(msgs.system.status()) == 'Ready'
-        except AssertionError as e:
+        except AssertionError:
             raise PyCmcDDEStatusError
 
     def db_name_and_path(self):
-        """ Returns the current database as (name, path) """
+        """Returns the current database as (name, path)"""
         return self.send_message(DDEMessageBase(func_name='GetDatabase', params=[self.options.delim]))
 
     # CATEGORY
@@ -111,7 +111,7 @@ class ConversationAPI:
         return field_names
 
     def category_field_definitions(self, category: str, fields: list[str] = None) -> CmcDefsDict:
-        """ Gets PyCommence connection and retrieves field definitions via DDE for a given category."""
+        """Gets PyCommence connection and retrieves field definitions via DDE for a given category."""
         fields_definitions = CmcDefsDict()
         fields = fields or self.category_field_names(category)
         for field_name in fields:
@@ -119,7 +119,6 @@ class ConversationAPI:
             field_definition = CmcFieldDefinition.from_field_info(field_definition_res)
             fields_definitions[field_name] = field_definition
         return fields_definitions
-
 
     # VIEW
     def view_reset(self, category: str):
@@ -130,13 +129,7 @@ class ConversationAPI:
         msg = msgs.view.filter_(slot, *filter_.get_params)
         return self.send_message(msg)
 
-    def view_filter_by_field(
-            self,
-            field,
-            value: str,
-            slot=1,
-            condition: ConditionType = ConditionType.CONTAIN
-    ) -> int:
+    def view_filter_by_field(self, field, value: str, slot=1, condition: ConditionType = ConditionType.CONTAIN) -> int:
         filter_ = FieldFilter(column=field, value=value, condition=condition)
         return self.view_filter(filter_, slot=slot)
 
@@ -155,7 +148,9 @@ class ConversationAPI:
         return field_definition
 
 
-def get_or_create_table_type(self: ConversationAPI, category: str, mode:FetchMode = 'all') -> type['CommenceTableGenerated'] | type['CommenceTable']:
+def get_or_create_table_type(
+    self: ConversationAPI, category: str, mode: FetchMode = 'all'
+) -> type['CommenceTableGenerated'] | type['CommenceTable']:
     table_type = get_table_type(category, mode=mode, missing='ignore')
     if not table_type:
         field_defs = self.category_field_definitions(category)

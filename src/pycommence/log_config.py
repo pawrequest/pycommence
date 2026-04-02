@@ -7,8 +7,8 @@ from loguru import logger
 
 
 def configure_loguru(
-        level: str = 'DEBUG',
-        log_file: Path | None = None,
+    level: str = 'DEBUG',
+    log_file: Path | None = None,
 ):
     logger.debug('Configuring loguru logger')
     lvl = level.upper()

@@ -40,7 +40,8 @@ dev = [
 
 [tool.ruff]
 line-length = 120
-extend-select = ["Q", "RUF100", "UP"]
-flake8-quotes = { inline-quotes = "single", multiline-quotes = "double" }
 format.quote-style = "single"
+
+lint.extend-select = ["RUF100", "UP","I"]
+
 

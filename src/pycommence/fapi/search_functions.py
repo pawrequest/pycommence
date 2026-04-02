@@ -10,19 +10,19 @@ from __future__ import annotations
 from fastapi import Depends
 from loguru import logger
 
+from pycommence import MoreAvailable
 from pycommence.conversation import get_or_create_table_type
+from pycommence.core.filters import FieldFilter, FilterArray
 from pycommence.core.meta import get_table_type
+from pycommence.core.row_data import RowData
 from pycommence.dde import DDETopic
 from pycommence.fapi.search_request_response import MoreAvailableFront, SearchRequest, SearchResponse
-from pycommence.core.filters import FieldFilter, FilterArray
-from pycommence import MoreAvailable
-from pycommence.core.row_data import RowData
 from pycommence.pycommence_client import PyCommenceClient
 
 
 async def pycommence_fetch(
-        q: SearchRequest = Depends(SearchRequest.from_query),
-        auto_model=False,
+    q: SearchRequest = Depends(SearchRequest.from_query),
+    auto_model=False,
 ) -> RowData:
     q.max_rtn = 1
     with PyCommenceClient() as pycmc:
@@ -37,12 +37,15 @@ async def pycommence_fetch(
 
 
 async def pycommence_search(
-        q: SearchRequest,
-        auto_model: bool = False,
+    q: SearchRequest,
+    auto_model: bool = False,
 ) -> SearchResponse:
     with PyCommenceClient() as pycmc:
         if auto_model:
-            table_type = get_or_create_table_type(pycmc.conversation(DDETopic.GET), q.csrname, )
+            table_type = get_or_create_table_type(
+                pycmc.conversation(DDETopic.GET),
+                q.csrname,
+            )
         else:
             table_type = get_table_type(q.csrname, mode='manual', missing='raise')
         if not table_type:
@@ -70,9 +73,9 @@ async def pycommence_search(
 
 
 async def pycommence_gather(
-        pycmc: PyCommenceClient,
-        q: SearchRequest,
-        filter_array: FilterArray | None = None,
+    pycmc: PyCommenceClient,
+    q: SearchRequest,
+    filter_array: FilterArray | None = None,
 ) -> tuple[list[RowData], MoreAvailable | None]:
     """
     Gather records from PyCommence based on the provided search request.

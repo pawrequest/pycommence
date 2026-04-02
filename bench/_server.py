@@ -1,13 +1,13 @@
 import threading
 from collections.abc import Sequence
 
-import win32ui  # noqa before dde import to ensure proper initialization order
 import dde as pywindde
+import win32ui  # noqa before dde import to ensure proper initialization order
 from loguru import logger
 
 from pycommence.dde import msgs
-from pycommence.dde.types import DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic, EMPTY
 from pycommence.dde.dde_errors import PyCmcDDEError, PyCmcDDENoConnectionError, dde_error_handler
+from pycommence.dde.types import EMPTY, DDEExecuteBase, DDEKind, DDEMessageBase, DDERequestBase, DDETopic
 from pycommence.threads import com_context
 
 
@@ -119,5 +119,3 @@ class DDEServer:
         with self._lock:
             self.conversation.ConnectTo(self.options.application_name, topic.value)
         self.connected = topic
-
-

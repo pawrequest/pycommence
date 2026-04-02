@@ -11,18 +11,13 @@ def category(category: str) -> DDERequestView:
 
 
 def conjunction(
-        and_or_12: str | None = None,
-        and_or_13: str | None = None,
-        and_or_34: str | None = None
+    and_or_12: str | None = None, and_or_13: str | None = None, and_or_34: str | None = None
 ) -> DDERequestView:
     return DDERequestView(func_name='ViewConjunction', params=[and_or_12, and_or_13, and_or_34])
 
 
 def filter_(
-        clause_number: int,
-        filter_type: str,
-        not_flag: str | None,
-        *filter_type_parameters: str | None
+    clause_number: int, filter_type: str, not_flag: str | None, *filter_type_parameters: str | None
 ) -> DDERequestView:
     """
     Docs: ViewFilter(ClauseNumber, FilterType, NotFlag, FieldTypeParameters...)
@@ -81,13 +76,7 @@ def connected_item(index: int, connection_name: str, to_category: str, conn_inde
     )
 
 
-def connected_field(
-        index: int,
-        connection_name: str,
-        to_category: str,
-        conn_index: int,
-        field: str
-) -> DDERequestView:
+def connected_field(index: int, connection_name: str, to_category: str, conn_index: int, field: str) -> DDERequestView:
     return DDERequestView(
         func_name='ViewConnectedField',
         params=[index, connection_name, to_category, conn_index, field],
@@ -95,12 +84,7 @@ def connected_field(
 
 
 def connected_fields(
-        index: int,
-        connection_name: str,
-        to_category: str,
-        conn_index: int,
-        fields: Sequence[str],
-        delim: str | None = None
+    index: int, connection_name: str, to_category: str, conn_index: int, fields: Sequence[str], delim: str | None = None
 ) -> DDERequestView:
     n = len(fields)
     return DDERequestView(
@@ -114,9 +98,10 @@ def mark_item(index: int) -> DDERequestView:
 
 
 def delete_all_items():
-    if input(
-            'Are you sure you want to delete ALL items in the current view? This action cannot be undone! (yes/no): '
-    ) != 'yes':
+    if (
+        input('Are you sure you want to delete ALL items in the current view? This action cannot be undone! (yes/no): ')
+        != 'yes'
+    ):
         raise RuntimeError('Aborted deletion of all items in view.')
     return 'NOPE'
     # return DDERequest(func_name='ViewDeleteAllItems', params=[])

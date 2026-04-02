@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Annotated, Any, Protocol, TYPE_CHECKING
+from typing import TYPE_CHECKING, Annotated, Any
 
 from pydantic import BeforeValidator
 
 if TYPE_CHECKING:
-    from pycommence.dde import DDETopic, DDEMessageBase
+    pass
 
 CmcDateFormat = '%Y%m%d'
 CmcTimeFormat = '%H:%M'
@@ -63,6 +63,7 @@ class ConnectedColumn:
     name: str
     category: str
     column: str
+
 
 #
 # class PyCmcProtocol(Protocol):

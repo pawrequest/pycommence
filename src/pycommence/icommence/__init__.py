@@ -9,11 +9,11 @@ from .row import (
 )
 
 __all__ = [
-    "ICommenceConversation",
-    "ICommenceCursor",
-    "ICommenceDB",
-    "ICommenceAddRowSet",
-    "ICommenceDeleteRowSet",
-    "ICommenceEditRowSet",
-    "ICommenceQueryRowSet",
+    'ICommenceConversation',
+    'ICommenceCursor',
+    'ICommenceDB',
+    'ICommenceAddRowSet',
+    'ICommenceDeleteRowSet',
+    'ICommenceEditRowSet',
+    'ICommenceQueryRowSet',
 ]

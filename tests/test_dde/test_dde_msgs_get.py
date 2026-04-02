@@ -14,6 +14,7 @@ def test_msg(pycmc_client):
 
 ####
 
+
 def test_clarify_item_names(pycmc_client):
     msg = get.clarify_item_names()
     res = pycmc_client.send_dde_message(msg)

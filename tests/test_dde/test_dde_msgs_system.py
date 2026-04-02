@@ -13,6 +13,7 @@ def test_all_system_funcs(pycmc_client):
         assert res is not None, f'Response for {func.__name__} is None'
     print('\nCaptured Logs:')
 
+
 # def test_all_system_funcs1(pycmc_client, caplog):
 #     pycmc_client.options.strip_strs = True
 #     with caplog.at_level('DEBUG'):
