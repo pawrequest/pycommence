@@ -1,7 +1,7 @@
 import pytest
 
-from pycommence.dde.msgs import get
 from pycommence.dde.dde_errors import PyCmcDDEError
+from pycommence.dde.msgs import get
 
 TESTCOUNT = 5
 

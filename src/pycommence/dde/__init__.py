@@ -1,5 +1,5 @@
 from . import msgs
-from .types import DDEMessageBase, DDETopic, DDEKind
+from .types import DDEKind, DDEMessageBase, DDETopic
 
 __all__ = [
     'msgs',

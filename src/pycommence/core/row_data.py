@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import typing as _t
-from dataclasses import dataclass
 from collections.abc import Callable, Generator
+from dataclasses import dataclass
 
 from loguru import logger
 
-from pycommence.core.pagination import MoreAvailable
 from pycommence.core.meta import CommenceTable, get_table_type
+from pycommence.core.pagination import MoreAvailable
 
 
 @dataclass

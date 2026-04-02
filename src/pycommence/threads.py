@@ -19,14 +19,14 @@ def com_context(mode: int = THREAD_MODEL):
         try:
             CoInitializeEx(mode)
             logger.debug(
-                f'Thread {thread_id} COM initialised for {'COINIT_MULTITHREADED' if mode is 0 else f'COINIT_APARTMENTTHREADED' if mode is 2 else 'unknown'} use'
+                f'Thread {thread_id} COM initialised for {'COINIT_MULTITHREADED' if mode == 0 else 'COINIT_APARTMENTTHREADED' if mode == 2 else 'unknown'} use'
             )
             initialized = True
         except OSError as e:
             # -2147417850 == 0x80010106: Cannot change thread mode after it is set
             if getattr(e, 'winerror', None) != ComAlreadyInitDifferentMode:
                 raise
-            logger.warning(f'DDEServer fixture running in thread ')
+            logger.warning('DDEServer fixture running in thread ')
             logger.debug(f'Thread {thread_id} COM already initialised with different threading model')
         except Exception as e:
             logger.error(f'Error initialising COM in thread {thread_id}: {e}')

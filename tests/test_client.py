@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from conftest import temp_contact
+from sample_data import TEST_ITEM_NAME, UPDATE_DICT
+
 from pycommence.dde import DDETopic
 from pycommence.dde.msgs import system
 from pycommence.pycommence_client import PyCommenceClient
-from sample_data import TEST_ITEM_NAME, UPDATE_DICT
 
 
 def test_client_system(pycmc_client):

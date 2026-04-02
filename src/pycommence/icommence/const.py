@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from enum import StrEnum, Enum, IntEnum
-import win32com.client.util
+from enum import Enum, IntEnum, StrEnum
+
 from win32.lib.pywintypes import IID
 
 

@@ -1,17 +1,17 @@
 import contextlib
 
 import pytest
-from loguru import logger
-
 from conftest import Contact
-from pycommence.cursor import CursorAPI
+from loguru import logger
+from sample_data import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
+
+from pycommence import MoreAvailable
 from pycommence.core.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.core.pagination import Pagination
-from pycommence import MoreAvailable
 from pycommence.core.row_data import RowData
+from pycommence.cursor import CursorAPI
 from pycommence.pycommence_client import PyCommenceClient
-from sample_data import JEFF_KEY, NEW_DICT, NEW_KEY, UPDATE_DICT
 
 PAGINATED = Pagination(offset=0, limit=5)
 
