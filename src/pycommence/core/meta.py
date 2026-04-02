@@ -6,20 +6,32 @@ from pydantic import BaseModel, ConfigDict
 
 from pycommence.core.fields import CmcDefsDict
 
-TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
-GENERATED_TABLE_TYPE_REGISTER: dict[str, type['CommenceTableGenerated']] = {}
+_TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
+_GENERATED_TABLE_TYPE_REGISTER: dict[str, type['CommenceTableGenerated']] = {}
 
 FetchMode = Literal['manual', 'auto', 'all']
 HandleMissing = Literal['raise', 'ignore', 'generate']
 
 
+def registered_table_models(mode: FetchMode = 'manual') -> list[type['CommenceTable'] | type['CommenceTableGenerated']]:
+    match mode:
+        case 'auto':
+            return list(_GENERATED_TABLE_TYPE_REGISTER.values())
+        case 'manual':
+            return list(_TABLE_TYPE_REGISTER.values())
+        case 'all':
+            return list(_TABLE_TYPE_REGISTER.values()) + list(_GENERATED_TABLE_TYPE_REGISTER.values())
+        case _:
+            raise ValueError(f'Invalid mode: {mode}')
+
+
 def register_table(cls: 'type[CommenceTable] | type[CommenceTableGenerated]'):
     if issubclass(cls, CommenceTableGenerated):
         logger.debug(f'Registering generated table model: {cls.__name__}')
-        GENERATED_TABLE_TYPE_REGISTER[str(cls.__name__)] = cls
+        _GENERATED_TABLE_TYPE_REGISTER[str(cls.__name__)] = cls
     elif issubclass(cls, CommenceTable):
         logger.debug(f'Registering table model: {cls.category}')
-        TABLE_TYPE_REGISTER[str(cls.category)] = cls
+        _TABLE_TYPE_REGISTER[str(cls.category)] = cls
 
 
 def get_table_type(
@@ -28,11 +40,11 @@ def get_table_type(
     register = None
     match mode:
         case 'auto':
-            register = GENERATED_TABLE_TYPE_REGISTER
+            register = _GENERATED_TABLE_TYPE_REGISTER
         case 'manual':
-            register = TABLE_TYPE_REGISTER
+            register = _TABLE_TYPE_REGISTER
         case 'all':
-            register = {**TABLE_TYPE_REGISTER, **GENERATED_TABLE_TYPE_REGISTER}
+            register = {**_TABLE_TYPE_REGISTER, **_GENERATED_TABLE_TYPE_REGISTER}
         case _:
             raise ValueError(f'Invalid mode: {mode}')
     if res := register.get(table_name):
@@ -57,7 +69,7 @@ class CommenceTableGenerated(BaseModel, ABC):
 class CommenceTable(BaseModel, ABC):
     model_config = ConfigDict(extra='ignore')
     category: ClassVar[str]
-    name_field: ClassVar[str | None] = None
+    name: str
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)

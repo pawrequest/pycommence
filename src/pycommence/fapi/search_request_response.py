@@ -11,7 +11,7 @@ from pycommence import MoreAvailable
 # from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.core.filters import ConditionType
 from pycommence.core.pagination import Pagination as _Pagination
-from pycommence.core.row_data import RowData
+from pycommence.core.row_data import RowData2
 
 PAGE_SIZE = 50
 
@@ -122,7 +122,7 @@ class SearchRequest(BaseModel):
 
 
 class SearchResponse(BaseModel):
-    records: list[RowData]
+    records: list[RowData2]
     length: int = 0
     search_request: SearchRequest
     more: MoreAvailableFront | None = None

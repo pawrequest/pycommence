@@ -9,7 +9,7 @@ from pycommence import MoreAvailable
 from pycommence.core.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.core.pagination import Pagination
-from pycommence.core.row_data import RowData
+from pycommence.core.row_data import RowData2
 from pycommence.cursor import CursorAPI
 from pycommence.pycommence_client import PyCommenceClient
 
@@ -28,76 +28,82 @@ def temp_contact(pycmc: PyCommenceClient):
         logger.info('Deleted temp record')
 
 
-def test_pycmc(pycmc):
-    assert pycmc
-    print(next(pycmc.cursor('Contact').read_rows(pagination=PAGINATED)))
+def test_pycmc(test_client):
+    assert test_client
+    print(next(test_client.cursor('Contact').read_rows(pagination=PAGINATED)))
 
 
-def test_temp_contact(pycmc):
+def test_temp_contact(test_client):
     """Test add_record and delete_record."""
     with pytest.raises(PyCommenceNotFoundError):
-        pycmc.cursor('Contact').read_row(pk=NEW_KEY)
-    with temp_contact(pycmc):
-        res = pycmc.cursor('Contact').read_row(pk=NEW_KEY)
+        test_client.cursor('Contact').read_row(pk=NEW_KEY)
+    with temp_contact(test_client):
+        res = test_client.cursor('Contact').read_row(pk=NEW_KEY)
         assert res
     with pytest.raises(PyCommenceNotFoundError):
-        pycmc.cursor('Contact').read_row(pk=NEW_KEY)
+        test_client.cursor('Contact').read_row(pk=NEW_KEY)
 
 
-def test_read_rows(pycmc):
-    res = pycmc.cursor('Contact').read_rows(pagination=PAGINATED)
+def test_read_rows(test_client):
+    res = test_client.cursor('Contact').read_rows(pagination=PAGINATED)
     row = next(res)
-    assert isinstance(row, RowData)
+    assert isinstance(row, RowData2)
     assert row.table_model is Contact
 
 
-def test_get_one_record(pycmc: PyCommenceClient):
-    with temp_contact(pycmc):
-        row: RowData = pycmc.cursor('Contact').read_row(pk=NEW_KEY)
+def test_get_one_record(test_client: PyCommenceClient):
+    with temp_contact(test_client):
+        row: RowData2 = test_client.cursor('Contact').read_row(pk=NEW_KEY)
         contact = row.construct_model()
         assert isinstance(contact, Contact)
         assert row.data.get('Notes') == 'Some Notes'
 
 
-def test_edit_record(pycmc: PyCommenceClient):
-    with temp_contact(pycmc):
-        original = pycmc.cursor('Contact').read_row(pk=NEW_KEY).data
+def test_edit_record(test_client: PyCommenceClient):
+    with temp_contact(test_client):
+        original = test_client.cursor('Contact').read_row(pk=NEW_KEY).data
 
-        pycmc.cursor('Contact').update_row(pk=NEW_KEY, update_pkg=UPDATE_DICT)
-        edited = pycmc.cursor('Contact').read_row(pk=NEW_KEY).data
+        test_client.cursor('Contact').update_row(pk=NEW_KEY, update_pkg=UPDATE_DICT)
+        edited = test_client.cursor('Contact').read_row(pk=NEW_KEY).data
         for k, v in UPDATE_DICT.items():
             assert edited[k] == v
-        pycmc.cursor('Contact').update_row(pk=NEW_KEY, update_pkg=original)
-        reverted = pycmc.cursor('Contact').read_row(pk=NEW_KEY).data
+        test_client.cursor('Contact').update_row(pk=NEW_KEY, update_pkg=original)
+        reverted = test_client.cursor('Contact').read_row(pk=NEW_KEY).data
         assert reverted == original
 
 
-def test_add_record(pycmc: PyCommenceClient):
-    row_count1 = pycmc.cursor('Contact').row_count
-    with temp_contact(pycmc):
-        pycmc.refresh_cursor('Contact')
-        row_count2 = pycmc.cursor('Contact').row_count
+def test_add_record(test_client: PyCommenceClient):
+    row_count1 = test_client.cursor('Contact').row_count
+    with temp_contact(test_client):
+        test_client.refresh_cursor('Contact')
+        row_count2 = test_client.cursor('Contact').row_count
         assert row_count2 == row_count1 + 1
 
-        res = pycmc.cursor('Contact').read_row(pk=NEW_KEY).data
+        res = test_client.cursor('Contact').read_row(pk=NEW_KEY).data
         for k, v in NEW_DICT.items():
             assert res[k] == v
 
-    pycmc.refresh_cursor('Contact')
-    row_count3 = pycmc.cursor('Contact').row_count
+    test_client.refresh_cursor('Contact')
+    row_count3 = test_client.cursor('Contact').row_count
     assert row_count3 == row_count1
 
 
-def test_add_duplicate_raises(pycmc: PyCommenceClient):
+def test_add_duplicate_raises(test_client: PyCommenceClient):
     with pytest.raises(PyCommenceExistsError):
-        with temp_contact(pycmc):
-            pycmc.cursor('Contact').create_row(create_pkg=NEW_DICT)
+        with temp_contact(test_client):
+            test_client.cursor('Contact').create_row(create_pkg=NEW_DICT)
 
 
-def test_multiple_csrs(pycmc: PyCommenceClient):
-    assert pycmc.cursor('Account').category == 'Account'
-    assert pycmc.cursor('Contact').category == 'Contact'
+def test_multiple_csrs(test_client: PyCommenceClient):
+    assert test_client.cursor('Account').category == 'Account'
+    assert test_client.cursor('Contact').category == 'Contact'
     ...
+
+
+def test_with_csr():
+    with PyCommenceClient('Contact') as pycmc:
+        assert pycmc.cursor('Contact').category == 'Contact'
+        ...
 
 
 # def test_pk_filter(pycmc):
@@ -111,8 +117,8 @@ def test_multiple_csrs(pycmc: PyCommenceClient):
 #             assert rows[0]['contactKey'] == pk
 
 
-def test_temporary_filter(pycmc):
-    cursor: CursorAPI = pycmc.cursor('Contact')
+def test_temporary_filter(test_client):
+    cursor: CursorAPI = test_client.cursor('Contact')
     num_rows = cursor.row_count
     pk_fil = cursor.pk_filter(JEFF_KEY)
     filter_array = FilterArray.from_filters(pk_fil)
@@ -123,9 +129,9 @@ def test_temporary_filter(pycmc):
     assert cursor.row_count == num_rows
 
 
-def test_pk_contains_filter(pycmc):
-    with temp_contact(pycmc):
-        cursor = pycmc.cursor('Contact')
+def test_pk_contains_filter(test_client):
+    with temp_contact(test_client):
+        cursor = test_client.cursor('Contact')
         partial_pk = 'Some'
         filter_array = cursor.pk_filter(partial_pk, condition=ConditionType.CONTAIN).to_array()
         rows = list(cursor.read_rows(filter_array=filter_array))
@@ -134,21 +140,21 @@ def test_pk_contains_filter(pycmc):
             assert partial_pk in row.data['contactKey']
 
 
-def test_multiple_conditions(pycmc):
-    with temp_contact(pycmc):
+def test_multiple_conditions(test_client):
+    with temp_contact(test_client):
         filter_array = FilterArray.from_filters(
             FieldFilter(column='contactKey', condition=ConditionType.EQUAL, value='Guy.Some'),
             FieldFilter(column='Title', condition=ConditionType.CONTAIN, value='CEO of SO'),
         )
-        rows = list(pycmc.cursor('Contact').read_rows(filter_array=filter_array))
+        rows = list(test_client.cursor('Contact').read_rows(filter_array=filter_array))
         assert len(rows) == 1
         assert rows[0].data['contactKey'] == 'Guy.Some'
         assert rows[0].data['Title'] == 'CEO of SOMmeBix'
 
 
-def test_pagination(pycmc):
-    with temp_contact(pycmc):
-        csr = pycmc.cursor('Contact')
+def test_pagination(test_client):
+    with temp_contact(test_client):
+        csr = test_client.cursor('Contact')
         pagination = Pagination(limit=5)
         offest_pag = Pagination(offset=2, limit=1)
 
@@ -161,12 +167,12 @@ def test_pagination(pycmc):
         assert row1.data['contactKey'] == rows[0].data['contactKey']
 
 
-def test_read_rows_more_available(pycmc):
-    csr = pycmc.cursor('Contact')
+def test_read_rows_more_available(test_client):
+    csr = test_client.cursor('Contact')
     total_rows = csr.row_count
     limit = 2
     pagination = Pagination(limit=limit, offset=0)
-    rows = list(pycmc.cursor('Contact').read_rows(pagination=pagination))
+    rows = list(test_client.cursor('Contact').read_rows(pagination=pagination))
     if total_rows > limit:
         assert isinstance(rows[-1], MoreAvailable)
         more = next(row for row in rows if isinstance(row, MoreAvailable))

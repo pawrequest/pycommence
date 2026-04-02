@@ -18,15 +18,16 @@ from pycommence.threads import com_context
 
 
 class _PyCommenceClientConnector:
-    def __init__(self, options: Options = get_options()):
+    def __init__(self, *csrname, options: Options = get_options()):
         self.options: Options = options
         self._lock = threading.RLock()
         self._com_context = None
         self._cmc_app: ICommenceDB | None = None
         self._conversations: dict[DDETopic, ConversationAPI] = {}
         self.cursors: dict[str, CursorAPI] = {}
+        self._init_csrs: tuple[str] | None = csrname
 
-    def __enter__(self):
+    def __enter__(self, init_csr: str | None = None) -> '_PyCommenceClientConnector':
         self._com_context = com_context()
         self._com_context.__enter__()
         self._init_in_context()
@@ -50,6 +51,9 @@ class _PyCommenceClientConnector:
         with self._lock:
             self._cmc_app = self._cmc_app or self._connect_app()
             self._create_conversation(DDETopic.GET)
+            if self._init_csrs:
+                for csrname in self._init_csrs:
+                    self._create_cursor(csrname)
 
     def _connect_app(self) -> ICommenceDB:
         with self._lock:
@@ -87,7 +91,7 @@ class _PyCommenceClientConnector:
         return conv_api
 
     # CURSOR METHODS
-    def cursor(self, name: str) -> CursorAPI:
+    def cursor(self, name: str | None = None) -> CursorAPI:
         name = name or self._sole_cursor_name()
         return self.cursors.get(name) or self._create_cursor(name)
 

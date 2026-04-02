@@ -5,11 +5,11 @@ from pycommence.dde.msgs import system as system_msgs
 TESTCOUNT = 1
 
 
-def test_all_system_funcs(pycmc_client):
+def test_all_system_funcs(test_client):
     system_msg_funcs = (func for name, func in inspect.getmembers(system_msgs, inspect.isfunction))
     for func in system_msg_funcs:
         msg = func()
-        res = pycmc_client.send_dde_message(msg)
+        res = test_client.send_dde_message(msg)
         assert res is not None, f'Response for {func.__name__} is None'
     print('\nCaptured Logs:')
 

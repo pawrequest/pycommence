@@ -8,29 +8,29 @@ from pycommence.dde.msgs import system
 from pycommence.pycommence_client import PyCommenceClient
 
 
-def test_client_system(pycmc_client):
+def test_client_system(test_client):
     msg = system.status()
-    res = pycmc_client.send_dde_message(msg)
+    res = test_client.send_dde_message(msg)
     ...
 
 
 TESTCOUNT = 2
 
 
-def test_temp_contact_adds_and_deletes(pycmc_client, caplog):
-    before = count_temp_contact(pycmc_client)
+def test_temp_contact_adds_and_deletes(test_client, caplog):
+    before = count_temp_contact(test_client)
     assert before == 0, 'Temp contact already exists in view before test'
 
-    with temp_contact(pycmc_client):
+    with temp_contact(test_client):
         with caplog.at_level('DEBUG'):
-            cnt_count = count_temp_contact(pycmc_client)
+            cnt_count = count_temp_contact(test_client)
             assert cnt_count > 0, 'Temp contact not found in view'
             assert cnt_count < 2, 'Multiple temp contacts found in view'
         print('\nCaptured Logs:')
         for record in caplog.records:
             print(f'{record.levelname}: {record.message}')
 
-    after = count_temp_contact(pycmc_client)
+    after = count_temp_contact(test_client)
     assert after == 0, 'Temp contact still exists in view after test'
 
 
@@ -42,23 +42,23 @@ def count_temp_contact(dde_server: PyCommenceClient) -> int:
     return cnt_count
 
 
-def test_edit_item(pycmc_client: PyCommenceClient):
-    with temp_contact(pycmc_client) as pycmc_client_temp_contact:
-        pycmc_client = pycmc_client_temp_contact
+def test_edit_item(test_client: PyCommenceClient):
+    with temp_contact(test_client) as pycmc_client_temp_contact:
+        test_client = pycmc_client_temp_contact
         update_dict = UPDATE_DICT
         tstamp = 'Updated on ' + datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         update_dict['Notes'] = tstamp
         category = 'Contact'
-        pycmc_client.conversation().view_reset(category)
-        res = pycmc_client.item_edit_dde(category, TEST_ITEM_NAME, update_dict, DDETopic.VIEW)
+        test_client.conversation().view_reset(category)
+        res = test_client.item_edit_dde(category, TEST_ITEM_NAME, update_dict, DDETopic.VIEW)
         assert res is True
 
-        pycmc_client.conversation(DDETopic.VIEW).view_reset(category)
-        item = pycmc_client.item_read_dde(category, TEST_ITEM_NAME)
+        test_client.conversation(DDETopic.VIEW).view_reset(category)
+        item = test_client.item_read_dde(category, TEST_ITEM_NAME)
         assert item['Notes'] == tstamp, 'Notes field not updated correctly'
 
 
-def test_get_category_field_def(pycmc_client: PyCommenceClient, timed):
+def test_get_category_field_def(test_client: PyCommenceClient, timed):
     category = 'Contact'
-    res = pycmc_client.conversation().category_field_definitions(category)
+    res = test_client.conversation().category_field_definitions(category)
     ...

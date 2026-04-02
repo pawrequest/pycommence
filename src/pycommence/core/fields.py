@@ -8,7 +8,7 @@ from typing import Literal, NamedTuple
 
 from loguru import logger
 
-from pycommence.core.types import CommenceDateOptional
+from pycommence.core.types import CommenceDateMaybe
 from pycommence.pycommence_options import get_options
 
 # DELIM = r';*;%'
@@ -130,7 +130,7 @@ class CmcDataType(NamedTuple):
 DATA_TYPES: list[CmcDataType] = [
     CmcDataType(0, 'TEXT', str),
     CmcDataType(1, 'NUMBER', Decimal),
-    CmcDataType(2, 'DATE', CommenceDateOptional),
+    CmcDataType(2, 'DATE', CommenceDateMaybe | None),
     CmcDataType(3, 'TELEPHONE', str),
     CmcDataType(7, 'CHECKBOX', bool),
     CmcDataType(11, 'NAME', str),
