@@ -3,10 +3,10 @@ from __future__ import annotations
 from collections.abc import Callable
 from functools import wraps
 
+import win32ui  # noqa BEFORE pywintypes, pythoncom
 import dde as pywindde
 import pythoncom
 import pywintypes
-import win32ui  # noqa BEFORE pywintypes, pythoncom
 
 from pycommence.core.exceptions import PyCommenceError
 

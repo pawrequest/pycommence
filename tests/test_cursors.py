@@ -9,7 +9,7 @@ from pycommence import MoreAvailable
 from pycommence.core.exceptions import PyCommenceExistsError, PyCommenceNotFoundError
 from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.core.pagination import Pagination
-from pycommence.core.row_data import RowData2
+from pycommence.core.row_data import RowData
 from pycommence.cursor import CursorAPI
 from pycommence.pycommence_client import PyCommenceClient
 
@@ -47,13 +47,13 @@ def test_temp_contact(test_client):
 def test_read_rows(test_client):
     res = test_client.cursor('Contact').read_rows(pagination=PAGINATED)
     row = next(res)
-    assert isinstance(row, RowData2)
+    assert isinstance(row, RowData)
     assert row.table_model is Contact
 
 
 def test_get_one_record(test_client: PyCommenceClient):
     with temp_contact(test_client):
-        row: RowData2 = test_client.cursor('Contact').read_row(pk=NEW_KEY)
+        row: RowData = test_client.cursor('Contact').read_row(pk=NEW_KEY)
         contact = row.construct_model()
         assert isinstance(contact, Contact)
         assert row.data.get('Notes') == 'Some Notes'

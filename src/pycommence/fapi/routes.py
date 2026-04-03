@@ -1,4 +1,4 @@
-from pycommence.core.row_data import RowData2
+from pycommence.core.row_data import RowData
 from pycommence.fapi.search_functions import pycommence_fetch, pycommence_search
 from pycommence.fapi.search_request_response import SearchRequest, SearchResponse
 
@@ -34,6 +34,6 @@ async def pycommence_search_endpoint(
 @router.get('/get')
 async def pycommence_get_endpoint(
     q: SearchRequest = Depends(SearchRequest.from_query),
-) -> RowData2:
+) -> RowData:
     record = await pycommence_fetch(q=q)
     return record

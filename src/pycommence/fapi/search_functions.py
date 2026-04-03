@@ -14,7 +14,7 @@ from pycommence import MoreAvailable
 from pycommence.conversation import get_or_create_table_type
 from pycommence.core.filters import FieldFilter, FilterArray
 from pycommence.core.meta import get_table_type
-from pycommence.core.row_data import RowData2
+from pycommence.core.row_data import RowData
 from pycommence.core.utils import alias_lookup
 from pycommence.dde import DDETopic
 from pycommence.fapi.search_request_response import MoreAvailableFront, SearchRequest, SearchResponse
@@ -24,7 +24,7 @@ from pycommence.pycommence_client import PyCommenceClient
 async def pycommence_fetch(
     q: SearchRequest = Depends(SearchRequest.from_query),
     auto_model=False,
-) -> RowData2:
+) -> RowData:
     q.max_rtn = 1
     with PyCommenceClient() as pycmc:
         csr = pycmc.cursor(q.csrname)
@@ -33,7 +33,7 @@ async def pycommence_fetch(
             pval = q.pk_value
             pval = pval.strip('"')
             q.row_id = q.row_id or csr.pk_to_id(pval)
-        row: RowData2 = csr.read_row(row_id=q.row_id)
+        row: RowData = csr.read_row(row_id=q.row_id)
     return row
 
 
@@ -77,7 +77,7 @@ async def pycommence_gather(
     pycmc: PyCommenceClient,
     q: SearchRequest,
     filter_array: FilterArray | None = None,
-) -> tuple[list[RowData2], MoreAvailable | None]:
+) -> tuple[list[RowData], MoreAvailable | None]:
     """
     Gather records from PyCommence based on the provided search request.
     Add MoreAvailable if q has pagination and there are more records to fetch.

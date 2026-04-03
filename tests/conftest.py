@@ -9,6 +9,7 @@ from sample_data import TEST_ITEM_NAME
 from pycommence.core.meta import CommenceTable
 from pycommence.dde import DDETopic
 from pycommence.pycommence_client import PyCommenceClient
+from pycommence.testing import test_client, test_client_non_tutorial
 
 
 class Contact(CommenceTable):
@@ -57,3 +58,9 @@ def temp_contact(client: PyCommenceClient, category='Contact') -> ContextManager
     finally:
         logger.info('Cleaning up temp contact')
         assert client.item_delete_dde(category, TEST_ITEM_NAME, DDETopic.GET) is True
+
+
+__all__ = [
+    'test_client',
+    'test_client_non_tutorial',
+]

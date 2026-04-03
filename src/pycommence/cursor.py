@@ -14,7 +14,7 @@ from typing import Self
 from pycommence.core.exceptions import PyCommenceExistsError, raise_for_one
 from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.core.pagination import MoreAvailable, Pagination
-from pycommence.core.row_data import RowData2, RowDataGenerator, RowFilter, RowInfo
+from pycommence.core.row_data import RowData, RowDataGenerator, RowFilter
 from pycommence.core.types import ConnectedColumn
 from pycommence.icommence.const import CursorType, SeekBookmark
 from pycommence.icommence.cursor_wrapper import CursorWrapper
@@ -135,7 +135,7 @@ class CursorAPI:
         return rs.get_value(0, 0)
 
     # CREATE
-    def create_row(self, create_pkg: dict[str, str]) -> None:
+    def create_row(self, create_pkg: dict[str, str]) -> bool:
         """
         Add a new row to the database.
 
@@ -153,20 +153,20 @@ class CursorAPI:
             raise PyCommenceExistsError(f'Primary key {pkg_pk} already exists.')
         rs = self.cursor_wrapper.get_add_row_set(limit=1)
         rs.modify_row(0, create_pkg)
-        rs.commit()
+        return rs.commit()
 
     # def read_row(self, row_id: str) -> RowData:
     #     rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
     #     row = next(rs.rows())
     #     return RowData(category=self.category, row_id=row_id, data=row)
 
-    def read_row(self, *, row_id: str = None, pk: str = None) -> RowData2:
+    def read_row(self, *, row_id: str = None, pk: str = None) -> RowData:
         raise_for_id_or_pk(row_id, pk)
         row_id = row_id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
-        return RowData2(RowInfo(self.category, row_id), data=row)
-        # return RowData(category=self.category, row_id=row_id, data=row)
+        # return RowData2(RowInfo(self.category, row_id), data=row)
+        return RowData(category=self.category, row_id=row_id, data=row)
 
     def read_rows(
         self,
@@ -186,7 +186,7 @@ class CursorAPI:
                     yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
                     break
                 row_id = rowset.get_row_id(i)
-                yield RowData2(RowInfo(self.category, row_id), data=row)
+                yield RowData(category=self.category, row_id= row_id, data=row)
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):

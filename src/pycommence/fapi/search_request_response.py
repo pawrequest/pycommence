@@ -7,11 +7,10 @@ from fastapi import Depends, Query
 from pydantic import BaseModel, model_validator
 
 from pycommence import MoreAvailable
-
 # from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.core.filters import ConditionType
 from pycommence.core.pagination import Pagination as _Pagination
-from pycommence.core.row_data import RowData2
+from pycommence.core.row_data import RowData
 
 PAGE_SIZE = 50
 
@@ -99,15 +98,15 @@ class SearchRequest(BaseModel):
 
     @classmethod
     def from_query(
-        cls,
-        csrname: str = Query(None),
-        pk_value: str = Query(''),
-        pagination: Pagination = Depends(Pagination.from_query),
-        condition: ConditionType = Depends(get_condition),
-        max_rtn: int = Query(None),
-        row_id: str = Query(None),
-        py_filter_i: int = Query(0),
-        cmc_filter_i: int = Query(0),
+            cls,
+            csrname: str = Query(None),
+            pk_value: str = Query(''),
+            pagination: Pagination = Depends(Pagination.from_query),
+            condition: ConditionType = Depends(get_condition),
+            max_rtn: int = Query(None),
+            row_id: str = Query(None),
+            py_filter_i: int = Query(0),
+            cmc_filter_i: int = Query(0),
     ):
         return cls(
             csrname=csrname,
@@ -122,14 +121,14 @@ class SearchRequest(BaseModel):
 
 
 class SearchResponse(BaseModel):
-    records: list[RowData2]
+    records: list[RowData]
     length: int = 0
     search_request: SearchRequest
     more: MoreAvailableFront | None = None
 
     def __str__(self):
         return (
-            f'Search Response: {self.length}x {self.search_request.csrname if self.search_request.csrname else ', '.join(self.search_request.csrnames)} records'
+            f'Search Response: {self.length}x {self.search_request.csrname if self.search_request.csrname else 'No CsrName'} records'
             f'{' (' + str(self.more.n_more) + ' more available),' if self.more else '. '} '
             f'SearchRequest[{str(self.search_request)}]'
         )

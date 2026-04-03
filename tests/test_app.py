@@ -22,7 +22,7 @@ def test_get_one(client):
     row_data = response.json()
     data_dict = row_data['data']
     assert data_dict['firstName'] == 'Jeff'
-    contact = Contact.model_validate(data_dict)
+    contact = Contact(row_id=row_data['row_id'], **data_dict)
     assert contact.firstName == 'Jeff'
     ...
 
