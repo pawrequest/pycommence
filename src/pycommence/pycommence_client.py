@@ -7,6 +7,7 @@ from win32com.universal import com_error
 
 from pycommence.conversation import ConversationAPI
 from pycommence.core.exceptions import PyCommenceServerError
+from pycommence.core.row_data import RowData
 from pycommence.cursor import CursorAPI
 from pycommence.dde import DDEMessageBase, DDETopic, msgs
 from pycommence.dde.dde_errors import dde_error_handler
@@ -35,7 +36,6 @@ class _PyCommenceClientConnector:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
-            logger.debug('Exiting PyCommenceClient context')
             with self._lock:
                 self._conversations.clear()
                 self.cursors.clear()
@@ -103,11 +103,11 @@ class _PyCommenceClientConnector:
         return self.cursors[csrname]
 
     def _create_cursor(
-        self,
-        name: str | None = None,
-        mode: CursorType = CursorType.CATEGORY,
-        pilot: bool = False,
-        internet: bool = False,
+            self,
+            name: str | None = None,
+            mode: CursorType = CursorType.CATEGORY,
+            pilot: bool = False,
+            internet: bool = False,
     ) -> CursorAPI:
         if pilot and internet:
             raise ValueError('Only one of pilot or internet can be set')
@@ -136,7 +136,7 @@ class _PyCommenceClientConnector:
         return next(iter(self.cursors.keys()))
 
 
-class PyCommenceClient(_PyCommenceClientConnector):
+class PyCommence(_PyCommenceClientConnector):
     @dde_error_handler
     def send_dde_message(self, msg: DDEMessageBase) -> str | list[str] | bool:
         conv = self.conversation(msg.topic)
@@ -153,7 +153,7 @@ class PyCommenceClient(_PyCommenceClientConnector):
                 item_dict[attr] = value
         else:
             for start in range(0, len(field_names), self.options.fields_chunk):
-                fields_chunk = field_names[start : start + self.options.fields_chunk]
+                fields_chunk = field_names[start: start + self.options.fields_chunk]
                 chunk_msg = msgs.get.fields(category=category, item=name, fields=fields_chunk, delim=self.options.delim)
                 chunk_res = self.send_dde_message(chunk_msg)
                 for attr, value in zip(fields_chunk, chunk_res):
@@ -172,10 +172,14 @@ class PyCommenceClient(_PyCommenceClientConnector):
         return res
 
     def item_edit_dde(
-        self, category, item_name: str, field_updates: dict[str, str], topic: DDETopic = DDETopic.GET
+            self, category, item_name: str, field_updates: dict[str, str], topic: DDETopic = DDETopic.GET
     ) -> bool:
         for field_name, field_value in field_updates.items():
             msg = msgs.execute.edit_item(category, item_name, field_name, field_value, topic)
             res = self.send_dde_message(msg)
             assert res is True
         return True
+
+    def read_row(self, *, csrname: str | None = None, row_id: str | None = None, pk: str | None = None) -> RowData:
+        csr = self.cursor(csrname)
+        return csr.read_row(row_id=row_id, pk=pk)

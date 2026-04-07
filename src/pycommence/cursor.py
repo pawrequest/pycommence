@@ -186,7 +186,7 @@ class CursorAPI:
                     yield MoreAvailable(n_more=self.row_count - (pagination.offset + i))
                     break
                 row_id = rowset.get_row_id(i)
-                yield RowData(category=self.category, row_id= row_id, data=row)
+                yield RowData(category=self.category, row_id=row_id, data=row)
 
     # UPDATE
     def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):

@@ -60,7 +60,7 @@ class FieldFilter(CmcFilter):
 
     @property
     def _filter_str(self) -> str:
-        filter_str = f'"{self.column}", "{self.condition}"{f', "{self.value}"' if self.value else ''}'
+        filter_str = f'"{self.column}", "{self.condition}"{f', "{self.value}"' if self.value else ""}'
         return filter_str
 
 
@@ -149,9 +149,9 @@ class FilterArray(BaseModel):
 
     def __str__(self):
         return (
-            f'[{''.join(str(_) for i, _ in enumerate(self.filters.values()))}]'
-            f'{' | Sorted By:' + ','.join(str(_) for _ in self.sorts) if self.sorts else ''}'
-            f'{' | ' + ','.join(self.logics) if self.logics else ''}'
+            f'[{"".join(str(_) for i, _ in enumerate(self.filters.values()))}]'
+            f'{" | Sorted By:" + ",".join(str(_) for _ in self.sorts) if self.sorts else ""}'
+            f'{" | " + ",".join(self.logics) if self.logics else ""}'
         )
         # return f'{'; '.join(str(_) for _ in self.filters.values())} | {''.join([str(_) for _ in self.sorts])} | {f'Logic={self.logics}' if self.logics else ""}'
 
@@ -189,7 +189,7 @@ class FilterArray(BaseModel):
 
     @property
     def sort_logics_text(self):
-        return f'[ViewConjunction({' ,'.join(self.logics)})]'
+        return f'[ViewConjunction({" ,".join(self.logics)})]'
 
     @property
     def filter_strs(self):

@@ -19,7 +19,7 @@ def com_context(mode: int = THREAD_MODEL):
         try:
             CoInitializeEx(mode)
             logger.debug(
-                f'Thread {thread_id} COM initialised for {'COINIT_MULTITHREADED' if mode == 0 else 'COINIT_APARTMENTTHREADED' if mode == 2 else 'unknown'} use'
+                f'Thread {thread_id} COM initialised for {"COINIT_MULTITHREADED" if mode == 0 else "COINIT_APARTMENTTHREADED" if mode == 2 else "unknown"} use'
             )
             initialized = True
         except OSError as e:

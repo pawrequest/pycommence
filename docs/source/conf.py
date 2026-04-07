@@ -92,4 +92,4 @@ def linkcode_resolve(domain, info):
     except OSError:
         return None
 
-    return f"{repo_src}/{modname.replace('.', r'/')}.py#L{linestart}-L{linestop}"
+    return f'{repo_src}/{modname.replace(".", r"/")}.py#L{linestart}-L{linestop}'

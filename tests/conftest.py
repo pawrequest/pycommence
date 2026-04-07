@@ -8,7 +8,7 @@ from sample_data import TEST_ITEM_NAME
 
 from pycommence.core.meta import CommenceTable
 from pycommence.dde import DDETopic
-from pycommence.pycommence_client import PyCommenceClient
+from pycommence.pycommence_client import PyCommence
 from pycommence.testing import test_client, test_client_non_tutorial
 
 
@@ -48,7 +48,7 @@ def contact_cursor(test_client):
 
 
 @contextlib.contextmanager
-def temp_contact(client: PyCommenceClient, category='Contact') -> ContextManager[PyCommenceClient]:
+def temp_contact(client: PyCommence, category='Contact') -> ContextManager[PyCommence]:
     topic = DDETopic.GET
     try:
         res = client.item_add_dde(category, TEST_ITEM_NAME, DDETopic.GET)

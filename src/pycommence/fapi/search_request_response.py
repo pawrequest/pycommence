@@ -7,6 +7,7 @@ from fastapi import Depends, Query
 from pydantic import BaseModel, model_validator
 
 from pycommence import MoreAvailable
+
 # from pycommence.fapi.search_functions import MoreAvailableFront
 from pycommence.core.filters import ConditionType
 from pycommence.core.pagination import Pagination as _Pagination
@@ -45,12 +46,12 @@ class SearchRequest(BaseModel):
     def __str__(self):
         return (
             f'Csr: {self.csrname}'
-            f'{' | pk=:' + self.pk_value if self.pk_value else ''}'
-            f'{' | row_id=:' + self.row_id if self.row_id else ''}'
-            f'{' | customer_name="' + self.customer_name + '"' if self.customer_name else ''}'
-            f'{' | cmc_filter_i=' + str(self.cmc_filter_i) if self.cmc_filter_i else ''}'
-            f'{' | py_filter_i=' + str(self.py_filter_i) if self.py_filter_i else ''}'
-            f'{' | ' + str(self.pagination) if self.pagination else ''}'
+            f'{" | pk=:" + self.pk_value if self.pk_value else ""}'
+            f'{" | row_id=:" + self.row_id if self.row_id else ""}'
+            f'{' | customer_name="' + self.customer_name + '"' if self.customer_name else ""}'
+            f'{" | cmc_filter_i=" + str(self.cmc_filter_i) if self.cmc_filter_i else ""}'
+            f'{" | py_filter_i=" + str(self.py_filter_i) if self.py_filter_i else ""}'
+            f'{" | " + str(self.pagination) if self.pagination else ""}'
         )
 
     @property
@@ -98,15 +99,15 @@ class SearchRequest(BaseModel):
 
     @classmethod
     def from_query(
-            cls,
-            csrname: str = Query(None),
-            pk_value: str = Query(''),
-            pagination: Pagination = Depends(Pagination.from_query),
-            condition: ConditionType = Depends(get_condition),
-            max_rtn: int = Query(None),
-            row_id: str = Query(None),
-            py_filter_i: int = Query(0),
-            cmc_filter_i: int = Query(0),
+        cls,
+        csrname: str = Query(None),
+        pk_value: str = Query(''),
+        pagination: Pagination = Depends(Pagination.from_query),
+        condition: ConditionType = Depends(get_condition),
+        max_rtn: int = Query(None),
+        row_id: str = Query(None),
+        py_filter_i: int = Query(0),
+        cmc_filter_i: int = Query(0),
     ):
         return cls(
             csrname=csrname,
@@ -128,8 +129,8 @@ class SearchResponse(BaseModel):
 
     def __str__(self):
         return (
-            f'Search Response: {self.length}x {self.search_request.csrname if self.search_request.csrname else 'No CsrName'} records'
-            f'{' (' + str(self.more.n_more) + ' more available),' if self.more else '. '} '
+            f'Search Response: {self.length}x {self.search_request.csrname if self.search_request.csrname else "No CsrName"} records'
+            f'{" (" + str(self.more.n_more) + " more available)," if self.more else ". "} '
             f'SearchRequest[{str(self.search_request)}]'
         )
 

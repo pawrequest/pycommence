@@ -7,7 +7,9 @@ using PyCommence, with support for pagination and filtering.
 
 from __future__ import annotations
 
-from fastapi import Depends
+from typing import AsyncGenerator
+
+from fastapi import Depends, Query
 from loguru import logger
 
 from pycommence import MoreAvailable
@@ -18,15 +20,15 @@ from pycommence.core.row_data import RowData
 from pycommence.core.utils import alias_lookup
 from pycommence.dde import DDETopic
 from pycommence.fapi.search_request_response import MoreAvailableFront, SearchRequest, SearchResponse
-from pycommence.pycommence_client import PyCommenceClient
+from pycommence.pycommence_client import PyCommence
 
 
 async def pycommence_fetch(
-    q: SearchRequest = Depends(SearchRequest.from_query),
-    auto_model=False,
+        q: SearchRequest = Depends(SearchRequest.from_query),
+        auto_model=False,
 ) -> RowData:
     q.max_rtn = 1
-    with PyCommenceClient() as pycmc:
+    with PyCommence() as pycmc:
         csr = pycmc.cursor(q.csrname)
         if not q.row_id:
             logger.debug(f'Getting row_id for pk_value: {q.pk_value} in csr: {q.csrname}')
@@ -38,10 +40,10 @@ async def pycommence_fetch(
 
 
 async def pycommence_search(
-    q: SearchRequest,
-    auto_model: bool = False,
+        q: SearchRequest,
+        auto_model: bool = False,
 ) -> SearchResponse:
-    with PyCommenceClient() as pycmc:
+    with PyCommence() as pycmc:
         if auto_model:
             table_type = get_or_create_table_type(
                 pycmc.conversation(DDETopic.GET),
@@ -56,6 +58,13 @@ async def pycommence_search(
         )
         records, more = await pycommence_gather(pycmc=pycmc, q=q, filter_array=filter_array)
         return SearchResponse(records=records, more=more, search_request=q)
+
+
+async def pycmc_f_query(
+        csrname: str = Query(...),
+) -> AsyncGenerator[PyCommence]:
+    with PyCommence(csrname) as pycmc:
+        yield pycmc
 
 
 # async def pycommence_search1(
@@ -74,9 +83,9 @@ async def pycommence_search(
 
 
 async def pycommence_gather(
-    pycmc: PyCommenceClient,
-    q: SearchRequest,
-    filter_array: FilterArray | None = None,
+        pycmc: PyCommence,
+        q: SearchRequest,
+        filter_array: FilterArray | None = None,
 ) -> tuple[list[RowData], MoreAvailable | None]:
     """
     Gather records from PyCommence based on the provided search request.

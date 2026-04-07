@@ -11,13 +11,13 @@ from pycommence.core.filters import ConditionType, FieldFilter, FilterArray
 from pycommence.core.pagination import Pagination
 from pycommence.core.row_data import RowData
 from pycommence.cursor import CursorAPI
-from pycommence.pycommence_client import PyCommenceClient
+from pycommence.pycommence_client import PyCommence
 
 PAGINATED = Pagination(offset=0, limit=5)
 
 
 @contextlib.contextmanager
-def temp_contact(pycmc: PyCommenceClient):
+def temp_contact(pycmc: PyCommence):
     logger.info('Adding temp record')
     try:
         pycmc.cursor('Contact').create_row(create_pkg=NEW_DICT)
@@ -51,7 +51,7 @@ def test_read_rows(test_client):
     assert row.table_model is Contact
 
 
-def test_get_one_record(test_client: PyCommenceClient):
+def test_get_one_record(test_client: PyCommence):
     with temp_contact(test_client):
         row: RowData = test_client.cursor('Contact').read_row(pk=NEW_KEY)
         contact = row.construct_model()
@@ -59,7 +59,7 @@ def test_get_one_record(test_client: PyCommenceClient):
         assert row.data.get('Notes') == 'Some Notes'
 
 
-def test_edit_record(test_client: PyCommenceClient):
+def test_edit_record(test_client: PyCommence):
     with temp_contact(test_client):
         original = test_client.cursor('Contact').read_row(pk=NEW_KEY).data
 
@@ -72,7 +72,7 @@ def test_edit_record(test_client: PyCommenceClient):
         assert reverted == original
 
 
-def test_add_record(test_client: PyCommenceClient):
+def test_add_record(test_client: PyCommence):
     row_count1 = test_client.cursor('Contact').row_count
     with temp_contact(test_client):
         test_client.refresh_cursor('Contact')
@@ -88,20 +88,20 @@ def test_add_record(test_client: PyCommenceClient):
     assert row_count3 == row_count1
 
 
-def test_add_duplicate_raises(test_client: PyCommenceClient):
+def test_add_duplicate_raises(test_client: PyCommence):
     with pytest.raises(PyCommenceExistsError):
         with temp_contact(test_client):
             test_client.cursor('Contact').create_row(create_pkg=NEW_DICT)
 
 
-def test_multiple_csrs(test_client: PyCommenceClient):
+def test_multiple_csrs(test_client: PyCommence):
     assert test_client.cursor('Account').category == 'Account'
     assert test_client.cursor('Contact').category == 'Contact'
     ...
 
 
 def test_with_csr():
-    with PyCommenceClient('Contact') as pycmc:
+    with PyCommence('Contact') as pycmc:
         assert pycmc.cursor('Contact').category == 'Contact'
         ...
 

@@ -19,11 +19,11 @@ def configure_loguru(
 
 
 def log_fmt_local_terminal(record) -> str:
-    file_txt = f"{record['file'].path}:{record['line']}"
+    file_txt = f'{record["file"].path}:{record["line"]}'
     category = record['extra'].get('category', 'General')
     category_txt = f'{category.title():<9}'
-    lvltext = f'<lvl>{record['level']: <7}</lvl>'
-    msg_txt = f'<lvl>{record['message']}</lvl>'
+    lvltext = f'<lvl>{record["level"]: <7}</lvl>'
+    msg_txt = f'<lvl>{record["message"]}</lvl>'
     msg_txt = msg_txt.replace('{', '{{').replace('}', '}}')
     # why file_txt must be at start for clickable?
     return f'{file_txt} - {lvltext} {category_txt} | {msg_txt}\n'

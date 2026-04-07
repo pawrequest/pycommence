@@ -5,7 +5,7 @@ from sample_data import TEST_ITEM_NAME, UPDATE_DICT
 
 from pycommence.dde import DDETopic
 from pycommence.dde.msgs import system
-from pycommence.pycommence_client import PyCommenceClient
+from pycommence.pycommence_client import PyCommence
 
 
 def test_client_system(test_client):
@@ -34,7 +34,7 @@ def test_temp_contact_adds_and_deletes(test_client, caplog):
     assert after == 0, 'Temp contact still exists in view after test'
 
 
-def count_temp_contact(dde_server: PyCommenceClient) -> int:
+def count_temp_contact(dde_server: PyCommence) -> int:
     topic = DDETopic.GET
     dde_server.conversation(topic).view_reset('Contact')
     dde_server.conversation().view_filter_by_field('contactKey', TEST_ITEM_NAME)
@@ -42,7 +42,7 @@ def count_temp_contact(dde_server: PyCommenceClient) -> int:
     return cnt_count
 
 
-def test_edit_item(test_client: PyCommenceClient):
+def test_edit_item(test_client: PyCommence):
     with temp_contact(test_client) as pycmc_client_temp_contact:
         test_client = pycmc_client_temp_contact
         update_dict = UPDATE_DICT
@@ -58,7 +58,7 @@ def test_edit_item(test_client: PyCommenceClient):
         assert item['Notes'] == tstamp, 'Notes field not updated correctly'
 
 
-def test_get_category_field_def(test_client: PyCommenceClient, timed):
+def test_get_category_field_def(test_client: PyCommence, timed):
     category = 'Contact'
     res = test_client.conversation().category_field_definitions(category)
     ...
