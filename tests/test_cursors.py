@@ -36,12 +36,12 @@ def test_pycmc(test_client):
 def test_temp_contact(test_client):
     """Test add_record and delete_record."""
     with pytest.raises(PyCommenceNotFoundError):
-        test_client.cursor('Contact').read_row(pk=NEW_KEY)
+        test_client.item_read_csr(csrname='Contact', pk=NEW_KEY)
     with temp_contact(test_client):
-        res = test_client.cursor('Contact').read_row(pk=NEW_KEY)
+        res = test_client.item_read_csr(csrname='Contact', pk=NEW_KEY)
         assert res
     with pytest.raises(PyCommenceNotFoundError):
-        test_client.cursor('Contact').read_row(pk=NEW_KEY)
+        test_client.item_read_csr(csrname='Contact', pk=NEW_KEY)
 
 
 def test_read_rows(test_client):
@@ -68,7 +68,7 @@ def test_edit_record(test_client: PyCommence):
         for k, v in UPDATE_DICT.items():
             assert edited[k] == v
         test_client.cursor('Contact').update_row(pk=NEW_KEY, update_pkg=original)
-        reverted = test_client.cursor('Contact').read_row(pk=NEW_KEY).data
+        reverted = test_client.item_read_csr(csrname='Contact', pk=NEW_KEY).data
         assert reverted == original
 
 

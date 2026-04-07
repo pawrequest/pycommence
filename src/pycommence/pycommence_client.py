@@ -1,7 +1,6 @@
 import threading
 from typing import cast
 
-from loguru import logger
 from win32com.client import Dispatch
 from win32com.universal import com_error
 
@@ -53,7 +52,7 @@ class _PyCommenceClientConnector:
             self._create_conversation(DDETopic.GET)
             if self._init_csrs:
                 for csrname in self._init_csrs:
-                    self._create_cursor(csrname)
+                    self.create_cursor(csrname)
 
     def _connect_app(self) -> ICommenceDB:
         with self._lock:
@@ -93,21 +92,21 @@ class _PyCommenceClientConnector:
     # CURSOR METHODS
     def cursor(self, name: str | None = None) -> CursorAPI:
         name = name or self._sole_cursor_name()
-        return self.cursors.get(name) or self._create_cursor(name)
+        return self.cursors.get(name) or self.create_cursor(name)
 
     def refresh_cursor(self, csrname: str = None) -> CursorAPI:
         """Reset an existing cursor with same name and mode."""
         csrname = csrname or self._sole_cursor_name()
         csr = self.cursors[csrname]
-        self.cursors[csrname] = self._create_cursor(csrname, csr.mode)
+        self.cursors[csrname] = self.create_cursor(csrname, csr.mode)
         return self.cursors[csrname]
 
-    def _create_cursor(
-            self,
-            name: str | None = None,
-            mode: CursorType = CursorType.CATEGORY,
-            pilot: bool = False,
-            internet: bool = False,
+    def create_cursor(
+        self,
+        name: str | None = None,
+        mode: CursorType = CursorType.CATEGORY,
+        pilot: bool = False,
+        internet: bool = False,
     ) -> CursorAPI:
         if pilot and internet:
             raise ValueError('Only one of pilot or internet can be set')
@@ -137,6 +136,12 @@ class _PyCommenceClientConnector:
 
 
 class PyCommence(_PyCommenceClientConnector):
+    # CURSOR CRUD
+    def item_read_csr(self, *, csrname: str | None = None, row_id: str | None = None, pk: str | None = None) -> RowData:
+        csr = self.cursor(csrname)
+        return csr.read_row(row_id=row_id, pk=pk)
+
+    # DDE CRUD
     @dde_error_handler
     def send_dde_message(self, msg: DDEMessageBase) -> str | list[str] | bool:
         conv = self.conversation(msg.topic)
@@ -153,7 +158,7 @@ class PyCommence(_PyCommenceClientConnector):
                 item_dict[attr] = value
         else:
             for start in range(0, len(field_names), self.options.fields_chunk):
-                fields_chunk = field_names[start: start + self.options.fields_chunk]
+                fields_chunk = field_names[start : start + self.options.fields_chunk]
                 chunk_msg = msgs.get.fields(category=category, item=name, fields=fields_chunk, delim=self.options.delim)
                 chunk_res = self.send_dde_message(chunk_msg)
                 for attr, value in zip(fields_chunk, chunk_res):
@@ -172,14 +177,10 @@ class PyCommence(_PyCommenceClientConnector):
         return res
 
     def item_edit_dde(
-            self, category, item_name: str, field_updates: dict[str, str], topic: DDETopic = DDETopic.GET
+        self, category, item_name: str, field_updates: dict[str, str], topic: DDETopic = DDETopic.GET
     ) -> bool:
         for field_name, field_value in field_updates.items():
             msg = msgs.execute.edit_item(category, item_name, field_name, field_value, topic)
             res = self.send_dde_message(msg)
             assert res is True
         return True
-
-    def read_row(self, *, csrname: str | None = None, row_id: str | None = None, pk: str | None = None) -> RowData:
-        csr = self.cursor(csrname)
-        return csr.read_row(row_id=row_id, pk=pk)

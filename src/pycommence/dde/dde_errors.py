@@ -3,7 +3,9 @@ from __future__ import annotations
 from collections.abc import Callable
 from functools import wraps
 
-import win32ui  # noqa BEFORE pywintypes, pythoncom
+
+# ruff: noqa: I001
+import win32ui  # noqa: F401 - BEFORE pywintypes, pythoncom, pywindde
 import dde as pywindde
 import pythoncom
 import pywintypes

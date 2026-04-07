@@ -165,7 +165,6 @@ class CursorAPI:
         row_id = row_id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_query_row_set_by_id(row_id)
         row = next(rs.rows())
-        # return RowData2(RowInfo(self.category, row_id), data=row)
         return RowData(category=self.category, row_id=row_id, data=row)
 
     def read_rows(
@@ -189,20 +188,20 @@ class CursorAPI:
                 yield RowData(category=self.category, row_id=row_id, data=row)
 
     # UPDATE
-    def update_row(self, update_pkg: dict, *, id: str | None = None, pk: str | None = None):
-        raise_for_id_or_pk(id, pk)
-        id = id or self.pk_to_id(pk)
-        rs = self.cursor_wrapper.get_edit_row_set_by_id(id)
+    def update_row(self, update_pkg: dict, *, row_id: str | None = None, pk: str | None = None) -> bool:
+        raise_for_id_or_pk(row_id, pk)
+        row_id = row_id or self.pk_to_id(pk)
+        rs = self.cursor_wrapper.get_edit_row_set_by_id(row_id)
         rs.modify_row(0, update_pkg)
-        assert rs.commit()
+        return rs.commit()
 
     # DELETE
-    def delete_row(self, id: str | None = None, pk: str | None = None) -> None:
+    def delete_row(self, id: str | None = None, pk: str | None = None) -> bool:
         raise_for_id_or_pk(id, pk)
         id = id or self.pk_to_id(pk)
         rs = self.cursor_wrapper.get_delete_row_set_by_id(id)
         rs.delete_row(0)
-        assert rs.commit()
+        return rs.commit()
 
     # FILTER
     def filter_by_array(self, filter_array: FilterArray) -> Self:

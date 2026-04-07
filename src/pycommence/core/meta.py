@@ -69,7 +69,7 @@ class CommenceTableGenerated(BaseModel, ABC):
 class CommenceTable(BaseModel, ABC):
     model_config = ConfigDict(extra='ignore')
     category: ClassVar[str]
-    row_id: str
+    row_id: str = ''
     name: str
 
     def __init_subclass__(cls, **kwargs):

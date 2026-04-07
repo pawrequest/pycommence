@@ -7,7 +7,7 @@ using PyCommence, with support for pagination and filtering.
 
 from __future__ import annotations
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
 from fastapi import Depends, Query
 from loguru import logger
@@ -24,8 +24,8 @@ from pycommence.pycommence_client import PyCommence
 
 
 async def pycommence_fetch(
-        q: SearchRequest = Depends(SearchRequest.from_query),
-        auto_model=False,
+    q: SearchRequest = Depends(SearchRequest.from_query),
+    auto_model=False,
 ) -> RowData:
     q.max_rtn = 1
     with PyCommence() as pycmc:
@@ -40,8 +40,8 @@ async def pycommence_fetch(
 
 
 async def pycommence_search(
-        q: SearchRequest,
-        auto_model: bool = False,
+    q: SearchRequest,
+    auto_model: bool = False,
 ) -> SearchResponse:
     with PyCommence() as pycmc:
         if auto_model:
@@ -61,7 +61,7 @@ async def pycommence_search(
 
 
 async def pycmc_f_query(
-        csrname: str = Query(...),
+    csrname: str = Query(...),
 ) -> AsyncGenerator[PyCommence]:
     with PyCommence(csrname) as pycmc:
         yield pycmc
@@ -83,9 +83,9 @@ async def pycmc_f_query(
 
 
 async def pycommence_gather(
-        pycmc: PyCommence,
-        q: SearchRequest,
-        filter_array: FilterArray | None = None,
+    pycmc: PyCommence,
+    q: SearchRequest,
+    filter_array: FilterArray | None = None,
 ) -> tuple[list[RowData], MoreAvailable | None]:
     """
     Gather records from PyCommence based on the provided search request.
