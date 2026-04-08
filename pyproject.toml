@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "pycommence"
-version = "0.2.666"
+version = "0.3.1"
 description = "wrapper for Commence Rm via pywin32"
 authors = [
     { name = "PawRequest", email = "pycommence+pawrequest@users.noreply.github.com" }
