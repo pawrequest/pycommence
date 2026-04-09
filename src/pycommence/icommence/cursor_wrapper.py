@@ -180,9 +180,9 @@ class CursorWrapper:
 
         """
         limit: int = limit if limit is not None else self._csr_cmc.RowCount
-        if limit > 5025:
-            logger.warning(f'Limit of {limit} exceeds maximum of 5025 rows - truncating to 5025')
-            limit = 5025
+        if limit > 4000:
+            logger.warning(f'Limit of {limit} exceeds maximum of 4000 rows - truncating to 4000')
+            limit = 4000
         result = self._csr_cmc.GetQueryRowSet(limit, OptionFlag.NONE)
         return rs.RowSetQuery(result)
 
