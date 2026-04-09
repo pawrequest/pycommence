@@ -1,4 +1,8 @@
-import pytest
+try:
+    import pytest
+except ImportError:
+    raise ImportError('pytest is required for testing. Please install with `pip install pytest`')
+
 
 from pycommence.pycommence_client import PyCommence
 from pycommence.threads import com_context

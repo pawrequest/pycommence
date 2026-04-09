@@ -1,10 +1,14 @@
 from abc import ABC
-from typing import ClassVar, Literal, cast
+from typing import TYPE_CHECKING, ClassVar, Literal, cast
 
 from loguru import logger
 from pydantic import BaseModel, ConfigDict
 
 from pycommence.core.fields import CmcDefsDict
+from pycommence.dde import DDETopic
+
+if TYPE_CHECKING:
+    from pycommence import PyCommence
 
 _TABLE_TYPE_REGISTER: dict[str, type['CommenceTable']] = {}
 _GENERATED_TABLE_TYPE_REGISTER: dict[str, type['CommenceTableGenerated']] = {}
@@ -58,6 +62,23 @@ def get_table_type(
     return None
 
 
+def get_table_type_generate(
+    table_name: str, pycmc: 'PyCommence'
+) -> type['CommenceTable'] | type['CommenceTableGenerated']:
+    if res := _TABLE_TYPE_REGISTER.get(table_name):
+        return res
+    if res := _GENERATED_TABLE_TYPE_REGISTER.get(table_name):
+        return res
+
+    return generate_table_pycmc(pycmc, table_name)
+
+
+def generate_table_pycmc(pycmc: 'PyCommence', table_name: str) -> type['CommenceTableGenerated']:
+    conv = pycmc.conversation(DDETopic.VIEW)
+    fields_defs = conv.category_field_definitions(table_name)
+    return generate_table_pydantic_model(table_name, table_name, field_def_dict=fields_defs)
+
+
 class CommenceTableGenerated(BaseModel, ABC):
     model_config = ConfigDict(extra='allow')
 
@@ -66,11 +87,14 @@ class CommenceTableGenerated(BaseModel, ABC):
         register_table(cls)
 
 
-class CommenceTable(BaseModel, ABC):
+class CommenceTableAdd(BaseModel, ABC):
     model_config = ConfigDict(extra='ignore')
     category: ClassVar[str]
-    row_id: str = ''
     name: str
+
+
+class CommenceTable(CommenceTableAdd, ABC):
+    row_id: str = ''
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -100,7 +124,7 @@ def generate_table_pydantic_model(
         'category': category,
         'name_field': defs_dict.name_field(error='ignore'),
     }
-    for k in field_def_dict.keys():
+    for k in defs_dict.keys():
         class_dict[k] = None
 
     logger.debug(f'Generating table class {name}.')

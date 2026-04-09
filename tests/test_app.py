@@ -1,8 +1,7 @@
 import pytest
+from conftest import Contact
 from starlette.testclient import TestClient
 
-from conftest import Contact
-from pycommence.conversation import get_or_create_table_type
 from pycommence.fapi.app import app
 
 

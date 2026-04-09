@@ -1,26 +1,23 @@
 import contextlib
-from typing import ClassVar, ContextManager
+from typing import ContextManager
 
 import pytest
 from loguru import logger
-from pydantic import Field
 from sample_data import TEST_ITEM_NAME
+from test_dde.testing import test_client, test_client_non_tutorial
 
-from pycommence.core.meta import CommenceTable
 from pycommence.dde import DDETopic
 from pycommence.pycommence_client import PyCommence
-from pycommence.testing import test_client, test_client_non_tutorial
+
+# class Contact(CommenceTable):
+#     category: ClassVar[str] = 'Contact'
+#     name: str = Field(..., alias='contactKey')
+#     firstName: str
 
 
-class Contact(CommenceTable):
-    category: ClassVar[str] = 'Contact'
-    name: str = Field(..., alias='contactKey')
-    firstName: str
-
-
-class Account(CommenceTable):
-    category: ClassVar[str] = 'Account'
-    name: str = Field(..., alias='accountKey')
+# class Account(CommenceTable):
+#     category: ClassVar[str] = 'Account'
+#     name: str = Field(..., alias='accountKey')
 
 
 @pytest.fixture(scope='function')

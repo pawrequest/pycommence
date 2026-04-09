@@ -3,7 +3,6 @@ from __future__ import annotations
 from collections.abc import Callable
 from functools import wraps
 
-
 # ruff: noqa: I001
 import win32ui  # noqa: F401 - BEFORE pywintypes, pythoncom, pywindde
 import dde as pywindde
@@ -26,7 +25,7 @@ def commence_pycom_error_code(e: pywintypes.com_error) -> int:
 
 
 class PyCmcDDEError(PyCommenceError):
-    def __init__(self, cmd: str, code: int, msg: str | None = None, og_exception: Exception | None = None):
+    def __init__(self, cmd: str, code: int, msg: str | None = None):
         self.cmd = cmd
         self.code = code
         self.dde_msg = dde_error_code_lookup(code)
@@ -34,7 +33,7 @@ class PyCmcDDEError(PyCommenceError):
         super().__init__(self.msg)
 
     def __str__(self):
-        return f'DDE Error {self.code} for command "{self.cmd}": {self.msg} ({self.dde_msg})'
+        return self.msg
 
 
 class PyCmcDDENoConnectionError(PyCmcDDEError):
@@ -65,10 +64,18 @@ def dde_error_handler(func: Callable):
             raise_for_bad_dde(cmd, res)
             return res
 
+        except PyCmcDDEError as e:
+            raise e
+
         except pythoncom.error as e:
             long_code, basic_msg, code_tup, sometype, *rest = e.args
             code = code_tup[0]
-            raise PyCmcDDEError(cmd, code) from e
+            msg = dde_error_code_lookup(code)
+            if 0 < code < 100:
+                if len(args) > 1:
+                    params = args[1].params
+                    msg += f': "{params[code - 1]}" is invalid for "{params[0]}".'
+            raise PyCmcDDEError(cmd, code, msg)
 
         except pywindde.error as e:
             try:

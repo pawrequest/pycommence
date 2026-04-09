@@ -14,6 +14,7 @@ class Options:
     max_cmd_len: int = 256  # undocumented Commence DDE cmd length limit
     fields_chunk: int = 12
     thread_model: int = COINIT_APARTMENTTHREADED
+    generate_models: bool = False
 
 
 @lru_cache(maxsize=1)

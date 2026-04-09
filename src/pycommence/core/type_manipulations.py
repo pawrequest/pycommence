@@ -3,7 +3,7 @@ from typing import get_args, get_origin
 from pydantic import BaseModel, create_model
 
 
-def make_partial(model: type[BaseModel], cache=None) -> type[BaseModel]:
+def make_partial(model: type[BaseModel], cache=None, prefix: str = 'Partial', suffix: str = '') -> type[BaseModel]:
     if cache is None:
         cache = {}
 
@@ -41,6 +41,6 @@ def make_partial(model: type[BaseModel], cache=None) -> type[BaseModel]:
         new_type = optionalize(field.annotation)
         fields[name] = (new_type, None)
 
-    partial = create_model(f'Partial{model.__name__}', __base__=BaseModel, **fields)
+    partial = create_model(f'{prefix}{model.__name__}{suffix}', __base__=BaseModel, **fields)
     cache[model] = partial
     return partial

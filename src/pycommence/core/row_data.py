@@ -21,16 +21,20 @@ class RowData:
     data: dict[str, str]
     _table_model_type: type[CommenceTable] | None = None
 
-    @property
     def table_model(self) -> type[CommenceTable] | None:
         if not self._table_model_type:
             self._table_model_type = get_table_type(self.category, mode='all', missing='raise')
         return self._table_model_type
 
     def construct_model(self) -> CommenceTable:
-        return self.table_model(row_id=self.row_id, **self.data)
+        return self.table_model()(row_id=self.row_id, **self.data)
 
 
 RowFilter = Callable[[Generator[dict[str, str]]], Generator[dict[str, str]]]
 RowDataGenerator = _t.Generator[RowData | MoreAvailable]
 RowDataGeneratorAsync = _t.AsyncGenerator[RowData | MoreAvailable]
+
+
+def construct_model(row_data) -> CommenceTable:
+    table_type = get_table_type(row_data.category, mode='all', missing='raise')
+    return table_type(row_id=row_data.row_id, **row_data.data)
