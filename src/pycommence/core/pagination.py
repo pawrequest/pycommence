@@ -14,7 +14,7 @@ class MoreAvailable:
 @dataclass
 class Pagination:
     offset: int = 0
-    limit: int = 0
+    limit: int = 100
 
     def __bool__(self):
         return any([self.limit, self.offset])
