@@ -174,7 +174,7 @@ class CursorAPI:
         row_filter: RowFilter | None = None,
     ) -> RowDataGenerator:
         """Generate rows from the cursor. Yields (row_id, row_dict) tuples."""
-        cmc_filter = self.temporary_filter(filter_array) if filter_array else contextlib.nullcontext()
+        cmc_filter = self.temporary_filter(filter_array) if filter_array is not None else contextlib.nullcontext()
         offset = self.temporary_offset(pagination.offset)
         with offset, cmc_filter:
             rowset = self.cursor_wrapper.get_query_row_set(limit=pagination.limit + 1 if pagination.limit else None)
