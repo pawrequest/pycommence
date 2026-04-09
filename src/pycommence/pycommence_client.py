@@ -56,8 +56,11 @@ class _PyCommenceClientConnector:
 
     def _connect_app(self) -> ICommenceDB:
         with self._lock:
-            res1 = Dispatch(self.options.application_db_name)
-            return cast(ICommenceDB, cast(object, res1))
+            try:
+                dispatch_ = Dispatch(self.options.application_db_name)
+                return cast(ICommenceDB, cast(object, dispatch_))
+            except Exception as e:
+                raise PyCommenceServerError(f'Error connecting to Commence application: {e}')
 
     # CONVERSATION METHODS
     def conversation(self, topic: DDETopic = None) -> ConversationAPI:
