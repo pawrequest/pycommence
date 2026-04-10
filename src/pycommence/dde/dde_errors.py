@@ -94,6 +94,9 @@ def dde_error_handler(func: Callable):
 
 
 DDEErrorDict = {
+    # COM errors
+    -2147483640: 'Too Much Data Requested?',
+    # COMMENCE ERRORS
     100: 'Out of memory',
     101: 'Internal error',
     102: ' Wrong number of parameters',
