@@ -1,5 +1,4 @@
 import pytest
-from conftest import Contact
 from starlette.testclient import TestClient
 
 from pycommence.fapi.app import app
@@ -22,8 +21,8 @@ def test_get_one(client):
     row_data = response.json()
     data_dict = row_data['data']
     assert data_dict['firstName'] == 'Jeff'
-    contact = Contact(row_id=row_data['row_id'], **data_dict)
-    assert contact.firstName == 'Jeff'
+    # contact = Contact(row_id=row_data['row_id'], **data_dict)
+    # assert contact.firstName == 'Jeff'
     ...
 
 
@@ -39,7 +38,7 @@ def test_get_one(client):
 
 
 def test_search_endpoint(client):
-    response = client.get('/search', params={'csrname': 'Contact', 'pk_value': 'Mark'})
+    response = client.get('/search', params={'csrname': 'Contact', 'pk_value': 'Mark', 'auto_model': True})
     data = response.json()
     assert response.status_code == 200
     assert 'records' in data

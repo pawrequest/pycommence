@@ -29,7 +29,7 @@ def test_generate_table(test_client):
 
 
 def test_2(test_client: PyCommence):
-    res = get_table_type_generate('Contact', test_client)
-    cont = test_client.item_read_dde('Contact', 'Musk.Eon')
-    model = res.model_validate(cont)
+    generated_table = get_table_type_generate('Contact', test_client)
+    contact = test_client.item_read_dde('Contact', 'Musk.Elon')
+    model = generated_table.model_validate(contact)
     assert model.__class__.__name__ == 'Contact'
