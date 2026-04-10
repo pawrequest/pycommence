@@ -53,8 +53,10 @@ async def pycommence_search(
             table_type = get_table_type(q.csrname, mode='manual', missing='raise')
         if not table_type:
             raise ValueError(f'Unknown table type for csrname: {q.csrname}')
+        col = pycmc.cursor(q.csrname).pk_label
         filter_array = FilterArray.from_filters(
-            FieldFilter(column=alias_lookup(table_type, 'name'), condition=q.condition, value=q.pk_value)
+            FieldFilter(column=col, condition=q.condition, value=q.pk_value)
+            # FieldFilter(column=alias_lookup(table_type, 'firstName'), condition=q.condition, value=q.pk_value)
         )
         records, more = await pycommence_gather(pycmc=pycmc, q=q, filter_array=filter_array)
         return SearchResponse(records=records, more=more, search_request=q)
