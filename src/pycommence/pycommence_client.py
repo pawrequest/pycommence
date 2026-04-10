@@ -1,4 +1,5 @@
 import threading
+from collections.abc import Callable
 from typing import cast
 
 from win32com.client import Dispatch
@@ -9,6 +10,8 @@ from pycommence.core.exceptions import PyCommenceServerError
 from pycommence.core.row_data import RowData
 from pycommence.cursor import CursorAPI
 from pycommence.dde import DDEMessageBase, DDETopic, msgs
+from pycommence.dde.dde_errors import dde_error_handler
+
 # from pycommence.dde.dde_errors import dde_error_handler
 from pycommence.icommence.const import CursorType, OptionFlag
 from pycommence.icommence.cursor_wrapper import CursorWrapper
@@ -150,28 +153,58 @@ class PyCommence(_PyCommenceClientConnector):
         conv = self.conversation(msg.topic)
         return conv.send_message(msg)
 
-    def item_read_dde(self, category, name, fields: list[str] = None, topic: DDETopic = DDETopic.GET) -> dict[str, str]:
-        item_dict = {}
-        field_names = fields if fields else self.conversation(topic).category_field_names(category)
-        master_msg = msgs.get.fields(category=category, item=name, fields=field_names, delim=self.options.delim)
+    def _chunked_dde_request(
+        self,
+        items: list[str],
+        build_msg: Callable[[list[str]], DDEMessageBase],
+    ) -> list[str]:
+        """Send a DDE request, adaptively chunking *items* to stay within the command length limit.
 
-        try:
+        Args:
+            items: The variable-length portion of the command (e.g. field names).
+            build_msg: Callable that builds a :class:`DDEMessageBase` from a
+                subset of *items*.
+
+        Returns:
+            Flat list of result values in the same order as *items*.
+        """
+        master_msg = build_msg(items)
+        if len(str(master_msg)) < self.options.max_cmd_len:
             res = self.send_dde_message(master_msg)
-            for attr, value in zip(field_names, res):
-                item_dict[attr] = value
-        except Exception as e:
-            # fall back to chunked approach
-            # try:
-            for start in range(0, len(field_names), self.options.fields_chunk):
-                fields_chunk = field_names[start : start + self.options.fields_chunk]
-                chunk_msg = msgs.get.fields(category=category, item=name, fields=fields_chunk, delim=self.options.delim)
-                chunk_res = self.send_dde_message(chunk_msg)
-                for attr, value in zip(fields_chunk, chunk_res):
-                    item_dict[attr] = value
-            # except Exception as e:
-            #     ...
-        assert len(item_dict) == len(field_names)
-        return item_dict
+            return res if isinstance(res, list) else [res]
+
+        results: list[str] = []
+        remaining = list(items)
+        while remaining:
+            chunk_size, chunk_msg = self._fit_chunk(remaining, build_msg)
+            res = self.send_dde_message(chunk_msg)
+            results.extend(res if isinstance(res, list) else [res])
+            remaining = remaining[chunk_size:]
+        return results
+
+    def _fit_chunk(
+        self,
+        remaining: list[str],
+        build_msg: Callable[[list[str]], DDEMessageBase],
+    ) -> tuple[int, DDEMessageBase]:
+        """Find the largest chunk from the front of *remaining* that fits within max_cmd_len."""
+        for size in range(min(self.options.fields_chunk, len(remaining)), 0, -1):
+            msg = build_msg(remaining[:size])
+            if len(str(msg)) < self.options.max_cmd_len:
+                return size, msg
+        raise ValueError(
+            f'Cannot fit DDE command within {self.options.max_cmd_len} chars even with a single item: "{remaining[0]}"'
+        )
+
+    def item_read_dde(self, category, name, fields: list[str] = None, topic: DDETopic = DDETopic.GET) -> dict[str, str]:
+        field_names = fields if fields else self.conversation(topic).category_field_names(category)
+
+        def build_msg(chunk: list[str]) -> DDEMessageBase:
+            return msgs.get.fields(category=category, item=name, fields=chunk, delim=self.options.delim)
+
+        results = self._chunked_dde_request(field_names, build_msg)
+        assert len(results) == len(field_names)
+        return dict(zip(field_names, results))
 
     def item_add_dde(self, category, item_name: str, topic: DDETopic) -> bool:
         msg = msgs.execute.add_item(category, item_name, topic)
