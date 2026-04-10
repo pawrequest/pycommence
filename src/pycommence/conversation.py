@@ -72,7 +72,7 @@ class ConversationAPI:
         self.conv = conv
         self.options = options
 
-    # @dde_error_handler
+    @dde_error_handler
     def _send_message_raw(self, msg: DDEMessageBase) -> str | bool:
         logger.debug(f'Sending DDE message: {msg}')
         with self._lock:

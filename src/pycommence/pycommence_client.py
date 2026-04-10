@@ -145,7 +145,7 @@ class PyCommence(_PyCommenceClientConnector):
         return csr.read_row(row_id=row_id, pk=pk)
 
     # DDE CRUD
-    # @dde_error_handler
+    @dde_error_handler
     def send_dde_message(self, msg: DDEMessageBase) -> str | list[str] | bool:
         conv = self.conversation(msg.topic)
         return conv.send_message(msg)
