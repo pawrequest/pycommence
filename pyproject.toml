@@ -43,3 +43,9 @@ line-length = 120
 format.quote-style = "single"
 
 lint.extend-select = ["RUF100", "UP", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/suite"]
+markers = [
+    "integration: tests requiring a live Commence database instance",
+]
