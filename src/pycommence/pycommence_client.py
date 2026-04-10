@@ -9,7 +9,7 @@ from pycommence.core.exceptions import PyCommenceServerError
 from pycommence.core.row_data import RowData
 from pycommence.cursor import CursorAPI
 from pycommence.dde import DDEMessageBase, DDETopic, msgs
-from pycommence.dde.dde_errors import dde_error_handler
+# from pycommence.dde.dde_errors import dde_error_handler
 from pycommence.icommence.const import CursorType, OptionFlag
 from pycommence.icommence.cursor_wrapper import CursorWrapper
 from pycommence.icommence.db import ICommenceDB
@@ -145,7 +145,7 @@ class PyCommence(_PyCommenceClientConnector):
         return csr.read_row(row_id=row_id, pk=pk)
 
     # DDE CRUD
-    @dde_error_handler
+    # @dde_error_handler
     def send_dde_message(self, msg: DDEMessageBase) -> str | list[str] | bool:
         conv = self.conversation(msg.topic)
         return conv.send_message(msg)
@@ -155,17 +155,21 @@ class PyCommence(_PyCommenceClientConnector):
         field_names = fields if fields else self.conversation(topic).category_field_names(category)
         master_msg = msgs.get.fields(category=category, item=name, fields=field_names, delim=self.options.delim)
 
-        if len(str(master_msg)) < self.options.max_cmd_len:
+        try:
             res = self.send_dde_message(master_msg)
             for attr, value in zip(field_names, res):
                 item_dict[attr] = value
-        else:
+        except Exception as e:
+            # fall back to chunked approach
+            # try:
             for start in range(0, len(field_names), self.options.fields_chunk):
                 fields_chunk = field_names[start : start + self.options.fields_chunk]
                 chunk_msg = msgs.get.fields(category=category, item=name, fields=fields_chunk, delim=self.options.delim)
                 chunk_res = self.send_dde_message(chunk_msg)
                 for attr, value in zip(fields_chunk, chunk_res):
                     item_dict[attr] = value
+            # except Exception as e:
+            #     ...
         assert len(item_dict) == len(field_names)
         return item_dict
 
