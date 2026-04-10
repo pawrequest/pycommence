@@ -1,0 +1,5930 @@
+{
+  "System": {
+    "requests": {
+      "Request": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "Items",
+          "params": [],
+          "syntaxRaw": "Items"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Databases": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "Databases",
+          "params": [],
+          "syntaxRaw": "Databases"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of Commence databases. The list is of the form:"
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "Use the GetDatabase request to determine the currently active database."
+        ],
+        "examples": []
+      },
+      "Formats": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "Formats",
+          "params": [],
+          "syntaxRaw": "Formats"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a tab-delimited list of clipboard formats supported by Commence for DDE."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Status": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "Status",
+          "params": [],
+          "syntaxRaw": "Status"
+        },
+        "returns": {
+          "type": "string",
+          "description": "\"Busy\" if DDE is unavailable (for example if Commence is currently printing, agents are running, or workgroup syncing is taking place). Returns \"Ready\" to indicate when Commence is available to process DDE Requests."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "SysItems": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "SysItems",
+          "params": [],
+          "syntaxRaw": "SysItems"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a tab-delimited list of items supported by the System topic."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Topics": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "Topics",
+          "params": [],
+          "syntaxRaw": "Topics"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a tab-delimited list of supported DDE conversation topics."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Version": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "Version",
+          "params": [],
+          "syntaxRaw": "Version"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the Commence version number as it appears in the Help-About box, in the form \"Version x.y\" where x and y are integers."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "VersionExtended": {
+        "kind": "REQUEST",
+        "topic": "System",
+        "signature": {
+          "name": "VersionExtended",
+          "params": [],
+          "syntaxRaw": "VersionExtended"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the full Commence version number plus the update level in the form \"Version x.y.z.w\" where x, y, z and w are integers. The full version also appears in the Help-System Information box under Version Information."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ClarifyItemNames(Status)]",
+          "[GetActiveViewInfo]",
+          "[GetCallerID(Category, PhoneNumber)]",
+          "[GetCategoryCount]",
+          "[GetCategoryDefinition(Category)]",
+          "[GetCategoryNames]",
+          "[GetConnectedItemCount(FromCategory, FromItem, Connection, ToCategory)]",
+          "[GetConnectedItemField(FromCategory, FromItem, Connection, ToCategory, Field [, Delimiter])]",
+          "[GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory)]",
+          "[GetConnectionCount(Category)]",
+          "[GetConnectionNames(Category)]",
+          "[GetDatabase]",
+          "[GetDatabaseDefinition]",
+          "[GetDesktopCount]",
+          "[GetDesktopNames]",
+          "[GetField(Category, Item, Field)]",
+          "[GetFieldCount(Category)]",
+          "[GetFieldDefinition(Category, Field)]",
+          "[GetFieldNames(Category)]",
+          "[GetFields(Category, Item, n, Field_1..., Field_n)]",
+          "[GetFieldToFile(Category, Item, Field, Filename)]",
+          "[GetFormCount(Category)]",
+          "[GetFormNames(Category)]",
+          "[GetImageFieldCount(Category)]",
+          "[GetImageFieldNames(Category, Delim)]",
+          "[GetImageFieldToFile(Category, Item, Field, Filename)]",
+          "[GetItemCount(Category)]",
+          "[GetItemNames(Category)]",
+          "[GetLastError]",
+          "[GetLetterViewInfo]",
+          "[GetMarkItem(Category, Item, Clarify Value)]",
+          "[GetImageFieldCount(Category)]",
+          "[GetPhoneNumber(PhoneNumber)]",
+          "[GetPreference(Setting)]",
+          "[GetReverseName(Name, PrefFlag)]",
+          "[GetTriggerCount]",
+          "[GetTriggerNames]",
+          "[GetViewCount(Category)]",
+          "[GetViewNames(Category)]",
+          "[GetViewToFile(Viewname, Mode, Param1, Param2, Filename)]",
+          "[MarkActiveItem]",
+          "[MergeTemplateCreate(name, Category, Shared)]",
+          "[MergeTemplateSave(name, Shared)]",
+          "[ViewCategory(Category)]",
+          "[ViewConjunction(AndOr12, AndOr13, AndOr34)]",
+          "[ViewConnectedCount(Index, Connection, ToCategory)]",
+          "[ViewConnectedField(Index, ConnectionName, ToCategory, ConnIndex, Field)]",
+          "[ViewConnectedFields(Index, ConnectionName, ToCategory, ConnIndex, n, Field_1..., Field_n)]",
+          "[ViewConnectedItem(Index, Connection, ToCategory, ConnIndex)]",
+          "[ViewDeleteAllItems]",
+          "[ViewField(Index, Field)]",
+          "[ViewFields(Index, n, Field_1..., Field_n)]",
+          "[ViewFieldToFile(Index, Field, Filename)]",
+          "[ViewFilter(ClauseNumber, FilterType, NotFlag, FieldTypeParameters...)]",
+          "[ViewImageFieldToFile(Index, Field, Filename)]",
+          "[ViewItemCount]",
+          "[ViewItemIndex(NameFieldValue)]",
+          "[ViewItemName(Index)]",
+          "[ViewMarkItem(Index)]",
+          "[ViewReverseName(Name, PrefFlag)]",
+          "[ViewSaveView(New View Name, Shared)]",
+          "[ViewSort(Field1, Sort1, Field2, Sort2 , Field3, Sort3 , Field4, Sort4)]",
+          "[ViewView(View Name)]"
+        ]
+      }
+    },
+    "executes": {},
+    "meta": {
+      "source": "C:\\prdev\\amdev\\pycommence\\rsrc\\commence_help_dde.txt",
+      "generatedBy": "optionA-parser",
+      "version": null
+    }
+  },
+  "GetData": {
+    "requests": {
+      "ClarifyItemNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ClarifyItemNames",
+          "params": [
+            {
+              "name": "Status",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ClarifyItemNames(Status)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ClarifyItemNames(Status)]"
+        ]
+      },
+      "GetActiveViewInfo": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetActiveViewInfo",
+          "params": [],
+          "syntaxRaw": "GetActiveViewInfo()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetCallerID": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCallerID",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Phone Number",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetCallerID(Category, Phone Number,Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of all items in the Category having the given phone number in a phone field. If Category is blank, searches all categories in the currently active database."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetCallerID(Category, Phone Number,Delim)]"
+        ]
+      },
+      "GetCategoryCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCategoryCount",
+          "params": [],
+          "syntaxRaw": "GetCategoryCount()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetCategoryDefinition": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCategoryDefinition",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetCategoryDefinition(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetCategoryNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCategoryNames",
+          "params": [],
+          "syntaxRaw": "GetCategoryNames()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectedItemCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectedItemCount",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectedItemCount(FromCategory, FromItem, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectedItemNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectedItemNames",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectionCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectionCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectionCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectionNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectionNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectionNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetDatabase": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetDatabase",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetDatabase(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the name and path of the currently active database."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetDatabase(Delim)]"
+        ]
+      },
+      "GetDatabaseDefinition": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetDatabaseDefinition",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetDatabaseDefinition(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "information about the curently active database. The returned string is of the form:"
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetDatabaseDefinition(Delim)]"
+        ]
+      },
+      "GetDesktopCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetDesktopCount",
+          "params": [],
+          "syntaxRaw": "[GetDesktopCount]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of desktops defined in the database."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetDesktopCount]"
+        ]
+      },
+      "GetDesktopNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetDesktopNames",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetDesktopNames(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of all desktops found in Commence."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetDesktopNames(Delim)]"
+        ]
+      },
+      "GetField": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetField",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetField(Category, Item, Field)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFieldCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFieldCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFieldDefinition": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldDefinition",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFieldDefinition(Category, Field, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list with configuration information for the specified field."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "For a Sequence field, the {DefaultString} is the next sequence value that will be used."
+        ],
+        "examples": [
+          "[GetFieldDefinition(Category, Field, Delim)]"
+        ]
+      },
+      "GetFieldNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFieldNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFields": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFields",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFields(Category, Item, n, Field_1..., Field_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFieldToFile": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldToFile",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFieldToFile(Category, Item, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFormCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFormCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFormCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFormNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFormNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFormNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetImageFieldCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetImageFieldNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldNames(Category, Delim)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetImageFieldToFile": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldToFile",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldToFile(Category, Item, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetItemCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetItemCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetItemCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetItemNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetItemNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetItemNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetLastError": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetLastError",
+          "params": [],
+          "syntaxRaw": "[GetLastError]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the error code number from the most recent request or execute error."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetLastError]"
+        ]
+      },
+      "GetLetterViewInfo": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetLetterViewInfo",
+          "params": [],
+          "syntaxRaw": "GetLetterViewInfo()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetMarkItem": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetMarkItem",
+          "params": [
+            {
+              "name": "\"(-Me-)\"",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetMarkItem(\"(-Me-)\")]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If a Clarify Field is defined for the category, the value of the clarify field can be specified with an optional third paramter. Alternatively, the ItemName can be a clarified item name."
+        ],
+        "examples": [
+          "[GetMarkItem(Category, Item, Clarify Value)]",
+          "[GetMarkItem(\"(-Me-)\")]"
+        ]
+      },
+      "GetMeField": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetPhoneNumber": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetPhoneNumber",
+          "params": [
+            {
+              "name": "PhoneNumber",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetPhoneNumber(PhoneNumber)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetPreference": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetPreference",
+          "params": [
+            {
+              "name": "Setting",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetPreference(Setting, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "some Commence preferences setting (from Customize-Preferences). Valid Settings are:"
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetPreference(Setting, Delim)]"
+        ]
+      },
+      "GetReverseName": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetReverseName",
+          "params": [
+            {
+              "name": "Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "PrefFlag",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetReverseName(Name, PrefFlag)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetTriggerCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetTriggerCount",
+          "params": [],
+          "syntaxRaw": "[GetTriggerCount()]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of agents defined with DDE trigger types."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetTriggerCount]"
+        ]
+      },
+      "GetTriggerNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetTriggerNames",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetTriggerNames(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of all trigger names that were are defined in agents with the Receive DDE trigger (i.e. the arg value). Since multiple agents can be waiting for the same trigger string, there may be duplicates."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetTriggerNames(Delim)]"
+        ]
+      },
+      "GetViewCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetViewCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetViewCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetViewNames": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetViewNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetViewNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetViewToFile": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetViewToFile",
+          "params": [
+            {
+              "name": "Viewname",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Mode",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Param1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Param2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetViewToFile (Viewname, Mode, Param1, Param2, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "MarkActiveItem": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "MarkActiveItem",
+          "params": [],
+          "syntaxRaw": "[MarkActiveItem]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[MarkActiveItem]"
+        ]
+      },
+      "MergeTemplateCreate": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "MergeTemplateCreate",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "MergeTemplateCreate(name, Category, Shared)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "MergeTemplateSave": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "MergeTemplateSave",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "MergeTemplateSave(name, Shared)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewCategory": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewCategory",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewCategory(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConjunction": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConjunction",
+          "params": [
+            {
+              "name": "AndOr12",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "AndOr13",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "AndOr34",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConjunction(AndOr12, AndOr13, AndOr34)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedCount",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedCount(Index, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedField": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedField",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedField(Index, ConnectionName, ToCategory, ConnIndex, Field)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedFields": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedFields",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedFields(Index, ConnectionName, ToCategory, ConnIndex, n, Field_1..., Field_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedItem": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedItem",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedItem(Index, Connection, ToCategory, ConnIndex)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewDeleteAllItems": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewDeleteAllItems",
+          "params": [],
+          "syntaxRaw": "ViewDeleteAllItems()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewField": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewField",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewField(Index, Field)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewFields": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewFields",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewFields(Index, n, Field_1..., Field_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewFieldToFile": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewFieldToFile",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewFieldToFile(Index, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewFilter": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewFilter",
+          "params": [
+            {
+              "name": "ClauseNumber",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FilterType",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "NotFlag",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FieldTypeParameters...",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewFilter(ClauseNumber, FilterType, NotFlag, FieldTypeParameters...)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewImageFieldToFile": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewImageFieldToFile",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewImageFieldToFile(Index, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewItemCount": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewItemCount",
+          "params": [],
+          "syntaxRaw": "ViewItemCount()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewItemIndex": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewItemIndex",
+          "params": [
+            {
+              "name": "NameFieldValue",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewItemIndex(NameFieldValue)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewItemName": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewItemName",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewItemName(Index)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewMarkItem": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewMarkItem",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewMarkItem(Index)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewReverseName": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewReverseName",
+          "params": [
+            {
+              "name": "Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "PrefFlag",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewReverseName(Name, PrefFlag)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewSaveView": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewSaveView",
+          "params": [
+            {
+              "name": "New View Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewSaveView(New View Name, Shared)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewSort": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewSort",
+          "params": [
+            {
+              "name": "Field1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field3",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort3",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field4",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort4",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewSort(Field1, Sort1, Field2, Sort2 , Field3, Sort3 , Field4, Sort4)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewView": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewView",
+          "params": [
+            {
+              "name": "View Name",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewView(View Name)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Gantt": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Chart",
+          "params": [],
+          "syntaxRaw": "Chart"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Item": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Detail",
+          "params": [],
+          "syntaxRaw": "Detail"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "Parameter": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Notes",
+          "params": [],
+          "syntaxRaw": "Notes"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "0": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Text",
+          "params": [],
+          "syntaxRaw": "Text"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "1": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Number",
+          "params": [],
+          "syntaxRaw": "Number"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "2": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Date",
+          "params": [],
+          "syntaxRaw": "Date"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "3": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Telephone",
+          "params": [],
+          "syntaxRaw": "Telephone"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "11": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Name",
+          "params": [],
+          "syntaxRaw": "Name"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "13": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Image",
+          "params": [],
+          "syntaxRaw": "Image"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "14": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Time",
+          "params": [],
+          "syntaxRaw": "Time"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "20": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Calculation",
+          "params": [],
+          "syntaxRaw": "Calculation"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "21": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Sequence",
+          "params": [],
+          "syntaxRaw": "Sequence"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "22": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "Selection",
+          "params": [],
+          "syntaxRaw": "Selection"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectedItemField": {
+        "kind": "REQUEST",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectedItemField",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field [",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delimiter]",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetConnectedItemField(FromCategory, FromItem, Connection, ToCategory, Field [, Delimiter])]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the indirect field value(s) in ToCategory that FromItem of the FromCategory is connected to via Connection."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetConnectedItemField(FromCategory, FromItem, Connection, ToCategory, Field [, Delimiter])]"
+        ]
+      }
+    },
+    "executes": {
+      "DeleteView": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "DeleteView",
+          "params": [
+            {
+              "name": "View Name",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[DeleteView(View Name)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[DeleteView(View Name)]"
+        ]
+      },
+      "GetActiveViewInfo": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetActiveViewInfo",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetActiveViewInfo(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "information about the currently active view. The return string is of the form:"
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetActiveViewInfo(Delim)]"
+        ]
+      },
+      "GetLetterViewInfo": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetLetterViewInfo",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetLetterViewInfo(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "information about the active view and selected letter template at the time the Tools-Send Letter or Customize-Database-Letter Template command was executed. This call is used by the Commence letter macros."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetLetterViewInfo(Delim)]"
+        ]
+      },
+      "GetViewCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetViewCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetViewCount(Category)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of defined views for the Category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional parameter Category is not specified, the number of defined views for all categories is returned."
+        ],
+        "examples": [
+          "[GetViewCount(Category)]"
+        ]
+      },
+      "GetViewToFile": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetViewToFile",
+          "params": [
+            {
+              "name": "Viewname",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Mode",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Param1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Param2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetViewToFile (Viewname, Mode, Param1, Param2, Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetViewToFile(Viewname, Mode, Param1, Param2, Filename)]"
+        ]
+      },
+      "GetViewNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetViewNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetViewNames(Category ,Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of the defined views for the Category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional parameter Category is not specified, the list contains the defined views for all categories. If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetViewNames(Category ,Delim)]"
+        ]
+      },
+      "ViewConjunction": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConjunction",
+          "params": [
+            {
+              "name": "AndOr12",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "AndOr13",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "AndOr34",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewConjunction(AndOr12, AndOr13, AndOr34)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewConjunction(AndOr12, AndOr13, AndOr34)]"
+        ]
+      },
+      "ViewFilter": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewFilter",
+          "params": [
+            {
+              "name": "ClauseNumber",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FilterType",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "NotFlag",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FilterTypeParameters",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewFilter(ClauseNumber, FilterType, NotFlag, FilterTypeParameters)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewFilter(ClauseNumber, FilterType, NotFlag, FilterTypeParameters)]"
+        ]
+      },
+      "ViewSaveView": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewSaveView",
+          "params": [
+            {
+              "name": "New View Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewSaveView(New View Name, Shared)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [
+          "CAUTION: If the view already exists, it will be overwritten. Use GetViewNames to determine if the view name conflicts with an existing view."
+        ],
+        "notes": [
+          "In a workgroup situation, the optional Shared parameter determines whether the view is local or shared. Valid values are \"yes\" and \"no\""
+        ],
+        "examples": [
+          "[ViewSaveView(New View Name, Shared)]"
+        ]
+      },
+      "ViewSort": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewSort",
+          "params": [
+            {
+              "name": "Field1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field3",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort3",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field4",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort4",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewSort(Field1, Sort1, Field2, Sort2, Field3, Sort3, Field4, Sort4)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewSort(Field1, Sort1, Field2, Sort2, Field3, Sort3, Field4, Sort4)]"
+        ]
+      },
+      "ViewView": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewView",
+          "params": [
+            {
+              "name": "ViewName",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewView(ViewName)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewView(ViewName)]"
+        ]
+      },
+      "ShowView": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ShowView",
+          "params": [
+            {
+              "name": "View Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "1",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ShowView(View Name, 1)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the view is already open, specify [ShowView(View Name, 1)] to force a new copy of the view to be opened."
+        ],
+        "examples": [
+          "[ShowView(View Name, 1)]",
+          "[ShowView(View Name, 1)]"
+        ]
+      },
+      "GetCategoryCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCategoryCount",
+          "params": [],
+          "syntaxRaw": "[GetCategoryCount]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of categories defined in Commence."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetCategoryCount]"
+        ]
+      },
+      "GetCategoryDefinition": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCategoryDefinition",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetCategoryDefinition(Category,Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list with configuration information for the specified category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetCategoryDefinition(Category,Delim)]"
+        ]
+      },
+      "GetCategoryNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetCategoryNames",
+          "params": [
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetCategoryNames(Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of all categories found in Commence."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetCategoryNames(Delim)]"
+        ]
+      },
+      "GetConnectionCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectionCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetConnectionCount(Category)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of connections where the named Commence category is the From category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetConnectionCount(Category)]"
+        ]
+      },
+      "GetConnectionNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectionNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnCatDelim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetConnectionNames(Category, Delim, ConnCatDelim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of all connections where the named Commence category is the From category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetConnectionNames(Category, Delim, ConnCatDelim)]"
+        ]
+      },
+      "GetFieldCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFieldCount(Category)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of fields defined in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetFieldCount(Category)]"
+        ]
+      },
+      "GetFieldNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFieldNames(Category, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of fields found in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetFieldNames(Category, Delim)]"
+        ]
+      },
+      "GetFormCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFormCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFormCount(Category)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of detail forms defined in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetFormCount(Category)]"
+        ]
+      },
+      "GetFormNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFormNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFormNames(Category, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of detail forms found in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetFormNames(Category, Delim)]"
+        ]
+      },
+      "GetImageFieldNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetImageFieldNames(Category, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of image fields found in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetImageFieldNames(Category, Delim)]"
+        ]
+      },
+      "GetImageFieldCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetImageFieldCount(Category)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of images fields defined in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetImageFieldCount(Category)]"
+        ]
+      },
+      "GetConnectedItemNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectedItemNames",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the list of items in ToCategory that FromItem of the FromCategory is connected to via Connection. The order of the items in the list is arbitrary (i.e., not sorted)."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory, Delim)]"
+        ]
+      },
+      "GetField": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetField",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetField(Category, Item, Field)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the data specified by the named Commence category, item and field."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetField(Category, Item, Field)]"
+        ]
+      },
+      "GetFields": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFields",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFields(Category, Item, n, Field_1, Field_2 ,..., Field_n, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "multiple field values (n) for the named category and item. Image type fields are not allowed in the Field_ parameters."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetFields(Category, Item, n, Field_1, Field_2 ,..., Field_n, Delim)]"
+        ]
+      },
+      "GetFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetFieldToFile",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetFieldToFile(Category, Item, Field, Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetFieldToFile(Category, Item, Field, Filename)]"
+        ]
+      },
+      "GetImageFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetImageFieldToFile",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetImageFieldToFile(Category, Item, Field, Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetImageFieldToFile(Category, Item, Field, Filename)]"
+        ]
+      },
+      "GetItemNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetItemNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetItemNames(Category, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a list of all items in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[GetItemNames(Category, Delim)]"
+        ]
+      },
+      "GetPhoneNumber": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetPhoneNumber",
+          "params": [
+            {
+              "name": "PhoneNumber",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetPhoneNumber(PhoneNumber)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "a phone number. Uses the current TAPI settings to determine the complete phone number to be dialed."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetPhoneNumber(PhoneNumber)]"
+        ]
+      },
+      "GetReverseName": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetReverseName",
+          "params": [
+            {
+              "name": "Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "PrefFlag",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetReverseName(Name, PrefFlag)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional PrefFlag parameter is 1, then the Customize-Preferences-Other-Name Field setting is used to determine if names should be reversed If the PrefFlag parameter is left blank or is set to 0, then the command uses the Reverse Name checkbox value of the latest invocation of Tools-Send Letter and reverses the name if appropriate."
+        ],
+        "examples": [
+          "[GetReverseName(Name, PrefFlag)]"
+        ]
+      },
+      "ViewConnectedField": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedField",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewConnectedField(Index, ConnectionName, ToCategory, ConnIndex, Field)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the value of Field of the ConnIndexth item in the ToCategory that is connected to the Indexth item via ConnectionName. Use the ViewConnectedCount REQUEST to determine the maximum ConnIndex value. The string \"(deleted)\" will be returned if the requested item is deleted after the ViewData snapshot is taken."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewConnectedField(Index, ConnectionName, ToCategory, ConnIndex, Field)]"
+        ]
+      },
+      "ViewConnectedFields": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedFields",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewConnectedFields(Index, ConnectionName, ToCategory, ConnIndex, n, Field_1..., Field_n, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "multiple field values (Field_1 through Field_n) in the ConnIndexth item in the ToCategory that is connected to the Indexth item via ConnectionName. Use the ViewConnectedCount REQUEST to determine the maximum ConnIndex value. The string \"(deleted)\" will be returned if the requested item is deleted after the ViewData snapshot is taken."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[ViewConnectedFields(Index, ConnectionName, ToCategory, ConnIndex, n, Field_1..., Field_n, Delim)]"
+        ]
+      },
+      "ViewField": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewField",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewField(Index, Field)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the value of Field of the Indexth item that satisfies the currently defined filter (if any). Use the ViewItemCount REQUEST to determine the maximum Index value. The string \"(deleted)\" will be returned if the requested item is deleted after the ViewData snapshot is taken."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the Name field is requested, the returned value is NOT clarified. Use ViewItemNameand ClarifyItemNames) to retrieve the clarified item name."
+        ],
+        "examples": [
+          "[ViewField(Index, Field)]"
+        ]
+      },
+      "ViewFields": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewFields",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewFields(Index, n, Field_1, Field_2 ,..., Field_n, Delim)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "multiple field values (n) for the Indexth item that satisfies the currently defined filter (if any). Use the ViewItemCount request to determine that maximum Index value. Use the GetFieldNames request to determine valid field names."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional Delim parameter is not specified, the returned list is delimited with CR/LF (ASCII codes 13 and 10). The Delim parameter can be any string (up to 8 characters)."
+        ],
+        "examples": [
+          "[ViewFields(Index, n, Field_1, Field_2 ,..., Field_n, Delim)]"
+        ]
+      },
+      "ViewFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewFieldToFile",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewFieldToFile(Index,Field,Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewFieldToFile(Index,Field,Filename)]"
+        ]
+      },
+      "ViewImageFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewImageFieldToFile",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewImageFieldToFile(Index,Field,Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewImageFieldToFile(Index,Field,Filename)]"
+        ]
+      },
+      "ViewItemIndex": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewItemIndex",
+          "params": [
+            {
+              "name": "NameFieldValue",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewItemIndex(NameFieldValue)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the index of the item with the indicated name field value. The item must also satisfy the currently defined filter (if any)."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the NameFieldValue is left blank, the marked item will be used. Returns the index of the marked item (if any)."
+        ],
+        "examples": [
+          "[ViewItemIndex(NameFieldValue)]"
+        ]
+      },
+      "ViewItemName": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewItemName",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewItemName(Index)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the item name of the Indexth item that satisfies the currently defined filter (if any). Different from ViewField(Index, Name) in that a clarified item name may be returned. The ClarifyItemNames request is used to enable or disable the use of clarified item names."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewItemName(Index)]"
+        ]
+      },
+      "ViewReverseName": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewReverseName",
+          "params": [
+            {
+              "name": "Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "PrefFlag",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewReverseName(Name, PrefFlag)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "If the optional PrefFlag parameter is 1, then the Customize-Preferences-Other-Name Field setting is used to determine if names should be reversed If the PrefFlag parameter is left blank or is set to 0, then the command uses the Reverse Name checkbox value of the latest invocation of Tools-Send Letter and reverses the name if appropriate."
+        ],
+        "examples": [
+          "[ViewReverseName(Name, PrefFlag)]"
+        ]
+      },
+      "GetConnectedItemCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectedItemCount",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetConnectedItemCount(FromCategory, FromItem, Connection, ToCategory)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of items in ToCategory that FromItem of the FromCategory is connected to via Connection."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetConnectedItemCount(FromCategory, FromItem, Connection, ToCategory)]"
+        ]
+      },
+      "GetConnectedItemNamesGetConnectedItemNames": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetConnectedItemNames",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetItemCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetItemCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetItemCount(Category)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of items in the named Commence category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetItemCount(Category)]"
+        ]
+      },
+      "GetMeField": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "GetMeField",
+          "params": [
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[GetMeField(Field)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the data for the specified Field from the (-Me-) item, if one is defined."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[GetMeField(Field)]"
+        ]
+      },
+      "ViewConnectedCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedCount",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewConnectedCount(Index, ConnectionName, ToCategory)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of items in the ToCategory that the Indexth item is connected to via ConnectionName."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewConnectedCount(Index, ConnectionName, ToCategory)]"
+        ]
+      },
+      "ViewConnectedItem": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewConnectedItem",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewConnectedItem(Index, ConnectionName, ToCategory, ConnIndex)]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the ConnIndexth item in ToCategory that the Indexth item is connected to via ConnectionName. Use the ViewConnectedCount REQUEST to determine the maximum ConnIndex value."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewConnectedItem(Index, ConnectionName, ToCategory, ConnIndex)]"
+        ]
+      },
+      "ViewItemCount": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ViewItemCount",
+          "params": [],
+          "syntaxRaw": "[ViewItemCount()]"
+        },
+        "returns": {
+          "type": "string",
+          "description": "the number of items that satisfy the currently defined filter (if any). If no filter is defined, this request returns the total number of items in the category."
+        },
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewItemCount]"
+        ]
+      },
+      "AddItem": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "AddItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Clarify Value",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[AddItem(Category, Item, Clarify Value)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [
+          "CAUTION: If the Category has mandatory fields, those fields must be filled in with subsequent EditItem commands. Use the GetFieldDefinition request to determine which fields are mandatory. Unpredictable results may follow if mandatory fields are left unfilled."
+        ],
+        "notes": [
+          "If a clarify field is defined for the category (but is not a Sequence Number field), the clarify field value can be specified using the optional third parameter, Clarify Value. Alternatively, the Item parameter can be a clarified item name."
+        ],
+        "examples": [
+          "[AddItem(Category, Item, Clarify Value)]"
+        ]
+      },
+      "AddSharedItem": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "AddSharedItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[AddSharedItem(Category, Item)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [
+          "CAUTION: If the Category has mandatory fields, those fields must be filled in with subsequent EditItem commands. Use the GetFieldDefinition request to determine which fields are mandatory. Unpredictable results may follow if mandatory fields are left unfilled."
+        ],
+        "notes": [],
+        "examples": [
+          "[AddSharedItem(Category, Item)]"
+        ]
+      },
+      "AppendText": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "AppendText",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Text",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[AppendText(Category, Item, Field, Text)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[AppendText(Category, Item, Field, Text)]"
+        ]
+      },
+      "AssignConnection": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "AssignConnection",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToItem",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[AssignConnection(FromCategory, FromItem, Connection, ToCategory, ToItem)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[AssignConnection(FromCategory, FromItem, Connection, ToCategory, ToItem)]"
+        ]
+      },
+      "CheckInFormScript": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "CheckInFormScript",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FormName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[CheckInFormScript(Category, FormName, Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[CheckInFormScript(Category, FormName, Filename)]"
+        ]
+      },
+      "CheckOutFormScript": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "CheckOutFormScript",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FormName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[CheckOutFormScript(Category, FormName, Filename)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[CheckOutFormScript(Category, FormName, Filename)]"
+        ]
+      },
+      "DeleteItem": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "DeleteItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[DeleteItem(Category, Item)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[DeleteItem(Category, Item)]"
+        ]
+      },
+      "EditItem": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "EditItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Value",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[EditItem(Category, Item, Field, Value)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[EditItem(Category, Item, Field, Value)]",
+          "[EditItem(Person,\"Doe, John\",Snapshot,c:\\image\\photo.bmp)]"
+        ]
+      },
+      "FireTrigger": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "FireTrigger",
+          "params": [
+            {
+              "name": "Trigger",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Arg2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "..Arg9",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[FireTrigger(Trigger, Arg2,..Arg9)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[FireTrigger(Trigger, Arg2,..Arg9)]"
+        ]
+      },
+      "LogPhoneCall": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "LogPhoneCall",
+          "params": [
+            {
+              "name": "Category1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Category n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[LogPhoneCall(Category1, Item1, ..., Category n, Item n)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "Additional parameter pairs of Category, Item may be specified as needed."
+        ],
+        "examples": [
+          "[LogPhoneCall(Category1, Item1, ..., Category n, Item n)]"
+        ]
+      },
+      "MergeTemplateCreate": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "MergeTemplateCreate",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[MergeTemplateCreate (name, Category, Shared)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[MergeTemplateCreate(name, Category, Shared)]"
+        ]
+      },
+      "MergeTemplateSave": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "MergeTemplateSave",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[MergeTemplateSave (name, Shared)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[MergeTemplateSave(name, Shared)]"
+        ]
+      },
+      "PromoteItemToShared": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "PromoteItemToShared",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[PromoteItemToShared(Category, Item)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[PromoteItemToShared(Category, Item)]"
+        ]
+      },
+      "ShowDesktop": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ShowDesktop",
+          "params": [
+            {
+              "name": "Desktop Name",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ShowDesktop(Desktop Name)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ShowDesktop(Desktop Name)]"
+        ]
+      },
+      "ShowItem": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "ShowItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ShowItem(Category, Item)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [
+          "Starting in version Commence 3.0a, ShowItem can specify the detail form to be used in the optional third parameter. Use the following syntax:"
+        ],
+        "examples": [
+          "[ShowItem(Category, Item)]",
+          "[ShowItem(Category, Item, FormName)]"
+        ]
+      },
+      "UnassignConnection": {
+        "kind": "EXECUTE",
+        "topic": "GetData",
+        "signature": {
+          "name": "UnassignConnection",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToItem",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[UnassignConnection(FromCategory, FromItem, Connection, ToCategory, ToItem)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[UnassignConnection(FromCategory, FromItem, Connection, ToCategory, ToItem)]"
+        ]
+      }
+    },
+    "meta": {
+      "source": "C:\\prdev\\amdev\\pycommence\\rsrc\\commence_help_dde.txt",
+      "generatedBy": "optionA-parser",
+      "version": null
+    }
+  },
+  "ViewData": {
+    "requests": {
+      "ViewCategory": {
+        "kind": "REQUEST",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewCategory",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewCategory(Category)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewCategory(Category)]"
+        ]
+      },
+      "ViewDeleteAllItems": {
+        "kind": "REQUEST",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewDeleteAllItems",
+          "params": [],
+          "syntaxRaw": "[ViewDeleteAllItems]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewDeleteAllItems]"
+        ]
+      },
+      "ViewMarkItem": {
+        "kind": "REQUEST",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewMarkItem",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "[ViewMarkItem(Index)]"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": [
+          "[ViewMarkItem(Index)]"
+        ]
+      }
+    },
+    "executes": {
+      "DeleteView": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "DeleteView",
+          "params": [
+            {
+              "name": "View Name",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "DeleteView(View Name)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetActiveViewInfo": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetActiveViewInfo",
+          "params": [],
+          "syntaxRaw": "GetActiveViewInfo()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetLetterViewInfo": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetLetterViewInfo",
+          "params": [],
+          "syntaxRaw": "GetLetterViewInfo()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetViewCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetViewCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetViewCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetViewToFile": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetViewToFile",
+          "params": [
+            {
+              "name": "Viewname",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Mode",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Param1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Param2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetViewToFile (Viewname, Mode, Param1, Param2, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetViewNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetViewNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetViewNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConjunction": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewConjunction",
+          "params": [
+            {
+              "name": "AndOr12",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "AndOr13",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "AndOr34",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConjunction(AndOr12, AndOr13, AndOr34)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewFilter": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewFilter",
+          "params": [
+            {
+              "name": "ClauseNumber",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FilterType",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "NotFlag",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FieldTypeParameters...",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewFilter(ClauseNumber, FilterType, NotFlag, FieldTypeParameters...)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewSaveView": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewSaveView",
+          "params": [
+            {
+              "name": "New View Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewSaveView(New View Name, Shared)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewSort": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewSort",
+          "params": [
+            {
+              "name": "Field1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort2",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field3",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort3",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field4",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Sort4",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewSort(Field1, Sort1, Field2, Sort2 , Field3, Sort3 , Field4, Sort4)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewView": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewView",
+          "params": [
+            {
+              "name": "View Name",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewView(View Name)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ShowView": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ShowView",
+          "params": [
+            {
+              "name": "View Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "1",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ShowView(View Name, 1)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetCategoryCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetCategoryCount",
+          "params": [],
+          "syntaxRaw": "GetCategoryCount()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetCategoryDefinition": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetCategoryDefinition",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetCategoryDefinition(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetCategoryNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetCategoryNames",
+          "params": [],
+          "syntaxRaw": "GetCategoryNames()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectionCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetConnectionCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectionCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectionNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetConnectionNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectionNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFieldCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFieldCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFieldNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetFieldNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFieldNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFormCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetFormCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFormCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFormNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetFormNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFormNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetImageFieldNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetImageFieldNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Delim",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldNames(Category, Delim)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetImageFieldCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetImageFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectedItemNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetConnectedItemNames",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetField": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetField",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetField(Category, Item, Field)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFields": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetFields",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFields(Category, Item, n, Field_1..., Field_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetFieldToFile",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetFieldToFile(Category, Item, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetImageFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetImageFieldToFile",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldToFile(Category, Item, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetItemNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetItemNames",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetItemNames(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetPhoneNumber": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetPhoneNumber",
+          "params": [
+            {
+              "name": "PhoneNumber",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetPhoneNumber(PhoneNumber)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetReverseName": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetReverseName",
+          "params": [
+            {
+              "name": "Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "PrefFlag",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetReverseName(Name, PrefFlag)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedField": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewConnectedField",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedField(Index, ConnectionName, ToCategory, ConnIndex, Field)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedFields": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewConnectedFields",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedFields(Index, ConnectionName, ToCategory, ConnIndex, n, Field_1..., Field_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewField": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewField",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewField(Index, Field)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewFields": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewFields",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewFields(Index, n, Field_1..., Field_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewFieldToFile",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewFieldToFile(Index, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewImageFieldToFile": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewImageFieldToFile",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewImageFieldToFile(Index, Field, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewItemIndex": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewItemIndex",
+          "params": [
+            {
+              "name": "NameFieldValue",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewItemIndex(NameFieldValue)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewItemName": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewItemName",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewItemName(Index)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewReverseName": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewReverseName",
+          "params": [
+            {
+              "name": "Name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "PrefFlag",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewReverseName(Name, PrefFlag)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectedItemCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetConnectedItemCount",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectedItemCount(FromCategory, FromItem, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetConnectedItemNamesGetConnectedItemNames": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetConnectedItemNames",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetConnectedItemNames(FromCategory, FromItem, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetItemCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetItemCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetItemCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "GetMeField": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "GetImageFieldCount",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "GetImageFieldCount(Category)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewConnectedCount",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedCount(Index, Connection, ToCategory)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewConnectedItem": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewConnectedItem",
+          "params": [
+            {
+              "name": "Index",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Connection",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnIndex",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ViewConnectedItem(Index, Connection, ToCategory, ConnIndex)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ViewItemCount": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ViewItemCount",
+          "params": [],
+          "syntaxRaw": "ViewItemCount()"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "AddItem": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "AddItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Clarify Value",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "AddItem(Category, Item, Clarify Value)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "AddSharedItem": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "AddSharedItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "AddSharedItem(Category, Item)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "AppendText": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "AppendText",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Text",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "AppendText(Category, Item, Field, Text)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "AssignConnection": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "AssignConnection",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToItem",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "AssignConnection(FromCategory, FromItem, ConnectionName, ToCategory, ToItem)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "CheckInFormScript": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "CheckInFormScript",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FormName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "CheckInFormScript(Category, FormName, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "CheckOutFormScript": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "CheckOutFormScript",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FormName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Filename",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "CheckOutFormScript(Category, FormName, Filename)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "DeleteItem": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "DeleteItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "DeleteItem(Category, Item)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "EditItem": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "EditItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Field",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FieldValue",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "EditItem(Category, Item, Field, FieldValue)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "FireTrigger": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "FireTrigger",
+          "params": [
+            {
+              "name": "Trigger",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Arg2...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Arg9",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "FireTrigger(Trigger, Arg2..., Arg9)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "LogPhoneCall": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "LogPhoneCall",
+          "params": [
+            {
+              "name": "Category1",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item_1...",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Category_n",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item_n",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "LogPhoneCall(Category1, Item_1..., Category_n, Item_n)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "MergeTemplateCreate": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "MergeTemplateCreate",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "MergeTemplateCreate(name, Category, Shared)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "MergeTemplateSave": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "MergeTemplateSave",
+          "params": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Shared",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "MergeTemplateSave(name, Shared)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "PromoteItemToShared": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "PromoteItemToShared",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "PromoteItemToShared(Category, Item)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ShowDesktop": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ShowDesktop",
+          "params": [
+            {
+              "name": "Desktop Name",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ShowDesktop(Desktop Name)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "ShowItem": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "ShowItem",
+          "params": [
+            {
+              "name": "Category",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "Item",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "ShowItem(Category, Item)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      },
+      "UnassignConnection": {
+        "kind": "EXECUTE",
+        "topic": "ViewData",
+        "signature": {
+          "name": "UnassignConnection",
+          "params": [
+            {
+              "name": "FromCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "FromItem",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ConnectionName",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToCategory",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "ToItem",
+              "type": "string",
+              "required": true
+            }
+          ],
+          "syntaxRaw": "UnassignConnection(FromCategory, FromItem, ConnectionName, ToCategory, ToItem)"
+        },
+        "returns": null,
+        "errors": [],
+        "constraints": [],
+        "notes": [],
+        "examples": []
+      }
+    },
+    "meta": {
+      "source": "C:\\prdev\\amdev\\pycommence\\rsrc\\commence_help_dde.txt",
+      "generatedBy": "optionA-parser",
+      "version": null
+    }
+  }
+}
