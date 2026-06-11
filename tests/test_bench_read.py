@@ -30,6 +30,7 @@ def client():
 
 # ── helpers ───────────────────────────────────────────────────────────────
 
+
 def _run_bench(fn, label):
     """Run *fn* once, return (label, total_s)."""
     start = time.perf_counter()
@@ -56,15 +57,14 @@ def _print_comparison(rows):
         tag = ' ◄ winner' if label == fastest[0] else ''
         ratio_vs_best = total / fastest[1]
         x_text = f'  ({ratio_vs_best:.1f}×)' if label != fastest[0] else ''
-        lines.append(
-            f'  {label:<30}: {total:>7.3f}s | {n_records:>3} records | {per_rec:>6.1f} ms/rec{x_text}{tag}'
-        )
+        lines.append(f'  {label:<30}: {total:>7.3f}s | {n_records:>3} records | {per_rec:>6.1f} ms/rec{x_text}{tag}')
 
     lines += [sep, '']
     print('\n'.join(lines))
 
 
 # ── the test ──────────────────────────────────────────────────────────────
+
 
 def test_compare_all_methods(client: PyCommence):
     """Fetch every contact with DDE, CSR (one-by-one), and CSR read_rows(); compare."""

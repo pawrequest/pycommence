@@ -147,17 +147,32 @@ class TestBulkReadAllRows:
         # 1. Cursor / COM
         t0 = time.perf_counter()
         cursor_rows = list(pycmc.read_all_cursor(BENCH_CATEGORY))
-        results.append(BenchResult('Cursor (COM)', len(cursor_rows), time.perf_counter() - t0, fields=len(cursor_rows[0]) if cursor_rows else 0))
+        results.append(
+            BenchResult(
+                'Cursor (COM)',
+                len(cursor_rows),
+                time.perf_counter() - t0,
+                fields=len(cursor_rows[0]) if cursor_rows else 0,
+            )
+        )
 
         # 2. DDE GetData
         t0 = time.perf_counter()
         get_rows = list(pycmc.read_all_dde_get(BENCH_CATEGORY))
-        results.append(BenchResult('DDE GetData', len(get_rows), time.perf_counter() - t0, fields=len(get_rows[0]) if get_rows else 0))
+        results.append(
+            BenchResult(
+                'DDE GetData', len(get_rows), time.perf_counter() - t0, fields=len(get_rows[0]) if get_rows else 0
+            )
+        )
 
         # 3. DDE ViewData
         t0 = time.perf_counter()
         view_rows = list(pycmc.read_all_dde_view(BENCH_CATEGORY))
-        results.append(BenchResult('DDE ViewData', len(view_rows), time.perf_counter() - t0, fields=len(view_rows[0]) if view_rows else 0))
+        results.append(
+            BenchResult(
+                'DDE ViewData', len(view_rows), time.perf_counter() - t0, fields=len(view_rows[0]) if view_rows else 0
+            )
+        )
 
         # Verify row counts match
         assert len(cursor_rows) == category_row_count
@@ -175,9 +190,7 @@ class TestSubsetRead:
         t0 = time.perf_counter()
         csr = pycmc.cursor(BENCH_CATEGORY)
         rows = [
-            rd.data
-            for rd in csr.read_rows(pagination=Pagination(offset=0, limit=SMALL_LIMIT))
-            if hasattr(rd, 'data')
+            rd.data for rd in csr.read_rows(pagination=Pagination(offset=0, limit=SMALL_LIMIT)) if hasattr(rd, 'data')
         ]
         elapsed = time.perf_counter() - t0
 
@@ -218,6 +231,7 @@ class TestSubsetRead:
 
         rows: list[dict[str, str]] = []
         for idx in range(SMALL_LIMIT):
+
             def build_msg(chunk: list[str], _idx=idx) -> DDEMessageBase:
                 return msgs.view.fields(_idx + 1, chunk, pycmc.options.delim)
 
@@ -239,11 +253,16 @@ class TestSubsetRead:
         t0 = time.perf_counter()
         csr = pycmc.cursor(BENCH_CATEGORY)
         cursor_rows = [
-            rd.data
-            for rd in csr.read_rows(pagination=Pagination(offset=0, limit=SMALL_LIMIT))
-            if hasattr(rd, 'data')
+            rd.data for rd in csr.read_rows(pagination=Pagination(offset=0, limit=SMALL_LIMIT)) if hasattr(rd, 'data')
         ]
-        results.append(BenchResult(f'Cursor (first {SMALL_LIMIT})', len(cursor_rows), time.perf_counter() - t0, fields=len(cursor_rows[0]) if cursor_rows else 0))
+        results.append(
+            BenchResult(
+                f'Cursor (first {SMALL_LIMIT})',
+                len(cursor_rows),
+                time.perf_counter() - t0,
+                fields=len(cursor_rows[0]) if cursor_rows else 0,
+            )
+        )
 
         # DDE GetData
         conv = pycmc.conversation(DDETopic.GET)
@@ -251,7 +270,11 @@ class TestSubsetRead:
         item_names_raw = conv.send_message(msgs.get.item_names(BENCH_CATEGORY))
         item_names = [item_names_raw] if isinstance(item_names_raw, str) else list(item_names_raw)
         get_rows = [pycmc.item_read_dde(BENCH_CATEGORY, n) for n in item_names[:SMALL_LIMIT]]
-        results.append(BenchResult(f'DDE GetData (first {SMALL_LIMIT})', len(get_rows), time.perf_counter() - t0, fields=len(all_fields)))
+        results.append(
+            BenchResult(
+                f'DDE GetData (first {SMALL_LIMIT})', len(get_rows), time.perf_counter() - t0, fields=len(all_fields)
+            )
+        )
 
         # DDE ViewData
         if DDETopic.VIEW not in pycmc._conversations:
@@ -261,12 +284,17 @@ class TestSubsetRead:
         vconv.view_reset(BENCH_CATEGORY)
         view_rows: list[dict[str, str]] = []
         for idx in range(SMALL_LIMIT):
+
             def build_msg(chunk: list[str], _idx=idx) -> DDEMessageBase:
                 return msgs.view.fields(_idx + 1, chunk, pycmc.options.delim)
 
             row_values = pycmc._chunked_dde_request(all_fields, build_msg)
             view_rows.append(dict(zip(all_fields, row_values)))
-        results.append(BenchResult(f'DDE ViewData (first {SMALL_LIMIT})', len(view_rows), time.perf_counter() - t0, fields=len(all_fields)))
+        results.append(
+            BenchResult(
+                f'DDE ViewData (first {SMALL_LIMIT})', len(view_rows), time.perf_counter() - t0, fields=len(all_fields)
+            )
+        )
 
         _print_results(*results)
 
@@ -287,7 +315,9 @@ class TestFieldScaling:
 
         t0 = time.perf_counter()
         rows = list(pycmc.read_all_cursor(BENCH_CATEGORY))
-        results.append(BenchResult('Cursor (all fields)', len(rows), time.perf_counter() - t0, fields=len(rows[0]) if rows else 0))
+        results.append(
+            BenchResult('Cursor (all fields)', len(rows), time.perf_counter() - t0, fields=len(rows[0]) if rows else 0)
+        )
 
         _print_results(*results)
 
@@ -297,11 +327,17 @@ class TestFieldScaling:
 
         t0 = time.perf_counter()
         rows_few = list(pycmc.read_all_dde_get(BENCH_CATEGORY, fields=self.FEW_FIELDS))
-        results.append(BenchResult('DDE GetData (3 fields)', len(rows_few), time.perf_counter() - t0, fields=len(self.FEW_FIELDS)))
+        results.append(
+            BenchResult('DDE GetData (3 fields)', len(rows_few), time.perf_counter() - t0, fields=len(self.FEW_FIELDS))
+        )
 
         t0 = time.perf_counter()
         rows_many = list(pycmc.read_all_dde_get(BENCH_CATEGORY, fields=self.MANY_FIELDS))
-        results.append(BenchResult('DDE GetData (8 fields)', len(rows_many), time.perf_counter() - t0, fields=len(self.MANY_FIELDS)))
+        results.append(
+            BenchResult(
+                'DDE GetData (8 fields)', len(rows_many), time.perf_counter() - t0, fields=len(self.MANY_FIELDS)
+            )
+        )
 
         assert len(rows_few) == len(rows_many) == category_row_count
         _print_results(*results)
@@ -312,11 +348,17 @@ class TestFieldScaling:
 
         t0 = time.perf_counter()
         rows_few = list(pycmc.read_all_dde_view(BENCH_CATEGORY, fields=self.FEW_FIELDS))
-        results.append(BenchResult('DDE ViewData (3 fields)', len(rows_few), time.perf_counter() - t0, fields=len(self.FEW_FIELDS)))
+        results.append(
+            BenchResult('DDE ViewData (3 fields)', len(rows_few), time.perf_counter() - t0, fields=len(self.FEW_FIELDS))
+        )
 
         t0 = time.perf_counter()
         rows_many = list(pycmc.read_all_dde_view(BENCH_CATEGORY, fields=self.MANY_FIELDS))
-        results.append(BenchResult('DDE ViewData (8 fields)', len(rows_many), time.perf_counter() - t0, fields=len(self.MANY_FIELDS)))
+        results.append(
+            BenchResult(
+                'DDE ViewData (8 fields)', len(rows_many), time.perf_counter() - t0, fields=len(self.MANY_FIELDS)
+            )
+        )
 
         assert len(rows_few) == len(rows_many) == category_row_count
         _print_results(*results)
@@ -352,8 +394,10 @@ class TestSingleItemRead:
         vconv.view_filter_by_field('contactKey', self.ITEM_PK, condition=ConditionType.EQUAL)
         total = vconv.row_count()
         assert total == 1
+
         def build_msg(chunk: list[str]) -> DDEMessageBase:
             return msgs.view.fields(1, chunk, pycmc.options.delim)
+
         row_values = pycmc._chunked_dde_request(all_fields, build_msg)
         row_view = dict(zip(all_fields, row_values))
         results.append(BenchResult('DDE ViewData (filter+read)', 1, time.perf_counter() - t0, fields=len(all_fields)))
@@ -362,11 +406,12 @@ class TestSingleItemRead:
         mismatches = []
         for fld in all_fields:
             if row.data[fld] != row_dde[fld] or row_dde[fld] != row_view[fld]:
-                mismatches.append(f'  {fld!r}: cursor={row.data[fld]!r}  dde_get={row_dde[fld]!r}  dde_view={row_view[fld]!r}')
+                mismatches.append(
+                    f'  {fld!r}: cursor={row.data[fld]!r}  dde_get={row_dde[fld]!r}  dde_view={row_view[fld]!r}'
+                )
         if mismatches:
             print(f'\n  ⚠ {len(mismatches)} field(s) differ (likely date/format differences):')
             for m in mismatches:
                 print(m)
 
         _print_results(*results)
-
