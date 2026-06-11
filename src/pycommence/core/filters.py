@@ -75,6 +75,15 @@ class ConnectedItemFilter(FieldFilter):
         return f'"{self.column}", "{self.connection_category}", "{self.value}"'
 
 
+class FieldFilterRange(FieldFilter):
+    value_max: str
+
+    @property
+    def _filter_str(self) -> str:
+        filter_str = f'"{self.column}", "{self.condition}", "{self.value}", "{self.value_max}"'
+        return filter_str
+
+
 class ConnectedFieldFilter(ConnectedItemFilter):
     kind: Literal['CTCF'] = 'CTCF'
     connected_column: str
