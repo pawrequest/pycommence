@@ -133,6 +133,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.filters.FieldFilter.to_array"><code class="docutils literal notranslate"><span class="pre">FieldFilter.to_array()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#pycommence.filters.FieldFilterRange"><code class="docutils literal notranslate"><span class="pre">FieldFilterRange</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycommence.filters.FieldFilterRange.value_max"><code class="docutils literal notranslate"><span class="pre">FieldFilterRange.value_max</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#pycommence.filters.ConnectedItemFilter"><code class="docutils literal notranslate"><span class="pre">ConnectedItemFilter</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.filters.ConnectedItemFilter.kind"><code class="docutils literal notranslate"><span class="pre">ConnectedItemFilter.kind</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycommence.filters.ConnectedItemFilter.connection_category"><code class="docutils literal notranslate"><span class="pre">ConnectedItemFilter.connection_category</span></code></a></li>
@@ -1033,8 +1037,25 @@ methods for CRUD operations, filtering, and row navigation.</p>
 </dd></dl>
 
 <dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="pycommence.filters.FieldFilterRange">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FieldFilterRange</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L61-L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FieldFilterRange" title="Link to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#pycommence.filters.FieldFilterRange.value_max" title="pycommence.filters.FieldFilterRange.value_max"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_max</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="pycommence.filters.FieldFilterRange.value_max">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#pycommence.filters.FieldFilterRange.value_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="pycommence.filters.ConnectedItemFilter">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectedItemFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L61-L69"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedItemFilter" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectedItemFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L70-L78"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedItemFilter" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1057,7 +1078,7 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="pycommence.filters.ConnectedFieldFilter">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectedFieldFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L72-L90"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedFieldFilter" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectedFieldFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L81-L99"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedFieldFilter" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1078,14 +1099,14 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.filters.ConnectedFieldFilter.from_fil">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_fil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L76-L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedFieldFilter.from_fil" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_fil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_fil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L85-L95"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedFieldFilter.from_fil" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="pycommence.filters.ConnectedItemConnectedItemFilter">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectedItemConnectedItemFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L93-L100"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedItemConnectedItemFilter" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectedItemConnectedItemFilter</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L102-L109"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.ConnectedItemConnectedItemFilter" title="Link to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1114,7 +1135,7 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.filters.SortOrder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SortOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L103-L108"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.SortOrder" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SortOrder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L112-L117"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.SortOrder" title="Link to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.filters.SortOrder.ASC">
 <span class="sig-name descname"><span class="pre">ASC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Ascending'</span></em><a class="headerlink" href="#pycommence.filters.SortOrder.ASC" title="Link to this definition"></a></dt>
@@ -1129,7 +1150,7 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.filters.Sort">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L111-L116"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.Sort" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L120-L125"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.Sort" title="Link to this definition"></a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="pycommence.filters.Sort.column">
 <span class="sig-name descname"><span class="pre">column</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#pycommence.filters.Sort.column" title="Link to this definition"></a></dt>
@@ -1146,12 +1167,12 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.filters.Sorts">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L119-L121"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.Sorts" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sorts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L128-L130"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.Sorts" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class pydantic_model">
 <dt class="sig sig-object py" id="pycommence.filters.FilterArray">
-<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FilterArray</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L127-L200"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FilterArray</span></span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L136-L209"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray" title="Link to this definition"></a></dt>
 <dd><p>Array of Cursor Filters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Fields<span class="colon">:</span></dt>
@@ -1205,12 +1226,12 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py method pydantic_validator">
 <dt class="sig sig-object py" id="pycommence.filters.FilterArray.val_logics">
-<em class="property"><span class="pre">validator</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">val_logics</span></span><em class="autodoc_pydantic_validator_arrow property">&#160; <span class="pre">»</span>&#160; </em><em class="xref py py-obj"><span class="pre">all</span> <span class="pre">fields</span></em><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L146-L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.val_logics" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">validator</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">val_logics</span></span><em class="autodoc_pydantic_validator_arrow property">&#160; <span class="pre">»</span>&#160; </em><em class="xref py py-obj"><span class="pre">all</span> <span class="pre">fields</span></em><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L155-L164"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.val_logics" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.filters.FilterArray.from_filters">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L162-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.from_filters" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sorts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L171-L176"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.from_filters" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -1235,24 +1256,24 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.filters.FilterArray.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L185-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.update" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkg</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L194-L195"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.update" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.filters.FilterArray.add_filter">
-<span class="sig-name descname"><span class="pre">add_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'And'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L188-L196"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.add_filter" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmc_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'And'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L197-L205"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.add_filter" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pycommence.filters.FilterArray.add_filters">
-<span class="sig-name descname"><span class="pre">add_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L198-L200"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.add_filters" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_filters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L207-L209"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.FilterArray.add_filters" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pycommence.filters.field_fil_to_confil">
-<span class="sig-name descname"><span class="pre">field_fil_to_confil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_fil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L203-L211"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.field_fil_to_confil" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">field_fil_to_confil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field_fil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/filters.py#L212-L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.filters.field_fil_to_confil" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -1872,7 +1893,7 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycommence.exceptions.HasRowCount">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HasRowCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/exceptions.py#L60-L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.exceptions.HasRowCount" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">HasRowCount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/exceptions.py#L60-L62"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.exceptions.HasRowCount" title="Link to this definition"></a></dt>
 <dd><dl class="py property">
 <dt class="sig sig-object py" id="pycommence.exceptions.HasRowCount.row_count">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">row_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pycommence.exceptions.HasRowCount.row_count" title="Link to this definition"></a></dt>
@@ -1882,7 +1903,7 @@ methods for CRUD operations, filtering, and row navigation.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pycommence.exceptions.raise_for_one">
-<span class="sig-name descname"><span class="pre">raise_for_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/exceptions.py#L66-L70"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.exceptions.raise_for_one" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">raise_for_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/pawrequest/pycommence/blob/main/src/pycommence/exceptions.py#L65-L69"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycommence.exceptions.raise_for_one" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
