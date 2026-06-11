@@ -58,6 +58,15 @@ class FieldFilter(CmcFilter):
         return filter_str
 
 
+class FieldFilterRange(FieldFilter):
+    value_max: str
+
+    @property
+    def _filter_str(self) -> str:
+        filter_str = f'"{self.column}", "{self.condition}", "{self.value}", "{self.value_max}"'
+        return filter_str
+
+
 class ConnectedItemFilter(FieldFilter):
     kind: Literal['CTI'] = 'CTI'
     connection_category: str
