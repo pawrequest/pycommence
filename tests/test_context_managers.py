@@ -6,5 +6,3 @@ def test_pycmc_context():
     with pycommence_context(csrname='Contact') as pycmc2:
         csr = pycmc2.csr()
         print(csr.row_count)
-
-

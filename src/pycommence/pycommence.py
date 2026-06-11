@@ -243,6 +243,3 @@ def pycommences_context(csrnames: list[str]) -> _t.Generator[PyCommence, None, N
         pyc.set_csr(csrname)
     yield pyc
     CoUninitialize()
-
-
-

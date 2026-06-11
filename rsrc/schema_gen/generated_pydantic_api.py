@@ -243,9 +243,7 @@ class ComLibraryApi(BaseModel):
     field__init__: FieldInit | None = PField(None, alias='__init__')
     field__del__: dict[str, Any] | None = PField(None, alias='__del__')
     close: dict[str, Any] | None = None
-    field_query_interface_: FieldQueryInterface | None = PField(
-        None, alias='_query_interface_'
-    )
+    field_query_interface_: FieldQueryInterface | None = PField(None, alias='_query_interface_')
     OnLoad: dict[str, Any] | None = None
     OnSave: dict[str, Any] | None = None
     OnCancel: dict[str, Any] | None = None

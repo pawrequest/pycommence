@@ -254,6 +254,3 @@ class Pagination:
 
     def prev_page(self):
         return Pagination(offset=max(0, self.offset - self.limit), limit=self.limit)
-
-
-

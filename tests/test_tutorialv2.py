@@ -49,7 +49,6 @@ def test_read_rows2(pycmc):
     # assert isinstance(res[0], dict)
 
 
-
 def test_get_records(pycmc):
     res = list(pycmc.read_rows(pagination=PAGINATED))
     assert isinstance(res, list)

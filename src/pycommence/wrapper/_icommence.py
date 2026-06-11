@@ -3,6 +3,7 @@ Commence RM Type Library - WIP
 
 MakePy generated api for Commence Rm COM object, mostly as generated
 """
+
 from __future__ import annotations
 
 from win32com.universal import com_error
@@ -43,14 +44,12 @@ class IApp(DispatchBaseClass):
     coclass_clsid = IID('{9419F0A4-A8ED-11D4-824C-0050DAC366C6}')
 
     def GetCursor(self, nMode=defaultNamedNotOptArg, nFlag=defaultNamedNotOptArg):
-        'method GetCursor'
+        "method GetCursor"
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            2, LCID, 1, (8, 0), ((3, 0), (3, 0)), nMode, nFlag
-        )
+        return self._oleobj_.InvokeTypes(2, LCID, 1, (8, 0), ((3, 0), (3, 0)), nMode, nFlag)
 
     def Version(self):
-        'method Version'
+        "method Version"
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
             1,
@@ -61,7 +60,7 @@ class IApp(DispatchBaseClass):
         )
 
     def quit(self):
-        'method quit'
+        "method quit"
         return self._oleobj_.InvokeTypes(
             3,
             LCID,
@@ -74,7 +73,7 @@ class IApp(DispatchBaseClass):
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -113,7 +112,7 @@ class ICmcApplication(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -132,53 +131,43 @@ class ICommenceAddRowSet(DispatchBaseClass):
     def CommitGetCursor(self, flags=defaultNamedNotOptArg):
         ret = self._oleobj_.InvokeTypes(25, LCID, 1, (9, 0), ((3, 1),), flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'CommitGetCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'CommitGetCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     def GetColumnIndex(self, pLabel=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags
-        )
+        return self._oleobj_.InvokeTypes(22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags)
 
     def GetColumnLabel(self, nCol=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
     def GetRow(
-            self,
-            nRow=defaultNamedNotOptArg,
-            pDelim=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        pDelim=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            26, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags
-        )
+        return self._oleobj_.InvokeTypes(26, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
     def GetRowValue(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
     def GetShared(self, nRow=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(28, LCID, 1, (11, 0), ((3, 1),), nRow)
 
     def ModifyRow(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            pBuf=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        pBuf=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             23,
@@ -205,7 +194,7 @@ class ICommenceAddRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -228,7 +217,7 @@ class ICommenceConversation(DispatchBaseClass):
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -241,160 +230,100 @@ class ICommenceCursor(DispatchBaseClass):
     coclass_clsid = None
 
     # Result is of type ICommenceAddRowSet
-    def GetAddRowSet(
-            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceAddRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            28, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
-        )
+    def GetAddRowSet(self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceAddRowSet':
+        ret = self._oleobj_.InvokeTypes(28, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetAddRowSet', '{C5D7DAE3-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetAddRowSet', '{C5D7DAE3-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     # Result is of type ICommenceDeleteRowSet
-    def GetDeleteRowSet(
-            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceDeleteRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            31, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
-        )
+    def GetDeleteRowSet(self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceDeleteRowSet':
+        ret = self._oleobj_.InvokeTypes(31, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetDeleteRowSet', '{C5D7DAE5-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetDeleteRowSet', '{C5D7DAE5-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     # Result is of type ICommenceDeleteRowSet
-    def GetDeleteRowSetByID(
-            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceDeleteRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            32, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
-        )
+    def GetDeleteRowSetByID(self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceDeleteRowSet':
+        ret = self._oleobj_.InvokeTypes(32, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetDeleteRowSetByID', '{C5D7DAE5-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetDeleteRowSetByID', '{C5D7DAE5-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     # Result is of type ICommenceEditRowSet
-    def GetEditRowSet(
-            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceEditRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            29, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
-        )
+    def GetEditRowSet(self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceEditRowSet':
+        ret = self._oleobj_.InvokeTypes(29, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetEditRowSet', '{C5D7DAE4-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetEditRowSet', '{C5D7DAE4-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     # Result is of type ICommenceEditRowSet
-    def GetEditRowSetByID(
-            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceEditRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            30, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
-        )
+    def GetEditRowSetByID(self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceEditRowSet':
+        ret = self._oleobj_.InvokeTypes(30, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetEditRowSetByID', '{C5D7DAE4-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetEditRowSetByID', '{C5D7DAE4-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     # Result is of type ICommenceQueryRowSet
-    def GetQueryRowSet(
-            self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceQueryRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            26, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags
-        )
+    def GetQueryRowSet(self, nCount=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceQueryRowSet':
+        ret = self._oleobj_.InvokeTypes(26, LCID, 1, (9, 0), ((3, 1), (3, 1)), nCount, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetQueryRowSet', '{C5D7DAE2-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetQueryRowSet', '{C5D7DAE2-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     # Result is of type ICommenceQueryRowSet
-    def GetQueryRowSetByID(
-            self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg
-    ) -> 'ICommenceQueryRowSet':
-        ret = self._oleobj_.InvokeTypes(
-            27, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags
-        )
+    def GetQueryRowSetByID(self, pRowID=defaultNamedNotOptArg, flags=defaultNamedNotOptArg) -> 'ICommenceQueryRowSet':
+        ret = self._oleobj_.InvokeTypes(27, LCID, 1, (9, 0), ((8, 1), (3, 1)), pRowID, flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetQueryRowSetByID', '{C5D7DAE2-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'GetQueryRowSetByID', '{C5D7DAE2-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     def SeekRow(self, bkOrigin=defaultNamedNotOptArg, nRows=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            24, LCID, 1, (3, 0), ((3, 1), (3, 1)), bkOrigin, nRows
-        )
+        return self._oleobj_.InvokeTypes(24, LCID, 1, (3, 0), ((3, 1), (3, 1)), bkOrigin, nRows)
 
-    def SeekRowApprox(
-            self, nNumerator=defaultNamedNotOptArg, nDenom=defaultNamedNotOptArg
-    ):
-        return self._oleobj_.InvokeTypes(
-            25, LCID, 1, (3, 0), ((3, 1), (3, 1)), nNumerator, nDenom
-        )
+    def SeekRowApprox(self, nNumerator=defaultNamedNotOptArg, nDenom=defaultNamedNotOptArg):
+        return self._oleobj_.InvokeTypes(25, LCID, 1, (3, 0), ((3, 1), (3, 1)), nNumerator, nDenom)
 
     def SetActiveDate(self, sDate=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            34, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags
-        )
+        return self._oleobj_.InvokeTypes(34, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags)
 
     def SetActiveDateRange(
-            self,
-            startDate=defaultNamedNotOptArg,
-            endDate=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        startDate=defaultNamedNotOptArg,
+        endDate=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
-        return self._oleobj_.InvokeTypes(
-            35, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags
-        )
+        return self._oleobj_.InvokeTypes(35, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags)
 
     def SetActiveItem(
-            self,
-            pCategoryName=defaultNamedNotOptArg,
-            pRowID=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        pCategoryName=defaultNamedNotOptArg,
+        pRowID=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
-        return self._oleobj_.InvokeTypes(
-            33, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), pCategoryName, pRowID, flags
-        )
+        return self._oleobj_.InvokeTypes(33, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), pCategoryName, pRowID, flags)
 
     def SetColumn(
-            self,
-            nColumn=defaultNamedNotOptArg,
-            pName=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nColumn=defaultNamedNotOptArg,
+        pName=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
-        return self._oleobj_.InvokeTypes(
-            23, LCID, 1, (11, 0), ((3, 1), (8, 1), (3, 1)), nColumn, pName, flags
-        )
+        return self._oleobj_.InvokeTypes(23, LCID, 1, (11, 0), ((3, 1), (8, 1), (3, 1)), nColumn, pName, flags)
 
     def SetFilter(self, pFilter=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            20, LCID, 1, (11, 0), ((8, 1), (3, 1)), pFilter, flags
-        )
+        return self._oleobj_.InvokeTypes(20, LCID, 1, (11, 0), ((8, 1), (3, 1)), pFilter, flags)
 
     def SetLogic(self, pLogic=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            21, LCID, 1, (11, 0), ((8, 1), (3, 1)), pLogic, flags
-        )
+        return self._oleobj_.InvokeTypes(21, LCID, 1, (11, 0), ((8, 1), (3, 1)), pLogic, flags)
 
     def SetRelatedColumn(
-            self,
-            nColumn=defaultNamedNotOptArg,
-            pConnName=defaultNamedNotOptArg,
-            pCatName=defaultNamedNotOptArg,
-            pName=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nColumn=defaultNamedNotOptArg,
+        pConnName=defaultNamedNotOptArg,
+        pCatName=defaultNamedNotOptArg,
+        pName=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             36,
@@ -410,9 +339,7 @@ class ICommenceCursor(DispatchBaseClass):
         )
 
     def SetSort(self, pSort=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            22, LCID, 1, (11, 0), ((8, 1), (3, 1)), pSort, flags
-        )
+        return self._oleobj_.InvokeTypes(22, LCID, 1, (11, 0), ((8, 1), (3, 1)), pSort, flags)
 
     _prop_map_get_ = {
         'Category': (1, 2, (8, 0), (), 'Category', None),
@@ -432,7 +359,7 @@ class ICommenceCursor(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -446,23 +373,19 @@ class ICommenceDB(DispatchBaseClass):
 
     # Result is of type ICommenceConversation
     def GetConversation(
-            self, pszApplicationName=defaultNamedNotOptArg, pszTopic=defaultNamedNotOptArg
+        self, pszApplicationName=defaultNamedNotOptArg, pszTopic=defaultNamedNotOptArg
     ) -> ICommenceConversation:
-        ret = self._oleobj_.InvokeTypes(
-            40, LCID, 1, (9, 0), ((8, 1), (8, 1)), pszApplicationName, pszTopic
-        )
+        ret = self._oleobj_.InvokeTypes(40, LCID, 1, (9, 0), ((8, 1), (8, 1)), pszApplicationName, pszTopic)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'GetConversation', '{9D1EB82D-6F4F-4DCF-BF8C-9E0D33FE83E1}'
-            )
+            ret = Dispatch(ret, 'GetConversation', '{9D1EB82D-6F4F-4DCF-BF8C-9E0D33FE83E1}')
         return ret
 
     # Result is of type ICommenceCursor
     def GetCursor(
-            self,
-            nMode=defaultNamedNotOptArg,
-            pName=defaultNamedNotOptArg,
-            nFlags=defaultNamedNotOptArg,
+        self,
+        nMode=defaultNamedNotOptArg,
+        pName=defaultNamedNotOptArg,
+        nFlags=defaultNamedNotOptArg,
     ) -> 'ICommenceCursor':
         # ret = self._oleobj_.InvokeTypes(
         #     20, LCID, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, nFlags
@@ -472,19 +395,15 @@ class ICommenceDB(DispatchBaseClass):
         # return ret
 
         try:
-            ret = self._oleobj_.InvokeTypes(
-                20, 0, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, nFlags
-            )
+            ret = self._oleobj_.InvokeTypes(20, 0, 1, (9, 0), ((3, 1), (8, 1), (3, 1)), nMode, pName, nFlags)
             if ret is not None:
                 ret = Dispatch(ret, 'ICommenceCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}')
             return ret
         except com_error as e:
-            raise RuntimeError(f"Failed to get cursor: {e}")
+            raise RuntimeError(f'Failed to get cursor: {e}')
 
     def MLValidate(self, pszRequiredVersion=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            50, LCID, 1, (3, 0), ((8, 1),), pszRequiredVersion
-        )
+        return self._oleobj_.InvokeTypes(50, LCID, 1, (3, 0), ((8, 1),), pszRequiredVersion)
 
     _prop_map_get_ = {
         'Name': (1, 2, (8, 0), (), 'Name', None),
@@ -504,7 +423,7 @@ class ICommenceDB(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -520,54 +439,40 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
         return self._oleobj_.InvokeTypes(24, LCID, 1, (3, 0), ((3, 1),), flags)
 
     def DeleteRow(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            23, LCID, 1, (3, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(23, LCID, 1, (3, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetColumnIndex(self, pLabel=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags
-        )
+        return self._oleobj_.InvokeTypes(22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags)
 
     def GetColumnLabel(self, nCol=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
     def GetRow(
-            self,
-            nRow=defaultNamedNotOptArg,
-            pDelim=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        pDelim=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            25, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags
-        )
+        return self._oleobj_.InvokeTypes(25, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
     def GetRowID(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            27, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(27, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetRowTimeStamp(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            28, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(28, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetRowValue(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
     def GetShared(self, nRow=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(26, LCID, 1, (11, 0), ((3, 1),), nRow)
@@ -582,7 +487,7 @@ class ICommenceDeleteRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -601,65 +506,51 @@ class ICommenceEditRowSet(DispatchBaseClass):
     def CommitGetCursor(self, flags=defaultNamedNotOptArg):
         ret = self._oleobj_.InvokeTypes(25, LCID, 1, (9, 0), ((3, 1),), flags)
         if ret is not None:
-            ret = Dispatch(
-                ret, 'CommitGetCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}'
-            )
+            ret = Dispatch(ret, 'CommitGetCursor', '{C5D7DAE0-9BEC-11D1-99CC-00C04FD3695E}')
         return ret
 
     def GetColumnIndex(self, pLabel=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags
-        )
+        return self._oleobj_.InvokeTypes(22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags)
 
     def GetColumnLabel(self, nCol=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
     def GetRow(
-            self,
-            nRow=defaultNamedNotOptArg,
-            pDelim=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        pDelim=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            26, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags
-        )
+        return self._oleobj_.InvokeTypes(26, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
     def GetRowID(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            29, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(29, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetRowTimeStamp(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            30, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(30, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetRowValue(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
     def GetShared(self, nRow=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(28, LCID, 1, (11, 0), ((3, 1),), nRow)
 
     def ModifyRow(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            pBuf=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        pBuf=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             23,
@@ -686,7 +577,7 @@ class ICommenceEditRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -699,22 +590,18 @@ class ICommenceQueryRowSet(DispatchBaseClass):
     coclass_clsid = None
 
     def GetColumnIndex(self, pLabel=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags
-        )
+        return self._oleobj_.InvokeTypes(22, LCID, 1, (3, 0), ((8, 1), (3, 1)), pLabel, flags)
 
     def GetColumnLabel(self, nCol=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(21, LCID, 1, (8, 0), ((3, 1), (3, 1)), nCol, flags)
 
     def GetFieldToFile(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            filename=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        filename=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             26,
@@ -729,38 +616,30 @@ class ICommenceQueryRowSet(DispatchBaseClass):
         )
 
     def GetRow(
-            self,
-            nRow=defaultNamedNotOptArg,
-            pDelim=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        pDelim=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            23, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags
-        )
+        return self._oleobj_.InvokeTypes(23, LCID, 1, (8, 0), ((3, 1), (8, 1), (3, 1)), nRow, pDelim, flags)
 
     def GetRowID(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            24, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(24, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetRowTimeStamp(self, nRow=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            27, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags
-        )
+        return self._oleobj_.InvokeTypes(27, LCID, 1, (8, 0), ((3, 1), (3, 1)), nRow, flags)
 
     def GetRowValue(
-            self,
-            nRow=defaultNamedNotOptArg,
-            nCol=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        nRow=defaultNamedNotOptArg,
+        nCol=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         # Result is a Unicode object
-        return self._oleobj_.InvokeTypes(
-            20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags
-        )
+        return self._oleobj_.InvokeTypes(20, LCID, 1, (8, 0), ((3, 1), (3, 1), (3, 1)), nRow, nCol, flags)
 
     def GetShared(self, nRow=defaultNamedNotOptArg):
         return self._oleobj_.InvokeTypes(25, LCID, 1, (11, 0), ((3, 1),), nRow)
@@ -775,7 +654,7 @@ class ICommenceQueryRowSet(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -805,12 +684,8 @@ class IConnOA(DispatchBaseClass):
             (),
         )
 
-    def ClearConnection(
-            self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg
-    ):
-        return self._oleobj_.InvokeTypes(
-            12, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify
-        )
+    def ClearConnection(self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg):
+        return self._oleobj_.InvokeTypes(12, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify)
 
     def FieldValue(self, FieldName=defaultNamedNotOptArg):
         # Result is a Unicode object
@@ -826,26 +701,22 @@ class IConnOA(DispatchBaseClass):
         )
 
     def SetActiveDate(self, sDate=defaultNamedNotOptArg, flags=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            16, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags
-        )
+        return self._oleobj_.InvokeTypes(16, LCID, 1, (11, 0), ((8, 1), (3, 1)), sDate, flags)
 
     def SetActiveDateRange(
-            self,
-            startDate=defaultNamedNotOptArg,
-            endDate=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        startDate=defaultNamedNotOptArg,
+        endDate=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
-        return self._oleobj_.InvokeTypes(
-            17, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags
-        )
+        return self._oleobj_.InvokeTypes(17, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), startDate, endDate, flags)
 
     def SetActiveItem(
-            self,
-            pCategoryName=defaultNamedNotOptArg,
-            ItemName=defaultNamedNotOptArg,
-            Clarify=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        pCategoryName=defaultNamedNotOptArg,
+        ItemName=defaultNamedNotOptArg,
+        Clarify=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
         return self._oleobj_.InvokeTypes(
             15,
@@ -859,22 +730,16 @@ class IConnOA(DispatchBaseClass):
             flags,
         )
 
-    def SetConnection(
-            self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg
-    ):
-        return self._oleobj_.InvokeTypes(
-            13, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify
-        )
+    def SetConnection(self, ItemName=defaultNamedNotOptArg, Clarify=defaultNamedNotOptArg):
+        return self._oleobj_.InvokeTypes(13, LCID, 1, (11, 0), ((8, 1), (8, 1)), ItemName, Clarify)
 
     def SetFilterKeyword(
-            self,
-            sKeyword=defaultNamedNotOptArg,
-            sValue=defaultNamedNotOptArg,
-            flags=defaultNamedNotOptArg,
+        self,
+        sKeyword=defaultNamedNotOptArg,
+        sValue=defaultNamedNotOptArg,
+        flags=defaultNamedNotOptArg,
     ):
-        return self._oleobj_.InvokeTypes(
-            19, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), sKeyword, sValue, flags
-        )
+        return self._oleobj_.InvokeTypes(19, LCID, 1, (11, 0), ((8, 1), (8, 1), (3, 1)), sKeyword, sValue, flags)
 
     _prop_map_get_ = {
         'ConnectedItemCount': (3, 2, (3, 0), (), 'ConnectedItemCount', None),
@@ -896,7 +761,7 @@ class IConnOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -908,9 +773,7 @@ class IControlOA(DispatchBaseClass):
     CLSID = IID('{F180CB64-D4F0-464B-8EB6-0008689A24A6}')
     coclass_clsid = None
 
-    def ActiveXGetProperty(
-            self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg
-    ):
+    def ActiveXGetProperty(self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg):
         return self._ApplyTypes_(
             2,
             1,
@@ -922,9 +785,7 @@ class IControlOA(DispatchBaseClass):
             Parameter1,
         )
 
-    def ActiveXMethod(
-            self, MethodName=defaultNamedNotOptArg, ParameterArr=defaultNamedNotOptArg
-    ):
+    def ActiveXMethod(self, MethodName=defaultNamedNotOptArg, ParameterArr=defaultNamedNotOptArg):
         return self._ApplyTypes_(
             4,
             1,
@@ -936,12 +797,8 @@ class IControlOA(DispatchBaseClass):
             ParameterArr,
         )
 
-    def ActiveXSetProperty(
-            self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg
-    ):
-        return self._oleobj_.InvokeTypes(
-            3, LCID, 1, (11, 0), ((8, 1), (16396, 1)), PropertyName, Parameter1
-        )
+    def ActiveXSetProperty(self, PropertyName=defaultNamedNotOptArg, Parameter1=defaultNamedNotOptArg):
+        return self._oleobj_.InvokeTypes(3, LCID, 1, (11, 0), ((8, 1), (16396, 1)), PropertyName, Parameter1)
 
     _prop_map_get_ = {
         'ControlName': (1, 2, (8, 0), (), 'ControlName', None),
@@ -951,7 +808,7 @@ class IControlOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -975,7 +832,7 @@ class IDatabaseOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1009,7 +866,7 @@ class IFieldOA(DispatchBaseClass):
         return int(self.__call__(*args))
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1040,12 +897,8 @@ class IFormOA(DispatchBaseClass):
         )
 
     # Result is of type IConnOA
-    def Connection(
-            self, ConnectionName=defaultNamedNotOptArg, CategoryName=defaultNamedNotOptArg
-    ):
-        ret = self._oleobj_.InvokeTypes(
-            30, LCID, 1, (9, 0), ((8, 1), (8, 1)), ConnectionName, CategoryName
-        )
+    def Connection(self, ConnectionName=defaultNamedNotOptArg, CategoryName=defaultNamedNotOptArg):
+        ret = self._oleobj_.InvokeTypes(30, LCID, 1, (9, 0), ((8, 1), (8, 1)), ConnectionName, CategoryName)
         if ret is not None:
             ret = Dispatch(ret, 'Connection', '{47A27291-7572-11D0-AC0B-00A02485EC15}')
         return ret
@@ -1123,7 +976,7 @@ class IFormOA(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1132,20 +985,20 @@ class IFormOA(DispatchBaseClass):
 
 
 class IFullControl(DispatchBaseClass):
-    'IFullControl Interface'
+    "IFullControl Interface"
 
     CLSID = IID('{BE0B47E8-0BD2-4114-923E-EEFFEB740942}')
     coclass_clsid = IID('{789D254B-2D9B-487C-BABF-89D0EF6BD76C}')
 
     def myfunction(self, x=defaultNamedNotOptArg, y=defaultNamedNotOptArg):
-        'method myfunction'
+        "method myfunction"
         return self._oleobj_.InvokeTypes(1, LCID, 1, (24, 0), ((3, 1), (3, 1)), x, y)
 
     _prop_map_get_ = {}
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1154,21 +1007,17 @@ class IFullControl(DispatchBaseClass):
 
 
 class ISimple(DispatchBaseClass):
-    'ISimple Interface'
+    "ISimple Interface"
 
     CLSID = IID('{1C9DF726-86D4-4C5B-8398-7418F0903597}')
     coclass_clsid = IID('{DADC9CCF-FA28-4738-B142-B4CBD17267A6}')
 
-    def MyEventCallback(
-            self, id=defaultNamedNotOptArg, pVarResult=defaultNamedNotOptArg
-    ):
-        'method MyEventCallback'
-        return self._oleobj_.InvokeTypes(
-            3, LCID, 1, (24, 0), ((3, 0), (16396, 0)), id, pVarResult
-        )
+    def MyEventCallback(self, id=defaultNamedNotOptArg, pVarResult=defaultNamedNotOptArg):
+        "method MyEventCallback"
+        return self._oleobj_.InvokeTypes(3, LCID, 1, (24, 0), ((3, 0), (16396, 0)), id, pVarResult)
 
     def Test(self):
-        'method Test'
+        "method Test"
         return self._oleobj_.InvokeTypes(
             1,
             LCID,
@@ -1178,7 +1027,7 @@ class ISimple(DispatchBaseClass):
         )
 
     def Version(self):
-        'method Version'
+        "method Version"
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
             2,
@@ -1197,7 +1046,7 @@ class ISimple(DispatchBaseClass):
     }
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1206,13 +1055,13 @@ class ISimple(DispatchBaseClass):
 
 
 class IUIObj(DispatchBaseClass):
-    'IUIObj Interface'
+    "IUIObj Interface"
 
     CLSID = IID('{2BAE3CB5-A80C-11D4-A632-0040D0051497}')
     coclass_clsid = IID('{2BAE3CB6-A80C-11D4-A632-0040D0051497}')
 
     def Application(self):
-        'method Application'
+        "method Application"
         ret = self._oleobj_.InvokeTypes(
             3,
             LCID,
@@ -1225,11 +1074,11 @@ class IUIObj(DispatchBaseClass):
         return ret
 
     def GetTest(self, bstrVal=defaultNamedNotOptArg):
-        'method GetTest'
+        "method GetTest"
         return self._oleobj_.InvokeTypes(5, LCID, 1, (24, 0), ((16392, 0),), bstrVal)
 
     def GoToURL(self):
-        'method GoToURL'
+        "method GoToURL"
         return self._oleobj_.InvokeTypes(
             2,
             LCID,
@@ -1239,7 +1088,7 @@ class IUIObj(DispatchBaseClass):
         )
 
     def HelloHTML(self):
-        'method HelloHTML'
+        "method HelloHTML"
         return self._oleobj_.InvokeTypes(
             1,
             LCID,
@@ -1249,12 +1098,10 @@ class IUIObj(DispatchBaseClass):
         )
 
     def OnClick(self, pdispBody=defaultNamedNotOptArg, varColor=defaultNamedNotOptArg):
-        return self._oleobj_.InvokeTypes(
-            1610743808, LCID, 1, (24, 0), ((9, 1), (12, 1)), pdispBody, varColor
-        )
+        return self._oleobj_.InvokeTypes(1610743808, LCID, 1, (24, 0), ((9, 1), (12, 1)), pdispBody, varColor)
 
     def Test(self):
-        'method Test'
+        "method Test"
         # Result is a Unicode object
         return self._oleobj_.InvokeTypes(
             4,
@@ -1265,14 +1112,14 @@ class IUIObj(DispatchBaseClass):
         )
 
     def clickIn(self, x=defaultNamedNotOptArg, y=defaultNamedNotOptArg):
-        'method clickIn'
+        "method clickIn"
         return self._oleobj_.InvokeTypes(6, LCID, 1, (24, 0), ((3, 1), (3, 1)), x, y)
 
     _prop_map_get_ = {}
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1281,7 +1128,7 @@ class IUIObj(DispatchBaseClass):
 
 
 class Isample(DispatchBaseClass):
-    'Isample Interface'
+    "Isample Interface"
 
     CLSID = IID('{6F0D28AA-9A6E-44B2-AAF5-A98FFD14B2C1}')
     coclass_clsid = IID('{F22497D6-AAC1-4DA4-9DC7-CD5C1536431C}')
@@ -1290,7 +1137,7 @@ class Isample(DispatchBaseClass):
     _prop_map_put_ = {}
 
     def __iter__(self):
-        'Return a Python iterator for this object'
+        "Return a Python iterator for this object"
         try:
             ob = self._oleobj_.InvokeTypes(-4, LCID, 3, (13, 10), ())
         except pythoncom.error:
@@ -1299,7 +1146,7 @@ class Isample(DispatchBaseClass):
 
 
 class _DFormOAEvents:
-    'Event interface for FormOA object'
+    "Event interface for FormOA object"
 
     CLSID = CLSID_Sink = IID('{654E7742-2AB6-11D0-8A93-444553540000}')
     coclass_clsid = IID('{654E7741-2AB6-11D0-8A93-444553540000}')
@@ -1329,9 +1176,7 @@ class _DFormOAEvents:
 
             cpc = oobj._oleobj_.QueryInterface(pythoncom.IID_IConnectionPointContainer)
             cp = cpc.FindConnectionPoint(self.CLSID_Sink)
-            cookie = cp.Advise(
-                win32com.server.util.wrap(self, usePolicy=EventHandlerPolicy)
-            )
+            cookie = cp.Advise(win32com.server.util.wrap(self, usePolicy=EventHandlerPolicy))
             self._olecp, self._olecp_cookie = cp, cookie
 
     def __del__(self):
@@ -1377,7 +1222,7 @@ class _DFormOAEvents:
 
 
 class _IFullControlEvents:
-    '_IFullControlEvents Interface'
+    "_IFullControlEvents Interface"
 
     CLSID = CLSID_Sink = IID('{8C5813AA-6C64-4B5F-BC50-BD2C768CD066}')
     coclass_clsid = IID('{789D254B-2D9B-487C-BABF-89D0EF6BD76C}')
@@ -1393,9 +1238,7 @@ class _IFullControlEvents:
 
             cpc = oobj._oleobj_.QueryInterface(pythoncom.IID_IConnectionPointContainer)
             cp = cpc.FindConnectionPoint(self.CLSID_Sink)
-            cookie = cp.Advise(
-                win32com.server.util.wrap(self, usePolicy=EventHandlerPolicy)
-            )
+            cookie = cp.Advise(win32com.server.util.wrap(self, usePolicy=EventHandlerPolicy))
             self._olecp, self._olecp_cookie = cp, cookie
 
     def __del__(self):

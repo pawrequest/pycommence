@@ -22,8 +22,7 @@ def parse_python_com_code(file_path=COM_DEFINITION):
         method_name = match.group(1)
         parameters = match.group(2)
         if parameters:
-            params = [param.strip().split('=')[0].strip() for param in parameters.split(',') if
-                      param.strip()]
+            params = [param.strip().split('=')[0].strip() for param in parameters.split(',') if param.strip()]
         else:
             params = []
         methods[method_name] = params
@@ -35,7 +34,7 @@ def generate_json_schema(reflection_data, com_methods):
         '$schema': 'http://json-schema.org/draft-07/schema#',
         'title': 'COM Library API',
         'type': 'object',
-        'properties': {}
+        'properties': {},
     }
     for method_name, params in com_methods.items():
         method_info = reflection_data.get(method_name, {})
@@ -46,8 +45,8 @@ def generate_json_schema(reflection_data, com_methods):
             'required': params,
             'return': {
                 'type': 'string',
-                'description': f'Returns a result from {method_name}'  # Simplistic assumption
-            }
+                'description': f'Returns a result from {method_name}',  # Simplistic assumption
+            },
         }
     return schema
 

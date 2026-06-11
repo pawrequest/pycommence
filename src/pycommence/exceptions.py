@@ -59,8 +59,7 @@ class Handle(StrEnum):
 
 class HasRowCount(Protocol):
     @property
-    def row_count(self) -> int:
-        ...
+    def row_count(self) -> int: ...
 
 
 def raise_for_one(res: HasRowCount):
