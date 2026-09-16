@@ -82,7 +82,7 @@ def show_item(category: str, item: str, topic: DDETopic, form_name: str | None =
     return DDEExecuteBase(func_name='ShowItem', params=[category, item, form_name], topic=topic)
 
 
-def show_view(view_name: str, topic: DDETopic, force_new_copy: int | None = None) -> DDEExecuteBase:
+def show_view(view_name: str, topic: DDETopic = DDETopic.VIEW, force_new_copy: int | None = None) -> DDEExecuteBase:
     """
     Docs show: [ShowView(View Name, 1)] to force a new copy.
     """
@@ -95,7 +95,7 @@ def get_view_to_file(
     param1: str | None,
     param2: str | None,
     filename: str,
-    topic: DDETopic,
+    topic: DDETopic = DDETopic.VIEW,
 ) -> DDEExecuteBase:
     return DDEExecuteBase(func_name='GetViewToFile', params=[view_name, mode, param1, param2, filename], topic=topic)
 

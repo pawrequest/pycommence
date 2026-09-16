@@ -86,6 +86,26 @@ class ConversationAPI:
         res = self._send_message_raw(msg)
         return self._handle_dde(res)
 
+    def send_message_text_ex(self, msg: str) -> str | list[str] | bool:
+        logger.debug(f'Sending DDE TEXT message: {msg}')
+        s = str(msg)
+        with self._lock:
+            res = self.conv.Execute(s)
+        logger.debug(f'Received raw DDE response ({type(res).__name__}): {res}')
+        if not isinstance(res, str | bool):
+            raise PyCommenceServerError(f'Unexpected response type from DDE: {type(res).__name__}')
+        return self._handle_dde(res)
+
+    def send_message_text_req(self, msg: str) -> str | list[str] | bool:
+        logger.debug(f'Sending DDE TEXT message: {msg}')
+        s = str(msg)
+        with self._lock:
+            res = self.conv.Request(s)
+        logger.debug(f'Received raw DDE response ({type(res).__name__}): {res}')
+        if not isinstance(res, str | bool):
+            raise PyCommenceServerError(f'Unexpected response type from DDE: {type(res).__name__}')
+        return self._handle_dde(res)
+
     def _handle_dde(self, res: str | bool) -> str | list[str] | bool:
         if isinstance(res, str):
             if self.options.split_str_lists and self.options.delim in res:
@@ -149,7 +169,7 @@ class ConversationAPI:
 
 
 def get_or_create_table_type(
-    self: ConversationAPI, category: str, mode: FetchMode = 'all'
+        self: ConversationAPI, category: str, mode: FetchMode = 'all'
 ) -> type['CommenceTableGenerated'] | type['CommenceTable']:
     table_type = get_table_type(category, mode=mode, missing='ignore')
     if not table_type:

@@ -25,7 +25,7 @@ class DDEKind(StrEnum):
 
 class DDEMessageBase(BaseModel):
     func_name: str
-    topic_literal: DDETopicLiteral = 'GetData'
+    # topic_literal: DDETopicLiteral = 'GetData'
     topic: DDETopic = DDETopic.GET
     kind: DDEKind = DDEKind.REQUEST
     params: list[DDEParam] = Field(default_factory=list[DDEParam])
@@ -94,7 +94,8 @@ def _dde_format_param(value: DDEParam) -> str:
     if not isinstance(value, str):
         value = str(value)
     value = value.strip('"\'')
-    return f'"{value}"'
+    return f'{value}'
+    # return f'"{value}"'
 
 
 @runtime_checkable

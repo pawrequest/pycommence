@@ -38,7 +38,7 @@ class CmcFilter(BaseModel, ABC):
         return f'[ViewFilter("{slot}", "{self.kind}", {self.not_flag}, {self._filter_str})]'
 
     def __str__(self):
-        return f'{self.__class__.__name__}: col="{self.column}" condition="{self.condition}" value="{self.value}"'
+        return f'{self.__class__.__name__}: col="{self.column}" condition="{str(self.condition)}" value="{self.value}"'
 
     @property
     def get_params(self):
@@ -60,7 +60,7 @@ class FieldFilter(CmcFilter):
 
     @property
     def _filter_str(self) -> str:
-        filter_str = f'"{self.column}", "{self.condition}"{f', "{self.value}"' if self.value else ""}'
+        filter_str = f'"{self.column}", "{str(self.condition)}"{f', "{self.value}"' if self.value else ""}'
         return filter_str
 
 
@@ -80,7 +80,7 @@ class FieldFilterRange(FieldFilter):
 
     @property
     def _filter_str(self) -> str:
-        filter_str = f'"{self.column}", "{self.condition}", "{self.value}", "{self.value_max}"'
+        filter_str = f'"{self.column}", "{str(self.condition)}", "{self.value}", "{self.value_max}"'
         return filter_str
 
 
@@ -102,7 +102,7 @@ class ConnectedFieldFilter(ConnectedItemFilter):
 
     @property
     def _filter_str(self):
-        return f'"{self.column}", "{self.connection_category}", "{self.connected_column}", "{self.condition}", "{self.value}"'
+        return f'"{self.column}", "{self.connection_category}", "{self.connected_column}", "{str(self.condition)}", "{self.value}"'
 
 
 class ConnectedItemConnectedItemFilter(ConnectedFieldFilter):
