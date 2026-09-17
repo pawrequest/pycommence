@@ -142,6 +142,14 @@ class _PyCommenceClientConnector:
 
 
 class PyCommence(_PyCommenceClientConnector):
+    """PyCommence Main EntryPoint.
+
+    Usage:
+    ```
+    with PyCommence(<category>) as p:
+        result: RowData = p.item_read_csr(<item_name>)
+    ```
+    """
     # CURSOR CRUD
     def item_read_csr(self, *, csrname: str | None = None, row_id: str | None = None, pk: str | None = None) -> RowData:
         csr = self.cursor(csrname)
